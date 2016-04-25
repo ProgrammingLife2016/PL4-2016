@@ -18,11 +18,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Parser parser = new Parser();
-
-		//TODO (?) ik krijg de filepath niet werkend met ../
 		HashMap nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
-
-        System.out.println(nodeMap.toString());
 
     }
 }
