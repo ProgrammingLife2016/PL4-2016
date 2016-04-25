@@ -17,10 +17,13 @@ public class MainController {
     private Rectangle zoomRectBorder;
     private Rectangle zoomRect;
     private Rectangle graphRect;
+    private Constants constants;
 
     public void launch(Stage primaryStage) {
 
-        Scene scene = new Scene(makeRoot(), Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        constants = new Constants();
+
+        Scene scene = new Scene(makeRoot(), constants.getWINDOW_WIDTH(), constants.getWINDOW_HEIGHT());
         scene.setOnKeyPressed(keyListener);
         scene.setOnScroll(scrollListener);
 
@@ -32,20 +35,20 @@ public class MainController {
     private Group makeRoot() {
         Group root = new Group();
 
-        double rectX = Constants.WINDOW_WIDTH - Constants.ZOOMBOX_WIDTH - 10;
-        double rectY = Constants.WINDOW_HEIGHT - Constants.ZOOMBOX_HEIGHT - 10;
+        double rectX = constants.getWINDOW_WIDTH() - constants.getZOOMBOX_WIDTH() - 10;
+        double rectY = constants.getWINDOW_HEIGHT() - constants.getZOOMBOX_HEIGHT() - 10;
 
-        zoomRectBorder = new Rectangle(rectX, rectY, Constants.ZOOMBOX_WIDTH, Constants.ZOOMBOX_HEIGHT);
+        zoomRectBorder = new Rectangle(rectX, rectY, constants.getZOOMBOX_WIDTH(), constants.getZOOMBOX_HEIGHT());
         zoomRectBorder.setFill(Color.WHITE);
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
 
-        zoomRect = new Rectangle(rectX, rectY, Constants.ZOOMBOX_WIDTH, Constants.ZOOMBOX_HEIGHT);
+        zoomRect = new Rectangle(rectX, rectY, constants.getZOOMBOX_WIDTH(), constants.getZOOMBOX_HEIGHT());
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
 
-        graphRect = new Rectangle(10, 10, Constants.GRAPHBOX_WIDTH, Constants.GRAPHOX_HEIGHT);
+        graphRect = new Rectangle(10, 10, constants.getGRAPHBOX_WIDTH(), constants.getGRAPHOX_HEIGHT());
         graphRect.setFill(Color.WHITE);
         graphRect.setStroke(Color.BLACK);
         graphRect.setStrokeWidth(3);
