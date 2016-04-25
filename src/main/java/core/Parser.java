@@ -1,4 +1,4 @@
-package application;
+package core;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,13 +14,13 @@ public class Parser {
 	/**
 	 * Map of all nodes
 	 */
-	private HashMap nodeMap;
+	private HashMap<Integer,Node> nodeMap;
 
 	/**
 	 * Constructor
 	 */
 	public Parser() {
-		nodeMap = new HashMap();
+		nodeMap = new HashMap<Integer,Node>();
 	}
 
 	/**
@@ -35,15 +35,25 @@ public class Parser {
 			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"));
 			String nextLine;
 			while ((nextLine = bReader.readLine()) != null) {
-				System.out.println(nextLine);
-				switch (nextLine.charAt(0)) {
+                String[] content = nextLine.trim().split("\\s+");
+                switch (nextLine.charAt(0)) {
 					case 'H':
 						break;
 					case 'S':
-						//TODO parse node
+						int id = Integer.parseInt(content[1]);
+                        String sequence = content[2];
+                        int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
+                        if(!nodeMap.containsKey(id)) {
+                            nodeMap.put(id, new Node(id, sequence, z));
+                        } else{
+                            nodeMap.get(id).setSequence(sequence);
+                            nodeMap.get(id).setzIndex(z);
+                        }
 						break;
 					case 'L':
-						//TODO parse link
+                        int orig = Integer.parseInt(content[1]);
+                        int dest = Integer.parseInt(content[3]);
+                        nodeMap.get(orig).addLink(dest);
 						break;
 					default:
 						break;

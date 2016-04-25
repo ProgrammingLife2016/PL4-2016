@@ -1,6 +1,7 @@
 package application;
 
-import java.io.FileInputStream;
+import core.Parser;
+
 import java.util.HashMap;
 
 /**
@@ -19,5 +20,6 @@ public class Main {
 
 		//TODO (?) ik krijg de filepath niet werkend met ../
 		HashMap nodeMap = parser.readGFA("C:/Users/Skullyhoofd/Documents/PL4-2016/src/main/resources/TB10.gfa");
-	}
+        System.out.println(nodeMap.toString());
+    }
 }
