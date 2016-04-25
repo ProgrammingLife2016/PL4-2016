@@ -9,9 +9,24 @@ import java.util.List;
  */
 public class Node {
 
+    /**
+     * Identifier.
+     */
     private int id;
+
+    /**
+     * Actual nucleic acid sequence of the node.
+     */
     private String sequence;
+
+    /**
+     * 'Depth' of the node in the genome.
+     */
     private int zIndex;
+
+    /**
+     * List of ids of Nodes to which this one is connected.
+     */
     private List<Integer> links;
 
     /**
@@ -20,7 +35,7 @@ public class Node {
      * @param seq - Actual nucleic acid sequence contents of the node.
      * @param z - The 'depth' of the node in the genome.
      */
-    public Node(int id, String seq, int z){
+    public Node(int id, String seq, int z) {
         this.id = id;
         this.sequence = seq;
         this.zIndex = z;
@@ -31,7 +46,7 @@ public class Node {
      * Add a link to another node.
      * @param link - The other node to which this one is linked.
      */
-    public void addLink(int link){
+    public void addLink(int link) {
         this.links.add(link);
     }
 
@@ -41,15 +56,15 @@ public class Node {
      */
     @Override
     public String toString() {
-        return "Node{" +
-                "id=" + id +
-                ", sequence='" + sequence + '\'' +
-                ", zIndex=" + zIndex +
-                ", links=" + links +
-                '}';
+        return "Node{"
+                + "id=" + id
+                + ", sequence='" + sequence + '\''
+                + ", zIndex=" + zIndex
+                + ", links=" + links
+                + '}';
     }
 
-    /** Getters & Setters **/
+    /** Getters & Setters. **/
 
     public int getId() {
         return id;
