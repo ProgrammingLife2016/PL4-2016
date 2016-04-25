@@ -10,13 +10,17 @@ import java.io.IOException;
  */
 public class TreeMain {
 
+    public TreeMain() {
+
+    }
     Tree treeoflife;
     int current_depth = 0;
 
     void setup() throws IOException {
-        BufferedReader r = new BufferedReader(new FileReader(new File("340tree_rooted_TKK.nwk")));
+        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new FileReader(f));
         TreeParser tp = new TreeParser(r);
-        treeoflife = tp.tokenize(1, "treeoflife", null);
+        treeoflife = tp.tokenize(f.length(), f.getName(), null);
         int tree_height = treeoflife.getHeight();
         System.out.println("largest tree height is: " + tree_height);
         recursive_print(0, 0);
@@ -34,9 +38,10 @@ public class TreeMain {
         }
     }
 
-    public void main(String args[]) {
+    public static void main(String args[]) {
         try {
-            setup();
+            TreeMain tm = new TreeMain();
+            tm.setup();
         } catch (IOException e) {
             e.printStackTrace();
         }
