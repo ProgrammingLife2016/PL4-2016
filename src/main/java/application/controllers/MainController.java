@@ -1,29 +1,36 @@
 package application.controllers;
 
-import application.Constants;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
  * MainController for GUI.
  */
 public class MainController {
+    private Rectangle2D screenSize;
+    private double windowWidth;
+    private double windowHeight;
+    private double graphBoxWidth;
+    private double graphBoxHeight;
+    private double zoomBoxWidth;
+    private double zoomBoxHeight;
+
     private Rectangle zoomRectBorder;
     private Rectangle zoomRect;
     private Rectangle graphRect;
-    private Constants constants;
 
     public void launch(Stage primaryStage) {
+        initVariables();
 
-        constants = new Constants();
-
-        Scene scene = new Scene(makeRoot(), constants.getWINDOW_WIDTH(), constants.getWINDOW_HEIGHT());
+        Scene scene = new Scene(makeRoot(), windowWidth, windowHeight);
         scene.setOnKeyPressed(keyListener);
         scene.setOnScroll(scrollListener);
 
@@ -32,28 +39,37 @@ public class MainController {
         primaryStage.show();
     }
 
+    private void initVariables() {
+        screenSize = Screen.getPrimary().getVisualBounds();
+        windowWidth = screenSize.getWidth();
+        windowHeight = screenSize.getHeight();
+        graphBoxWidth = windowWidth - 10;
+        graphBoxHeight = windowHeight - 10;
+        zoomBoxWidth = graphBoxWidth / 5.0;
+        zoomBoxHeight = graphBoxHeight / 5.0;
+    }
+
     private Group makeRoot() {
         Group root = new Group();
 
-        double rectX = constants.getWINDOW_WIDTH() - constants.getZOOMBOX_WIDTH() - 10;
-        double rectY = constants.getWINDOW_HEIGHT() - constants.getZOOMBOX_HEIGHT() - 10;
+        double rectX = windowWidth - zoomBoxWidth - 20;
 
-        zoomRectBorder = new Rectangle(rectX, rectY, constants.getZOOMBOX_WIDTH(), constants.getZOOMBOX_HEIGHT());
+        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRectBorder.setFill(Color.WHITE);
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
 
-        zoomRect = new Rectangle(rectX, rectY, constants.getZOOMBOX_WIDTH(), constants.getZOOMBOX_HEIGHT());
+        zoomRect = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
 
-        graphRect = new Rectangle(10, 10, constants.getGRAPHBOX_WIDTH(), constants.getGRAPHOX_HEIGHT());
+        graphRect = new Rectangle(10, 10, graphBoxWidth - 10, graphBoxHeight - 10);
         graphRect.setFill(Color.WHITE);
         graphRect.setStroke(Color.BLACK);
         graphRect.setStrokeWidth(3);
 
-        root.getChildren().addAll(zoomRectBorder, zoomRect, graphRect);
+        root.getChildren().addAll(graphRect, zoomRectBorder, zoomRect);
         return root;
     }
     /**
@@ -61,7 +77,7 @@ public class MainController {
      */
     private EventHandler<ScrollEvent> scrollListener = new EventHandler<ScrollEvent>() {
         public void handle(ScrollEvent event) {
-            double delta = event.getTextDeltaY();
+            double delta = event.getDeltaY();
 
             if (delta > 0) {
                 // Both positive and negative offsets have to be tested as scaleZoomRect
@@ -91,17 +107,17 @@ public class MainController {
     private Boolean checkRectBoundaries(double offsetX, double offsetY) {
         Boolean res = true;
         if (res && offsetX < 0) {
-            res = (zoomRect.getX() + offsetX) > zoomRectBorder.getX();
+            res = (zoomRect.getX() + offsetX) >= zoomRectBorder.getX();
         } else if (res && offsetX > 0) {
             res = (zoomRect.getX() + zoomRect.getWidth() + offsetX)
-                    < (zoomRectBorder.getX() + zoomRectBorder.getWidth());
+                    <= (zoomRectBorder.getX() + zoomRectBorder.getWidth());
         }
 
         if (res && offsetY < 0) {
-            res = (zoomRect.getY() + offsetY) > zoomRectBorder.getY();
+            res = (zoomRect.getY() + offsetY) >= zoomRectBorder.getY();
         } else if (res && offsetY > 0) {
             res = (zoomRect.getY() + zoomRect.getHeight() + offsetY)
-                    < (zoomRectBorder.getY() + zoomRectBorder.getHeight());
+                    <= (zoomRectBorder.getY() + zoomRectBorder.getHeight());
         }
 
         return res;
@@ -138,6 +154,6 @@ public class MainController {
                 default:
                     break;
             }
-        };
+        }
     };
 }
