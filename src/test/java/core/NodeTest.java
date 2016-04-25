@@ -15,12 +15,20 @@ public class NodeTest {
 
     Node n;
 
+
+    /**
+     * SetUp used to test the Node Class.
+     */
     @Before
     public void setUp() throws Exception {
         n = new Node(0,"ATCG",0);
         n.addLink(0);
     }
 
+    /**
+     * Test to test if Node's are added correctly.
+     * @throws Exception
+     */
     @Test
     public void testAddLink() throws Exception {
         ArrayList<Integer> al1 = new ArrayList<Integer>();
@@ -33,16 +41,28 @@ public class NodeTest {
     }
 
 
+    /**
+     * Test GetId method.
+     * @throws Exception
+     */
     @Test
     public void testGetId() throws Exception {
         assertEquals(n.getId(),0);
     }
 
+    /**
+     * Test the GetSequence method.
+     * @throws Exception
+     */
     @Test
     public void testGetSequence() throws Exception {
         assertEquals(n.getSequence(),"ATCG");
     }
 
+    /**
+     * Test the SetSequence method.
+     * @throws Exception
+     */
     @Test
     public void testSetSequence() throws Exception {
         n.setSequence("ATCGATCG");
@@ -50,17 +70,29 @@ public class NodeTest {
 
     }
 
+    /**
+     * Test the GetzIndex method.
+     * @throws Exception
+     */
     @Test
     public void testGetzIndex() throws Exception {
         assertEquals(n.getzIndex(), 0);
     }
 
+    /**
+     * Test the SetzIndex method.
+     * @throws Exception
+     */
     @Test
     public void testSetzIndex() throws Exception {
         n.setzIndex(3);
         assertEquals(n.getzIndex(), 3);
     }
 
+    /**
+     * Test the GetLinks method.
+     * @throws Exception
+     */
     @Test
     public void testGetLinks() throws Exception {
         ArrayList<Integer> al1 = new ArrayList<Integer>();
