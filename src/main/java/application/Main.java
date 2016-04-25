@@ -1,5 +1,6 @@
 package application;
 
+import application.controllers.WindowFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,7 +16,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         mainController = new MainController();
+        WindowFactory.createWindow(mainController.getRoot());
 
-        mainController.launch(primaryStage);
+
     }
 }

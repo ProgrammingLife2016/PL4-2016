@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.net.URL;
 
 
 /**
@@ -32,7 +33,7 @@ public abstract class ControllerTemplate<T extends Parent> implements Initializa
      * Constructor: generate a ControllerTemplate
      * @param root parameter set as root of the ControllerTemplate
      */
-    public ControllerTemplate(T root) {
+    public ControllerTemplate(final T root) {
         this.root = root;
         root.visibleProperty().bind(visible);
     }
@@ -42,13 +43,12 @@ public abstract class ControllerTemplate<T extends Parent> implements Initializa
      * Method to load FXML files
      * @param filePath location of the FXML file to be loaded
      */
-    private final void loadFXMLfile(String filePath) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
-
-        loader.setRoot(root);
-        loader.setController(this);
-
+    public final void loadFXMLfile(String filePath) {
         try {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource(filePath));
+
+            loader.setRoot(root);
+            loader.setController(this);
             loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
