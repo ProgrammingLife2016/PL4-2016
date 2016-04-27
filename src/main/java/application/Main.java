@@ -1,23 +1,39 @@
 package application;
 
+import application.controllers.Controller;
+import application.controllers.GraphViewController;
 import application.controllers.WindowFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import application.controllers.MainController;
 
+/**
+ * Main class.
+ * @author Arthur Breurkes
+ * @version 1.0
+ * @since 18-04-2016
+ */
 public class Main extends Application {
-    private MainController mainController;
-    
+    /**
+     * MainController used for the application.
+     */
+    private Controller mainController;
+
+    /**
+     * Usual main method to start the application.
+     * @param args runtime arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Method to launch the application.
+     * @param primaryStage stage used to initialize GUI.
+     */
     @Override
     public void start(Stage primaryStage) {
-        mainController = new MainController();
+        mainController = new GraphViewController(primaryStage);
         WindowFactory.createWindow(mainController.getRoot());
-
-
     }
 }

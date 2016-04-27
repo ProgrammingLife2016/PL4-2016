@@ -16,12 +16,12 @@ import javafx.scene.input.KeyCombination;
 public class MenuController  {
 
     MenuBar menuBar;
-    MainController mainController;
+    Controller mainController;
     private MenuItem loadPhylogeneticTree,loadGenome,resetView, shortcuts, showPhylogeneticTree, showGenomeSequence;
 
 
 
-    public MenuController(MainController main, MenuBar bar) {
+    public MenuController(Controller main, MenuBar bar) {
         this.mainController = main;
         this.menuBar = bar;
 
