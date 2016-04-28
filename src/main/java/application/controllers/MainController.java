@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
  * MainController for GUI.
  */
 public class MainController extends Controller<StackPane> {
-    private MenuController menuController;
 
     @FXML
     StackPane screen;
@@ -38,7 +37,6 @@ public class MainController extends Controller<StackPane> {
      */
     public final void initialize(URL location, ResourceBundle resources) {
         HBox box = new HBox();
-        menuController = new MenuController(this, menuBar);
 
         box.getChildren().addAll(screen, menuBar);
         screen.getChildren().setAll();

@@ -26,10 +26,12 @@ public class MenuController  {
         this.menuBar = bar;
 
         Menu fileMenu = initFileMenu();
-        Menu helpMenu = initHelpMenu();
+
         Menu viewMenu = initViewMenu();
 
-        menuBar.getMenus().addAll(fileMenu, helpMenu, viewMenu);
+        Menu helpMenu = initHelpMenu();
+
+        menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 
     }
 
@@ -44,14 +46,17 @@ public class MenuController  {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Genome Sequence", null, null);
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
-        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree);
+        resetView = initMenuItem("Reset", null, null);
+        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView);
         return viewMenu;
 
     }
 
     private Menu initFileMenu() {
+        loadGenome = initMenuItem("Load Genome Sequence", new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN), null);
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree", new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN), null);
-        Menu fileMenu = initMenu("File", loadPhylogeneticTree);
+
+        Menu fileMenu = initMenu("File", loadGenome, loadPhylogeneticTree);
         return fileMenu;
 
     }

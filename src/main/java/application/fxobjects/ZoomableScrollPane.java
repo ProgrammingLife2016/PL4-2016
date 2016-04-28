@@ -1,24 +1,31 @@
 package application.fxobjects;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
+
 
 public class ZoomableScrollPane extends ScrollPane {
     Group zoomGroup;
     Scale scaleTransform;
     Node content;
     double scaleValue = 1.0;
-    double delta = 0.1;
+
+    private Rectangle zoomRectBorder;
+    public Rectangle zoomRect;
 
 
     public ZoomableScrollPane(Node content) {
         this.content = content;
 
+
+        this.setHbarPolicy(ScrollBarPolicy.NEVER);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+
         Group contentGroup = new Group();
+
 
         zoomGroup = new Group();
         contentGroup.getChildren().addAll(zoomGroup);
@@ -27,7 +34,6 @@ public class ZoomableScrollPane extends ScrollPane {
         scaleTransform = new Scale(scaleValue, scaleValue, 0, 0);
         zoomGroup.getTransforms().add(scaleTransform);
 
-        zoomGroup.setOnScroll(new ZoomHandler());
     }
 
 
@@ -35,9 +41,9 @@ public class ZoomableScrollPane extends ScrollPane {
         return scaleValue;
     }
 
-    public void zoomToActual() {
-        zoomTo(1.0);
-    }
+   // public void zoomToActual() {
+    //    controller.zoomTo(1.0);
+  //  }
 
     public void zoomTo(double scaleValue) {
 
@@ -48,33 +54,68 @@ public class ZoomableScrollPane extends ScrollPane {
 
     }
 
-    public void zoomActual() {
+//    public void zoomActual() {
+//
+//        scaleValue = 1;
+//        controller.zoomTo(scaleValue);
+//
+//    }
 
-        scaleValue = 1;
-        zoomTo(scaleValue);
+//    public void zoomOut() {
+//        scaleValue -= delta;
+//
+//        if (Double.compare(scaleValue, 0.1) < 0) {
+//            scaleValue = 0.1;
+//        }
+//
+//        controller.zoomTo(scaleValue);
+//    }
+
+//    public void zoomIn() {
+//
+//        scaleValue += delta;
+//
+//        if (Double.compare(scaleValue, 10) > 0) {
+//            scaleValue = 10;
+//        }
+//
+//        controller.zoomTo(scaleValue);
+//
+//    }
+
+    public void zoom(double delta) {
+        System.out.println(delta);
+        if (delta < 0.0) {
+            scaleValue -= -(delta/100);
+            zoomTo(scaleValue);
+
+        } else {
+            scaleValue += (delta/100);
+            zoomTo(scaleValue);
+        }
+
 
     }
 
-    public void zoomOut() {
-        scaleValue -= delta;
-
-        if (Double.compare(scaleValue, 0.1) < 0) {
-            scaleValue = 0.1;
+    public Boolean checkRectBoundaries(double offsetX, double offsetY) {
+        Boolean res = true;
+        if (offsetX < 0) {
+            res = (zoomRect.getX() + offsetX) >= zoomRectBorder.getX();
+        } else if (offsetX > 0) {
+            res = (zoomRect.getX() + zoomRect.getWidth() + offsetX)
+                    <= (zoomRectBorder.getX() + zoomRectBorder.getWidth());
         }
 
-        zoomTo(scaleValue);
-    }
-
-    public void zoomIn() {
-
-        scaleValue += delta;
-
-        if (Double.compare(scaleValue, 10) > 0) {
-            scaleValue = 10;
+        if (res && offsetY < 0) {
+            res = (zoomRect.getY() + offsetY) >= zoomRectBorder.getY();
+        } else if (res && offsetY > 0) {
+            res = (zoomRect.getY() + zoomRect.getHeight() + offsetY)
+                    <= (zoomRectBorder.getY() + zoomRectBorder.getHeight());
         }
 
-        zoomTo(scaleValue);
+        System.out.println(res);
 
+        return res;
     }
 
     /**
@@ -105,26 +146,9 @@ public class ZoomableScrollPane extends ScrollPane {
         }
 
         // apply zoom
-        zoomTo(scale);
+        //controller.zoomTo(scale);
 
     }
 
-    private class ZoomHandler implements EventHandler<ScrollEvent> {
 
-        public void handle(ScrollEvent scrollEvent) {
-            // if (scrollEvent.isControlDown())
-            {
-
-                if (scrollEvent.getDeltaY() < 0) {
-                    scaleValue -= delta;
-                } else {
-                    scaleValue += delta;
-                }
-
-                zoomTo(scaleValue);
-
-                scrollEvent.consume();
-            }
-        }
-    }
 }

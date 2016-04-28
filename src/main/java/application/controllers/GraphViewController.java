@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
 import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
@@ -8,11 +7,11 @@ import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
-import javax.swing.border.Border;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,50 +24,46 @@ import java.util.ResourceBundle;
  */
 public class GraphViewController extends Controller<StackPane> {
     private Graph graph;
-    private Stage primaryStage;
+
     private MenuController menuController;
 
+    private ZoomController zoomController;
     @FXML
     StackPane screen;
-    @FXML
-    BorderPane mainPane;
     @FXML
     MenuBar menuBar;
 
     /**
      * Constructor: generate a Controller.
      */
-    public GraphViewController(Stage primaryStage) {
+    public GraphViewController() {
         super(new StackPane());
         loadFXMLfile("/application/fxml/graphview.fxml");
 
+
         this.graph = new Graph();
-        //this.primaryStage = primaryStage;
+
+        zoomController = graph.getZoomController();
     }
 
     public void initialize(URL location, ResourceBundle resources) {
-        BorderPane root = new BorderPane();
-
-
-
         graph = new Graph();
 
-        root.setCenter(graph.getScrollPane());
+        BorderPane root = graph.getZoomController().getPane();
 
-        ZoomBox box = graph.getZoomBox();
+        HBox hbox = new HBox();
+        menuController = new MenuController(this, menuBar);
 
-        root.setRight(box.getZoomBox());
+        hbox.getChildren().addAll(screen, menuBar);
+        screen.getChildren().setAll();
 
-//        Scene scene = new Scene(root);
-//        scene.getStylesheets().add(getClass().getResource("/application/css/graph.css").toExternalForm());
-//
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
+        root.setTop(hbox);
 
         addGraphComponents();
-
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
+
+
 
         this.getRoot().getChildren().addAll(root);
     }

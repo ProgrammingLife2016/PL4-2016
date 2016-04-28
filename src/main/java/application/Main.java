@@ -38,8 +38,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         //mainController = new MainController();
-        mainController = new GraphViewController(primaryStage);
-        ZoomBox z = mainController.getGraph().getZoomBox();
-        WindowFactory.createWindow(mainController.getRoot(), z);
+        mainController = new GraphViewController();
+        ZoomBox z = mainController.getGraph().getZoomController().getZoomBox();
+        WindowFactory.createWindow(mainController.getRoot(), z, mainController.getGraph());
     }
 }
