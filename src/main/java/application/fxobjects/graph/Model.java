@@ -19,13 +19,13 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    Map<String, Cell> cellMap; // <id,cell>
+    Map<Integer, Cell> cellMap; // <id,cell>
 
     public Model() {
 
-        graphParent = new RectangleCell("_ROOT_");
+        graphParent = new RectangleCell(1 , "");
 
-        // clear model, create lists
+       // clear model, create lists
         clear();
     }
 
@@ -77,12 +77,12 @@ public class Model {
      * @param id the id, which represents the sequence.
      * @param type The type of cell.
      */
-    public void addCell(String id, CellType type) {
+    public void addCell(int id, String seq, CellType type) {
 
         switch (type) {
 
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
+                RectangleCell rectangleCell = new RectangleCell(id, seq);
                 addCell(rectangleCell);
                 break;
 
@@ -114,7 +114,7 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      */
-    public void addEdge(String sourceId, String targetId) {
+    public void addEdge(int sourceId, int targetId) {
 
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);

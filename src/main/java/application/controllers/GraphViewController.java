@@ -81,7 +81,7 @@ public class GraphViewController extends Controller<StackPane> {
 
         //System.out.println(nodeMap.values());
         Node root = (nodeMap.get(1));
-        model.addCell(Integer.toString(root.getId()),CellType.RECTANGLE);
+        model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
         for(int i = 1; i<=nodeMap.size();i++) {
 
@@ -89,15 +89,15 @@ public class GraphViewController extends Controller<StackPane> {
             for(int j:nodeMap.get(i).getLinks()) {
                 //Add next cell
                 if(first) {
-                    model.addCell(Integer.toString(nodeMap.get(j).getId()), CellType.RECTANGLE);
+                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
                     first = false;
                 }
                 else
                 {
-                    model.addCell(Integer.toString(nodeMap.get(j).getId()), CellType.TRIANGLE);
+                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
                 }
                 //Add link from current cell to next cell
-                model.addEdge(Integer.toString(nodeMap.get(i).getId()),Integer.toString(nodeMap.get(j).getId()));
+                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId());
             }
 
         }
@@ -127,14 +127,14 @@ public class GraphViewController extends Controller<StackPane> {
             if(!marked[i - 1])
             {
 
-                m.addCell(next.getSequence(),CellType.RECTANGLE);
-                m.addEdge(n.getSequence(),next.getSequence());
+                m.addCell(next.getId(), next.getSequence(),CellType.RECTANGLE);
+                m.addEdge(n.getId(), next.getId());
                 dfs(next, i, marked, m);
                 marked[i-1] =true;
             }
             else
             {
-                m.addEdge(n.getSequence(),next.getSequence());
+                m.addEdge(n.getId(), next.getId());
             }
         }
     }

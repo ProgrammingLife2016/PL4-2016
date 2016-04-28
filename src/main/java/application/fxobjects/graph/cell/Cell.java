@@ -7,14 +7,14 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public abstract class Cell extends Pane {
-    String cellId;
+    private int cellId;
 
     List<Cell> children = new ArrayList<>();
     List<Cell> parents = new ArrayList<>();
 
     Node view;
 
-    public Cell(String cellId) {
+    public Cell(int cellId) {
         this.cellId = cellId;
     }
 
@@ -49,7 +49,7 @@ public abstract class Cell extends Pane {
         return this.view;
     }
 
-    public String getCellId() {
+    public int getCellId() {
         return cellId;
     }
 

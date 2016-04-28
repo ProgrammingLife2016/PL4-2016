@@ -8,7 +8,7 @@ import application.fxobjects.graph.cell.Cell;
 public class TriangleCell extends Cell {
     private final CellType type = CellType.TRIANGLE;
 
-    public TriangleCell(String id) {
+    public TriangleCell(int id) {
         super(id);
 
         double width = 50;
