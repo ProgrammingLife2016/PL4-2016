@@ -1,12 +1,19 @@
 package application.fxobjects.graph;
 
-import application.fxobjects.graph.cell.*;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.CellType;
+import application.fxobjects.graph.cell.Edge;
+import application.fxobjects.graph.cell.RectangleCell;
+import application.fxobjects.graph.cell.TriangleCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Model containing all nodes and edges.
+ */
 public class Model {
 
     Cell graphParent;
@@ -21,14 +28,20 @@ public class Model {
 
     Map<Integer, Cell> cellMap; // <id,cell>
 
+    /**
+     * Class constructor.
+     */
     public Model() {
 
-        graphParent = new RectangleCell(1 , "");
+        graphParent = new RectangleCell(1, "");
 
        // clear model, create lists
         clear();
     }
 
+    /**
+     * Remove all cells and edges.
+     */
     public void clear() {
 
         allCells = new ArrayList<>();
@@ -43,31 +56,58 @@ public class Model {
 
     }
 
+    /**
+     * Remove all added cells and edges.
+     */
     public void clearAddedLists() {
         addedCells.clear();
         addedEdges.clear();
     }
 
+    /**
+     * Get a list of added cells.
+     * @return A list of added cells.
+     */
     public List<Cell> getAddedCells() {
         return addedCells;
     }
 
+    /**
+     * Get a list of removed cells.
+     * @return A list of removed cells.
+     */
     public List<Cell> getRemovedCells() {
         return removedCells;
     }
 
+    /**
+     * Get a list of all cells.
+     * @return A list of all cells.
+     */
     public List<Cell> getAllCells() {
         return allCells;
     }
 
+    /**
+     * Get a list of added edges.
+     * @return A list of all added edges.
+     */
     public List<Edge> getAddedEdges() {
         return addedEdges;
     }
 
+    /**
+     * Get a list of removed edges.
+     * @return A list of removed edges.
+     */
     public List<Edge> getRemovedEdges() {
         return removedEdges;
     }
 
+    /**
+     * Get a list of all edges.
+     * @return A list of all edges.
+     */
     public List<Edge> getAllEdges() {
         return allEdges;
     }
@@ -75,6 +115,7 @@ public class Model {
     /**
      * Method to add a Cell (Node).
      * @param id the id, which represents the sequence.
+     * @param seq The genome sequence of a cell.
      * @param type The type of cell.
      */
     public void addCell(int id, String seq, CellType type) {
@@ -102,7 +143,7 @@ public class Model {
      */
     private void addCell(Cell cell) {
 
-        if(!cellMap.containsKey(cell.getCellId())) {
+        if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
 
             cellMap.put(cell.getCellId(), cell);
@@ -127,7 +168,7 @@ public class Model {
 
     /**
      * Attach all cells which don't have a parent to graphParent.
-     * @param cellList
+     * @param cellList List of cells without a parent.
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
 
@@ -141,8 +182,7 @@ public class Model {
 
     /**
      * Remove the graphParent reference if it is set
-     *
-     * @param cellList
+     * @param cellList List of cells to be removed from the graph
      */
     public void disconnectFromGraphParent(List<Cell> cellList) {
 
@@ -151,6 +191,9 @@ public class Model {
         }
     }
 
+    /**
+     * Add and remove cells from the allCells list.
+     */
     public void merge() {
 
         // cells

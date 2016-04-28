@@ -6,6 +6,9 @@ import application.fxobjects.graph.cell.CellLayer;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 
+/**
+ * Class representing a graph.
+ */
 public class Graph {
 
     private Model model;
@@ -23,6 +26,9 @@ public class Graph {
      */
     CellLayer cellLayer;
 
+    /**
+     * Class constructor.
+     */
     public Graph() {
 
         this.model = new Model();
@@ -38,13 +44,26 @@ public class Graph {
 
     }
 
-
+    /**
+     * Get the current cell layer.
+     * @return The current cell layer.
+     */
     public Pane getCellLayer() {
         return this.cellLayer;
     }
 
-    public ZoomController getZoomController() { return zoomController; }
+    /**
+     * Get the zoom controller.
+     * @return The zoom controller.
+     */
+    public ZoomController getZoomController() { 
+    	return zoomController; 
+    }
 
+    /**
+     * Get the model of the Graph.
+     * @return The model of the graph.
+     */
     public Model getModel() {
         return model;
     }
@@ -80,6 +99,10 @@ public class Graph {
 
     }
 
+    /**
+     * Get the zoom scalar value. 
+     * @return The zoom scalar value.
+     */
     public double getScale() {
         return zoomController.getZoomPane().getScaleValue();
     }

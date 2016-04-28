@@ -5,6 +5,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Class responsible for the handling of mouse events
+ */
 public class MouseHandling {
     final DragContext dragContext = new DragContext();
 
@@ -62,10 +65,18 @@ public class MouseHandling {
         }
     };
 
+    /**
+     * Class constructor.
+     * @param graph A given graph.
+     */
     public MouseHandling(Graph graph) {
         this.graph = graph;
     }
 
+    /**
+     * Assign mouse events handlers to a given Node.
+     * @param node Node to get mouse handlers assigned.
+     */
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
