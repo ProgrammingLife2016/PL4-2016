@@ -19,6 +19,7 @@ public class BaseLayout extends CellLayout {
         this.currentY = 200;
         this.lastType = null;
         this.offset = offset;
+        this.graph = graph;
     }
 
     public void execute() {

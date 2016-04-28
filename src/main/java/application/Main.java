@@ -2,6 +2,7 @@ package application;
 
 import application.controllers.Controller;
 import application.controllers.GraphViewController;
+import application.controllers.MainController;
 import application.controllers.WindowFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -33,6 +34,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        //mainController = new MainController();
         mainController = new GraphViewController(primaryStage);
         WindowFactory.createWindow(mainController.getRoot());
     }

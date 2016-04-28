@@ -41,7 +41,7 @@ public class GraphViewController extends Controller<StackPane> {
         loadFXMLfile("/application/fxml/graphview.fxml");
 
         this.graph = new Graph();
-        this.primaryStage = primaryStage;
+        //this.primaryStage = primaryStage;
     }
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -81,5 +81,9 @@ public class GraphViewController extends Controller<StackPane> {
         model.addEdge("Cell AB", "Cell B");
 
         graph.endUpdate();
+    }
+
+    public Graph getGraph() {
+        return graph;
     }
 }
