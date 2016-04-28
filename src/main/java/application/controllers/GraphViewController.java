@@ -5,6 +5,8 @@ import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
+import core.Node;
+import core.Parser;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
@@ -12,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
@@ -25,6 +28,7 @@ public class GraphViewController extends Controller<StackPane> {
     private Graph graph;
     private Stage primaryStage;
     private MenuController menuController;
+    private HashMap<Integer, Node> nodeMap;
 
     @FXML
     StackPane screen;
@@ -39,7 +43,6 @@ public class GraphViewController extends Controller<StackPane> {
     public GraphViewController(Stage primaryStage) {
         super(new StackPane());
         loadFXMLfile("/application/fxml/graphview.fxml");
-
         this.graph = new Graph();
         //this.primaryStage = primaryStage;
     }
@@ -65,22 +68,50 @@ public class GraphViewController extends Controller<StackPane> {
         this.getRoot().getChildren().addAll(root);
     }
 
-    private void addGraphComponents() {
+    public void addGraphComponents() {
         Model model = graph.getModel();
 
         graph.beginUpdate();
 
-        model.addCell("Cell A", CellType.RECTANGLE);
-        model.addCell("Cell AA", CellType.TRIANGLE);
-        model.addCell("Cell AB", CellType.TRIANGLE);
-        model.addCell("Cell B", CellType.RECTANGLE);
+//        model.addCell("Cell A", CellType.RECTANGLE);
+//        model.addEdge("Cell AB", "Cell B");
 
-        model.addEdge("Cell A", "Cell AA");
-        model.addEdge("Cell A", "Cell AB");
-        model.addEdge("Cell AA", "Cell B");
-        model.addEdge("Cell AB", "Cell B");
+        Parser parser = new Parser();
+        nodeMap = parser.readGFA("src/main/resources/TBTestFile.gfa");
 
+        System.out.println(nodeMap.values());
+        Node root = (nodeMap.get(1));
+        model.addCell(root.getSequence(),CellType.RECTANGLE);
+
+        dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
+    }
+
+    /**
+     * A simple Depth Frist implementation to display every Node in our Graph.
+     * @param n Current Node.
+     * @param ni Integer to find current Node in map.
+     * @param marked Keep track of Nodes that are already added in case of loops.
+     * @param m The model to add the Nodes to.
+     */
+    private void dfs(Node n,int ni,boolean[] marked, Model m){
+
+        if(n == null && ni>0) return;
+        marked[ni-1] = true;
+
+        //for every child
+        for(int i: n.getLinks())
+        {
+            //if childs state is not visited then recurse
+            if(!marked[i - 1])
+            {
+                Node next = nodeMap.get(i);
+                m.addCell(next.getSequence(),CellType.RECTANGLE);
+                m.addEdge(n.getSequence(),next.getSequence());
+                dfs(next, i, marked, m);
+                marked[i-1] =true;
+            }
+        }
     }
 
     public Graph getGraph() {
