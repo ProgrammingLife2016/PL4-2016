@@ -5,10 +5,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
+/**
+ * Class representing a Triangle shape.
+ */
+@SuppressWarnings("CheckStyle.JavadocMethod")
 public class TriangleCell extends Cell {
     private final CellType type = CellType.TRIANGLE;
     private Text text;
 
+    /**
+     * Triangle cell constructor.
+     * @param id The ID of a cell.
+     * @param seq The genome sequence of a cell.
+     */
     public TriangleCell(int id, String seq) {
         super(id);
         double width = 50;
@@ -30,10 +39,18 @@ public class TriangleCell extends Cell {
         setView(pane);
     }
 
+    /**
+     * Return the type of the Cell.
+     * @return The type of the Cell.
+     */
     public CellType getType() {
         return type;
     }
 
+    /**
+     * Return the Cell's text.
+     * @return The Cell's text.
+     */
     public Text getText() {
         return text;
     }

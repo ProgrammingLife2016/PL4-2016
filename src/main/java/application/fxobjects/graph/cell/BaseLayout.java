@@ -15,6 +15,11 @@ public class BaseLayout extends CellLayout {
     private CellType lastType;
     private int cellCount = 0;
 
+    /**
+     * Class constructor.
+     * @param graph A given graph.
+     * @param offset Offset to be added on execute() call.
+     */
     public BaseLayout(Graph graph, int offset) {
         this.currentX = 20;
         this.currentY = 200;
@@ -33,25 +38,28 @@ public class BaseLayout extends CellLayout {
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
-                    if(lastType != CellType.TRIANGLE)
+                    if (lastType != CellType.TRIANGLE) {
                         currentX += offset;
+                    }
                     cell.relocate(currentX, 200);
                     currentY = 200;
                     cellCount = 0;
+                    break;
                 case TRIANGLE:
-                        if(cellCount%2==0) {
-                            currentY += (cellCount+1)* offset;
-                            currentY += offset * 2;
-                        }
+                    if (cellCount % 2 == 0) {
+                        currentY += (cellCount + 1) * offset;
+                        currentY += offset * 2;
+                    }
                     else {
-                            currentY -= (cellCount+1) * offset;
+                            currentY -= (cellCount + 1) * offset;
                             currentY -= offset * 2;
-                        }
+                    }
                     currentX += offset;
                     cellCount++;
 
                     cell.relocate(currentX, currentY);
                         //currentY += offset * 2;
+                    break;
                 default:
                     break;
             }
