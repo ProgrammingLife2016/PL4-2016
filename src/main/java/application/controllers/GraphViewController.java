@@ -77,13 +77,23 @@ public class GraphViewController extends Controller<StackPane> {
 //        model.addEdge("Cell AB", "Cell B");
 
         Parser parser = new Parser();
-        nodeMap = parser.readGFA("src/main/resources/TBTestFile.gfa");
+        nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
-        System.out.println(nodeMap.values());
+        //System.out.println(nodeMap.values());
         Node root = (nodeMap.get(1));
         model.addCell(root.getSequence(),CellType.RECTANGLE);
 
-        dfs(root,1,new boolean[nodeMap.size()],model);
+        for(int i = 1; i<=nodeMap.size();i++) {
+            for(int j:nodeMap.get(i).getLinks()) {
+                //Add next cell
+                model.addCell(nodeMap.get(j).getSequence(),CellType.RECTANGLE);
+                //Add link from current cell to next cell
+                model.addEdge(nodeMap.get(i).getSequence(),nodeMap.get(j).getSequence());
+            }
+
+        }
+
+        //dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
     }
 
@@ -102,14 +112,20 @@ public class GraphViewController extends Controller<StackPane> {
         //for every child
         for(int i: n.getLinks())
         {
+            Node next = nodeMap.get(i);
             //if childs state is not visited then recurse
+
             if(!marked[i - 1])
             {
-                Node next = nodeMap.get(i);
+
                 m.addCell(next.getSequence(),CellType.RECTANGLE);
                 m.addEdge(n.getSequence(),next.getSequence());
                 dfs(next, i, marked, m);
                 marked[i-1] =true;
+            }
+            else
+            {
+                m.addEdge(n.getSequence(),next.getSequence());
             }
         }
     }
