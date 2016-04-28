@@ -19,10 +19,8 @@ public class ZoomableScrollPane extends ScrollPane {
 
     public ZoomableScrollPane(Node content) {
         this.content = content;
-
-
-        this.setHbarPolicy(ScrollBarPolicy.NEVER);
-        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+//        this.setHbarPolicy(ScrollBarPolicy.NEVER);
+//        this.setVbarPolicy(ScrollBarPolicy.NEVER);
 
         Group contentGroup = new Group();
 
@@ -84,22 +82,20 @@ public class ZoomableScrollPane extends ScrollPane {
 //    }
 
     public void zoom(double delta) {
-        System.out.println(delta);
         if (delta < 0.0) {
-            scaleValue -= -(delta/200);
-            if(scaleValue<0.1)
+            scaleValue -= -(delta / 200);
+            if (scaleValue < 0.1) {
                 scaleValue = 0.1;
-
+            }
             zoomTo(scaleValue);
 
         } else {
-            scaleValue += (delta/200);
-            if(scaleValue>1)
+            scaleValue += (delta / 200);
+            if (scaleValue > 1)
                 scaleValue = 1;
             zoomTo(scaleValue);
+
         }
-
-
     }
 
     public Boolean checkRectBoundaries(double offsetX, double offsetY) {

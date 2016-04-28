@@ -5,7 +5,6 @@ import application.fxobjects.graph.Graph;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -35,6 +34,7 @@ public class WindowFactory {
 
         screenSize = Screen.getPrimary().getVisualBounds();
 
+        scene.setOnKeyPressed(g.getZoomController().getKeyHandler());
         window.setWidth(screenSize.getWidth());
         window.setHeight(screenSize.getHeight());
         window.setScene(scene);

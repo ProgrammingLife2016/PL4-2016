@@ -5,6 +5,7 @@ import application.fxobjects.ZoomableScrollPane;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.transform.Scale;
@@ -18,6 +19,7 @@ public class ZoomController extends ScrollPane {
     private ZoomBox  zoomBox;
     private BorderPane pane;
     private ZoomHandler zoomHandler;
+    private KeyHandler keyHandler;
 
     Scale scaleTransform;
     double scaleValue = 1.0;
@@ -27,10 +29,12 @@ public class ZoomController extends ScrollPane {
         zoomBox = new ZoomBox();
 
         zoomHandler = new ZoomHandler();
+        keyHandler = new KeyHandler();
 
         scaleTransform = new Scale(scaleValue, scaleValue, 0, 0);
 
         this.setOnScroll(new ZoomHandler());
+
         init();
     }
 
@@ -40,6 +44,13 @@ public class ZoomController extends ScrollPane {
 
     public BorderPane getPane() { return pane; }
 
+    public ZoomHandler getZoomHandler() {
+        return zoomHandler;
+    }
+
+    public KeyHandler getKeyHandler() { return keyHandler; }
+
+
     public BorderPane init() {
         pane = new BorderPane();
 
@@ -47,12 +58,9 @@ public class ZoomController extends ScrollPane {
         pane.setBottom(zoomBox.getZoomBox());
 
         pane.setOnScroll(new ZoomHandler());
+        pane.setOnKeyPressed(new KeyHandler());
 
         return pane;
-    }
-
-    public ZoomHandler getZoomHandler() {
-        return zoomHandler;
     }
 
 
@@ -60,16 +68,24 @@ public class ZoomController extends ScrollPane {
 
         @Override
         public void handle(ScrollEvent scrollEvent) {
-            //System.out.println("scroll event");
 
-            double delta = scrollEvent.getTextDeltaY();
+            double delta = scrollEvent.getDeltaY();
             {
-                //System.out.println(delta);
+
                 zoomPane.zoom(delta);
                 zoomBox.zoom(delta);
-
                 scrollEvent.consume();
             }
         }
+    }
+
+    private class KeyHandler implements EventHandler<KeyEvent> {
+
+        @Override
+        public void handle(KeyEvent event) {
+            System.out.println("key event");
+            zoomBox.moveRectangle(event);
+        }
+
     }
 }
