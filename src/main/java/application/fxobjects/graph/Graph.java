@@ -1,11 +1,9 @@
 package application.fxobjects.graph;
 
-import application.fxobjects.ZoomableScrollPane;
-
+import application.controllers.ZoomController;
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayer;
 import javafx.scene.Group;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 
 public class Graph {
@@ -14,7 +12,7 @@ public class Graph {
 
     private Group canvas;
 
-    private ZoomableScrollPane scrollPane;
+    private ZoomController zoomController;
 
     MouseHandling mouseHandler;
 
@@ -32,28 +30,25 @@ public class Graph {
         canvas = new Group();
         cellLayer = new CellLayer();
 
-        canvas.getChildren().add(cellLayer);
+        canvas.getChildren().addAll(cellLayer);
 
         mouseHandler = new MouseHandling(this);
 
-        scrollPane = new ZoomableScrollPane(canvas);
-
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
+        zoomController = new ZoomController(canvas);
 
     }
 
-    public ScrollPane getScrollPane() {
-        return this.scrollPane;
-    }
 
     public Pane getCellLayer() {
         return this.cellLayer;
     }
 
+    public ZoomController getZoomController() { return zoomController; }
+
     public Model getModel() {
         return model;
     }
+
 
     public void beginUpdate() {
     }
@@ -86,6 +81,6 @@ public class Graph {
     }
 
     public double getScale() {
-        return this.scrollPane.getScaleValue();
+        return zoomController.getZoomPane().getScaleValue();
     }
 }

@@ -1,8 +1,11 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
+import application.fxobjects.graph.Graph;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -23,12 +26,12 @@ public class WindowFactory {
 
     /**
      * Create method for windows.
-     * @param parent parent object for the window.
+     * @param c parent of the window
      * @return the constructed window.
      */
-    public static Stage createWindow(Parent parent) {
+    public static Stage createWindow(Parent c, ZoomBox z, Graph g) {
         Stage window = new Stage();
-        Scene scene = createScene(parent);
+        Scene scene = createScene(c, g.getZoomController());
 
         screenSize = Screen.getPrimary().getVisualBounds();
 
@@ -44,8 +47,9 @@ public class WindowFactory {
      * @param parent parent object for the scene.
      * @return the constructed scene.
      */
-    public static Scene createScene(Parent parent) {
+    public static Scene createScene(Parent parent, ZoomController c) {
         Scene scene = new Scene(parent);
+        scene.setOnScroll(c.getZoomHandler());
         return scene;
     }
 }

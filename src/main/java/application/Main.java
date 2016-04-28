@@ -2,6 +2,7 @@ package application;
 
 import application.controllers.GraphViewController;
 import application.controllers.WindowFactory;
+import application.fxobjects.ZoomBox;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -9,6 +10,10 @@ public class Main extends Application {
 	/**
      * MainController used for the application.
      */
+
+    //private Controller mainController;
+
+
     private GraphViewController mainController;
 
     /**
@@ -25,7 +30,11 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        mainController = new GraphViewController(primaryStage);
-		WindowFactory.createWindow(mainController.getRoot());
+
+        //mainController = new MainController();
+        mainController = new GraphViewController();
+        ZoomBox z = mainController.getGraph().getZoomController().getZoomBox();
+        WindowFactory.createWindow(mainController.getRoot(), z, mainController.getGraph());
+
     }
 }
