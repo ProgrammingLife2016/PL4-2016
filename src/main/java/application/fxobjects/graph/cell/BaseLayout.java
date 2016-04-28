@@ -28,18 +28,17 @@ public class BaseLayout extends CellLayout {
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
-                    if(lastType == CellType.TRIANGLE)
+                    if(lastType != CellType.TRIANGLE)
                         currentX += offset;
                     cell.relocate(currentX, 200);
                     currentY = 200;
                 case TRIANGLE:
-                    if(lastType == CellType.RECTANGLE) {
                         currentX += offset;
                         currentY += offset;
-                    }
-                    else
+
                         currentY -= offset * 2;
                     cell.relocate(currentX, currentY);
+                        currentY += offset * 2;
                 default:
                     break;
             }

@@ -72,6 +72,11 @@ public class Model {
         return allEdges;
     }
 
+    /**
+     * Method to add a Cell (Node).
+     * @param id the id, which represents the sequence.
+     * @param type The type of cell.
+     */
     public void addCell(String id, CellType type) {
 
         switch (type) {
@@ -91,6 +96,10 @@ public class Model {
         }
     }
 
+    /**
+     * Method to add a Cell (Node).
+     * @param cell The cell (Node) to add.
+     */
     private void addCell(Cell cell) {
 
         addedCells.add(cell);
@@ -99,6 +108,11 @@ public class Model {
 
     }
 
+    /**
+     * Method to add an Edge to the model.
+     * @param sourceId From.
+     * @param targetId To.
+     */
     public void addEdge(String sourceId, String targetId) {
 
         Cell sourceCell = cellMap.get(sourceId);
@@ -111,8 +125,7 @@ public class Model {
     }
 
     /**
-     * Attach all cells which don't have a parent to graphParent
-     *
+     * Attach all cells which don't have a parent to graphParent.
      * @param cellList
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
