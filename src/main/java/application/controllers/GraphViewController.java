@@ -81,14 +81,14 @@ public class GraphViewController extends Controller<StackPane> {
 
         //System.out.println(nodeMap.values());
         Node root = (nodeMap.get(1));
-        model.addCell(root.getSequence(),CellType.RECTANGLE);
+        model.addCell(Integer.toString(root.getId()),CellType.RECTANGLE);
 
         for(int i = 1; i<=nodeMap.size();i++) {
-            for(int j:nodeMap.get(i).getLinks()) {
+            for(int j : nodeMap.get(i).getLinks()) {
                 //Add next cell
-                model.addCell(nodeMap.get(j).getSequence(),CellType.RECTANGLE);
+                model.addCell(Integer.toString(nodeMap.get(j).getId()),CellType.RECTANGLE);
                 //Add link from current cell to next cell
-                model.addEdge(nodeMap.get(i).getSequence(),nodeMap.get(j).getSequence());
+                model.addEdge(Integer.toString(nodeMap.get(i).getId()),Integer.toString(nodeMap.get(j).getId()));
             }
 
         }
