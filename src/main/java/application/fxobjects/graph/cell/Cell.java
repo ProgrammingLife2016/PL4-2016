@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 public abstract class Cell extends Pane {
     private int cellId;
@@ -54,4 +55,5 @@ public abstract class Cell extends Pane {
     }
 
     public abstract CellType getType();
+    public abstract Text getText();
 }

@@ -1,11 +1,11 @@
 package application.fxobjects.graph;
 
+import application.fxobjects.graph.cell.Cell;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
 public class MouseHandling {
-
     final DragContext dragContext = new DragContext();
 
     Graph graph;
@@ -13,21 +13,15 @@ public class MouseHandling {
 
         @Override
         public void handle(MouseEvent event) {
+            Cell node = (Cell) event.getSource();
 
-            Node node = (Node) event.getSource();
-
-            double scale = graph.getScale();
-
-            dragContext.x = node.getBoundsInParent().getMinX() * scale - event.getScreenX();
-            dragContext.y = node.getBoundsInParent().getMinY() * scale - event.getScreenY();
-
+            System.out.println(node.getCellId());
         }
     };
     EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 
         @Override
         public void handle(MouseEvent event) {
-
             Node node = (Node) event.getSource();
 
             double offsetX = event.getScreenX() + dragContext.x;
@@ -51,17 +45,33 @@ public class MouseHandling {
         }
     };
 
+    EventHandler<MouseEvent> onMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            Cell cell = (Cell) event.getSource();
+            cell.getText().setVisible(true);
+
+        }
+    };
+
+    EventHandler<MouseEvent> onMouseExitedEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            Cell cell = (Cell) event.getSource();
+            cell.getText().setVisible(false);
+        }
+    };
+
     public MouseHandling(Graph graph) {
         this.graph = graph;
     }
 
-    public void makeDraggable(final Node node) {
-
-
+    public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnMouseReleased(onMouseReleasedEventHandler);
-
+        node.setOnMouseEntered(onMouseEnteredEventHandler);
+        node.setOnMouseExited(onMouseExitedEventHandler);
     }
 
     class DragContext {

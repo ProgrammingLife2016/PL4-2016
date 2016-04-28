@@ -87,7 +87,7 @@ public class Model {
                 break;
 
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id);
+                TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
 
