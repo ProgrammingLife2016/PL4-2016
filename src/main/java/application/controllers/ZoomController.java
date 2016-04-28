@@ -71,7 +71,6 @@ public class ZoomController extends ScrollPane {
 
             double delta = scrollEvent.getDeltaY();
             {
-
                 zoomPane.zoom(delta);
                 zoomBox.zoom(delta);
                 scrollEvent.consume();
@@ -83,7 +82,6 @@ public class ZoomController extends ScrollPane {
 
         @Override
         public void handle(KeyEvent event) {
-            System.out.println("key event");
             zoomBox.moveRectangle(event);
         }
 

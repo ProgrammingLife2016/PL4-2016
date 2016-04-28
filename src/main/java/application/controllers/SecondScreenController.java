@@ -43,7 +43,7 @@ public class SecondScreenController extends Controller<StackPane> {
         Graph g = graphViewer.getGraph();
 
         HBox box = new HBox();
-        menuController = new MenuController(this, menuBar);
+       // menuController = new MenuController(this, menuBar);
 
         HBox middleBox = new HBox();
         // middleBox.getChildren().addAll(g);

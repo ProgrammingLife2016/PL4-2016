@@ -89,26 +89,37 @@ public class ZoomBox extends ScrollPane {
         return res;
     }
 
-    public void scaleZoomRect(double delta) {
+    public void scaleZoomRectIn(double delta) {
+        if (zoomRect.getWidth() > 182.0) {
+            double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
+            zoomRect.setWidth(zoomRect.getWidth() + delta);
+            zoomRect.setHeight(zoomRect.getHeight() + adj);
+
+            zoomRect.setX(zoomRect.getX() - 0.5 * delta);
+            zoomRect.setY(zoomRect.getY() - 0.5 * adj);
+        }
+    }
+
+    public void scaleZoomRectOut(double delta) {
         double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
         zoomRect.setWidth(zoomRect.getWidth() + delta);
         zoomRect.setHeight(zoomRect.getHeight() + adj);
-
+        
         zoomRect.setX(zoomRect.getX() - 0.5 * delta);
         zoomRect.setY(zoomRect.getY() - 0.5 * adj);
+
     }
 
-
     public void zoom(double delta) {
-        if (delta > 0.0) {
+        if (-delta > 0.0) {
             if (checkRectBoundaries(delta, (zoomRect.getHeight() / zoomRect.getWidth()) * delta) && checkRectBoundaries(-delta, -(zoomRect.getHeight() / zoomRect.getWidth()) * delta)) {
-                scaleZoomRect(delta);
+                scaleZoomRectOut(-delta);
             }
-        } else if (delta < 0.0) {
+        } else if (-delta < 0.0) {
             if ((zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
-                    && zoomRect.getWidth() + delta * (zoomRect.getWidth() /
-                    zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
-                scaleZoomRect(delta);
+                    && zoomRect.getWidth() + delta * (zoomRect.getWidth() *
+                    zoomRect.getHeight()) >= (zoomRectBorder.getWidth() *0.05)) {
+                scaleZoomRectIn(-delta);
             }
         }
     }
@@ -118,7 +129,6 @@ public class ZoomBox extends ScrollPane {
         switch (event.getCode()) {
             case A:
                 if (checkRectBoundaries(-offset, 0)) {
-                    System.out.println("if");
                     zoomRect.setX(zoomRect.getX() - offset);
                 }
                 break;
