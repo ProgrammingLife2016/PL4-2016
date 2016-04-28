@@ -38,19 +38,43 @@ public class ZoomController extends ScrollPane {
         init();
     }
 
+    /**
+     * Getter for zoomPane.
+     * @return the zoomPane.
+     */
     public ZoomableScrollPane getZoomPane() { return zoomPane; }
 
+    /**
+     * Getter for zoomPane.
+     * @return the zoomPane.
+     */
     public ZoomBox getZoomBox() { return zoomBox; }
 
+    /**
+     * Getter for pan.
+     * @return the Pane.
+     */
     public BorderPane getPane() { return pane; }
 
+    /**
+     * Getter for zoomHandler.
+     * @return the handler.
+     */
     public ZoomHandler getZoomHandler() {
         return zoomHandler;
     }
 
+    /**
+     * Getter for keyHandler.
+     * @return the keyHandler.
+     */
     public KeyHandler getKeyHandler() { return keyHandler; }
 
 
+    /**
+     * Init method.
+     * @return the pane.
+     */
     public BorderPane init() {
         pane = new BorderPane();
 
@@ -63,7 +87,9 @@ public class ZoomController extends ScrollPane {
         return pane;
     }
 
-
+    /**
+     * Handler for the zoom function.
+     */
     private class ZoomHandler implements EventHandler<ScrollEvent> {
 
         @Override
@@ -78,6 +104,9 @@ public class ZoomController extends ScrollPane {
         }
     }
 
+    /**
+     * Handles the move funtion.
+     */
     private class KeyHandler implements EventHandler<KeyEvent> {
 
         @Override

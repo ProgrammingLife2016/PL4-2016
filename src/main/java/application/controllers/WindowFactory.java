@@ -23,9 +23,7 @@ public class WindowFactory {
     /**
      * Constructor method for WindowFactory.
      */
-    public WindowFactory(){
-
-    }
+    public WindowFactory(){}
 
     /**
      * Create method for windows.

@@ -54,6 +54,11 @@ public class GraphViewController extends Controller<StackPane> {
         zoomBox = zoomController.getZoomBox();
     }
 
+    /**
+     * Method to initialize.
+     * @param location
+     * @param resources
+     */
     public void initialize(URL location, ResourceBundle resources) {
         graph = new Graph();
 
@@ -74,6 +79,9 @@ public class GraphViewController extends Controller<StackPane> {
         this.getRoot().getChildren().addAll(root);
     }
 
+    /**
+     * Method that adds all nodes to the Model.
+     */
     public void addGraphComponents() {
         Model model = graph.getModel();
 
@@ -137,6 +145,10 @@ public class GraphViewController extends Controller<StackPane> {
         }
     }
 
+    /**
+     * Getter for the graph.
+     * @return the graph.
+     */
     public Graph getGraph() {
         return graph;
     }

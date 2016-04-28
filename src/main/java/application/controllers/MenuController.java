@@ -24,8 +24,6 @@ public class MenuController  {
     GraphViewController mainController;
     private MenuItem loadPhylogeneticTree,loadGenome,resetView, shortcuts, showPhylogeneticTree, showGenomeSequence;
 
-
-
     public MenuController(GraphViewController main, MenuBar bar) {
         this.mainController = main;
         this.menuBar = bar;
@@ -39,7 +37,6 @@ public class MenuController  {
         menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 
     }
-
 
     private Menu initHelpMenu() {
         shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
