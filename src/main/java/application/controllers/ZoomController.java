@@ -60,11 +60,11 @@ public class ZoomController extends ScrollPane {
 
         @Override
         public void handle(ScrollEvent scrollEvent) {
-            System.out.println("scroll event");
+            //System.out.println("scroll event");
 
             double delta = scrollEvent.getTextDeltaY();
             {
-                System.out.println(delta);
+                //System.out.println(delta);
                 zoomPane.zoom(delta);
                 zoomBox.zoom(delta);
 
