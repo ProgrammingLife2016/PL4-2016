@@ -10,6 +10,11 @@ public class Edge extends Group {
 
     Line line;
 
+    /**
+     * A class that represent an Edge between 2 nodes.
+     * @param source From.
+     * @param target To.
+     */
     public Edge(Cell source, Cell target) {
 
         this.source = source;
@@ -30,10 +35,18 @@ public class Edge extends Group {
 
     }
 
+    /**
+     * Getter Function.
+     * @return the source.
+     */
     public Cell getSource() {
         return source;
     }
 
+    /**
+     * Getter function.
+     * @return the target.
+     */
     public Cell getTarget() {
         return target;
     }

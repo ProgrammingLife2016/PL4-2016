@@ -19,13 +19,13 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    Map<String, Cell> cellMap; // <id,cell>
+    Map<Integer, Cell> cellMap; // <id,cell>
 
     public Model() {
 
-        graphParent = new RectangleCell("_ROOT_");
+        graphParent = new RectangleCell(1 , "");
 
-        // clear model, create lists
+       // clear model, create lists
         clear();
     }
 
@@ -72,17 +72,22 @@ public class Model {
         return allEdges;
     }
 
-    public void addCell(String id, CellType type) {
+    /**
+     * Method to add a Cell (Node).
+     * @param id the id, which represents the sequence.
+     * @param type The type of cell.
+     */
+    public void addCell(int id, String seq, CellType type) {
 
         switch (type) {
 
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
+                RectangleCell rectangleCell = new RectangleCell(id, seq);
                 addCell(rectangleCell);
                 break;
 
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id);
+                TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
 
@@ -91,15 +96,25 @@ public class Model {
         }
     }
 
+    /**
+     * Method to add a Cell (Node).
+     * @param cell The cell (Node) to add.
+     */
     private void addCell(Cell cell) {
 
-        addedCells.add(cell);
+        if(!cellMap.containsKey(cell.getCellId())) {
+            addedCells.add(cell);
 
-        cellMap.put(cell.getCellId(), cell);
-
+            cellMap.put(cell.getCellId(), cell);
+        }
     }
 
-    public void addEdge(String sourceId, String targetId) {
+    /**
+     * Method to add an Edge to the model.
+     * @param sourceId From.
+     * @param targetId To.
+     */
+    public void addEdge(int sourceId, int targetId) {
 
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
@@ -111,8 +126,7 @@ public class Model {
     }
 
     /**
-     * Attach all cells which don't have a parent to graphParent
-     *
+     * Attach all cells which don't have a parent to graphParent.
      * @param cellList
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
