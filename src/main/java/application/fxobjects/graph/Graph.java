@@ -1,7 +1,7 @@
 package application.fxobjects.graph;
 
 import application.fxobjects.ZoomableScrollPane;
-
+import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayer;
 import javafx.scene.Group;
@@ -15,6 +15,8 @@ public class Graph {
     private Group canvas;
 
     private ZoomableScrollPane scrollPane;
+
+    private ZoomBox zoomBox;
 
     MouseHandling mouseHandler;
 
@@ -32,7 +34,9 @@ public class Graph {
         canvas = new Group();
         cellLayer = new CellLayer();
 
-        canvas.getChildren().add(cellLayer);
+        zoomBox = new ZoomBox();
+
+        canvas.getChildren().addAll(cellLayer);
 
         mouseHandler = new MouseHandling(this);
 
@@ -40,6 +44,9 @@ public class Graph {
 
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+
+
+
 
     }
 
@@ -54,6 +61,8 @@ public class Graph {
     public Model getModel() {
         return model;
     }
+
+    public ZoomBox getZoomBox() { return zoomBox; }
 
     public void beginUpdate() {
     }

@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
 import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
@@ -11,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.swing.border.Border;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,9 +49,15 @@ public class GraphViewController extends Controller<StackPane> {
     public void initialize(URL location, ResourceBundle resources) {
         BorderPane root = new BorderPane();
 
+
+
         graph = new Graph();
 
         root.setCenter(graph.getScrollPane());
+
+        ZoomBox box = graph.getZoomBox();
+
+        root.setRight(box.getZoomBox());
 
 //        Scene scene = new Scene(root);
 //        scene.getStylesheets().add(getClass().getResource("/application/css/graph.css").toExternalForm());
