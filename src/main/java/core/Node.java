@@ -7,6 +7,7 @@ import java.util.List;
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
+@SuppressWarnings("checkstyle:javadocmethod")
 public class Node {
 
     /**
