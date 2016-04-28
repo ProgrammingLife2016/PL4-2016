@@ -4,19 +4,27 @@ import core.Node;
 import core.Parser;
 
 import java.util.HashMap;
+import application.controllers.Controller;
+import application.controllers.GraphViewController;
+import application.controllers.MainController;
+import application.controllers.WindowFactory;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-/**
- * Main class for initialization purposes.
- */
-public class Main {
+public class Main extends Application {
 	static HashMap nodeMap;
 
 	/**
-	 * Standard main method.
-	 * @param args argument parameter.
-	 *
-	 */
-	public static void main(String[] args) {
+     * MainController used for the application.
+     */
+    private Controller mainController;
+
+    /**
+     * Usual main method to start the application.
+     * @param args runtime arguments.
+     */
+    public static void main(String[] args) {
+        launch(args);
 
 		Parser parser = new Parser();
 		nodeMap = parser.readGFA("src/main/resources/TBTestFile.gfa");
@@ -25,7 +33,18 @@ public class Main {
 		Node root = (Node)nodeMap.get(1);
 		System.out.println("Root: " + root.getSequence());
 		dfs(root, 1,new boolean[nodeMap.size()]);
-		}
+    }
+
+    /**
+     * Method to launch the application.
+     * @param primaryStage stage used to initialize GUI.
+     */
+    @Override
+    public void start(Stage primaryStage) {
+        //mainController = new MainController();
+        mainController = new GraphViewController(primaryStage);
+        WindowFactory.createWindow(mainController.getRoot());
+    }
 
 	private static void dfs(Node n,int ni,boolean[] marked){
 		if(n == null && ni>0) return;
