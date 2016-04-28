@@ -11,7 +11,7 @@ public class ZoomableScrollPane extends ScrollPane {
     Group zoomGroup;
     Scale scaleTransform;
     Node content;
-    double scaleValue = 1.0;
+    double scaleValue = 0.1;
 
     private Rectangle zoomRectBorder;
     public Rectangle zoomRect;
@@ -86,11 +86,16 @@ public class ZoomableScrollPane extends ScrollPane {
     public void zoom(double delta) {
         System.out.println(delta);
         if (delta < 0.0) {
-            scaleValue -= -(delta/100);
+            scaleValue -= -(delta/200);
+            if(scaleValue<0.1)
+                scaleValue = 0.1;
+
             zoomTo(scaleValue);
 
         } else {
-            scaleValue += (delta/100);
+            scaleValue += (delta/200);
+            if(scaleValue>1)
+                scaleValue = 1;
             zoomTo(scaleValue);
         }
 
