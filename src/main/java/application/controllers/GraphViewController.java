@@ -1,5 +1,8 @@
 package application.controllers;
 
+import application.TreeItem;
+import application.TreeMain;
+import application.TreeParser;
 import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
 import application.fxobjects.graph.Model;
@@ -17,9 +20,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Controller class, used when creating other controllers.
@@ -56,6 +62,7 @@ public class GraphViewController extends Controller<StackPane> {
 
     /**
      * Method to initialize.
+     *
      * @param location
      * @param resources
      */
@@ -73,6 +80,7 @@ public class GraphViewController extends Controller<StackPane> {
         root.setTop(hbox);
 
         addGraphComponents();
+        //addPhylogeneticTree();
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
 
@@ -92,16 +100,14 @@ public class GraphViewController extends Controller<StackPane> {
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        for(int i = 1; i<=nodeMap.size();i++) {
+        for (int i = 1; i <= nodeMap.size(); i++) {
 
             int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for(int j:nodeMap.get(i).getLinks()) {
+            for (int j : nodeMap.get(i).getLinks()) {
                 //Add next cell
-                if(numberOfLinks==1) {
+                if (numberOfLinks == 1) {
                     model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
-                }
-                else
-                {
+                } else {
                     model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
                 }
                 //Add link from current cell to next cell
@@ -114,32 +120,80 @@ public class GraphViewController extends Controller<StackPane> {
         graph.endUpdate();
     }
 
+    public void addPhylogeneticTree() {
+
+        try {
+            TreeMain tm = new TreeMain();
+            setup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Implementing phylogenetic tree here.
+     */
+    TreeItem current;
+    int current_depth = 0;
+
+    void setup() throws IOException {
+        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new FileReader(f));
+        String t = r.readLine();
+        current = TreeParser.parse(t);
+
+        Model model = graph.getModel();
+        graph.beginUpdate();
+        int i = 1;
+        //model.addCell(i,root.getName(),CellType.RECTANGLE);
+        //i++;
+
+        Queue<TreeItem> q = new LinkedList<>();
+        ArrayList<Integer> done = new ArrayList<>();
+
+        q.add(current);
+        model.addCell(1,current.getName(),CellType.RECTANGLE);
+        while (!q.isEmpty()) {
+            current = q.poll();
+            int j = 1;
+            for (TreeItem child : current.getChildren()) {
+                model.addCell(i+j, child.getName(), CellType.RECTANGLE);
+                model.addEdge(i, i + j);
+                if (!done.contains(i+j))
+                    q.add(child);
+                j++;
+            }
+            done.add(i);
+            i++;
+        }
+
+        graph.endUpdate();
+    }
+
     /**
      * A simple Depth Frist implementation to display every Node in our Graph.
-     * @param n Current Node.
-     * @param ni Integer to find current Node in map.
+     *
+     * @param n      Current Node.
+     * @param ni     Integer to find current Node in map.
      * @param marked Keep track of Nodes that are already added in case of loops.
-     * @param m The model to add the Nodes to.
+     * @param m      The model to add the Nodes to.
      */
-    private void dfs(Node n,int ni,boolean[] marked, Model m){
-        if(n == null && ni>0) return;
-        marked[ni-1] = true;
+    private void dfs(Node n, int ni, boolean[] marked, Model m) {
+        if (n == null && ni > 0) return;
+        marked[ni - 1] = true;
 
         //for every child
-        for(int i: n.getLinks())
-        {
+        for (int i : n.getLinks()) {
             Node next = nodeMap.get(i);
             //if childs state is not visited then recurse
 
-            if(!marked[i - 1])
-            {
-                m.addCell(next.getId(), next.getSequence(),CellType.RECTANGLE);
+            if (!marked[i - 1]) {
+                m.addCell(next.getId(), next.getSequence(), CellType.RECTANGLE);
                 m.addEdge(n.getId(), next.getId());
                 dfs(next, i, marked, m);
-                marked[i-1] =true;
-            }
-            else
-            {
+                marked[i - 1] = true;
+            } else {
                 m.addEdge(n.getId(), next.getId());
             }
         }
@@ -147,12 +201,12 @@ public class GraphViewController extends Controller<StackPane> {
 
     /**
      * Getter for the graph.
+     *
      * @return the graph.
      */
     public Graph getGraph() {
         return graph;
     }
-
 
 
 }
