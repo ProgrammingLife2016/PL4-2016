@@ -1,12 +1,13 @@
 package core;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * Created by Skullyhoofd on 25/04/2016.
@@ -20,17 +21,16 @@ public class NodeTest {
      * SetUp used to test the Node Class.
      */
     @Before
-    public void setUp() throws Exception {
-        n = new Node(0,"ATCG",0);
+    public void setUp() {
+        n = new Node(0, "ATCG", 0);
         n.addLink(0);
     }
 
     /**
      * Test to test if Node's are added correctly.
-     * @throws Exception
      */
     @Test
-    public void testAddLink() throws Exception {
+    public void testAddLink() {
         ArrayList<Integer> al1 = new ArrayList<Integer>();
         al1.add(0);
         al1.add(1);
@@ -43,28 +43,25 @@ public class NodeTest {
 
     /**
      * Test GetId method.
-     * @throws Exception
      */
     @Test
-    public void testGetId() throws Exception {
-        assertEquals(n.getId(),0);
+    public void testGetId() {
+        assertEquals(n.getId(), 0);
     }
 
     /**
      * Test the GetSequence method.
-     * @throws Exception
      */
     @Test
-    public void testGetSequence() throws Exception {
-        assertEquals(n.getSequence(),"ATCG");
+    public void testGetSequence() {
+        assertEquals(n.getSequence(), "ATCG");
     }
 
     /**
      * Test the SetSequence method.
-     * @throws Exception
      */
     @Test
-    public void testSetSequence() throws Exception {
+    public void testSetSequence() {
         n.setSequence("ATCGATCG");
         assertEquals(n.getSequence(), "ATCGATCG");
 
@@ -72,29 +69,26 @@ public class NodeTest {
 
     /**
      * Test the GetzIndex method.
-     * @throws Exception
      */
     @Test
-    public void testGetzIndex() throws Exception {
+    public void testGetzIndex() {
         assertEquals(n.getzIndex(), 0);
     }
 
     /**
      * Test the SetzIndex method.
-     * @throws Exception
      */
     @Test
-    public void testSetzIndex() throws Exception {
+    public void testSetzIndex() {
         n.setzIndex(3);
         assertEquals(n.getzIndex(), 3);
     }
 
     /**
      * Test the GetLinks method.
-     * @throws Exception
      */
     @Test
-    public void testGetLinks() throws Exception {
+    public void testGetLinks() {
         ArrayList<Integer> al1 = new ArrayList<Integer>();
         al1.add(0);
         assertTrue(n.getLinks().equals(al1));
