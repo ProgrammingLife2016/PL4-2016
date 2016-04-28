@@ -5,12 +5,9 @@ import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
-import application.fxobjects.graph.cell.RandomCellLayout;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 

@@ -15,7 +15,6 @@ public class BaseLayout extends CellLayout {
     private CellType lastType;
 
     public BaseLayout(Graph graph, int offset) {
-        this.graph = graph;
         this.currentX = 20;
         this.currentY = 200;
         this.lastType = null;
