@@ -80,14 +80,14 @@ public class ZoomableScrollPane extends ScrollPane {
 
     public void zoom(double delta) {
         if (delta < 0.0) {
-            scaleValue -= -(delta / 200);
+            scaleValue -= -(delta / 400);
             if (scaleValue < 0.1) {
                 scaleValue = 0.1;
             }
             zoomTo(scaleValue);
 
         } else {
-            scaleValue += (delta / 200);
+            scaleValue += (delta / 400);
             if (scaleValue > 1)
                 scaleValue = 1;
             zoomTo(scaleValue);
