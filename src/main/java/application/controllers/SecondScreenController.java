@@ -28,7 +28,7 @@ public class SecondScreenController extends Controller<StackPane> {
 
     public SecondScreenController() {
         super(new StackPane());
-       // loadFXMLfile("/application/fxml/main.fxml");
+        // loadFXMLfile("/application/fxml/main.fxml");
 
     }
 
@@ -46,8 +46,7 @@ public class SecondScreenController extends Controller<StackPane> {
         menuController = new MenuController(this, menuBar);
 
         HBox middleBox = new HBox();
-       // middleBox.getChildren().addAll(g);
-
+        // middleBox.getChildren().addAll(g);
 
 
         box.getChildren().addAll(screen, menuBar);
@@ -56,8 +55,5 @@ public class SecondScreenController extends Controller<StackPane> {
         mainPane.setTop(box);
         this.getRoot().getChildren().addAll(mainPane);
     }
-
-
-
 
 }
