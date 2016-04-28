@@ -90,7 +90,6 @@ public class GraphViewController extends Controller<StackPane> {
                 //Add next cell
                 if(numberOfLinks==1) {
                     model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
-                    
                 }
                 else
                 {
