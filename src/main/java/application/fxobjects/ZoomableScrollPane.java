@@ -87,8 +87,9 @@ public class ZoomableScrollPane extends ScrollPane {
 
         } else {
             scaleValue += (delta / 400);
-            if (scaleValue > 1)
+            if (scaleValue > 1) {
                 scaleValue = 1;
+            }
             zoomTo(scaleValue);
 
         }

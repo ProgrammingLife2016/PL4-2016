@@ -46,11 +46,8 @@ public class MenuController  {
     }
 
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Load Genome Sequence", null, null);
+        showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null, null);
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
-
-        showGenomeSequence.setOnAction(t -> WindowFactory.createDirectoryChooser());
-
 
         resetView = initMenuItem("Reset", null, null);
         Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView);
@@ -62,6 +59,7 @@ public class MenuController  {
         loadGenome = initMenuItem("Load Genome Sequence", new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN), null);
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree", new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN), null);
 
+        loadGenome.setOnAction(t -> WindowFactory.createDirectoryChooser());
         Menu fileMenu = initMenu("File", loadGenome, loadPhylogeneticTree);
         return fileMenu;
 
