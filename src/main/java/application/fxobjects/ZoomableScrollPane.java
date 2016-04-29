@@ -19,13 +19,7 @@ public class ZoomableScrollPane extends ScrollPane {
 
     public ZoomableScrollPane(Node content) {
         this.content = content;
-
-
-        this.setHbarPolicy(ScrollBarPolicy.NEVER);
-        this.setVbarPolicy(ScrollBarPolicy.NEVER);
-
         Group contentGroup = new Group();
-
 
         zoomGroup = new Group();
         contentGroup.getChildren().addAll(zoomGroup);
