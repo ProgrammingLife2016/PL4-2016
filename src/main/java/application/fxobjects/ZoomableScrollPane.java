@@ -19,7 +19,6 @@ public class ZoomableScrollPane extends ScrollPane {
 
     public ZoomableScrollPane(Node content) {
         this.content = content;
-
         Group contentGroup = new Group();
 
         zoomGroup = new Group();

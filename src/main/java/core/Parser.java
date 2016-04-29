@@ -31,7 +31,8 @@ public class Parser {
     public final HashMap<Integer, Node> readGFA(final String input) {
 		BufferedReader bReader;
 		try {
-			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), "UTF-8"));
+			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), 
+					"UTF-8"));
 			String nextLine;
 			while ((nextLine = bReader.readLine()) != null) {
                 String[] content = nextLine.trim().split("\\s+");
