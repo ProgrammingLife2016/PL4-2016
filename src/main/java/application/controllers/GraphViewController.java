@@ -123,7 +123,7 @@ public class GraphViewController extends Controller<StackPane> {
     public void addPhylogeneticTree() {
 
         try {
-            TreeMain tm = new TreeMain();
+            //TreeMain tm = new TreeMain();
             setup();
         } catch (IOException e) {
             e.printStackTrace();
@@ -146,26 +146,30 @@ public class GraphViewController extends Controller<StackPane> {
         Model model = graph.getModel();
         graph.beginUpdate();
         int i = 1;
-        //model.addCell(i,root.getName(),CellType.RECTANGLE);
-        //i++;
 
         Queue<TreeItem> q = new LinkedList<>();
         ArrayList<Integer> done = new ArrayList<>();
 
+        System.out.println((current.getName()));
         q.add(current);
-        model.addCell(1,current.getName(),CellType.RECTANGLE);
+        model.addCell(i,current.getName(),CellType.RECTANGLE);
+        System.out.println("Cell added: " + i);
+
         while (!q.isEmpty()) {
             current = q.poll();
-            int j = 1;
+            //From node
+            int j = i;
+
             for (TreeItem child : current.getChildren()) {
-                model.addCell(i+j, child.getName(), CellType.RECTANGLE);
-                model.addEdge(i, i + j);
-                if (!done.contains(i+j))
-                    q.add(child);
-                j++;
+                model.addCell(++i, child.getName(), CellType.RECTANGLE);
+                System.out.println("Cell added: " + i);
+                model.addEdge(j, i);
+                System.out.println("Link added: " + j +  ", "+ i);
+                //System.out.println("Link added: " + j +  ", "+ i);
+                q.add(child);
             }
-            done.add(i);
-            i++;
+            //done.add(i);
+           // i++;
         }
 
         graph.endUpdate();
