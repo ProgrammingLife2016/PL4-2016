@@ -30,7 +30,6 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-
         //mainController = new MainController();
         mainController = new GraphViewController();
         ZoomBox z = mainController.getGraph().getZoomController().getZoomBox();

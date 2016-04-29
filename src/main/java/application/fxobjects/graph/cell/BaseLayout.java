@@ -46,14 +46,14 @@ public class BaseLayout extends CellLayout {
                     cellCount = 0;
                     break;
                 case TRIANGLE:
-                    if (cellCount % 2 == 0) {
-                        currentY += (cellCount + 1) * offset;
-                        currentY += offset * 2;
-                    }
+                    if(cellCount%2==0) {
+                            currentY += (cellCount+2)*(cellCount)* offset;
+                        }
                     else {
-                            currentY -= (cellCount + 1) * offset;
-                            currentY -= offset * 2;
-                    }
+                            currentY -= (cellCount)*(cellCount+1) * offset;
+                            //currentY -= offset * 2;
+                        }
+
                     currentX += offset;
                     cellCount++;
 

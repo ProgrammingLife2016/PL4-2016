@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
 import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
@@ -7,8 +8,10 @@ import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
 import core.Node;
 import core.Parser;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -32,6 +35,8 @@ public class GraphViewController extends Controller<StackPane> {
     private HashMap<Integer, Node> nodeMap;
 
     private ZoomController zoomController;
+    private ZoomBox zoomBox;
+
     @FXML
     StackPane screen;
     @FXML
@@ -46,8 +51,14 @@ public class GraphViewController extends Controller<StackPane> {
         this.graph = new Graph();
 
         zoomController = graph.getZoomController();
+        zoomBox = zoomController.getZoomBox();
     }
 
+    /**
+     * Method to initialize.
+     * @param location
+     * @param resources
+     */
     public void initialize(URL location, ResourceBundle resources) {
         graph = new Graph();
 
@@ -65,23 +76,19 @@ public class GraphViewController extends Controller<StackPane> {
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
 
-
-
         this.getRoot().getChildren().addAll(root);
     }
 
+    /**
+     * Method that adds all nodes to the Model.
+     */
     public void addGraphComponents() {
         Model model = graph.getModel();
 
         graph.beginUpdate();
-
-//        model.addCell("Cell A", CellType.RECTANGLE);
-//        model.addEdge("Cell AB", "Cell B");
-
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
-        //System.out.println(nodeMap.values());
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
@@ -115,7 +122,6 @@ public class GraphViewController extends Controller<StackPane> {
      * @param m The model to add the Nodes to.
      */
     private void dfs(Node n,int ni,boolean[] marked, Model m){
-
         if(n == null && ni>0) return;
         marked[ni-1] = true;
 
@@ -127,7 +133,6 @@ public class GraphViewController extends Controller<StackPane> {
 
             if(!marked[i - 1])
             {
-
                 m.addCell(next.getId(), next.getSequence(),CellType.RECTANGLE);
                 m.addEdge(n.getId(), next.getId());
                 dfs(next, i, marked, m);
@@ -140,7 +145,14 @@ public class GraphViewController extends Controller<StackPane> {
         }
     }
 
+    /**
+     * Getter for the graph.
+     * @return the graph.
+     */
     public Graph getGraph() {
         return graph;
     }
+
+
+
 }
