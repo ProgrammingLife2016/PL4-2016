@@ -31,6 +31,11 @@ public class Node {
     private List<Integer> links;
 
     /**
+     * List of genomes of which this node is a part.
+     */
+    private List<String> genomes;
+
+    /**
      * Node constructor.
      * @param id - Node identifier.
      * @param seq - Actual nucleic acid sequence contents of the node.
@@ -41,6 +46,7 @@ public class Node {
         this.sequence = seq;
         this.zIndex = z;
         this.links = new ArrayList<Integer>();
+        this.genomes = new ArrayList<String>();
     }
 
     /**
@@ -49,6 +55,14 @@ public class Node {
      */
     public void addLink(int link) {
         this.links.add(link);
+    }
+
+    /**
+     * Add a genome to the node.
+     * @param s - The other node to which this one is linked.
+     */
+    public void addGenome(String s) {
+        this.genomes.add(s);
     }
 
     /**
@@ -61,7 +75,8 @@ public class Node {
                 + "id=" + id
                 + ", sequence='" + sequence + '\''
                 + ", zIndex=" + zIndex
-                + ", links=" + links
+                + ", links=" + links.toString()
+                + ", genomes=" + genomes.toString()
                 + '}';
     }
 
@@ -89,6 +104,10 @@ public class Node {
 
     public List<Integer> getLinks() {
         return links;
+    }
+
+    public List<String> getGenomes() {
+        return genomes;
     }
 
 
