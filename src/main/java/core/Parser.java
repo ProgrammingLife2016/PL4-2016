@@ -28,7 +28,8 @@ public class Parser {
 	 * @param input - filepath of .gfa file to be parsed.
 	 * @return - A HashMap containing the information from the .gfa file.
 	 */
-    public final HashMap<Integer, Node> readGFA(final String input) {
+	 @SuppressWarnings("checkstyle:magicnumbers")
+    	public final HashMap<Integer, Node> readGFA(final String input) {
 		BufferedReader bReader;
 		try {
 			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), 
