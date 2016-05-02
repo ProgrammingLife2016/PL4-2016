@@ -62,14 +62,6 @@ public class Node {
      * Add a genome to the node.
      * @param s - The other node to which this one is linked.
      */
-    public void addGenome(String s) {
-        this.genomes.add(s);
-    }
-
-    /**
-     * Add a genome to the node.
-     * @param s - The other node to which this one is linked.
-     */
     public void addAllGenome(String[] s) {
         this.genomes.addAll(Arrays.asList(s));
     }
