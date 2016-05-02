@@ -152,7 +152,7 @@ public class GraphViewController extends Controller<StackPane> {
 
         System.out.println((current.getName()));
         q.add(current);
-        model.addCell(i,current.getName(),CellType.RECTANGLE);
+        model.addCell(i,current.getName(),CellType.PHYLOGENETIC);
         System.out.println("Cell added: " + i);
 
         while (!q.isEmpty()) {
@@ -161,7 +161,7 @@ public class GraphViewController extends Controller<StackPane> {
             int j = i;
 
             for (TreeItem child : current.getChildren()) {
-                model.addCell(++i, child.getName(), CellType.RECTANGLE);
+                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
                 System.out.println("Cell added: " + i);
                 model.addEdge(j, i);
                 System.out.println("Link added: " + j +  ", "+ i);

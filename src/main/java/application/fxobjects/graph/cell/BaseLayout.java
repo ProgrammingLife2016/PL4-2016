@@ -29,7 +29,7 @@ public class BaseLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
 
-
+        boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
@@ -52,10 +52,42 @@ public class BaseLayout extends CellLayout {
 
                     cell.relocate(currentX, currentY);
                         //currentY += offset * 2;
+//                case PHYLOGENETIC:
+//                    if(!done) {
+//                        System.out.println("kachel");
+//                        cell.relocate(100, 100);
+//                        toCellWithDepth(cells.get(0), 0, 0);
+//                        done = true;
+//                        break;
+//                    }
                 default:
                     break;
             }
             lastType = cell.getType();
         }
+    }
+    private int maxDepth = 0;
+    private int count = 0;
+    private void toCellWithDepth(Cell c, int depth,int downmoves) {
+        //count leafs
+        if(c.getCellChildren().isEmpty()) {
+            count++;
+        }
+        if (depth>maxDepth)
+            maxDepth = depth;
+        int childNumber = -1;
+        for(Cell child: c.getCellChildren()) {
+            childNumber++;
+            toCellWithDepth(child,depth+1, downmoves+childNumber);
+        }
+        //System.out.println(downmoves + " " + depth);
+
+        if(c.getCellChildren().isEmpty()) {
+            c.relocate(maxDepth*50,count*50);
+        }
+        else {
+            c.relocate(50+depth*50,count*50);
+        }
+
     }
 }

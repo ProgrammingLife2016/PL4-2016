@@ -90,6 +90,10 @@ public class Model {
                 TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
+            case PHYLOGENETIC:
+                PhylogeneticCell recCell = new PhylogeneticCell(id, seq);
+                addCell(recCell);
+                break;
 
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
