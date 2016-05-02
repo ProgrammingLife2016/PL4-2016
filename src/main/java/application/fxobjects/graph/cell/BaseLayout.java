@@ -14,15 +14,16 @@ public class BaseLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
-
+    private static final int baseX = 200;
+    private static final int baseY = 200;
     /**
      * Class constructor.
      * @param graph A given graph.
      * @param offset Offset to be added on execute() call.
      */
     public BaseLayout(Graph graph, int offset) {
-        this.currentX = 20;
-        this.currentY = 200;
+        this.currentX = baseX;
+        this.currentY = baseY;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
@@ -41,8 +42,8 @@ public class BaseLayout extends CellLayout {
                     if (lastType != CellType.TRIANGLE) {
                         currentX += offset;
                     }
-                    cell.relocate(currentX, 200);
-                    currentY = 200;
+                    cell.relocate(currentX, baseY);
+                    currentY = baseY;
                     cellCount = 0;
                     break;
                 case TRIANGLE:
@@ -52,10 +53,17 @@ public class BaseLayout extends CellLayout {
                         currentY -= cellCount * offset;
                     }
 
-                    currentX += offset;
-                    cellCount++;
+                    if (currentY == baseY) {
+                        currentX += offset;
+                    }
 
+                    cellCount++;
                     cell.relocate(currentX, currentY);
+
+                    // Don't draw triangles above rectangles
+                    if (currentY != baseY) {
+                        currentX += offset;
+                    }
                     break;
                 default:
                     break;
