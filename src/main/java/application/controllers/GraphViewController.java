@@ -6,6 +6,7 @@ import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
+import core.GraphReducer;
 import core.Node;
 import core.Parser;
 import javafx.event.EventHandler;
@@ -84,33 +85,41 @@ public class GraphViewController extends Controller<StackPane> {
      */
     public void addGraphComponents() {
         Model model = graph.getModel();
-
         graph.beginUpdate();
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
+        for (int i = 0; i < 10; i++) {
+            System.out.println(nodeMap.size());
+            GraphReducer.collapse(nodeMap);
+            System.out.println("--------------------");
+        }
+
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        for(int i = 1; i<=nodeMap.size();i++) {
+        for (int idx = 1; idx <= nodeMap.size(); idx++) {
+            Node node = nodeMap.get(idx);
+            if (node != null) {
+                int numberOfLinks = node.getLinks().size();
 
-            int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for(int j:nodeMap.get(i).getLinks()) {
-                //Add next cell
-                if(numberOfLinks==1) {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
+                for (int linkId : node.getLinks()) {
+                    Node child = nodeMap.get(linkId);
+
+                    if (child != null) {
+                        //Add next cell
+                        if (numberOfLinks == 1) {
+                            model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
+                        } else {
+                            model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
+                        }
+                        //Add link from current cell to next cell
+                        model.addEdge(node.getId(), child.getId());
+                    }
                 }
-                else
-                {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
-                }
-                //Add link from current cell to next cell
-                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId());
             }
-
         }
 
-        //dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
     }
 
