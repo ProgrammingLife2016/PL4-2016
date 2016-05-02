@@ -176,34 +176,6 @@ public class GraphViewController extends Controller<StackPane> {
     }
 
     /**
-     * A simple Depth Frist implementation to display every Node in our Graph.
-     *
-     * @param n      Current Node.
-     * @param ni     Integer to find current Node in map.
-     * @param marked Keep track of Nodes that are already added in case of loops.
-     * @param m      The model to add the Nodes to.
-     */
-    private void dfs(Node n, int ni, boolean[] marked, Model m) {
-        if (n == null && ni > 0) return;
-        marked[ni - 1] = true;
-
-        //for every child
-        for (int i : n.getLinks()) {
-            Node next = nodeMap.get(i);
-            //if childs state is not visited then recurse
-
-            if (!marked[i - 1]) {
-                m.addCell(next.getId(), next.getSequence(), CellType.RECTANGLE);
-                m.addEdge(n.getId(), next.getId());
-                dfs(next, i, marked, m);
-                marked[i - 1] = true;
-            } else {
-                m.addEdge(n.getId(), next.getId());
-            }
-        }
-    }
-
-    /**
      * Getter for the graph.
      *
      * @return the graph.
