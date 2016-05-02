@@ -1,10 +1,6 @@
 package application.fxobjects.graph;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.CellType;
-import application.fxobjects.graph.cell.Edge;
-import application.fxobjects.graph.cell.RectangleCell;
-import application.fxobjects.graph.cell.TriangleCell;
+import application.fxobjects.graph.cell.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
