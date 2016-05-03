@@ -10,34 +10,43 @@ import java.util.Objects;
  */
 public class GraphReducer {
 
-
-    public final static HashMap<Integer, Node> collapse(HashMap<Integer, Node> nodeMap) {
-        for (int idx = 0; idx < nodeMap.size(); idx++) {
-
+    private final static void determineParents(HashMap<Integer, Node> nodeMap) {
+        for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
-            if (parent != null) {
-                List<Node> children = parent.getLiveLinks(nodeMap);
 
-                int collapseLevels = 1;
-                if (children.size() >= 4) {
-                   collapseLevels = (int) Math.floor(children.size() / 2.0);
-                }
-
-                if (parent.getLiveLinks(nodeMap).size() >= 2) {
-                    Node child1 = children.get(0);
-                    Node child2 = children.get(children.size() - 1);
-
-                    for (Node node : children) {
-
-                    }
-                    List<Node> grantChildren1 = new ArrayList<Node>();
-                    List<Node> grantChildren2 = new ArrayList<Node>();
-
-                }
+            for (int childId : parent.getLinks()) {
+                nodeMap.get(childId).addParent(parent.getId());
             }
-
         }
+    }
+    public final static void collapse(HashMap<Integer, Node> nodeMap) {
+        determineParents(nodeMap);
 
-        return nodeMap;
+        for (int idx = 1; idx <= nodeMap.size(); idx++) {
+            Node parent = nodeMap.get(idx);
+            System.out.println(parent);
+
+            if (parent == null) { continue; }
+            List<Node> children = parent.getLiveLinks(nodeMap);
+
+            if (children.size() >= 2 && children.size() <= 2) {
+                Node grandChild = null;
+
+                for (Node node : children) {
+                    List<Node> liveLinks = node.getLiveLinks(nodeMap);
+                    List<Integer> parents = node.getParents();
+
+                    if (liveLinks.size() != 1 || parents.size() != 1) { break; }
+
+                    if (grandChild == null) {
+                        grandChild = liveLinks.get(0);
+                    } else if (liveLinks.get(0).getId() != grandChild.getId()) {
+                        break;
+                    }
+                }
+                //System.out.println("Removing node...");
+                nodeMap.remove(children.get(1).getId());
+            }
+        }
     }
 }

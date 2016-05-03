@@ -97,7 +97,7 @@ public class GraphViewController extends Controller<StackPane> {
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
-        //GraphReducer.collapse(nodeMap);
+        GraphReducer.collapse(nodeMap);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
