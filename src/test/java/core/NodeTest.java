@@ -87,6 +87,32 @@ public class NodeTest {
     }
 
     /**
+     * Test the addParent method with 1 parent node.
+     */
+    @Test
+    public void testAddParentPartial() {
+        Node n1 = new Node(1, "A", 1);
+        n1.addParent(21);
+
+        assertEquals(n1.getParents().size(), 1);
+        assertEquals(n1.getParents().get(0), (Integer) 21);
+    }
+
+    /**
+     * Test the addParent method with multiple parent nodes.
+     */
+    @Test
+    public void testAddParentFull() {
+        Node n1 = new Node(1, "A", 1);
+        n1.addParent(21);
+        n1.addParent(42);
+
+        assertEquals(n1.getParents().size(), 2);
+        assertEquals(n1.getParents().get(0), (Integer) 21);
+        assertEquals(n1.getParents().get(1), (Integer) 42);
+    }
+
+    /**
      * Test GetId method.
      */
     @Test

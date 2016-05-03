@@ -33,6 +33,10 @@ public class Node {
     private List<Integer> links;
 
     /**
+     * List of ids of parent Nodes which have this node as child.
+     */
+    private List<Integer> parents;
+    /**
      * List of genomes of which this node is a part.
      */
     private List<String> genomes;
@@ -48,6 +52,7 @@ public class Node {
         this.sequence = seq;
         this.zIndex = z;
         this.links = new ArrayList<>();
+        this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
     }
 
@@ -57,6 +62,14 @@ public class Node {
      */
     public void addLink(int link) {
         this.links.add(link);
+    }
+
+    /**
+     * Add a parent node's Id which links this node.
+     * @param parent - A parent node.
+     */
+    public void addParent(int parent) {
+        this.parents.add(parent);
     }
 
     /**
@@ -87,17 +100,19 @@ public class Node {
 
     /**
      * toStrong method to represent Node as a string.
+     *
      * @return - the string representation.
      */
     @Override
     public String toString() {
-        return "Node{"
-                + "id=" + id
-                + ", sequence='" + sequence + '\''
-                + ", zIndex=" + zIndex
-                + ", links=" + links.toString()
-                + ", genomes=" + genomes.toString()
-                + '}';
+        return "Node{" +
+                "id=" + id +
+                ", sequence='" + sequence + '\'' +
+                ", zIndex=" + zIndex +
+                ", links=" + links +
+                ", parents=" + parents +
+                ", genomes=" + genomes +
+                '}';
     }
 
     /** Getters & Setters. **/
@@ -124,6 +139,10 @@ public class Node {
 
     public List<Integer> getLinks() {
         return links;
+    }
+
+    public List<Integer> getParents() {
+        return parents;
     }
 
     public List<String> getGenomes() {
