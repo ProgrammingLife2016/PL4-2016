@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,6 +42,49 @@ public class NodeTest {
         assertTrue(n.getLinks().equals(al1));
     }
 
+    /**
+     * Test the getLiveLinks method with all links in the nodeMap.
+     */
+    @Test
+    public void testGetLiveLinksFull() {
+        Node n1 = new Node(1, "A", 1);
+        Node n2 = new Node(2, "B", 2);
+        Node n3 = new Node(3, "C", 3);
+
+        n1.addLink(n2.getId());
+        n1.addLink(n3.getId());
+
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(n1.getId(), n1);
+        nodeMap.put(n2.getId(), n2);
+        nodeMap.put(n3.getId(), n3);
+
+        List<Node> liveNodes = n1.getLiveLinks(nodeMap);
+        assertEquals(liveNodes.size(), 2);
+        assertEquals(liveNodes.get(0), n2);
+        assertEquals(liveNodes.get(1), n3);
+    }
+
+    /**
+     * Test the getLiveLinks method with only one link in the nodeMap.
+     */
+    @Test
+    public void testGetLiveLinksPartial() {
+        Node n1 = new Node(1, "A", 1);
+        Node n2 = new Node(2, "B", 2);
+        Node n3 = new Node(3, "C", 3);
+
+        n1.addLink(n2.getId());
+        n1.addLink(n3.getId());
+
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(n1.getId(), n1);
+        nodeMap.put(n2.getId(), n2);
+
+        List<Node> liveNodes = n1.getLiveLinks(nodeMap);
+        assertEquals(liveNodes.size(), 1);
+        assertEquals(liveNodes.get(0), n2);
+    }
 
     /**
      * Test GetId method.

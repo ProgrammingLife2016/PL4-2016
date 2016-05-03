@@ -1,6 +1,8 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,6 +33,11 @@ public class Node {
     private List<Integer> links;
 
     /**
+     * List of genomes of which this node is a part.
+     */
+    private List<String> genomes;
+
+    /**
      * Node constructor.
      * @param id - Node identifier.
      * @param seq - Actual nucleic acid sequence contents of the node.
@@ -40,7 +47,8 @@ public class Node {
         this.id = id;
         this.sequence = seq;
         this.zIndex = z;
-        this.links = new ArrayList<Integer>();
+        this.links = new ArrayList<>();
+        this.genomes = new ArrayList<>();
     }
 
     /**
@@ -49,6 +57,32 @@ public class Node {
      */
     public void addLink(int link) {
         this.links.add(link);
+    }
+
+    /**
+     * Add a genome to the node.
+     * @param s - The other node to which this one is linked.
+     */
+    public void addAllGenome(String[] s) {
+        this.genomes.addAll(Arrays.asList(s));
+    }
+
+    /**
+     * Gets all live links by comparing the link list with all existing nodes.
+     * @param nodeMap A HashMap of all existing nodes.
+     * @return A list of links which are not null.
+     */
+    public List<Node> getLiveLinks(HashMap<Integer, Node> nodeMap) {
+        List<Node> liveLinks = new ArrayList<>();
+
+        for (int id : links) {
+            Node child = nodeMap.get(id);
+            if (child != null) {
+                liveLinks.add(child);
+            }
+        }
+
+        return liveLinks;
     }
 
     /**
@@ -61,7 +95,8 @@ public class Node {
                 + "id=" + id
                 + ", sequence='" + sequence + '\''
                 + ", zIndex=" + zIndex
-                + ", links=" + links
+                + ", links=" + links.toString()
+                + ", genomes=" + genomes.toString()
                 + '}';
     }
 
@@ -89,6 +124,10 @@ public class Node {
 
     public List<Integer> getLinks() {
         return links;
+    }
+
+    public List<String> getGenomes() {
+        return genomes;
     }
 
 

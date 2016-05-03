@@ -1,5 +1,8 @@
 package application.controllers;
 
+import application.TreeItem;
+import application.TreeMain;
+import application.TreeParser;
 import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
 import application.fxobjects.graph.Model;
@@ -18,9 +21,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Controller class, used when creating other controllers.
@@ -57,6 +63,7 @@ public class GraphViewController extends Controller<StackPane> {
 
     /**
      * Method to initialize.
+     *
      * @param location
      * @param resources
      */
@@ -74,6 +81,7 @@ public class GraphViewController extends Controller<StackPane> {
         root.setTop(hbox);
 
         addGraphComponents();
+        //addPhylogeneticTree();
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
 
@@ -89,11 +97,7 @@ public class GraphViewController extends Controller<StackPane> {
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(nodeMap.size());
-            GraphReducer.collapse(nodeMap);
-            System.out.println("--------------------");
-        }
+        //GraphReducer.collapse(nodeMap);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
@@ -101,14 +105,12 @@ public class GraphViewController extends Controller<StackPane> {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node node = nodeMap.get(idx);
             if (node != null) {
-                int numberOfLinks = node.getLinks().size();
-
                 for (int linkId : node.getLinks()) {
                     Node child = nodeMap.get(linkId);
 
                     if (child != null) {
                         //Add next cell
-                        if (numberOfLinks == 1) {
+                        if (node.getLinks().size() == 1) {
                             model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
                         } else {
                             model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
@@ -123,45 +125,69 @@ public class GraphViewController extends Controller<StackPane> {
         graph.endUpdate();
     }
 
-    /**
-     * A simple Depth Frist implementation to display every Node in our Graph.
-     * @param n Current Node.
-     * @param ni Integer to find current Node in map.
-     * @param marked Keep track of Nodes that are already added in case of loops.
-     * @param m The model to add the Nodes to.
-     */
-    private void dfs(Node n,int ni,boolean[] marked, Model m){
-        if(n == null && ni>0) return;
-        marked[ni-1] = true;
+    public void addPhylogeneticTree() {
 
-        //for every child
-        for(int i: n.getLinks())
-        {
-            Node next = nodeMap.get(i);
-            //if childs state is not visited then recurse
-
-            if(!marked[i - 1])
-            {
-                m.addCell(next.getId(), next.getSequence(),CellType.RECTANGLE);
-                m.addEdge(n.getId(), next.getId());
-                dfs(next, i, marked, m);
-                marked[i-1] =true;
-            }
-            else
-            {
-                m.addEdge(n.getId(), next.getId());
-            }
+        try {
+            //TreeMain tm = new TreeMain();
+            setup();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+    }
+
+    /**
+     * Implementing phylogenetic tree here.
+     */
+    TreeItem current;
+    int current_depth = 0;
+
+    void setup() throws IOException {
+        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new FileReader(f));
+        String t = r.readLine();
+        current = TreeParser.parse(t);
+
+        Model model = graph.getModel();
+        graph.beginUpdate();
+        int i = 1;
+
+        Queue<TreeItem> q = new LinkedList<>();
+        ArrayList<Integer> done = new ArrayList<>();
+
+        System.out.println((current.getName()));
+        q.add(current);
+        model.addCell(i,current.getName(),CellType.PHYLOGENETIC);
+        System.out.println("Cell added: " + i);
+
+        while (!q.isEmpty()) {
+            current = q.poll();
+            //From node
+            int j = i;
+
+            for (TreeItem child : current.getChildren()) {
+                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
+                System.out.println("Cell added: " + i);
+                model.addEdge(j, i);
+                System.out.println("Link added: " + j +  ", "+ i);
+                //System.out.println("Link added: " + j +  ", "+ i);
+                q.add(child);
+            }
+            //done.add(i);
+           // i++;
+        }
+
+        graph.endUpdate();
     }
 
     /**
      * Getter for the graph.
+     *
      * @return the graph.
      */
     public Graph getGraph() {
         return graph;
     }
-
 
 
 }

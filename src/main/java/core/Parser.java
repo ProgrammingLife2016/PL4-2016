@@ -28,7 +28,8 @@ public class Parser {
 	 * @param input - filepath of .gfa file to be parsed.
 	 * @return - A HashMap containing the information from the .gfa file.
 	 */
-    public final HashMap<Integer, Node> readGFA(final String input) {
+	 @SuppressWarnings("checkstyle:magicnumbers")
+    	public final HashMap<Integer, Node> readGFA(final String input) {
 		BufferedReader bReader;
 		try {
 			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), 
@@ -43,12 +44,19 @@ public class Parser {
 						int id = Integer.parseInt(content[1]);
                         String sequence = content[2];
                         int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
-                        if (!nodeMap.containsKey(id)) {
+						String[] genomes = content[4].split(":")[2].split(";");
+						for (int i = 0; i < genomes.length; i++) {
+							genomes[i] = genomes[i].substring(0,genomes[i].length()-6);
+						}
+
+						if (!nodeMap.containsKey(id)) {
                             nodeMap.put(id, new Node(id, sequence, z));
                         } else {
                             nodeMap.get(id).setSequence(sequence);
                             nodeMap.get(id).setzIndex(z);
                         }
+						
+						nodeMap.get(id).addAllGenome(genomes);
 						break;
 					case 'L':
                         int orig = Integer.parseInt(content[1]);
