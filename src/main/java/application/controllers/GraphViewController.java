@@ -88,7 +88,7 @@ public class GraphViewController extends Controller<StackPane> {
     }
 
     /**
-     * Method that adds all nodes to the Model.
+     * Method that adds all nodes and edges to the Model.
      */
     public void addGraphComponents() {
         Model model = graph.getModel();
@@ -98,39 +98,34 @@ public class GraphViewController extends Controller<StackPane> {
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
         Node root = (nodeMap.get(1));
+        //Add the root to start with.
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
         Object r = root.getGenomes().get(0);
 
         for (int i = 1; i <= nodeMap.size(); i++) {
-            Collection<Integer> start = new ArrayList<>();
-            int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j : nodeMap.get(i).getLinks()) {
+            Node from = nodeMap.get(i);
+            for (int j : from.getLinks()) {
+                Node to = nodeMap.get(j);
                 //Add next cell
                 if (nodeMap.get(j).getGenomes().contains(r)) {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
+                    model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
+                    model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
-                //Add link from current cell to next cell
 
-                Collection<Integer> end = new ArrayList<>();
-
-                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId(), intersection(nodeMap.get(i).getGenomes(),nodeMap.get(j).getGenomes()));
+                //Add link from current cell to next cell.
+                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(), to.getGenomes()));
             }
 
         }
-
-        //dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
     }
 
     private int intersection(List<String> l1, List<String> l2) {
         int i = 0;
-        System.out.println(l1);
-        System.out.println(l2);
-        for (String s:l1) {
-            if(l2.contains(s)) {
+        for (String s : l1) {
+            if (l2.contains(s)) {
                 i++;
             }
         }
@@ -171,7 +166,7 @@ public class GraphViewController extends Controller<StackPane> {
 
         System.out.println((current.getName()));
         q.add(current);
-        model.addCell(i,current.getName(),CellType.PHYLOGENETIC);
+        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
         System.out.println("Cell added: " + i);
 
         while (!q.isEmpty()) {
@@ -183,12 +178,12 @@ public class GraphViewController extends Controller<StackPane> {
                 model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
                 System.out.println("Cell added: " + i);
                 model.addEdge(j, i, 1);
-                System.out.println("Link added: " + j +  ", "+ i);
+                System.out.println("Link added: " + j + ", " + i);
                 //System.out.println("Link added: " + j +  ", "+ i);
                 q.add(child);
             }
             //done.add(i);
-           // i++;
+            // i++;
         }
 
         graph.endUpdate();
