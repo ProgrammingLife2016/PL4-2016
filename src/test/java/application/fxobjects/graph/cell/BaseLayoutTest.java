@@ -3,9 +3,11 @@ package application.fxobjects.graph.cell;
 import application.fxobjects.graph.Graph;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test class for BaseLayout.java.
@@ -18,8 +20,10 @@ import static org.junit.Assert.assertEquals;
        "checkstyle:magicnumber"
 })
 public class BaseLayoutTest {
-    private Graph testGraph;
     private BaseLayout baseLayout;
+
+    @Mock
+    public final Graph testGraph = mock(Graph.class);
 
     /**
      * Set up method for testing purposes.
@@ -27,7 +31,6 @@ public class BaseLayoutTest {
      */
     @Before
     public void setUp() throws Exception {
-        testGraph = new Graph();
         baseLayout = new BaseLayout(null, 0);
     }
 
