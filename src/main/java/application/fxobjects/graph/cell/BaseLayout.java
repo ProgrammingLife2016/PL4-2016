@@ -17,7 +17,8 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Class constructor.
-     * @param graph A given graph.
+     *
+     * @param graph  A given graph.
      * @param offset Offset to be added on execute() call.
      */
     public BaseLayout(Graph graph, int offset) {
@@ -46,25 +47,15 @@ public class BaseLayout extends CellLayout {
                     cellCount = 1;
                     break;
                 case TRIANGLE:
-//                    if(cellCount%2==1) {
-//
-//                            currentY += (cellCount++)* offset/2;
-//                        }
-//                    else {
-//                            currentY -= 2*(cellCount) * offset/2;
-//                            //currentY -= offset * 2;
-//                        }
-                    if(lastType==CellType.RECTANGLE)
-                        currentX+= (offset/2);
+                    if (lastType == CellType.RECTANGLE)
+                        currentX += (offset / 2);
 
-                    currentY = -currentY + ((currentY/(currentY+1)*100));
-                   // System.out.println(currentY);
+                    currentY = -currentY + ((currentY / (currentY + 1) * 100));
                     currentX += offset;
                     cellCount++;
 
                     cell.relocate(currentX, currentY);
-                    currentX -= (offset/2);
-                    //currentY += offset * 2;
+                    currentX -= (offset / 2);
                     break;
 //                case PHYLOGENETIC:
 //                    if(!done) {
@@ -80,27 +71,28 @@ public class BaseLayout extends CellLayout {
             lastType = cell.getType();
         }
     }
+
     private int maxDepth = 0;
     private int count = 0;
-    private void toCellWithDepth(Cell c, int depth,int downmoves) {
+
+    private void toCellWithDepth(Cell c, int depth, int downmoves) {
         //count leafs
-        if(c.getCellChildren().isEmpty()) {
+        if (c.getCellChildren().isEmpty()) {
             count++;
         }
-        if (depth>maxDepth)
+        if (depth > maxDepth)
             maxDepth = depth;
         int childNumber = -1;
-        for(Cell child: c.getCellChildren()) {
+        for (Cell child : c.getCellChildren()) {
             childNumber++;
-            toCellWithDepth(child,depth+1, downmoves+childNumber);
+            toCellWithDepth(child, depth + 1, downmoves + childNumber);
         }
         //System.out.println(downmoves + " " + depth);
 
-        if(c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth*50,count*50);
-        }
-        else {
-            c.relocate(50+depth*50,count*50);
+        if (c.getCellChildren().isEmpty()) {
+            c.relocate(maxDepth * 50, count * 50);
+        } else {
+            c.relocate(50 + depth * 50, count * 50);
         }
 
     }
