@@ -21,11 +21,11 @@ public class TriangleCell extends Cell {
      */
     public TriangleCell(int id, String seq) {
         super(id);
-        double width = 50;
-        double height = 50;
+        double width = 10;
+        double height = 10;
 
         StackPane pane = new StackPane();
-        pane.setMaxHeight(50);
+        pane.setMaxHeight(10);
         text = new Text(seq);
         text.setVisible(false);
         text.setManaged(false);

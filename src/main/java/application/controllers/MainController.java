@@ -1,5 +1,6 @@
 package application.controllers;
 
+import core.graph.Graph;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
@@ -39,8 +40,9 @@ public class MainController extends Controller<BorderPane> {
     public final void initialize(URL location, ResourceBundle resources) {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
+        Graph graph = new Graph();
 
-        GraphController graphController = new GraphController(this);
+        GraphController graphController = new GraphController(this, graph);
         AnchorPane anchorPane = graphController.getRoot();
 
         this.getRoot().setTop(menuBar);
