@@ -1,10 +1,11 @@
 package application.controllers;
 
+import application.fxobjects.graph.MouseHandling;
 import application.fxobjects.graph.cell.BaseLayout;
+import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
 import javafx.scene.layout.AnchorPane;
 import core.graph.Graph;
-import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,14 +17,13 @@ public class GraphController extends Controller<AnchorPane> {
     private Graph graph;
     private MainController mainController;
 
-    public GraphController(MainController controller) {
+    public GraphController(MainController controller, Graph g) {
         super(new AnchorPane());
-        this.graph = new Graph();
+        this.graph = g;
         this.mainController = controller;
 
         init();
     }
-
 
     public Graph getGraph() { return graph; }
 
@@ -34,10 +34,9 @@ public class GraphController extends Controller<AnchorPane> {
     }
 
     public void init() {
-        StackPane root = new StackPane();
+        AnchorPane root = new AnchorPane();
 
-        CellLayout layout = new BaseLayout(graph, 100);
-        layout.execute();
+        graph.addGraphComponents();
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());
@@ -47,10 +46,10 @@ public class GraphController extends Controller<AnchorPane> {
         root.getChildren().removeAll(graph.getModel().getRemovedCells());
         root.getChildren().removeAll(graph.getModel().getRemovedEdges());
 
-        // enable dragging of cells
-//        for (Cell cell : graph.getModel().getAddedCells()) {
-//            mouseHandler.setMouseHandling(cell);
-//        }
+        graph.endUpdate();
+
+        CellLayout layout = new BaseLayout(graph, 20);
+        layout.execute();
 
         System.out.println("fill root");
         this.getRoot().getChildren().add(root);

@@ -14,6 +14,7 @@ public class MouseHandling {
 
     Graph graph;
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
+        System.out.println("mouse");
         Cell node = (Cell) event.getSource();
 
         System.out.println(node.getCellId());

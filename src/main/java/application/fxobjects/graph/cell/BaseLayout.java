@@ -35,7 +35,6 @@ public class BaseLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
 
-
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:

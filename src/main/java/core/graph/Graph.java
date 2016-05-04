@@ -21,7 +21,6 @@ public class Graph {
     public Graph() {
         this.model = new Model();
 
-        addGraphComponents();
     }
 
     /**
@@ -34,7 +33,6 @@ public class Graph {
 
 
     public void addGraphComponents() {
-        Model model = this.getModel();
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
@@ -55,7 +53,6 @@ public class Graph {
                 model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId());
             }
         }
-        endUpdate();
     }
 
     public void endUpdate() {
