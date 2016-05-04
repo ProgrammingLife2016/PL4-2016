@@ -66,10 +66,54 @@ public class NodeTest {
     }
 
     /**
-     * Test the getLiveLinks method with only one link in the nodeMap.
+     * Test the getLiveParents method with only one parent in the nodeMap.
      */
     @Test
     public void testGetLiveLinksPartial() {
+        Node n1 = new Node(1, "A", 1);
+        Node n2 = new Node(2, "B", 2);
+        Node n3 = new Node(3, "C", 3);
+
+        n1.addParent(n2.getId());
+        n1.addParent(n3.getId());
+
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(n1.getId(), n1);
+        nodeMap.put(n2.getId(), n2);
+
+        List<Node> liveParents = n1.getLiveParents(nodeMap);
+        assertEquals(liveParents.size(), 1);
+        assertEquals(liveParents.get(0), n2);
+    }
+
+    /**
+     * Test the getLiveParents method with all parents in the nodeMap.
+     */
+    @Test
+    public void testGetLiveParentsFull() {
+        Node n1 = new Node(1, "A", 1);
+        Node n2 = new Node(2, "B", 2);
+        Node n3 = new Node(3, "C", 3);
+
+        n1.addParent(n2.getId());
+        n1.addParent(n3.getId());
+
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(n1.getId(), n1);
+        nodeMap.put(n2.getId(), n2);
+        nodeMap.put(n3.getId(), n3);
+
+        List<Node> liveParents = n1.getLiveParents(nodeMap);
+        assertEquals(liveParents.size(), 2);
+        assertEquals(liveParents.get(0), n2);
+        assertEquals(liveParents.get(1), n3);
+    }
+
+    /**
+     * Test the getLiveLinks method with only one link in the nodeMap.
+     */
+    @Test
+    public void testGetLiveParentsPartial() {
         Node n1 = new Node(1, "A", 1);
         Node n2 = new Node(2, "B", 2);
         Node n3 = new Node(3, "C", 3);

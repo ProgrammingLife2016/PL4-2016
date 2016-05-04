@@ -90,9 +90,7 @@ public class Node {
 
         for (int id : parents) {
             Node parent = nodeMap.get(id);
-            if (parent != null) {
-                liveParents.add(parent);
-            }
+            if (parent != null) {  liveParents.add(parent); }
         }
 
         return liveParents;
@@ -108,9 +106,7 @@ public class Node {
 
         for (int id : links) {
             Node child = nodeMap.get(id);
-            if (child != null) {
-                liveLinks.add(child);
-            }
+            if (child != null) { liveLinks.add(child); }
         }
 
         return liveLinks;
@@ -157,6 +153,10 @@ public class Node {
 
     public List<Integer> getLinks() {
         return links;
+    }
+
+    public void setLinks(List<Integer> links) {
+        this.links = links;
     }
 
     public List<Integer> getParents() {
