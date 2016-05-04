@@ -155,12 +155,12 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      */
-    public void addEdge(int sourceId, int targetId) {
+    public void addEdge(int sourceId, int targetId, int width) {
 
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
-        Edge edge = new Edge(sourceCell, targetCell);
+        Edge edge = new Edge(sourceCell, targetCell, width);
 
         addedEdges.add(edge);
 

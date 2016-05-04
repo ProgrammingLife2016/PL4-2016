@@ -38,27 +38,33 @@ public class BaseLayout extends CellLayout {
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
-                    if (lastType != CellType.TRIANGLE) {
-                        currentX += offset;
-                    }
-                    cell.relocate(currentX, 200);
+                    currentX += offset;
+
                     currentY = 200;
-                    cellCount = 0;
+                    cell.relocate(currentX, currentY);
+
+                    cellCount = 1;
                     break;
                 case TRIANGLE:
-                    if(cellCount%2==0) {
-                            currentY += (cellCount+2)*(cellCount)* offset;
-                        }
-                    else {
-                            currentY -= (cellCount)*(cellCount+1) * offset;
-                            //currentY -= offset * 2;
-                        }
+//                    if(cellCount%2==1) {
+//
+//                            currentY += (cellCount++)* offset/2;
+//                        }
+//                    else {
+//                            currentY -= 2*(cellCount) * offset/2;
+//                            //currentY -= offset * 2;
+//                        }
+                    if(lastType==CellType.RECTANGLE)
+                        currentX+= (offset/2);
 
+                    currentY = -currentY + ((currentY/(currentY+1)*100));
+                   // System.out.println(currentY);
                     currentX += offset;
                     cellCount++;
 
                     cell.relocate(currentX, currentY);
-                        //currentY += offset * 2;
+                    currentX -= (offset/2);
+                    //currentY += offset * 2;
                     break;
 //                case PHYLOGENETIC:
 //                    if(!done) {

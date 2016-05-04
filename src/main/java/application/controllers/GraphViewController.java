@@ -100,24 +100,43 @@ public class GraphViewController extends Controller<StackPane> {
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        for (int i = 1; i <= nodeMap.size(); i++) {
+        Object r = root.getGenomes().get(0);
 
+        for (int i = 1; i <= nodeMap.size(); i++) {
+            Collection<Integer> start = new ArrayList<>();
             int numberOfLinks = nodeMap.get(i).getLinks().size();
             for (int j : nodeMap.get(i).getLinks()) {
                 //Add next cell
-                if (numberOfLinks == 1) {
+                if (nodeMap.get(j).getGenomes().contains(r)) {
                     model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
                 }
                 //Add link from current cell to next cell
-                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId());
+
+                Collection<Integer> end = new ArrayList<>();
+
+                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId(), intersection(nodeMap.get(i).getGenomes(),nodeMap.get(j).getGenomes()));
             }
 
         }
 
         //dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
+    }
+
+    private int intersection(List<String> l1, List<String> l2) {
+        int i = 0;
+        System.out.println(l1);
+        System.out.println(l2);
+        for (String s:l1) {
+            if(l2.contains(s)) {
+                i++;
+            }
+        }
+        System.out.println(i);
+        return i;
+
     }
 
     public void addPhylogeneticTree() {
@@ -163,7 +182,7 @@ public class GraphViewController extends Controller<StackPane> {
             for (TreeItem child : current.getChildren()) {
                 model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
                 System.out.println("Cell added: " + i);
-                model.addEdge(j, i);
+                model.addEdge(j, i, 1);
                 System.out.println("Link added: " + j +  ", "+ i);
                 //System.out.println("Link added: " + j +  ", "+ i);
                 q.add(child);
