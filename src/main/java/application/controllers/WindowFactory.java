@@ -1,7 +1,7 @@
 package application.controllers;
 
 import application.fxobjects.ZoomBox;
-import application.fxobjects.graph.Graph;
+import core.graph.Graph;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
