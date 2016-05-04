@@ -122,6 +122,13 @@ public class GraphViewController extends Controller<StackPane> {
         graph.endUpdate();
     }
 
+    /**
+     * Method that returns the amount of element that exist in both lists.
+     *
+     * @param l1 The first list.
+     * @param l2 The second list.
+     * @return Number of element that exist in both lists.
+     */
     private int intersection(List<String> l1, List<String> l2) {
         int i = 0;
         for (String s : l1) {
@@ -129,9 +136,7 @@ public class GraphViewController extends Controller<StackPane> {
                 i++;
             }
         }
-        System.out.println(i);
         return i;
-
     }
 
     public void addPhylogeneticTree() {
@@ -179,13 +184,9 @@ public class GraphViewController extends Controller<StackPane> {
                 System.out.println("Cell added: " + i);
                 model.addEdge(j, i, 1);
                 System.out.println("Link added: " + j + ", " + i);
-                //System.out.println("Link added: " + j +  ", "+ i);
                 q.add(child);
             }
-            //done.add(i);
-            // i++;
         }
-
         graph.endUpdate();
     }
 
