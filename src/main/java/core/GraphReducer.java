@@ -6,6 +6,11 @@ import java.util.*;
  * Created by Niels Warnars on 2-5-2016.
  */
 public class GraphReducer {
+
+    /**
+     * Give all nodes a list of its parents.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     */
     private final static void determineParents(HashMap<Integer, Node> nodeMap) {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
@@ -21,6 +26,11 @@ public class GraphReducer {
         }
     }
 
+    /**
+     * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param collapseLevel How many collapse actions have already been performed.
+     */
     public final static void collapse(HashMap<Integer, Node> nodeMap, int collapseLevel) {
         determineParents(nodeMap);
 
@@ -36,7 +46,11 @@ public class GraphReducer {
     }
 
 
-
+    /**
+     * Collapse a parent and its grandchild horizontally.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param parent    A given parent node to be collapsed with its grandchild.
+     */
     private final static void collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
         if (parent == null) { return; }
         if (parent.getLiveLinks(nodeMap).size() != 1) { return; }
@@ -57,12 +71,18 @@ public class GraphReducer {
     }
 
 
+    /**
+     * Collapse a parent and its grandchild horizontally.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param parent    A given parent node to be collapsed with a number of its children.
+     * @return  Whether nodes have been collapsed.
+     */
     private final static Boolean collapseNodeBubbles(HashMap<Integer, Node> nodeMap, Node parent) {
         Boolean res = false;
         List<Node> children = parent.getLiveLinks(nodeMap);
         if (children.size() > 4) { return res; }
         for (Node child : children) {
-            if (recurse(nodeMap, parent, child)) {
+            if (collapseCheck(nodeMap, parent, child)) {
                 nodeMap.remove(child.getId());
                 if (!res) { res = true; }
             }
@@ -72,7 +92,14 @@ public class GraphReducer {
     }
 
 
-    private final static Boolean recurse(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
+    /**
+     * Check whether a node can be collapsed / removed.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param startNode    A parent node linked to a to be collapsed node.
+     * @param currentNode   A node to be removed / collapsed.
+     * @return  Whether currentNode can be removed / collapsed.
+     */
+    private final static Boolean collapseCheck(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
         List<Node> startNodeChildren = startNode.getLiveLinks(nodeMap);
         List<Node> currentNodeChildren = currentNode.getLiveLinks(nodeMap);
 
