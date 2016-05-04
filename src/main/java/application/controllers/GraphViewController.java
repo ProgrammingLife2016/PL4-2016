@@ -46,7 +46,7 @@ public class GraphViewController extends Controller<StackPane> {
      */
     public GraphViewController() {
         super(new StackPane());
-        loadFXMLfile("../../fxml/graphview.fxml");
+        loadFXMLfile("/fxml/graphview.fxml");
         this.graph = new Graph();
 
         zoomController = graph.getZoomController();
@@ -88,7 +88,7 @@ public class GraphViewController extends Controller<StackPane> {
 
         graph.beginUpdate();
         Parser parser = new Parser();
-        nodeMap = parser.readGFA(this.getClass().getResourceAsStream("../../TB10.gfa"));
+        nodeMap = parser.readGFA(this.getClass().getResourceAsStream("/TB10.gfa"));
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
