@@ -1,7 +1,7 @@
-package application.fxobjects.graph;
+package core;
 
 import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.CellType;
+import core.graph.cell.CellType;
 import application.fxobjects.graph.cell.Edge;
 import application.fxobjects.graph.cell.RectangleCell;
 import application.fxobjects.graph.cell.TriangleCell;

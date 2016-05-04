@@ -1,6 +1,7 @@
 package application.fxobjects.graph.cell;
 
-import application.fxobjects.graph.Graph;
+import core.graph.Graph;
+import core.graph.cell.CellType;
 
 import java.util.List;
 

@@ -2,9 +2,8 @@ package application.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,20 +11,22 @@ import java.util.ResourceBundle;
 /**
  * MainController for GUI.
  */
-public class MainController extends Controller<StackPane> {
+public class MainController extends Controller<BorderPane> {
+
 
     @FXML
-    StackPane screen;
-    @FXML
-    BorderPane mainPane;
+    AnchorPane screen;
     @FXML
     MenuBar menuBar;
+
+    AnchorPane anchorPane;
 
     /**
      * Constructor to create MainController based on abstract Controller.
      */
     public MainController() {
-        super(new StackPane());
+        super(new BorderPane());
+        anchorPane = new AnchorPane();
         loadFXMLfile("/application/fxml/main.fxml");
     }
 
@@ -36,12 +37,27 @@ public class MainController extends Controller<StackPane> {
      * @param resources resources to localize the root object.
      */
     public final void initialize(URL location, ResourceBundle resources) {
-        HBox box = new HBox();
+        MenuFactory menuFactory = new MenuFactory(this);
+        menuBar = menuFactory.createMenu(menuBar);
 
-        box.getChildren().addAll(screen, menuBar);
-        screen.getChildren().setAll();
+        GraphController graphController = new GraphController(this);
+        AnchorPane anchorPane = graphController.getRoot();
 
-        mainPane.setTop(box);
-        this.getRoot().getChildren().addAll(mainPane);
+        this.getRoot().setTop(menuBar);
+        this.getRoot().setCenter(anchorPane);
+
+
+//        this.getRoot().getStylesheets().add("application/css/main.css");
+//        this.getRoot().getStyleClass().add("root");
     }
+
+
+    public void switchScene() {
+//        System.out.println("switch scene");
+//        BorderPane borderPane = this.getRoot();
+//        GraphController graph = new GraphController(this);
+//        borderPane.setCenter(graph.init());
+
+    }
+
 }
