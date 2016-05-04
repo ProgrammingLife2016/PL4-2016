@@ -81,6 +81,24 @@ public class Node {
     }
 
     /**
+     * Gets all live parents by comparing the link list with all existing nodes.
+     * @param nodeMap A HashMap of all existing nodes.
+     * @return A list of parents which are not null.
+     */
+    public List<Node> getLiveParents(HashMap<Integer, Node> nodeMap) {
+        List<Node> liveParents = new ArrayList<>();
+
+        for (int id : parents) {
+            Node parent = nodeMap.get(id);
+            if (parent != null) {
+                liveParents.add(parent);
+            }
+        }
+
+        return liveParents;
+    }
+
+    /**
      * Gets all live links by comparing the link list with all existing nodes.
      * @param nodeMap A HashMap of all existing nodes.
      * @return A list of links which are not null.

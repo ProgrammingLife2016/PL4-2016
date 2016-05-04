@@ -13,40 +13,51 @@ public class GraphReducer {
     private final static void determineParents(HashMap<Integer, Node> nodeMap) {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
-
+            if (parent == null) { continue; }
             for (int childId : parent.getLinks()) {
                 nodeMap.get(childId).addParent(parent.getId());
             }
         }
     }
+
     public final static void collapse(HashMap<Integer, Node> nodeMap) {
         determineParents(nodeMap);
 
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
-            System.out.println(parent);
-
             if (parent == null) { continue; }
+
             List<Node> children = parent.getLiveLinks(nodeMap);
-
-            if (children.size() >= 2 && children.size() <= 2) {
-                Node grandChild = null;
-
-                for (Node node : children) {
-                    List<Node> liveLinks = node.getLiveLinks(nodeMap);
-                    List<Integer> parents = node.getParents();
-
-                    if (liveLinks.size() != 1 || parents.size() != 1) { break; }
-
-                    if (grandChild == null) {
-                        grandChild = liveLinks.get(0);
-                    } else if (liveLinks.get(0).getId() != grandChild.getId()) {
-                        break;
+            // Only parents with two children should be evaluated.
+            if (children.size() == 2) {
+                for (Node child : children) {
+                    if (recurse2(nodeMap, parent, child)) {
+                        nodeMap.remove(child.getId());
                     }
                 }
-                //System.out.println("Removing node...");
-                nodeMap.remove(children.get(1).getId());
             }
+
+//            if (children.size() == 3) {
+//                for (Node child : children) {
+//                    if (recurse(nodeMap, parent, child)) {
+//                        nodeMap.remove(child.getId());
+//                    }
+//                }
+//            }
         }
+    }
+
+    private final static Boolean recurse2(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
+        List<Node> startNodeChildren = startNode.getLiveLinks(nodeMap);
+        List<Node> currentNodeChildren = currentNode.getLiveLinks(nodeMap);
+
+        if (startNodeChildren.size() != 2) { return false; }
+        if (currentNodeChildren.size() != 1) { return false; }
+        if (startNodeChildren.contains(currentNode)) { return true; }
+
+        Node currentNodeChild = nodeMap.get(currentNodeChildren.get(0).getId());
+       // if (currentNodeChild == null) { return false; }
+
+        return currentNodeChild.getGenomes().containsAll(startNode.getGenomes());
     }
 }

@@ -96,8 +96,8 @@ public class GraphViewController extends Controller<StackPane> {
         graph.beginUpdate();
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
-
         GraphReducer.collapse(nodeMap);
+        System.out.println(nodeMap.values().size());
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
@@ -105,12 +105,10 @@ public class GraphViewController extends Controller<StackPane> {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node node = nodeMap.get(idx);
             if (node != null) {
-                for (int linkId : node.getLinks()) {
-                    Node child = nodeMap.get(linkId);
-
+                for (Node child : node.getLiveLinks(nodeMap)) {
                     if (child != null) {
                         //Add next cell
-                        if (node.getLinks().size() == 1) {
+                        if (node.getLiveLinks(nodeMap).size() == 1) {
                             model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
                         } else {
                             model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
