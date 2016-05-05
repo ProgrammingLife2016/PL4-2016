@@ -1,10 +1,7 @@
 package core;
 
-import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.*;
 import core.graph.cell.CellType;
-import application.fxobjects.graph.cell.Edge;
-import application.fxobjects.graph.cell.RectangleCell;
-import application.fxobjects.graph.cell.TriangleCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,6 +128,10 @@ public class Model {
                 TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
+            case PHYLOGENETIC:
+                PhylogeneticCell recCell = new PhylogeneticCell(id, seq);
+                addCell(recCell);
+                break;
 
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
@@ -155,12 +156,12 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      */
-    public void addEdge(int sourceId, int targetId) {
+    public void addEdge(int sourceId, int targetId, int width) {
 
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
-        Edge edge = new Edge(sourceCell, targetCell);
+        Edge edge = new Edge(sourceCell, targetCell, width);
 
         addedEdges.add(edge);
 
