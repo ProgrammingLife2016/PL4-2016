@@ -17,6 +17,7 @@ public class Edge extends Group {
      * Edge constructor.
      * @param source From.
      * @param target To.
+     * @param width The thickness of the edge when drawn.
      */
     public Edge(Cell source, Cell target, int width) {
 

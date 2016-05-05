@@ -1,14 +1,10 @@
 package application.controllers;
 
 import core.graph.Graph;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
@@ -51,20 +47,23 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    /**
+     * Create the graph visualisation.
+     */
     public void fillGraph() {
         Graph graph = new Graph();
         GraphController graphController = new GraphController(this, graph);
         screen = graphController.getRoot();
-       // screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
-
     }
 
-    public void createMenu(){
+    /**
+     * Create the menu bar.
+     */
+    public void createMenu() {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
-
     }
 
 //    public void createSrollBar() {
@@ -75,7 +74,8 @@ public class MainController extends Controller<BorderPane> {
 //
 //        horizontalScrollBar.valueProperty().addListener(new ChangeListener<Number>() {
 //            @Override
-//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//            public void changed(ObservableValue<? extends Number> observable,
+// Number oldValue, Number newValue) {
 //                System.out.println("semantic zoom");
 //
 //            }
@@ -85,6 +85,9 @@ public class MainController extends Controller<BorderPane> {
 //
 //    }
 
+    /**
+     * Make the gui change scene.
+     */
     public void switchScene() {
         System.out.println("switch scene");
         //BorderPane borderPane = this.getRoot();
@@ -92,8 +95,6 @@ public class MainController extends Controller<BorderPane> {
         //borderPane.setCenter(graph.init());
         //createSrollBar();
         fillGraph();
-
-
     }
 
 }

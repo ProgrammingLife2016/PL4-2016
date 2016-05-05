@@ -9,10 +9,18 @@ import javafx.scene.control.ScrollBar;
 public class ScrollFactory {
     private MainController mainController;
 
+    /**
+     * Create a new ScrollFactory.
+     * @param controller    The main controller.
+     */
     public ScrollFactory(MainController controller) {
         this.mainController = controller;
     }
 
+    /**
+     * Create a horizontal scrollbar.
+     * @return  A horizontal scrollbar.
+     */
     public static ScrollBar createHorizontalScrollBar() {
         ScrollBar horizontalScrollbar = new ScrollBar();
         horizontalScrollbar.setOrientation(Orientation.HORIZONTAL);
@@ -20,6 +28,10 @@ public class ScrollFactory {
         return horizontalScrollbar;
     }
 
+    /**
+     * Create a vertical scrollbar.
+     * @return A vertical scrollbar.
+     */
     public static ScrollBar createVerticalScrollBar() {
         ScrollBar verticalScrollBar = new ScrollBar();
         verticalScrollBar.setOrientation(Orientation.VERTICAL);

@@ -46,7 +46,7 @@ public class Parser {
                         int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
 						String[] genomes = content[4].split(":")[2].split(";");
 						for (int i = 0; i < genomes.length; i++) {
-							genomes[i] = genomes[i].substring(0,genomes[i].length()-6);
+							genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
 						}
 
 						if (!nodeMap.containsKey(id)) {
@@ -72,6 +72,7 @@ public class Parser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return nodeMap;
 	}
 

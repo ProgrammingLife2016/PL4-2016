@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.graph.MouseHandling;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import javafx.scene.control.ScrollPane;
@@ -11,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
+ * Controller responsible for setting up the graph visualisation.
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class GraphController extends Controller<ScrollPane> {
@@ -18,6 +18,11 @@ public class GraphController extends Controller<ScrollPane> {
     private MainController mainController;
     private javafx.geometry.Rectangle2D screenSize;
 
+    /**
+     * Set-up a new graph controller.
+     * @param controller    The main controller.
+     * @param g A graph containing the model and node map.
+     */
     public GraphController(MainController controller, Graph g) {
         super(new ScrollPane());
         this.graph = g;
@@ -27,14 +32,28 @@ public class GraphController extends Controller<ScrollPane> {
         init();
     }
 
-    public Graph getGraph() { return graph; }
+    /**
+     * Get the graph instance.
+     * @return  The graph instance.
+     */
+    public Graph getGraph() {
+        return graph;
+    }
 
 
+    /**
+     * Dummy initialize method.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
 
+    /**
+     * Initialize the graph pane.
+     */
     public void init() {
         AnchorPane root = new AnchorPane();
         graph.addGraphComponents();
@@ -49,7 +68,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         graph.endUpdate();
 
-        CellLayout layout = new BaseLayout(graph, 20,(int) (screenSize.getHeight()-25)/2);
+        CellLayout layout = new BaseLayout(graph, 20, (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
 
         this.getRoot().setContent(root);
