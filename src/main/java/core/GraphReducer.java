@@ -11,24 +11,25 @@ import java.util.List;
  * By collapsing nodes the size of the graph can be reduced.
  * Created by Niels Warnars on 2-5-2016.
  */
-public class GraphReducer {
+public final class GraphReducer {
+    private GraphReducer() { }
+
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<HashMap<Integer, Node>>();
 
     /**
      * Give all nodes a list of its parents.
      * @param nodeMap   A HashMap containing all nodes in the graph.
      */
-    public final static void determineParents(HashMap<Integer, Node> nodeMap) {
+    public static void determineParents(HashMap<Integer, Node> nodeMap) {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) { continue; }
             for (int childId : parent.getLinks()) {
                 Node child = nodeMap.get(childId);
+                if (child == null) { continue; }
 
-                if (child != null) {
-                    if (!child.getParents().contains(parent.getId())) {
+                if (!child.getParents().contains(parent.getId())) {
                         child.addParent(parent.getId());
-                    }
                 }
             }
         }
@@ -39,10 +40,11 @@ public class GraphReducer {
      * @param startMap  An uncollapsed node map.
      * @return  A list of node maps with a decreasing amount of nodes.
      */
-    public final static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap) {
+    public static List<HashMap<Integer, Node>>
+    createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
 
-        for (int i = 1; ; i++) {
+        for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1));
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
@@ -59,8 +61,9 @@ public class GraphReducer {
     /**
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      * @param map   A HashMap containing all nodes in the graph.
+     * @return	A collapsed map.
      */
-    public final static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
+    public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
         HashMap<Integer, Node> nodeMap = (HashMap<Integer, Node>) map.clone();
 
         determineParents(nodeMap);
@@ -83,7 +86,7 @@ public class GraphReducer {
      * @param parent    A given parent node to be collapsed with its grandchild.
      * @return  Whether the horizontal collapse action has succeeded.
      */
-    public final static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
         if (parent == null) { return false; }
         if (parent.getLiveLinks(nodeMap).size() != 1) { return false; }
         Node child = parent.getLiveLinks(nodeMap).get(0);
@@ -109,7 +112,8 @@ public class GraphReducer {
      * @param parent    A given parent node to be collapsed with a number of its children.
      * @return  Whether nodes have been collapsed.
      */
-    public final static Boolean collapseNodeBubbles(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean
+    collapseNodeBubbles(HashMap<Integer, Node> nodeMap, Node parent) {
         Boolean res = false;
         List<Node> children = parent.getLiveLinks(nodeMap);
         if (children.size() > 4) { return res; }
@@ -131,7 +135,8 @@ public class GraphReducer {
      * @param currentNode   A node to be removed / collapsed.
      * @return  Whether currentNode can be removed / collapsed.
      */
-    public final static Boolean collapseCheck(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
+    public static Boolean
+    collapseCheck(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
         List<Node> startNodeChildren = startNode.getLiveLinks(nodeMap);
         List<Node> currentNodeChildren = currentNode.getLiveLinks(nodeMap);
 
