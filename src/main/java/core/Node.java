@@ -119,14 +119,14 @@ public class Node {
      */
     @Override
     public String toString() {
-        return "Node{" +
-                "id=" + id +
-                ", sequence='" + sequence + '\'' +
-                ", zIndex=" + zIndex +
-                ", links=" + links +
-                ", parents=" + parents +
-                ", genomes=" + genomes +
-                '}';
+        return "Node{"
+                + "id=" + id
+                + ", sequence='" + sequence + '\''
+                + ", zIndex=" + zIndex
+                + ", links=" + links
+                + ", parents=" + parents
+                + ", genomes=" + genomes
+                + '}';
     }
 
     /** Getters & Setters. **/
