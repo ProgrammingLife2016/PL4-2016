@@ -31,6 +31,7 @@ public class BaseLayout extends CellLayout {
         this.offset = offset;
         this.graph = graph;
         this.centerY = middle;
+        System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
     }
 
@@ -79,21 +80,26 @@ public class BaseLayout extends CellLayout {
                 case RECTANGLE:
                     currentX += offset;
 
-                    cell.relocate(currentX, centerY);
-                    //currentY = centerY;
+                    currentY = centerY;
+                    cell.relocate(currentX, currentY);
 
                     cellCount = 1;
                     break;
                 case TRIANGLE:
                     if (lastType == CellType.RECTANGLE) {
                         currentX += (offset / 2);
+                        currentY = centerY - 100;
+
+                    } else {
+                        currentX += offset;
+                        currentY = centerY - (500/cellCount);
                     }
-                    currentY = -centerY + ((centerY / (centerY + 1) * 100));
-                    currentX += offset;
+
+
                     cellCount++;
+                    //currentX -= (offset / 2);
 
                     cell.relocate(currentX, currentY);
-                    currentX -= (offset / 2);
                     break;
 //                case PHYLOGENETIC:
 //                    if(!done) {
@@ -104,6 +110,7 @@ public class BaseLayout extends CellLayout {
 //                        break;
 //                    }
                 default:
+                    System.out.println("default");
                     break;
             }
             lastType = cell.getType();

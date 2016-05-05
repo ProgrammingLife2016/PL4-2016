@@ -26,7 +26,7 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     MenuBar menuBar;
 
-    ScrollBar horizontalScrollBar;
+  //  ScrollBar horizontalScrollBar;
 
     static Rectangle2D screenSize;
     /**
