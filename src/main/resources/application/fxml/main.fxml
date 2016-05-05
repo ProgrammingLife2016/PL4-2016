@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
 <fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml">
 
     <BorderPane>
@@ -11,7 +11,7 @@
         </top>
 
         <center>
-            <AnchorPane fx:id="screen"/>
+            <ScrollPane fx:id="screen"/>
         </center>
     </BorderPane>
 

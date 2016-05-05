@@ -25,12 +25,6 @@ public class MouseHandling {
         double offsetX = event.getScreenX() + dragContext.x;
         double offsetY = event.getScreenY() + dragContext.y;
 
-        // adjust the offset in case we are zoomed
-        //double scale = graph.getScale();
-
-//            offsetX /= scale;
-//            offsetY /= scale;
-
         node.relocate(offsetX, offsetY);
 
     };

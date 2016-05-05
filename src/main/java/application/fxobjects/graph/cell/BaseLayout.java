@@ -15,18 +15,22 @@ public class BaseLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
+    private double centerY;
+    private double maxDistance;
 
     /**
      * Class constructor.
      * @param graph A given graph.
      * @param offset Offset to be added on execute() call.
      */
-    public BaseLayout(Graph graph, int offset) {
+    public BaseLayout(Graph graph, int offset, double middle) {
         this.currentX = 20;
         this.currentY = 200;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
+        this.centerY = middle;
+        this.maxDistance = middle;
     }
 
     /**
@@ -41,18 +45,33 @@ public class BaseLayout extends CellLayout {
                     if (lastType != CellType.TRIANGLE) {
                         currentX += offset;
                     }
-                    cell.relocate(currentX, 200);
-                    currentY = 200;
+                    cell.relocate(currentX, centerY);
+                    currentY = (int) centerY;
                     cellCount = 0;
                     break;
                 case TRIANGLE:
                     if(cellCount%2==0) {
-                            currentY += (cellCount+2)*(cellCount)* offset;
+                        double increment = (cellCount+2)*(cellCount)* offset;
+                        if (increment > maxDistance) {
+                            double off = maxDistance - increment;
+                            increment = increment - off - 200;
+                            currentY += increment;
+                        } else {
+                            currentY += increment;
+                        }
+
                         }
                     else {
-                            currentY -= (cellCount)*(cellCount+1) * offset;
+                        double decrement = (cellCount) * (cellCount + 1) * offset;
+                        if (decrement > maxDistance) {
+                            double off = maxDistance - decrement;
+                            decrement = decrement - off - 10;
+                            currentY -= decrement;
+                        } else {
+                            currentY -= decrement;
                             //currentY -= offset * 2;
                         }
+                    }
 
                     currentX += offset;
                     cellCount++;

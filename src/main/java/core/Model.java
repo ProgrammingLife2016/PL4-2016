@@ -26,13 +26,13 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
+    double size;
     Map<Integer, Cell> cellMap; // <id,cell>
 
     /**
      * Class constructor.
      */
     public Model() {
-
         graphParent = new RectangleCell(1, "");
 
        // clear model, create lists

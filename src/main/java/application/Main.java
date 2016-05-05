@@ -13,9 +13,6 @@ public class Main extends Application {
 
     private Controller mainController;
 
-
-    //private GraphViewController mainController;
-
     /**
      * Usual main method to start the application.
      * @param args runtime arguments.

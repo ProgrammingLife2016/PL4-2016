@@ -2,26 +2,28 @@ package application.controllers;
 
 import application.fxobjects.graph.MouseHandling;
 import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import core.graph.Graph;
-
+import javafx.stage.Screen;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
-public class GraphController extends Controller<AnchorPane> {
+public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private MainController mainController;
+    private javafx.geometry.Rectangle2D screenSize;
 
     public GraphController(MainController controller, Graph g) {
-        super(new AnchorPane());
+        super(new ScrollPane());
         this.graph = g;
         this.mainController = controller;
-
+        this.screenSize = Screen.getPrimary().getVisualBounds();
+        this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
     }
 
@@ -35,7 +37,6 @@ public class GraphController extends Controller<AnchorPane> {
 
     public void init() {
         AnchorPane root = new AnchorPane();
-
         graph.addGraphComponents();
 
         // add components to graph pane
@@ -48,10 +49,9 @@ public class GraphController extends Controller<AnchorPane> {
 
         graph.endUpdate();
 
-        CellLayout layout = new BaseLayout(graph, 20);
+        CellLayout layout = new BaseLayout(graph, 20, (screenSize.getHeight()-25)/2);
         layout.execute();
 
-        System.out.println("fill root");
-        this.getRoot().getChildren().add(root);
+        this.getRoot().setContent(root);
     }
 }
