@@ -1,5 +1,6 @@
 package application.fxobjects.graph.cell;
 
+import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
