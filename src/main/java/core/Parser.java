@@ -2,7 +2,9 @@ package core;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -29,11 +31,10 @@ public class Parser {
 	 * @return - A HashMap containing the information from the .gfa file.
 	 */
 	 @SuppressWarnings("checkstyle:magicnumbers")
-    	public final HashMap<Integer, Node> readGFA(final String input) {
+    	public final HashMap<Integer, Node> readGFA(final InputStream input) {
 		BufferedReader bReader;
 		try {
-			bReader = new BufferedReader(new InputStreamReader(new FileInputStream(input), 
-					"UTF-8"));
+			bReader = new BufferedReader(new InputStreamReader(input));
 			String nextLine;
 			while ((nextLine = bReader.readLine()) != null) {
                 String[] content = nextLine.trim().split("\\s+");
