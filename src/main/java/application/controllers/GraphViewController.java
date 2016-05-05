@@ -1,7 +1,6 @@
 package application.controllers;
 
 import application.TreeItem;
-import application.TreeMain;
 import application.TreeParser;
 import application.fxobjects.ZoomBox;
 import application.fxobjects.graph.Graph;
@@ -12,19 +11,13 @@ import application.fxobjects.graph.cell.CellType;
 import core.GraphReducer;
 import core.Node;
 import core.Parser;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -54,7 +47,7 @@ public class GraphViewController extends Controller<StackPane> {
      */
     public GraphViewController() {
         super(new StackPane());
-        loadFXMLfile("/application/fxml/graphview.fxml");
+        loadFXMLfile("/fxml/graphview.fxml");
         this.graph = new Graph();
 
         zoomController = graph.getZoomController();
@@ -81,6 +74,7 @@ public class GraphViewController extends Controller<StackPane> {
         root.setTop(hbox);
 
         createLevelMaps();
+        // For now only render the most collapsed map
         addGraphComponents(graph.getModel().getLevelMaps().size() - 1);
         //addPhylogeneticTree();
         CellLayout layout = new BaseLayout(graph, 100);
@@ -97,7 +91,8 @@ public class GraphViewController extends Controller<StackPane> {
         graph.beginUpdate();
         Parser parser = new Parser();
 
-        HashMap<Integer, Node> startMap = parser.readGFA("src/main/resources/TB10.gfa");
+        HashMap<Integer, Node> startMap
+                = parser.readGFA(this.getClass().getResourceAsStream("/TB10.gfa"));
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         model.setLevelMaps(levelMaps);
     }
@@ -162,7 +157,7 @@ public class GraphViewController extends Controller<StackPane> {
 
         System.out.println((current.getName()));
         q.add(current);
-        model.addCell(i,current.getName(),CellType.PHYLOGENETIC);
+        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
         System.out.println("Cell added: " + i);
 
         while (!q.isEmpty()) {
@@ -174,7 +169,7 @@ public class GraphViewController extends Controller<StackPane> {
                 model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
                 System.out.println("Cell added: " + i);
                 model.addEdge(j, i);
-                System.out.println("Link added: " + j +  ", "+ i);
+                System.out.println("Link added: " + j + ", " + i);
                 //System.out.println("Link added: " + j +  ", "+ i);
                 q.add(child);
             }

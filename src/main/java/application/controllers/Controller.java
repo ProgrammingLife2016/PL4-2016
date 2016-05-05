@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * Controller class, used when creating other controllers.
@@ -33,11 +35,12 @@ public abstract class Controller<T extends Parent> implements Initializable {
      */
     public final void loadFXMLfile(String filePath) {
         try {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource(filePath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
+            InputStream stream = this.getClass().getResourceAsStream(filePath);
 
             loader.setRoot(root);
             loader.setController(this);
-            loader.load();
+            loader.load(stream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
