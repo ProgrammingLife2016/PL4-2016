@@ -80,7 +80,8 @@ public class GraphViewController extends Controller<StackPane> {
 
         root.setTop(hbox);
 
-        addGraphComponents();
+        createLevelMaps();
+        addGraphComponents(graph.getModel().getLevelMaps().size() - 1);
         //addPhylogeneticTree();
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
@@ -89,23 +90,34 @@ public class GraphViewController extends Controller<StackPane> {
     }
 
     /**
-     * Method that adds all nodes to the Model.
+     * Create the zoom level maps.
      */
-    public void addGraphComponents() {
+    public void createLevelMaps() {
         Model model = graph.getModel();
         graph.beginUpdate();
         Parser parser = new Parser();
-        List<HashMap<Integer, Node>> maps = new ArrayList<>();
-        maps.add(parser.readGFA("src/main/resources/TB10.gfa"));
+        model.addLevelMap(parser.readGFA("src/main/resources/TB10.gfa"));
 
-        for (int i = 1; i <= 8; i++) {
-            HashMap<Integer, Node> nodeMap = GraphReducer.collapse(maps.get(i - 1));
-            maps.add(nodeMap);
+        for (int i = 1; ; i++) {
+            HashMap<Integer, Node> levelMap = GraphReducer.collapse(model.getLevelMaps().get(i - 1));
+            model.addLevelMap(levelMap);
 
-            System.out.println(maps.get(i).size());
+            int previousMapSize = model.getLevelMaps().get(i - 1).size();
+            int currentMapSize = model.getLevelMaps().get(i).size();
+            System.out.println("[DEBUG] Current map size: " + model.getLevelMaps().get(i).size());
+            System.out.println("[DEBUG] Size difference: " + (previousMapSize - currentMapSize));
+
+            // Don't make any new zoom level if the number of nodes after reduction is only 20 less
+            // than the number of nodes after previous reduction.
+            if ((previousMapSize - currentMapSize) < 10) { return; }
         }
-
-        HashMap<Integer, Node> nodeMap = maps.get(maps.size() - 1);
+    }
+    /**
+     * Method that adds all nodes to the Model.
+     */
+    public void addGraphComponents(int zoomLevel) {
+        Model model = graph.getModel();
+        HashMap<Integer, Node> nodeMap = model.getLevelMaps().get(zoomLevel);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);

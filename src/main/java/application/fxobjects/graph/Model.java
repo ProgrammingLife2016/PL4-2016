@@ -1,6 +1,7 @@
 package application.fxobjects.graph;
 
 import application.fxobjects.graph.cell.*;
+import core.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,8 @@ public class Model {
     List<Edge> removedEdges;
 
     Map<Integer, Cell> cellMap; // <id,cell>
+
+    List<HashMap<Integer, Node>> levelMaps;
 
     /**
      * Class constructor.
@@ -50,6 +53,7 @@ public class Model {
 
         cellMap = new HashMap<>(); // <id,cell>
 
+        levelMaps = new ArrayList<HashMap<Integer, Node>>();
     }
 
     /**
@@ -148,6 +152,22 @@ public class Model {
 
             cellMap.put(cell.getCellId(), cell);
         }
+    }
+
+    /**
+     * Add a level map to the model.
+     * @param levelMap HashMap containing all nodes of a certain zoomlevel.
+     */
+    public void addLevelMap(HashMap<Integer, Node> levelMap) {
+        this.levelMaps.add(levelMap);
+    }
+
+    /**
+     * Return a list of level maps.
+     * @return
+     */
+    public List<HashMap<Integer, Node>> getLevelMaps() {
+        return this.levelMaps;
     }
 
     /**
