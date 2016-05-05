@@ -39,7 +39,7 @@ public class GraphViewController extends Controller<StackPane> {
     private Graph graph;
 
     private MenuController menuController;
-    private HashMap<Integer, Node> nodeMap;
+    private HashMap<Integer, Node> fullNodeMap;
 
     private ZoomController zoomController;
     private ZoomBox zoomBox;
@@ -95,30 +95,33 @@ public class GraphViewController extends Controller<StackPane> {
         Model model = graph.getModel();
         graph.beginUpdate();
         Parser parser = new Parser();
-        nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
+        List<HashMap<Integer, Node>> maps = new ArrayList<>();
+        maps.add(parser.readGFA("src/main/resources/TB10.gfa"));
 
-        for (int i = 0; i < 2; i++) {
-            GraphReducer.collapse(nodeMap, i);
-            System.out.println(nodeMap.values().size());
+        for (int i = 1; i <= 8; i++) {
+            HashMap<Integer, Node> nodeMap = GraphReducer.collapse(maps.get(i - 1));
+            maps.add(nodeMap);
+
+            System.out.println(maps.get(i).size());
         }
+
+        HashMap<Integer, Node> nodeMap = maps.get(maps.size() - 1);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        for (int idx = 450; idx <= nodeMap.size(); idx++) {
+        for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node node = nodeMap.get(idx);
             if (node != null) {
                 for (Node child : node.getLiveLinks(nodeMap)) {
-                    if (child != null) {
-                        //Add next cell
-                        if (node.getLiveLinks(nodeMap).size() == 1) {
-                            model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
-                        } else {
-                            model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
-                        }
-                        //Add link from current cell to next cell
-                        model.addEdge(node.getId(), child.getId());
+                    //Add next cell
+                    if (node.getLiveLinks(nodeMap).size() == 1) {
+                        model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
+                    } else {
+                        model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
                     }
+                    //Add link from current cell to next cell
+                    model.addEdge(node.getId(), child.getId());
                 }
             }
         }

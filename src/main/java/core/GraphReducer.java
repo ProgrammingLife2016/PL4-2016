@@ -28,24 +28,25 @@ public class GraphReducer {
 
     /**
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
-     * @param nodeMap   A HashMap containing all nodes in the graph.
-     * @param collapseLevel How many collapse actions have already been performed.
+     * @param map   A HashMap containing all nodes in the graph.
      */
-    public final static void collapse(HashMap<Integer, Node> nodeMap, int collapseLevel) {
+    public final static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
+        HashMap<Integer, Node> nodeMap = (HashMap<Integer, Node>) map.clone();
+
         determineParents(nodeMap);
 
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) { continue; }
 
-            Boolean collapsedNodes = collapseNodeBubbles(nodeMap, parent);
-            if (!collapsedNodes && collapseLevel >= 1) {
-                collapseNodeSequence(nodeMap, parent);
-            }
+            collapseNodeBubbles(nodeMap, parent);
+            collapseNodeSequence(nodeMap, parent);
         }
+
+        return nodeMap;
     }
 
-
+    
     /**
      * Collapse a parent and its grandchild horizontally.
      * @param nodeMap   A HashMap containing all nodes in the graph.
@@ -63,6 +64,7 @@ public class GraphReducer {
 
         if (grandChild == null) { return; }
         if (grandChild.getLiveLinks(nodeMap).size() != 1) { return; }
+        if (grandChild.getLiveParents(nodeMap).size() != 1) { return; }
         List<Integer> newParentLinks = new ArrayList<>();
         newParentLinks.add(grandChild.getId());
 
