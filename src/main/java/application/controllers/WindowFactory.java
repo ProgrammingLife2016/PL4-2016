@@ -13,14 +13,14 @@ import javafx.stage.Stage;
  * @version 1.0
  * @since 25-04-2016
  */
-public class WindowFactory {
+public final class WindowFactory {
     static Rectangle2D screenSize;
     static Stage window;
 
     /**
      * Constructor method for WindowFactory.
      */
-    public WindowFactory(){}
+    private WindowFactory() { }
 
     /**
      * Create method for windows.
@@ -51,12 +51,15 @@ public class WindowFactory {
         return scene;
     }
 
+    /**
+     * Method to create the directory chooser.
+     * @return  The directory chooser.
+     */
     public static DirectoryChooser createDirectoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Graph File");
 
         directoryChooser.showDialog(window);
-
         return directoryChooser;
     }
 

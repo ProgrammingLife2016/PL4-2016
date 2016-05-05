@@ -11,7 +11,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * Class representing a graph.
@@ -42,26 +46,26 @@ public class Graph {
         Parser parser = new Parser();
         nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
 
-        Node root = (nodeMap.get(1));
+        Node root = nodeMap.get(1);
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
         Object r = root.getGenomes().get(0);
 
-        for(int i = 1; i<=nodeMap.size();i++) {
+        for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
            // int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for(int j:nodeMap.get(i).getLinks()) {
+            for (int j : nodeMap.get(i).getLinks()) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if(nodeMap.get(j).getGenomes().contains(r)) {
+                if (nodeMap.get(j).getGenomes().contains(r)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                }
-                else {
+                } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
-                //Add link from current cell to next cell
 
-                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(), to.getGenomes()));
+                //Add link from current cell to next cell
+                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                        to.getGenomes()));
             }
         }
     }
@@ -111,7 +115,7 @@ public class Graph {
      * Implementing phylogenetic tree here.
      */
     TreeItem current;
-    int current_depth = 0;
+    int currentDepth = 0;
 
     void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
@@ -124,9 +128,9 @@ public class Graph {
         int i = 1;
 
         Queue<TreeItem> q = new LinkedList<>();
-        ArrayList<Integer> done = new ArrayList<>();
+        //ArrayList<Integer> done = new ArrayList<>();
 
-        System.out.println((current.getName()));
+        System.out.println(current.getName());
         q.add(current);
         model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
         System.out.println("Cell added: " + i);
