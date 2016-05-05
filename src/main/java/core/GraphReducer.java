@@ -50,9 +50,9 @@ public final class GraphReducer {
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMaps.get(i).size();
 
-            // Don't make any new zoom level if the number of nodes after reduction is only 2 less
+            // Don't make any new zoom level if the number of nodes after reduction is only 10 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) < 2) {
+            if ((previousMapSize - currentMapSize) < 10) {
                 return levelMaps;
             }
         }
