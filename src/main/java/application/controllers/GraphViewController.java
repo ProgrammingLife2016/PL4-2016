@@ -96,21 +96,10 @@ public class GraphViewController extends Controller<StackPane> {
         Model model = graph.getModel();
         graph.beginUpdate();
         Parser parser = new Parser();
-        model.addLevelMap(parser.readGFA("src/main/resources/TB10.gfa"));
 
-        for (int i = 1; ; i++) {
-            HashMap<Integer, Node> levelMap = GraphReducer.collapse(model.getLevelMaps().get(i - 1));
-            model.addLevelMap(levelMap);
-
-            int previousMapSize = model.getLevelMaps().get(i - 1).size();
-            int currentMapSize = model.getLevelMaps().get(i).size();
-            System.out.println("[DEBUG] Current map size: " + model.getLevelMaps().get(i).size());
-            System.out.println("[DEBUG] Size difference: " + (previousMapSize - currentMapSize));
-
-            // Don't make any new zoom level if the number of nodes after reduction is only 20 less
-            // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) < 10) { return; }
-        }
+        HashMap<Integer, Node> startMap = parser.readGFA("src/main/resources/TB10.gfa");
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        model.setLevelMaps(levelMaps);
     }
     /**
      * Method that adds all nodes to the Model.

@@ -163,6 +163,8 @@ public class Node {
         return parents;
     }
 
+    public void setParents(List<Integer> parents) { this.parents = parents; }
+
     public List<String> getGenomes() {
         return genomes;
     }

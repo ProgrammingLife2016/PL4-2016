@@ -164,10 +164,18 @@ public class Model {
 
     /**
      * Return a list of level maps.
-     * @return
+     * @return A list of level maps.
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return this.levelMaps;
+    }
+
+    /**
+     * Set a list of level maps.
+     * @param levelMaps A list of level maps.
+     */
+    public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
+        this.levelMaps = levelMaps;
     }
 
     /**
