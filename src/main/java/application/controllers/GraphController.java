@@ -49,7 +49,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         graph.endUpdate();
 
-        CellLayout layout = new BaseLayout(graph, 20, (screenSize.getHeight()-25)/2);
+        CellLayout layout = new BaseLayout(graph, 20,(int) (screenSize.getHeight()-25)/2);
         layout.execute();
 
         this.getRoot().setContent(root);

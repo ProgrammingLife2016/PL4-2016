@@ -15,7 +15,7 @@ public class BaseLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
-    private double centerY;
+    private int centerY;
     private double maxDistance;
 
     /**
@@ -24,7 +24,7 @@ public class BaseLayout extends CellLayout {
      * @param graph  A given graph.
      * @param offset Offset to be added on execute() call.
      */
-    public BaseLayout(Graph graph, int offset, double middle) {
+    public BaseLayout(Graph graph, int offset, int middle) {
         this.currentX = 20;
         this.currentY = 200;
         this.lastType = null;
@@ -79,8 +79,8 @@ public class BaseLayout extends CellLayout {
                 case RECTANGLE:
                     currentX += offset;
 
-                    currentY = (int) centerY;
                     cell.relocate(currentX, centerY);
+                    //currentY = centerY;
 
                     cellCount = 1;
                     break;
@@ -88,8 +88,7 @@ public class BaseLayout extends CellLayout {
                     if (lastType == CellType.RECTANGLE) {
                         currentX += (offset / 2);
                     }
-
-                    currentY = -currentY + ((currentY / (currentY + 1) * 100));
+                    currentY = -centerY + ((centerY / (centerY + 1) * 100));
                     currentX += offset;
                     cellCount++;
 
