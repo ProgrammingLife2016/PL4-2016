@@ -14,16 +14,17 @@ public class BaseLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
-    private static final int baseX = 200;
-    private static final int baseY = 200;
+    private static final int BASE_X = 200;
+    private static final int BASE_Y = 200;
+
     /**
      * Class constructor.
      * @param graph A given graph.
      * @param offset Offset to be added on execute() call.
      */
     public BaseLayout(Graph graph, int offset) {
-        this.currentX = baseX;
-        this.currentY = baseY;
+        this.currentX = BASE_X;
+        this.currentY = BASE_Y;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
@@ -35,15 +36,15 @@ public class BaseLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
 
-        boolean done = false;
+        //boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
                     if (lastType != CellType.TRIANGLE) {
                         currentX += offset;
                     }
-                    cell.relocate(currentX, baseY);
-                    currentY = baseY;
+                    cell.relocate(currentX, BASE_X);
+                    currentY = BASE_Y;
                     cellCount = 0;
                     break;
                 case TRIANGLE:
@@ -53,7 +54,7 @@ public class BaseLayout extends CellLayout {
                         currentY -= cellCount * offset;
                     }
 
-                    if (currentY == baseY) {
+                    if (currentY == BASE_Y) {
                         currentX += offset;
                     }
 
@@ -61,7 +62,7 @@ public class BaseLayout extends CellLayout {
                     cell.relocate(currentX, currentY);
 
                     // Don't draw triangles above rectangles
-                    if (currentY != baseY) {
+                    if (currentY != BASE_Y) {
                         currentX += offset;
                     }
                     break;
@@ -81,26 +82,26 @@ public class BaseLayout extends CellLayout {
     }
     private int maxDepth = 0;
     private int count = 0;
-    private void toCellWithDepth(Cell c, int depth,int downmoves) {
+
+/*    private void toCellWithDepth(Cell c, int depth, int downmoves) {
         //count leafs
-        if(c.getCellChildren().isEmpty()) {
+        if (c.getCellChildren().isEmpty()) {
             count++;
         }
-        if (depth>maxDepth)
+        if (depth > maxDepth) {
             maxDepth = depth;
+        }
         int childNumber = -1;
-        for(Cell child: c.getCellChildren()) {
+        for (Cell child : c.getCellChildren()) {
             childNumber++;
-            toCellWithDepth(child,depth+1, downmoves+childNumber);
+            toCellWithDepth(child, depth + 1, downmoves + childNumber);
         }
         //System.out.println(downmoves + " " + depth);
 
-        if(c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth*50,count*50);
+        if (c.getCellChildren().isEmpty()) {
+            c.relocate(maxDepth * 50, count * 50);
+        } else {
+            c.relocate(50 + depth * 50, count * 50);
         }
-        else {
-            c.relocate(50+depth*50,count*50);
-        }
-
-    }
+    }*/
 }
