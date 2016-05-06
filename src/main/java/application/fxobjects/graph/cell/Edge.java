@@ -7,16 +7,14 @@ import javafx.scene.shape.Line;
  * A class that represent an Edge between 2 nodes.
  */
 public class Edge extends Group {
-
-    protected Cell source;
-    protected Cell target;
-
-    Line line;
+    private Cell source;
+    private Cell target;
+    private Line line;
 
     /**
      * Edge constructor.
-     * @param source From.
-     * @param target To.
+     * @param source cell for edge start.
+     * @param target cell for edge destination.
      */
     public Edge(Cell source, Cell target) {
 
@@ -43,19 +41,50 @@ public class Edge extends Group {
     }
 
     /**
-     * Getter Function.
-     * @return the source.
+     * Getter Function for the source cell.
+     * @return the source cell.
      */
     public Cell getSource() {
         return source;
     }
 
     /**
-     * Getter function.
-     * @return the target.
+     * Setter method for the source cell.
+     * @param source cell to set as source.
+     */
+    public void setSource(Cell source) {
+        this.source = source;
+    }
+
+    /**
+     * Getter function for the destination cell.
+     * @return the target cell.
      */
     public Cell getTarget() {
         return target;
     }
 
+    /**
+     * Setter method for the destination cell.
+     * @param target cell to set as destination.
+     */
+    public void setTarget(Cell target) {
+        this.target = target;
+    }
+
+    /**
+     * Getter method for the Line.
+     * @return the Line.
+     */
+    public Line getLine() {
+        return line;
+    }
+
+    /**
+     * Setter method for the Line.
+     * @param line the Line to set as line.
+     */
+    public void setLine(Line line) {
+        this.line = line;
+    }
 }
