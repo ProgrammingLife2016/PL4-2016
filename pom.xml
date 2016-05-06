@@ -7,7 +7,7 @@
     <groupId>Context</groupId>
     <artifactId>Context</artifactId>
     <packaging>jar</packaging>
-    <version>0.2</version>
+    <version>0.1</version>
 
     <build>
         <plugins>
