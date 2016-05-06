@@ -21,14 +21,17 @@ public class BaseLayout extends CellLayout {
     private int maxDepth = 0;
     private int count = 0;
 
+    private static final int baseX = 200;
+    private static final int baseY = 200;
+
     /**
      * Class constructor.
      * @param graph A given graph.
      * @param offset Offset to be added on execute() call.
      */
     public BaseLayout(Graph graph, int offset) {
-        this.currentX = 20;
-        this.currentY = 200;
+        this.currentX = baseX;
+        this.currentY = baseY;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
@@ -47,24 +50,28 @@ public class BaseLayout extends CellLayout {
                     if (lastType != CellType.TRIANGLE) {
                         currentX += offset;
                     }
-                    cell.relocate(currentX, 200);
-                    currentY = 200;
+                    cell.relocate(currentX, baseY);
+                    currentY = baseY;
                     cellCount = 0;
                     break;
                 case TRIANGLE:
-                    if(cellCount%2==0) {
-                            currentY += (cellCount+2)*(cellCount)* offset;
-                        }
-                    else {
-                            currentY -= (cellCount)*(cellCount+1) * offset;
-                            //currentY -= offset * 2;
-                        }
+                    if (cellCount % 2 == 0) {
+                        currentY += cellCount * offset;
+                    } else {
+                        currentY -= cellCount * offset;
+                    }
 
-                    currentX += offset;
+                    if (currentY == baseY) {
+                        currentX += offset;
+                    }
+
                     cellCount++;
-
                     cell.relocate(currentX, currentY);
-                        //currentY += offset * 2;
+
+                    // Don't draw triangles above rectangles
+                    if (currentY != baseY) {
+                        currentX += offset;
+                    }
                     break;
 //                case PHYLOGENETIC:
 //                    if(!done) {

@@ -26,7 +26,7 @@ public class MainController extends Controller<StackPane> {
      */
     public MainController() {
         super(new StackPane());
-        loadFXMLfile("/application/fxml/main.fxml");
+        loadFXMLfile("../fxml/main.fxml");
     }
 
     /**

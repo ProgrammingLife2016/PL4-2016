@@ -17,11 +17,11 @@ public class MouseHandling {
         @Override
         public void handle(MouseEvent event) {
             Cell node = (Cell) event.getSource();
-
             System.out.println(node.getCellId());
         }
     };
-    EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+
+   /* EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
 
         @Override
         public void handle(MouseEvent event) {
@@ -39,7 +39,8 @@ public class MouseHandling {
             node.relocate(offsetX, offsetY);
 
         }
-    };
+    };*/
+
     EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
 
         @Override
@@ -79,7 +80,7 @@ public class MouseHandling {
      */
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
-        node.setOnMouseDragged(onMouseDraggedEventHandler);
+        //node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnMouseReleased(onMouseReleasedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
         node.setOnMouseExited(onMouseExitedEventHandler);
