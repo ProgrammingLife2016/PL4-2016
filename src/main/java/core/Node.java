@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,6 +33,10 @@ public class Node {
     private List<Integer> links;
 
     /**
+     * List of ids of parent Nodes which have this node as child.
+     */
+    private List<Integer> parents;
+    /**
      * List of genomes of which this node is a part.
      */
     private List<String> genomes;
@@ -46,8 +51,9 @@ public class Node {
         this.id = id;
         this.sequence = seq;
         this.zIndex = z;
-        this.links = new ArrayList<Integer>();
-        this.genomes = new ArrayList<String>();
+        this.links = new ArrayList<>();
+        this.parents = new ArrayList<>();
+        this.genomes = new ArrayList<>();
     }
 
     /**
@@ -59,6 +65,14 @@ public class Node {
     }
 
     /**
+     * Add a parent node's Id which links this node.
+     * @param parent - A parent node.
+     */
+    public void addParent(int parent) {
+        this.parents.add(parent);
+    }
+
+    /**
      * Add a genome to the node.
      * @param s - The other node to which this one is linked.
      */
@@ -67,7 +81,40 @@ public class Node {
     }
 
     /**
+     * Gets all live parents by comparing the link list with all existing nodes.
+     * @param nodeMap A HashMap of all existing nodes.
+     * @return A list of parents which are not null.
+     */
+    public List<Node> getLiveParents(HashMap<Integer, Node> nodeMap) {
+        List<Node> liveParents = new ArrayList<>();
+
+        for (int id : parents) {
+            Node parent = nodeMap.get(id);
+            if (parent != null) {  liveParents.add(parent); }
+        }
+
+        return liveParents;
+    }
+
+    /**
+     * Gets all live links by comparing the link list with all existing nodes.
+     * @param nodeMap A HashMap of all existing nodes.
+     * @return A list of links which are not null.
+     */
+    public List<Node> getLiveLinks(HashMap<Integer, Node> nodeMap) {
+        List<Node> liveLinks = new ArrayList<>();
+
+        for (int id : links) {
+            Node child = nodeMap.get(id);
+            if (child != null) { liveLinks.add(child); }
+        }
+
+        return liveLinks;
+    }
+
+    /**
      * toStrong method to represent Node as a string.
+     *
      * @return - the string representation.
      */
     @Override
@@ -76,8 +123,9 @@ public class Node {
                 + "id=" + id
                 + ", sequence='" + sequence + '\''
                 + ", zIndex=" + zIndex
-                + ", links=" + links.toString()
-                + ", genomes=" + genomes.toString()
+                + ", links=" + links
+                + ", parents=" + parents
+                + ", genomes=" + genomes
                 + '}';
     }
 
@@ -106,6 +154,16 @@ public class Node {
     public List<Integer> getLinks() {
         return links;
     }
+
+    public void setLinks(List<Integer> links) {
+        this.links = links;
+    }
+
+    public List<Integer> getParents() {
+        return parents;
+    }
+
+    public void setParents(List<Integer> parents) { this.parents = parents; }
 
     public List<String> getGenomes() {
         return genomes;

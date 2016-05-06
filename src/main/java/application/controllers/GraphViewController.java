@@ -8,6 +8,7 @@ import application.fxobjects.graph.Model;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.CellType;
+import core.GraphReducer;
 import core.Node;
 import core.Parser;
 import javafx.fxml.FXML;
@@ -31,7 +32,7 @@ public class GraphViewController extends Controller<StackPane> {
     private Graph graph;
 
     private MenuController menuController;
-    private HashMap<Integer, Node> nodeMap;
+    private HashMap<Integer, Node> fullNodeMap;
 
     private ZoomController zoomController;
     private ZoomBox zoomBox;
@@ -72,7 +73,9 @@ public class GraphViewController extends Controller<StackPane> {
 
         root.setTop(hbox);
 
-        addGraphComponents();
+        createLevelMaps();
+        // For now only render the most collapsed map
+        addGraphComponents(graph.getModel().getLevelMaps().size() - 1);
         //addPhylogeneticTree();
         CellLayout layout = new BaseLayout(graph, 100);
         layout.execute();
@@ -81,35 +84,44 @@ public class GraphViewController extends Controller<StackPane> {
     }
 
     /**
-     * Method that adds all nodes to the Model.
+     * Create the zoom level maps.
      */
-    public void addGraphComponents() {
+    public void createLevelMaps() {
         Model model = graph.getModel();
-
         graph.beginUpdate();
         Parser parser = new Parser();
-        nodeMap = parser.readGFA(this.getClass().getResourceAsStream("/TB10.gfa"));
+
+        HashMap<Integer, Node> startMap
+                = parser.readGFA(this.getClass().getResourceAsStream("/TB10.gfa"));
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        model.setLevelMaps(levelMaps);
+    }
+    /**
+     * Method that adds all nodes to the Model.
+     */
+    public void addGraphComponents(int zoomLevel) {
+        Model model = graph.getModel();
+        HashMap<Integer, Node> nodeMap = model.getLevelMaps().get(zoomLevel);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        for (int i = 1; i <= nodeMap.size(); i++) {
-
-            int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j : nodeMap.get(i).getLinks()) {
-                //Add next cell
-                if (numberOfLinks == 1) {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.RECTANGLE);
-                } else {
-                    model.addCell(nodeMap.get(j).getId(), nodeMap.get(j).getSequence(), CellType.TRIANGLE);
+        for (int idx = 1; idx <= nodeMap.size(); idx++) {
+            Node node = nodeMap.get(idx);
+            if (node != null) {
+                for (Node child : node.getLiveLinks(nodeMap)) {
+                    //Add next cell
+                    if (node.getLiveLinks(nodeMap).size() == 1) {
+                        model.addCell(child.getId(), child.getSequence(), CellType.RECTANGLE);
+                    } else {
+                        model.addCell(child.getId(), child.getSequence(), CellType.TRIANGLE);
+                    }
+                    //Add link from current cell to next cell
+                    model.addEdge(node.getId(), child.getId());
                 }
-                //Add link from current cell to next cell
-                model.addEdge(nodeMap.get(i).getId(), nodeMap.get(j).getId());
             }
-
         }
 
-        //dfs(root,1,new boolean[nodeMap.size()],model);
         graph.endUpdate();
     }
 
