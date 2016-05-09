@@ -1,6 +1,11 @@
 package core;
 
-import application.fxobjects.graph.cell.*;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.Edge;
+import application.fxobjects.graph.cell.RectangleCell;
+import application.fxobjects.graph.cell.TriangleCell;
+import application.fxobjects.graph.cell.PhylogeneticCell;
+
 import core.graph.cell.CellType;
 
 import java.util.ArrayList;
@@ -23,7 +28,6 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    double size;
     Map<Integer, Cell> cellMap; // <id,cell>
 
     /**
@@ -155,6 +159,7 @@ public class Model {
      * Method to add an Edge to the model.
      * @param sourceId From.
      * @param targetId To.
+     * @param width The thickness of the edge when drawn.
      */
     public void addEdge(int sourceId, int targetId, int width) {
 

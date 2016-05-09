@@ -20,7 +20,10 @@ public class ZoomController extends BorderPane {
     private KeyHandler keyHandler;
     private Rectangle2D screenSize;
 
-
+    /**
+     * Initialize the zoom controller.
+     * @param content   content.
+     */
     public ZoomController(Node content) {
         zoomBox = new ZoomBox();
 
@@ -40,16 +43,16 @@ public class ZoomController extends BorderPane {
      * Getter for keyHandler.
      * @return the keyHandler.
      */
-    public KeyHandler getKeyHandler() { return keyHandler; }
+    public KeyHandler getKeyHandler() {
+        return keyHandler;
+    }
 
 
     /**
      * Init method.
-     * @return the pane.
      */
     public void init() {
         this.setBottom(zoomBox.getZoomBox());
-
     }
 
     /**
