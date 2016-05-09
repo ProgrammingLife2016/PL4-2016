@@ -39,22 +39,25 @@ public class Graph {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
-        HashMap<Integer, Node> nodeMap = parser.readGFA(inputStream);
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap);
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         model.setLevelMaps(levelMaps);
+
+        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
         Object r = root.getGenomes().get(0);
 
-        for (int i = 1; i<=nodeMap.size();i++) {
+        for (int i = 1; i <= nodeMap.size() ; i++) {
             Node from = nodeMap.get(i);
-           // int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j:nodeMap.get(i).getLinks(nodeMap)) {
+            if (from == null) { continue; }
+
+            for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if(nodeMap.get(j).getGenomes().contains(r)) {
+                if(to.getGenomes().contains(r)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);

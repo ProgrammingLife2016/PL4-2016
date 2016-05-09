@@ -41,15 +41,10 @@ public class GraphReducerTest {
     public void testDetermineParentsEmpty() {
         HashMap<Integer, Node> nodeMap = new HashMap<>();
         Node n1 = new Node(1, "A", 1);
-        Node n2 = new Node(2, "B", 2);
-
         nodeMap.put(1, n1);
-        nodeMap.put(2, n2);
 
         GraphReducer.determineParents(nodeMap);
-
         assertTrue(nodeMap.get(1).getParents().size() == 0);
-        assertTrue(nodeMap.get(2).getParents().size() == 0);
     }
 
     /**
@@ -113,6 +108,7 @@ public class GraphReducerTest {
     @Test
     public void testCollapseNodeSequence() {
         HashMap<Integer, Node> nodeMap = createNodeMap(4);
+        // 1-2-3-4
         nodeMap.get(1).addLink(2);
         nodeMap.get(2).addLink(3);
         nodeMap.get(3).addLink(4);
@@ -120,17 +116,41 @@ public class GraphReducerTest {
         GraphReducer.determineParents(nodeMap);
         assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
 
+        // Check node 1
         assertEquals(nodeMap.get(1).getId(), nodeMap.get(1).getId());
         assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
         assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
 
+        // Check node 2
         assertNull(nodeMap.get(2));
 
+        // Check node 3
         assertEquals(nodeMap.get(3).getId(), nodeMap.get(3).getId());
         assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
         assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
     }
 
+    /**
+     * Test the collapseCheck method with too few nodes.
+     */
+    @Test
+    public void collapseCheckTooFewNodes() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(1);
+        nodeMap.get(1).addLink(2);
+
+        assertFalse(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(1)));
+    }
+
+    /**
+     * Test the collapseCheck method with too few nodes.
+     */
+    @Test
+    public void collapseCheckTooManyGrandChildren() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(1);
+        nodeMap.get(1).addLink(2);
+
+        assertFalse(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(1)));
+    }
     /**
      * Test the collapseCheck method with not a bubble.
      */

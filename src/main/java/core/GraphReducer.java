@@ -40,8 +40,7 @@ public final class GraphReducer {
      * @param startMap  An uncollapsed node map.
      * @return  A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>>
-    createLevelMaps(HashMap<Integer, Node> startMap) {
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
 
         for (int i = 1;; i++) {
@@ -65,7 +64,6 @@ public final class GraphReducer {
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
         HashMap<Integer, Node> nodeMap = (HashMap<Integer, Node>) map.clone();
-
         determineParents(nodeMap);
 
         for (int idx = 1; idx <= map.size(); idx++) {
@@ -73,7 +71,7 @@ public final class GraphReducer {
             if (parent == null) { continue; }
 
             collapseNodeBubbles(nodeMap, parent);
-            collapseNodeSequence(nodeMap, parent);
+            //collapseNodeSequence(nodeMap, parent);
         }
 
         return nodeMap;
@@ -145,8 +143,13 @@ public final class GraphReducer {
         List<Integer> currentNodeChildrenIds = currentNode.getLinks(nodeMap);
 
         if (startNodeChildrenIds.size() < 2) { return false; }
+
+        // Check will fail if startNode == CurrentNode
         if (currentNodeChildrenIds.size() != 1) { return false; }
+
+        // startNode - Child X - 1x GrandChild (This might be redundant with collapseNodeSequence()
         if (startNodeChildrenIds.contains(currentNode)) { return true; }
+
 
         Node currentNodeChild = nodeMap.get(currentNodeChildrenIds.get(0));
         if (currentNodeChild == null) { return false; }
