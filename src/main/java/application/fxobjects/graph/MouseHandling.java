@@ -1,7 +1,6 @@
 package application.fxobjects.graph;
 
 import application.fxobjects.graph.cell.Cell;
-import com.sun.deploy.uitoolkit.DragContext;
 import core.graph.Graph;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
