@@ -7,7 +7,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-
 /**
  * WindowFactory class.
  * @version 1.0

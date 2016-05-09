@@ -7,10 +7,7 @@ import core.graph.cell.CellType;
 import core.Node;
 import core.Parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -40,7 +37,9 @@ public class Graph {
 
     public void addGraphComponents() {
         Parser parser = new Parser();
-        nodeMap = parser.readGFA("src/main/resources/TB10.gfa");
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+
+        nodeMap = parser.readGFA(inputStream);
 
         Node root = (nodeMap.get(1));
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
@@ -60,7 +59,6 @@ public class Graph {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
                 //Add link from current cell to next cell
-
                 model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(), to.getGenomes()));
             }
         }

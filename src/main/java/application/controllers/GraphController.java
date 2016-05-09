@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.graph.MouseHandling;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import javafx.scene.control.ScrollPane;
@@ -36,6 +35,7 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     public void init() {
+        System.out.println("init");
         AnchorPane root = new AnchorPane();
         graph.addGraphComponents();
 

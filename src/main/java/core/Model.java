@@ -2,7 +2,6 @@ package core;
 
 import application.fxobjects.graph.cell.*;
 import core.graph.cell.CellType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +24,8 @@ public class Model {
 
     double size;
     Map<Integer, Cell> cellMap; // <id,cell>
+
+    List<HashMap<Integer, Node>> levelMaps;
 
     /**
      * Class constructor.
@@ -51,6 +52,7 @@ public class Model {
 
         cellMap = new HashMap<>(); // <id,cell>
 
+        levelMaps = new ArrayList<>();
     }
 
     /**
@@ -152,19 +154,42 @@ public class Model {
     }
 
     /**
+     * Add a level map to the model.
+     * @param levelMap HashMap containing all nodes of a certain zoomlevel.
+     */
+    public void addLevelMap(HashMap<Integer, Node> levelMap) {
+        this.levelMaps.add(levelMap);
+    }
+
+    /**
+     * Return a list of level maps.
+     * @return A list of level maps.
+     */
+    public List<HashMap<Integer, Node>> getLevelMaps() {
+        return this.levelMaps;
+    }
+
+    /**
+     * Set a list of level maps.
+     * @param levelMaps A list of level maps.
+     */
+    public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
+        this.levelMaps = levelMaps;
+    }
+
+    /**
      * Method to add an Edge to the model.
      * @param sourceId From.
      * @param targetId To.
      */
     public void addEdge(int sourceId, int targetId, int width) {
-
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
-
         Edge edge = new Edge(sourceCell, targetCell, width);
 
-        addedEdges.add(edge);
-
+        if (sourceCell != null && targetCell != null) {
+            addedEdges.add(edge);
+        }
     }
 
     /**

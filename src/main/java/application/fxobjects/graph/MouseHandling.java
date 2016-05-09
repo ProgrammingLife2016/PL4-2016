@@ -1,6 +1,7 @@
 package application.fxobjects.graph;
 
 import application.fxobjects.graph.cell.Cell;
+import com.sun.deploy.uitoolkit.DragContext;
 import core.graph.Graph;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -10,24 +11,21 @@ import javafx.scene.input.MouseEvent;
  * Class responsible for the handling of mouse events
  */
 public class MouseHandling {
-    final DragContext dragContext = new DragContext();
+   final DragContext dragContext = new DragContext();
 
     Graph graph;
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
-        System.out.println("mouse");
         Cell node = (Cell) event.getSource();
-
         System.out.println(node.getCellId());
     };
+
     EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        Node node = (Node) event.getSource();
-
-        double offsetX = event.getScreenX() + dragContext.x;
-        double offsetY = event.getScreenY() + dragContext.y;
-
-        node.relocate(offsetX, offsetY);
-
+        //Node node = (Node) event.getSource();
+        Cell node = (Cell) event.getSource();
+        System.out.println(node.getCellId());
     };
+
+
     EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
 
     };
@@ -57,7 +55,7 @@ public class MouseHandling {
      */
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
-        node.setOnMouseDragged(onMouseDraggedEventHandler);
+        //node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnMouseReleased(onMouseReleasedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
         node.setOnMouseExited(onMouseExitedEventHandler);
