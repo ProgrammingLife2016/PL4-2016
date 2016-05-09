@@ -21,7 +21,7 @@ Travis CI Build status: [![](https://travis-ci.org/ProgrammingLife2016/PL4-2016.
 
 #### Windows & OS X
 
-Run through IDE, such as [Intellij IDEA](https://www.jetbrains.com/idea/).
+Run through IDE, such as [IntelliJ IDEA](https://www.jetbrains.com/idea/).
 
 ### Executing the application
 
