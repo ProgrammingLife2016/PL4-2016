@@ -24,11 +24,11 @@ public final class GraphReducer {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) { continue; }
-            for (int childId : parent.getLinks()) {
+            for (int childId : parent.getLinks(nodeMap)) {
                 Node child = nodeMap.get(childId);
                 if (child == null) { continue; }
 
-                if (!child.getParents().contains(parent.getId())) {
+                if (!child.getParents(nodeMap).contains(parent.getId())) {
                         child.addParent(parent.getId());
                 }
             }
@@ -88,15 +88,17 @@ public final class GraphReducer {
      */
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
         if (parent == null) { return false; }
-        if (parent.getLiveLinks(nodeMap).size() != 1) { return false; }
-        Node child = parent.getLiveLinks(nodeMap).get(0);
+        if (parent.getLinks(nodeMap).size() != 1) { return false; }
+        int childId = parent.getLinks(nodeMap).get(0);
+        Node child = nodeMap.get(childId);
 
-        if (child.getLiveLinks(nodeMap).size() != 1) { return false; }
-        if (child.getLiveParents(nodeMap).size() != 1) { return false; }
-        Node grandChild = child.getLiveLinks(nodeMap).get(0);
+        if (child.getLinks(nodeMap).size() != 1) { return false; }
+        if (child.getParents(nodeMap).size() != 1) { return false; }
+        int grandChildId = child.getLinks(nodeMap).get(0);
+        Node grandChild = nodeMap.get(grandChildId);
 
-        if (grandChild.getLiveParents(nodeMap).size() != 1) { return false; }
-        if (grandChild.getLiveLinks(nodeMap).size() != 1) { return false; }
+        if (grandChild.getParents(nodeMap).size() != 1) { return false; }
+        if (grandChild.getLinks(nodeMap).size() != 1) { return false; }
 
         nodeMap.remove(child.getId());
         parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
@@ -115,9 +117,11 @@ public final class GraphReducer {
     public static Boolean
     collapseNodeBubbles(HashMap<Integer, Node> nodeMap, Node parent) {
         Boolean res = false;
-        List<Node> children = parent.getLiveLinks(nodeMap);
-        if (children.size() > 4) { return res; }
-        for (Node child : children) {
+        List<Integer> childrenIds = parent.getLinks(nodeMap);
+        if (childrenIds.size() > 4) { return res; }
+
+        for (int childId : childrenIds) {
+            Node child = nodeMap.get(childId);
             if (collapseCheck(nodeMap, parent, child)) {
                 nodeMap.remove(child.getId());
                 if (!res) { res = true; }
@@ -137,14 +141,14 @@ public final class GraphReducer {
      */
     public static Boolean
     collapseCheck(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
-        List<Node> startNodeChildren = startNode.getLiveLinks(nodeMap);
-        List<Node> currentNodeChildren = currentNode.getLiveLinks(nodeMap);
+        List<Integer> startNodeChildrenIds = startNode.getLinks(nodeMap);
+        List<Integer> currentNodeChildrenIds = currentNode.getLinks(nodeMap);
 
-        if (startNodeChildren.size() < 2) { return false; }
-        if (currentNodeChildren.size() != 1) { return false; }
-        if (startNodeChildren.contains(currentNode)) { return true; }
+        if (startNodeChildrenIds.size() < 2) { return false; }
+        if (currentNodeChildrenIds.size() != 1) { return false; }
+        if (startNodeChildrenIds.contains(currentNode)) { return true; }
 
-        Node currentNodeChild = nodeMap.get(currentNodeChildren.get(0).getId());
+        Node currentNodeChild = nodeMap.get(currentNodeChildrenIds.get(0));
         if (currentNodeChild == null) { return false; }
 
         return currentNodeChild.getGenomes().containsAll(startNode.getGenomes());
