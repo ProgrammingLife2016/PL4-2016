@@ -2,7 +2,9 @@ package application.controllers;
 
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
+import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import core.graph.Graph;
 import javafx.stage.Screen;
@@ -23,6 +25,14 @@ public class GraphController extends Controller<ScrollPane> {
         this.mainController = controller;
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
+            if(event.getDeltaY() != 0) {
+                event.consume();
+            }
+        });
+
         init();
     }
 
