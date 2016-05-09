@@ -1,4 +1,4 @@
-package application.fxobjects.graph;
+package application.controllers;
 
 import application.fxobjects.graph.cell.Cell;
 import core.graph.Graph;
@@ -9,7 +9,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * Class responsible for the handling of mouse events
  */
-public class MouseHandling {
+public class GraphMouseHandling {
    final DragContext dragContext = new DragContext();
 
     Graph graph;
@@ -44,7 +44,7 @@ public class MouseHandling {
      * Class constructor.
      * @param graph A given graph.
      */
-    public MouseHandling(Graph graph) {
+    public GraphMouseHandling(Graph graph) {
         this.graph = graph;
     }
 

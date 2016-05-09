@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.fxobjects.graph.cell.BaseLayout;
+import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -15,12 +16,15 @@ import java.util.ResourceBundle;
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private MainController mainController;
+    private GraphMouseHandling graphMouseHandling;
+
     private javafx.geometry.Rectangle2D screenSize;
 
     public GraphController(MainController controller, Graph g) {
         super(new ScrollPane());
         this.graph = g;
         this.mainController = controller;
+        this.graphMouseHandling = new GraphMouseHandling(graph);
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
@@ -43,11 +47,16 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
+        for(Cell cell : graph.getModel().getAddedCells()) {
+            graphMouseHandling.setMouseHandling(cell);
+        }
+
         // remove components from graph pane
         root.getChildren().removeAll(graph.getModel().getRemovedCells());
         root.getChildren().removeAll(graph.getModel().getRemovedEdges());
 
         graph.endUpdate();
+
 
         CellLayout layout = new BaseLayout(graph, 20,(int) (screenSize.getHeight()-25)/2);
         layout.execute();
