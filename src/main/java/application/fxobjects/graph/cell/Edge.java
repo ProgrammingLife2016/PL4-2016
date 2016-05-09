@@ -26,7 +26,9 @@ public class Edge extends Group {
 
         line = new Line();
 
-        line.setStrokeWidth(width);
+        width /= 1;
+
+        line.setStrokeWidth(Math.max(width,1));
         line.startXProperty().bind(source.layoutXProperty().add(
         		source.getBoundsInParent().getWidth() / 2.0));
         line.startYProperty().bind(source.layoutYProperty().add(

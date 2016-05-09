@@ -185,10 +185,13 @@ public class Model {
     public void addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
-        Edge edge = new Edge(sourceCell, targetCell, width);
 
         if (sourceCell != null && targetCell != null) {
+            Edge edge = new Edge(sourceCell, targetCell, width);
             addedEdges.add(edge);
+        }
+        else {
+            System.out.println("Nullpointer in edge, Edge not added.");
         }
     }
 
