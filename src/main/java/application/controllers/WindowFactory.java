@@ -1,7 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.ZoomBox;
-import application.fxobjects.graph.Graph;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,7 +7,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.File;
 
 /**
  * WindowFactory class.
@@ -30,15 +27,15 @@ public class WindowFactory {
      * @param c parent of the window
      * @return the constructed window.
      */
-    public static Stage createWindow(Parent c, ZoomBox z, Graph g) {
+    public static Stage createWindow(Parent c) {
         window = new Stage();
-        Scene scene = createScene(c, g.getZoomController());
+        Scene scene = createScene(c);
 
         screenSize = Screen.getPrimary().getVisualBounds();
 
-        scene.setOnKeyPressed(g.getZoomController().getKeyHandler());
         window.setWidth(screenSize.getWidth());
         window.setHeight(screenSize.getHeight());
+        window.setMaxHeight(screenSize.getHeight());
         window.setScene(scene);
         window.show();
         return window;
@@ -49,14 +46,12 @@ public class WindowFactory {
      * @param parent parent object for the scene.
      * @return the constructed scene.
      */
-    public static Scene createScene(Parent parent, ZoomController c) {
+    public static Scene createScene(Parent parent) {
         Scene scene = new Scene(parent);
-        scene.setOnScroll(c.getZoomHandler());
         return scene;
     }
 
     public static DirectoryChooser createDirectoryChooser() {
-
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Graph File");
 
@@ -64,5 +59,8 @@ public class WindowFactory {
 
         return directoryChooser;
     }
+
+
+
 
 }

@@ -1,4 +1,4 @@
-package application.fxobjects.graph.cell;
+package core.graph.cell;
 
 /**
  * Enum for the type of cells.

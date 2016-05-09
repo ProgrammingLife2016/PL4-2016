@@ -1,8 +1,8 @@
 package application;
 
-import application.controllers.GraphViewController;
+import application.controllers.Controller;
+import application.controllers.MainController;
 import application.controllers.WindowFactory;
-import application.fxobjects.ZoomBox;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,10 +11,7 @@ public class Main extends Application {
      * MainController used for the application.
      */
 
-    //private Controller mainController;
-
-
-    private GraphViewController mainController;
+    private Controller mainController;
 
     /**
      * Usual main method to start the application.
@@ -30,10 +27,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        //mainController = new MainController();
-        mainController = new GraphViewController();
-        ZoomBox z = mainController.getGraph().getZoomController().getZoomBox();
-        WindowFactory.createWindow(mainController.getRoot(), z, mainController.getGraph());
+        mainController = new MainController();
+        WindowFactory.createWindow(mainController.getRoot());
 
     }
 }

@@ -1,6 +1,7 @@
 package application.fxobjects.graph;
 
 import application.fxobjects.graph.cell.Cell;
+import core.graph.Graph;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -12,57 +13,34 @@ public class MouseHandling {
     final DragContext dragContext = new DragContext();
 
     Graph graph;
-    EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
+        System.out.println("mouse");
+        Cell node = (Cell) event.getSource();
 
-        @Override
-        public void handle(MouseEvent event) {
-            Cell node = (Cell) event.getSource();
-
-            System.out.println(node.getCellId());
-        }
+        System.out.println(node.getCellId());
     };
-    EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
+        Node node = (Node) event.getSource();
 
-        @Override
-        public void handle(MouseEvent event) {
-            Node node = (Node) event.getSource();
+        double offsetX = event.getScreenX() + dragContext.x;
+        double offsetY = event.getScreenY() + dragContext.y;
 
-            double offsetX = event.getScreenX() + dragContext.x;
-            double offsetY = event.getScreenY() + dragContext.y;
+        node.relocate(offsetX, offsetY);
 
-            // adjust the offset in case we are zoomed
-            double scale = graph.getScale();
-
-            offsetX /= scale;
-            offsetY /= scale;
-
-            node.relocate(offsetX, offsetY);
-
-        }
     };
-    EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
 
-        @Override
-        public void handle(MouseEvent event) {
-
-        }
     };
 
-    EventHandler<MouseEvent> onMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            Cell cell = (Cell) event.getSource();
-            cell.getText().setVisible(true);
+    EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
+        Cell cell = (Cell) event.getSource();
+        cell.getText().setVisible(true);
 
-        }
     };
 
-    EventHandler<MouseEvent> onMouseExitedEventHandler = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            Cell cell = (Cell) event.getSource();
-            cell.getText().setVisible(false);
-        }
+    EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
+        Cell cell = (Cell) event.getSource();
+        cell.getText().setVisible(false);
     };
 
     /**

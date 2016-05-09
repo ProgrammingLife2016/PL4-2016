@@ -1,6 +1,7 @@
-package application.fxobjects.graph;
+package core;
 
 import application.fxobjects.graph.cell.*;
+import core.graph.cell.CellType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +23,13 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
+    double size;
     Map<Integer, Cell> cellMap; // <id,cell>
 
     /**
      * Class constructor.
      */
     public Model() {
-
         graphParent = new RectangleCell(1, "");
 
        // clear model, create lists
@@ -155,12 +156,12 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      */
-    public void addEdge(int sourceId, int targetId) {
+    public void addEdge(int sourceId, int targetId, int width) {
 
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
-        Edge edge = new Edge(sourceCell, targetCell);
+        Edge edge = new Edge(sourceCell, targetCell, width);
 
         addedEdges.add(edge);
 

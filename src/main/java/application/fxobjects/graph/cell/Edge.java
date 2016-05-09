@@ -18,7 +18,7 @@ public class Edge extends Group {
      * @param source From.
      * @param target To.
      */
-    public Edge(Cell source, Cell target) {
+    public Edge(Cell source, Cell target, int width) {
 
         this.source = source;
         this.target = target;
@@ -28,6 +28,7 @@ public class Edge extends Group {
 
         line = new Line();
 
+        line.setStrokeWidth(width);
         line.startXProperty().bind(source.layoutXProperty().add(
         		source.getBoundsInParent().getWidth() / 2.0));
         line.startYProperty().bind(source.layoutYProperty().add(

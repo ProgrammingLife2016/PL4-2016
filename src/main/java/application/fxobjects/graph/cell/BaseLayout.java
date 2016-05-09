@@ -1,6 +1,7 @@
 package application.fxobjects.graph.cell;
 
-import application.fxobjects.graph.Graph;
+import core.graph.Graph;
+import core.graph.cell.CellType;
 
 import java.util.List;
 
@@ -14,18 +15,24 @@ public class BaseLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
+    private int centerY;
+    private double maxDistance;
 
     /**
      * Class constructor.
-     * @param graph A given graph.
+     *
+     * @param graph  A given graph.
      * @param offset Offset to be added on execute() call.
      */
-    public BaseLayout(Graph graph, int offset) {
+    public BaseLayout(Graph graph, int offset, int middle) {
         this.currentX = 20;
         this.currentY = 200;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
+        this.centerY = middle;
+        System.out.println(centerY + "   center Y");
+        this.maxDistance = middle;
     }
 
     /**
@@ -34,31 +41,65 @@ public class BaseLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
 
+//        for (Cell cell : cells) {
+//            switch (cell.getType()) {
+//                case RECTANGLE:
+//                    if (lastType != CellType.TRIANGLE) {
+//                        currentX += offset;
+//                    }
+//                    cell.relocate(currentX, centerY);
+//                    currentY = (int) centerY;
+//                    cellCount = 0;
+//                    break;
+//                case TRIANGLE:
+//                    if(cellCount%2==0) {
+//                        double increment = (cellCount+2)*(cellCount)* offset;
+//                        if (increment > maxDistance) {
+//                            double off = maxDistance - increment;
+//                            increment = increment - off - 200;
+//                            currentY += increment;
+//                        } else {
+//                            currentY += increment;
+//                        }
+//
+//                        }
+//                    else {
+//                        double decrement = (cellCount) * (cellCount + 1) * offset;
+//                        if (decrement > maxDistance) {
+//                            double off = maxDistance - decrement;
+//                            decrement = decrement - off - 10;
+//                            currentY -= decrement;
+//                        } else {
+//                            currentY -= decrement;
+//                            //currentY -= offset * 2;
+//                        }
+//                    }
         boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
-                    if (lastType != CellType.TRIANGLE) {
-                        currentX += offset;
-                    }
-                    cell.relocate(currentX, 200);
-                    currentY = 200;
-                    cellCount = 0;
+                    currentX += offset;
+
+                    currentY = centerY;
+                    cell.relocate(currentX, currentY);
+
+                    cellCount = 1;
                     break;
                 case TRIANGLE:
-                    if(cellCount%2==0) {
-                            currentY += (cellCount+2)*(cellCount)* offset;
-                        }
-                    else {
-                            currentY -= (cellCount)*(cellCount+1) * offset;
-                            //currentY -= offset * 2;
-                        }
+                    if (lastType == CellType.RECTANGLE) {
+                        currentX += (offset / 2);
+                        currentY = centerY - 100;
 
-                    currentX += offset;
+                    } else {
+                        currentX += offset;
+                        currentY = centerY - (500/cellCount);
+                    }
+
+
                     cellCount++;
+                    //currentX -= (offset / 2);
 
                     cell.relocate(currentX, currentY);
-                        //currentY += offset * 2;
                     break;
 //                case PHYLOGENETIC:
 //                    if(!done) {
@@ -69,32 +110,34 @@ public class BaseLayout extends CellLayout {
 //                        break;
 //                    }
                 default:
+                    System.out.println("default");
                     break;
             }
             lastType = cell.getType();
         }
     }
+
     private int maxDepth = 0;
     private int count = 0;
-    private void toCellWithDepth(Cell c, int depth,int downmoves) {
+
+    private void toCellWithDepth(Cell c, int depth, int downmoves) {
         //count leafs
-        if(c.getCellChildren().isEmpty()) {
+        if (c.getCellChildren().isEmpty()) {
             count++;
         }
-        if (depth>maxDepth)
+        if (depth > maxDepth)
             maxDepth = depth;
         int childNumber = -1;
-        for(Cell child: c.getCellChildren()) {
+        for (Cell child : c.getCellChildren()) {
             childNumber++;
-            toCellWithDepth(child,depth+1, downmoves+childNumber);
+            toCellWithDepth(child, depth + 1, downmoves + childNumber);
         }
         //System.out.println(downmoves + " " + depth);
 
-        if(c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth*50,count*50);
-        }
-        else {
-            c.relocate(50+depth*50,count*50);
+        if (c.getCellChildren().isEmpty()) {
+            c.relocate(maxDepth * 50, count * 50);
+        } else {
+            c.relocate(50 + depth * 50, count * 50);
         }
 
     }

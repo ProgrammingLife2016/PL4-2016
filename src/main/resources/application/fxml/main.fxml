@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
-<fx:root type="javafx.scene.layout.StackPane" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.control.ScrollPane?>
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml">
 
     <BorderPane>
         <top>
@@ -11,13 +11,7 @@
         </top>
 
         <center>
-            <BorderPane fx:id="mainPane">
-
-                <center>
-                    <StackPane fx:id="screen"/>
-                </center>
-
-            </BorderPane>
+            <ScrollPane fx:id="screen"/>
         </center>
     </BorderPane>
 

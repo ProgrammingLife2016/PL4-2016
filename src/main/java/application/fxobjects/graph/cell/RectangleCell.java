@@ -1,5 +1,6 @@
 package application.fxobjects.graph.cell;
 
+import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,11 +21,11 @@ public class RectangleCell extends Cell {
     public RectangleCell(int id, String seq) {
         super(id);
         StackPane pane = new StackPane();
-        pane.setMaxHeight(50);
+        pane.setMaxHeight(10);
         text = new Text(seq);
         text.setVisible(false);
         text.setManaged(false);
-        Rectangle view = new Rectangle(50, 50);
+        Rectangle view = new Rectangle(10, 10);
         view.setStroke(Color.DODGERBLUE);
         view.setFill(Color.DODGERBLUE);
 

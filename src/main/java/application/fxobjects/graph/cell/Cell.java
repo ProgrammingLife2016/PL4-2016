@@ -3,6 +3,7 @@ package application.fxobjects.graph.cell;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;

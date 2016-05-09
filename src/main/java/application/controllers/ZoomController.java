@@ -1,68 +1,40 @@
 package application.controllers;
 
 import application.fxobjects.ZoomBox;
-import application.fxobjects.ZoomableScrollPane;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.transform.Scale;
+import javafx.stage.Screen;
+
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
-public class ZoomController extends ScrollPane {
+public class ZoomController extends BorderPane {
 
-    private ZoomableScrollPane zoomPane;
-    private ZoomBox  zoomBox;
-    private BorderPane pane;
+    private ZoomBox zoomBox;
     private ZoomHandler zoomHandler;
     private KeyHandler keyHandler;
+    private Rectangle2D screenSize;
 
-    Scale scaleTransform;
-    double scaleValue = 1.0;
 
     public ZoomController(Node content) {
-        zoomPane = new ZoomableScrollPane(content);
         zoomBox = new ZoomBox();
+
+        screenSize = Screen.getPrimary().getVisualBounds();
 
         zoomHandler = new ZoomHandler();
         keyHandler = new KeyHandler();
 
-        scaleTransform = new Scale(scaleValue, scaleValue, 0, 0);
-
-        this.setOnScroll(new ZoomHandler());
+//        this.setOnScroll(new ZoomHandler());
+//        this.setOnKeyPressed(new KeyHandler());
 
         init();
     }
 
-    /**
-     * Getter for zoomPane.
-     * @return the zoomPane.
-     */
-    public ZoomableScrollPane getZoomPane() { return zoomPane; }
-
-    /**
-     * Getter for zoomPane.
-     * @return the zoomPane.
-     */
-    public ZoomBox getZoomBox() { return zoomBox; }
-
-    /**
-     * Getter for pan.
-     * @return the Pane.
-     */
-    public BorderPane getPane() { return pane; }
-
-    /**
-     * Getter for zoomHandler.
-     * @return the handler.
-     */
-    public ZoomHandler getZoomHandler() {
-        return zoomHandler;
-    }
 
     /**
      * Getter for keyHandler.
@@ -75,16 +47,9 @@ public class ZoomController extends ScrollPane {
      * Init method.
      * @return the pane.
      */
-    public BorderPane init() {
-        pane = new BorderPane();
+    public void init() {
+        this.setBottom(zoomBox.getZoomBox());
 
-        pane.setCenter(zoomPane);
-        pane.setBottom(zoomBox.getZoomBox());
-
-        pane.setOnScroll(new ZoomHandler());
-        pane.setOnKeyPressed(new KeyHandler());
-
-        return pane;
     }
 
     /**
@@ -95,9 +60,9 @@ public class ZoomController extends ScrollPane {
         @Override
         public void handle(ScrollEvent scrollEvent) {
 
+
             double delta = scrollEvent.getDeltaY();
             {
-                zoomPane.zoom(delta);
                 zoomBox.zoom(delta);
                 scrollEvent.consume();
             }
