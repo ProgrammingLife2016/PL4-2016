@@ -32,8 +32,7 @@ public class MenuFactory {
      * @param bar a MenuBar.
      * @return the completed MenuBar.
      */
-    public static MenuBar createMenu(MenuBar bar) {
-
+    public MenuBar createMenu(MenuBar bar) {
         Menu fileMenu = initFileMenu();
         Menu viewMenu = initViewMenu();
         Menu helpMenu = initHelpMenu();
@@ -44,7 +43,7 @@ public class MenuFactory {
     }
 
 
-    private static Menu initHelpMenu() {
+    private Menu initHelpMenu() {
         shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
 
         Menu helpMenu = initMenu("Help", shortcuts);
@@ -52,7 +51,7 @@ public class MenuFactory {
 
     }
 
-    private static Menu initViewMenu() {
+    private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null, null);
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
         resetView = initMenuItem("Reset", null, null);
@@ -63,7 +62,7 @@ public class MenuFactory {
 
     }
 
-    private static Menu initFileMenu() {
+    private Menu initFileMenu() {
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> WindowFactory.createDirectoryChooser());
@@ -76,18 +75,17 @@ public class MenuFactory {
 
     }
 
-    private static Menu initMenu(String title, final MenuItem... items) {
+    private Menu initMenu(String title, final MenuItem... items) {
         Menu newMenu = new Menu(title);
         newMenu.getItems().addAll(items);
         return newMenu;
     }
 
-    private static MenuItem initMenuItem(String title, KeyCombination combination,
+    private MenuItem initMenuItem(String title, KeyCombination combination,
                                          EventHandler<ActionEvent> handler) {
         MenuItem newItem = new MenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
         return newItem;
     }
-
 }

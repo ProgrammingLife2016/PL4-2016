@@ -67,10 +67,8 @@ public class ZoomController extends BorderPane {
         public void handle(ScrollEvent scrollEvent) {
 
             double delta = scrollEvent.getDeltaY();
-            {
-                zoomBox.zoom(delta);
-                scrollEvent.consume();
-            }
+            zoomBox.zoom(delta);
+            scrollEvent.consume();
         }
     }
 

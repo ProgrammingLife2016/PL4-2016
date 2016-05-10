@@ -13,14 +13,14 @@ import javafx.stage.Stage;
  * @version 1.0
  * @since 25-04-2016
  */
-public class WindowFactory {
+public final class WindowFactory {
     static Rectangle2D screenSize;
     static Stage window;
 
     /**
-     * Constructor method for WindowFactory.
+     * Private class constructor.
      */
-    public WindowFactory() {
+    private WindowFactory() {
     }
 
     /**

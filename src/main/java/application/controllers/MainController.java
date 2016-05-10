@@ -60,8 +60,8 @@ public class MainController extends Controller<BorderPane> {
      * Method that creates the Menubar.
      */
     public void createMenu() {
-        MenuFactory menuFactory = new MenuFactory(this);
-        menuBar = MenuFactory.createMenu(menuBar);
+        MenuFactory mf = new MenuFactory(this);
+        menuBar = mf.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
 
     }
