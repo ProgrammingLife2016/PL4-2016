@@ -11,12 +11,21 @@ import java.io.IOException;
 public class TreeMain {
 
 
+    /**
+     * Constructor method of this class.
+     */
     public TreeMain() {
 
     }
+
     TreeItem root;
     int current_depth = 0;
 
+    /**
+     * The setup method for this class.
+     *
+     * @throws IOException
+     */
     void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));
@@ -25,6 +34,11 @@ public class TreeMain {
         System.out.println(root.toString());
     }
 
+    /**
+     * Main of this class.
+     *
+     * @param args args.
+     */
     public static void main(String args[]) {
         try {
             TreeMain tm = new TreeMain();
