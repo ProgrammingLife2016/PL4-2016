@@ -23,6 +23,7 @@ public class MainController extends Controller<BorderPane> {
     MenuBar menuBar;
 
     static Rectangle2D screenSize;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -45,6 +46,9 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    /**
+     * Method to fill the graph.
+     */
     public void fillGraph() {
         Graph graph = new Graph();
         GraphController graphController = new GraphController(this, graph);
@@ -53,13 +57,19 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
-    public void createMenu(){
+    /**
+     * Method that creates the Menubar.
+     */
+    public void createMenu() {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
 
     }
 
+    /**
+     * Switches the scene.
+     */
     public void switchScene() {
         fillGraph();
     }
