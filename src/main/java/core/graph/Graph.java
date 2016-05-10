@@ -2,24 +2,13 @@ package core.graph;
 
 import application.TreeItem;
 import application.TreeParser;
-
 import core.Model;
 import core.graph.cell.CellType;
 import core.Node;
 import core.Parser;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
-
+import java.io.*;
+import java.util.*;
 
 /**
  * Class representing a graph.
@@ -39,7 +28,6 @@ public class Graph {
 
     /**
      * Get the model of the Graph.
-     *
      * @return The model of the graph.
      */
     public Model getModel() {
@@ -47,9 +35,6 @@ public class Graph {
     }
 
 
-    /**
-     * Loads the data in the graph.
-     */
     public void addGraphComponents() {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
@@ -61,27 +46,24 @@ public class Graph {
 
         Object r = root.getGenomes().get(0);
 
-        for (int i = 1; i <= nodeMap.size(); i++) {
+        for(int i = 1; i<=nodeMap.size();i++) {
             Node from = nodeMap.get(i);
-            // int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j : nodeMap.get(i).getLinks()) {
+           // int numberOfLinks = nodeMap.get(i).getLinks().size();
+            for(int j:nodeMap.get(i).getLinks()) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if (nodeMap.get(j).getGenomes().contains(r)) {
+                if(nodeMap.get(j).getGenomes().contains(r)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                } else {
+                }
+                else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
                 //Add link from current cell to next cell
-                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                        to.getGenomes()));
+                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(), to.getGenomes()));
             }
         }
     }
 
-    /**
-     * Method that updates the model.
-     */
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is
         // the parent
@@ -112,9 +94,6 @@ public class Graph {
         return i;
     }
 
-    /**
-     * Unused at this point of time.
-     */
     public void addPhylogeneticTree() {
 
         try {
@@ -130,13 +109,8 @@ public class Graph {
      * Implementing phylogenetic tree here.
      */
     TreeItem current;
-    int currentDepth = 0;
+    int current_depth = 0;
 
-    /**
-     * Setup method for the PHYLOGENETIC Tree.
-     *
-     * @throws IOException
-     */
     void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));

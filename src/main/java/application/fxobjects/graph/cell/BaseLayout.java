@@ -2,14 +2,12 @@ package application.fxobjects.graph.cell;
 
 import core.graph.Graph;
 import core.graph.cell.CellType;
-
 import java.util.List;
 
 /**
  * Class to create a proper layout fitting the corresponding data.
- *
- * @version 1.0
  * @since 27-04-2016
+ * @version 1.0
  */
 public class BaseLayout extends CellLayout {
     private int offset;
@@ -21,20 +19,19 @@ public class BaseLayout extends CellLayout {
     private int centerY;
     private double maxDistance;
 
-    private static final int BASEX = 200;
-    private static final int BASEY = 200;
+    private static final int baseX = 200;
+    private static final int baseY = 200;
 
     /**
      * Class constructor.
      *
      * @param graph  A given graph.
      * @param offset Offset to be added on execute() call.
-     * @param middle the middle of the pane.
      */
 
     public BaseLayout(Graph graph, int offset, int middle) {
-        this.currentX = BASEX;
-        this.currentY = BASEY;
+        this.currentX = baseX;
+        this.currentY = baseY;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
@@ -86,7 +83,7 @@ public class BaseLayout extends CellLayout {
                         currentY -= cellCount * offset;
                     }
 
-                    if (currentY == BASEY) {
+                    if (currentY == baseY) {
                         currentX += offset;
                     }
 
@@ -94,7 +91,7 @@ public class BaseLayout extends CellLayout {
                     cell.relocate(currentX, currentY);
 
                     // Don't draw triangles above rectangles
-                    if (currentY != BASEY) {
+                    if (currentY != baseY) {
                         currentX += offset;
                     }
                     break;
@@ -118,22 +115,19 @@ public class BaseLayout extends CellLayout {
     private int count = 0;
 
     //ToDo: relocate this method to phylogenetic class.
-
     /**
      * Layout method for phylogenetic tree.
-     *
-     * @param c         cell to start from.
-     * @param depth     allowed depth for traversal.
+     * @param c cell to start from.
+     * @param depth allowed depth for traversal.
      * @param downmoves amount of down moves to go down.
      */
-    private void toCellWithDepth(Cell c, int depth, int downmoves) {
+    private void toCellWithDepth(Cell c, int depth,int downmoves) {
         //count leafs
         if (c.getCellChildren().isEmpty()) {
             count++;
         }
-        if (depth > maxDepth) {
+        if (depth > maxDepth)
             maxDepth = depth;
-        }
         int childNumber = -1;
         for (Cell child : c.getCellChildren()) {
             childNumber++;
@@ -151,7 +145,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the offset.
-     *
      * @return offset.
      */
     public int getOffset() {
@@ -160,7 +153,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the offset.
-     *
      * @param offset value to set offset to.
      */
     public void setOffset(int offset) {
@@ -169,7 +161,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the Graph.
-     *
      * @return graph.
      */
     public Graph getGraph() {
@@ -178,7 +169,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the Graph.
-     *
      * @param graph Graph to be set.
      */
     public void setGraph(Graph graph) {
@@ -187,7 +177,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current X value.
-     *
      * @return currentX.
      */
     public int getCurrentX() {
@@ -196,7 +185,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current X value.
-     *
      * @param currentX value to set currentX to.
      */
     public void setCurrentX(int currentX) {
@@ -205,7 +193,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current Y value.
-     *
      * @return currentY.
      */
     public int getCurrentY() {
@@ -214,7 +201,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current Y value.
-     *
      * @param currentY value to set currentY to.
      */
     public void setCurrentY(int currentY) {
@@ -223,7 +209,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the last seen type of cell.
-     *
      * @return the last seen CellType.
      */
     public CellType getLastType() {
@@ -232,7 +217,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the last seen type of cell.
-     *
      * @param lastType CellType to be set.
      */
     public void setLastType(CellType lastType) {
@@ -241,7 +225,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the cell count.
-     *
      * @return cellCount.
      */
     public int getCellCount() {
@@ -250,7 +233,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the cell count.
-     *
      * @param cellCount the value to set cellCount to.
      */
     public void setCellCount(int cellCount) {
@@ -259,7 +241,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the maximum allowed depth.
-     *
      * @return maxDepth.
      */
     public int getMaxDepth() {
@@ -268,7 +249,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the maximum allowed depth.
-     *
      * @param maxDepth value to set maxDepth to.
      */
     public void setMaxDepth(int maxDepth) {
@@ -277,7 +257,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the count value.
-     *
      * @return count.
      */
     public int getCount() {
@@ -286,7 +265,6 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the count value.
-     *
      * @param count value to set count to.
      */
     public void setCount(int count) {

@@ -24,8 +24,9 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Constructor method for this class.
+     *
      * @param controller the controller to use.
-     * @param g the graph.
+     * @param g          the graph.
      */
     public GraphController(MainController controller, Graph g) {
         super(new ScrollPane());
@@ -47,6 +48,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Getter method for the graph.
+     *
      * @return the graph.
      */
     public Graph getGraph() {

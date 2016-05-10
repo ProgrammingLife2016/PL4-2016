@@ -13,10 +13,8 @@ public class Edge extends Group {
 
     /**
      * Edge constructor.
-     *
      * @param source cell for edge start.
      * @param target cell for edge destination.
-     * @param width the width of the Edge.
      */
     public Edge(Cell source, Cell target, int width) {
 
@@ -30,16 +28,16 @@ public class Edge extends Group {
 
         width /= 1;
 
-        line.setStrokeWidth(Math.max(width, 1));
+        line.setStrokeWidth(Math.max(width,1));
         line.startXProperty().bind(source.layoutXProperty().add(
-                source.getBoundsInParent().getWidth() / 2.0));
+        		source.getBoundsInParent().getWidth() / 2.0));
         line.startYProperty().bind(source.layoutYProperty().add(
-                source.getBoundsInParent().getHeight() / 2.0));
+        		source.getBoundsInParent().getHeight() / 2.0));
 
         line.endXProperty().bind(target.layoutXProperty().add(
-                target.getBoundsInParent().getWidth() / 2.0));
+        		target.getBoundsInParent().getWidth() / 2.0));
         line.endYProperty().bind(target.layoutYProperty().add(
-                target.getBoundsInParent().getHeight() / 2.0));
+        		target.getBoundsInParent().getHeight() / 2.0));
 
         getChildren().add(line);
 
@@ -47,7 +45,6 @@ public class Edge extends Group {
 
     /**
      * Getter Function for the source cell.
-     *
      * @return the source cell.
      */
     public Cell getSource() {
@@ -56,7 +53,6 @@ public class Edge extends Group {
 
     /**
      * Setter method for the source cell.
-     *
      * @param source cell to set as source.
      */
     public void setSource(Cell source) {
@@ -65,7 +61,6 @@ public class Edge extends Group {
 
     /**
      * Getter function for the destination cell.
-     *
      * @return the target cell.
      */
     public Cell getTarget() {
@@ -74,7 +69,6 @@ public class Edge extends Group {
 
     /**
      * Setter method for the destination cell.
-     *
      * @param target cell to set as destination.
      */
     public void setTarget(Cell target) {
@@ -83,7 +77,6 @@ public class Edge extends Group {
 
     /**
      * Getter method for the Line.
-     *
      * @return the Line.
      */
     public Line getLine() {
@@ -92,7 +85,6 @@ public class Edge extends Group {
 
     /**
      * Setter method for the Line.
-     *
      * @param line the Line to set as line.
      */
     public void setLine(Line line) {
