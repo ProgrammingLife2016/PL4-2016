@@ -1,5 +1,9 @@
 package application;
 
+import application.fxobjects.graph.cell.PhylogeneticCell;
+import core.graph.cell.CellType;
+import javafx.scene.text.Text;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  *
  */
 public class TreeItem {
+
     /**
      * The list of children of this node.
      */
@@ -32,6 +37,7 @@ public class TreeItem {
      */
     private TreeItem parent;
 
+    public PhylogeneticCell cell;
     /**
      * Creates a new PhylogeneticTreeItem. Will initialize the ArrayList storing
      * the children and assign a new and unique id to the node.
@@ -51,6 +57,10 @@ public class TreeItem {
         }
 
         return result;
+    }
+
+    public void setCell(int id) {
+        cell = new PhylogeneticCell(id, name);
     }
 
     /**
@@ -154,6 +164,7 @@ public class TreeItem {
      */
     public void setName(final String name) {
         this.name = name;
+        cell.setText(new Text(name));
     }
 
     /**
@@ -244,5 +255,4 @@ public class TreeItem {
         }
         return output.toString();
     }
-
 }

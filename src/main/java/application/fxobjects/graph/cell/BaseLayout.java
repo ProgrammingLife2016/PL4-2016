@@ -114,35 +114,6 @@ public class BaseLayout extends CellLayout {
     private int maxDepth = 0;
     private int count = 0;
 
-    //ToDo: relocate this method to phylogenetic class.
-    /**
-     * Layout method for phylogenetic tree.
-     * @param c cell to start from.
-     * @param depth allowed depth for traversal.
-     * @param downmoves amount of down moves to go down.
-     */
-    private void toCellWithDepth(Cell c, int depth,int downmoves) {
-        //count leafs
-        if (c.getCellChildren().isEmpty()) {
-            count++;
-        }
-        if (depth > maxDepth)
-            maxDepth = depth;
-        int childNumber = -1;
-        for (Cell child : c.getCellChildren()) {
-            childNumber++;
-            toCellWithDepth(child, depth + 1, downmoves + childNumber);
-        }
-        //System.out.println(downmoves + " " + depth);
-
-        if (c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth * 50, count * 50);
-        } else {
-            c.relocate(50 + depth * 50, count * 50);
-        }
-
-    }
-
     /**
      * Getter method for the offset.
      * @return offset.

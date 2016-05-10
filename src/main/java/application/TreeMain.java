@@ -14,10 +14,10 @@ public class TreeMain {
     public TreeMain() {
 
     }
-    TreeItem root;
+    public TreeItem root;
     int current_depth = 0;
 
-    void setup() throws IOException {
+    public void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));
         String t = r.readLine();

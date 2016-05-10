@@ -1,5 +1,8 @@
 package application.controllers;
 
+import application.TreeItem;
+import application.TreeMain;
+import application.TreeParser;
 import core.graph.Graph;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -8,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -53,6 +57,19 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
+    public void fillTree(String tree) {
+        try {
+            TreeMain tm = new TreeMain();
+            tm.setup();
+            TreeController treeController = new TreeController(this, tm.root);
+            screen = treeController.getRoot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public void createMenu(){
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
@@ -62,6 +79,10 @@ public class MainController extends Controller<BorderPane> {
 
     public void switchScene() {
         fillGraph();
+    }
+
+    public void switchTreeScene() {
+        fillTree("TODO");
     }
 
 }

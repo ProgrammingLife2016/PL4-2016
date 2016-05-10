@@ -16,13 +16,13 @@ public class PhylogeneticCell extends Cell {
     /**
      * Rectangle cell constructor.
      * @param id The ID of a cell.
-     * @param seq The genome sequence of a cell.
+     * @param name The genome sequence of a cell.
      */
-    public PhylogeneticCell(int id, String seq) {
+    public PhylogeneticCell(int id, String name) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(50);
-        text = new Text(seq);
+        text = new Text(name);
         text.setVisible(false);
         text.setManaged(false);
         Rectangle view = new Rectangle(50, 50);
@@ -32,6 +32,10 @@ public class PhylogeneticCell extends Cell {
         pane.getChildren().addAll(view, text);
 
         setView(pane);
+    }
+
+    public void setText(Text text) {
+        this.text = text;
     }
 
     /**

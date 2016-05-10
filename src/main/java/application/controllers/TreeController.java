@@ -1,8 +1,11 @@
 package application.controllers;
 
+import application.TreeItem;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
+import application.fxobjects.graph.cell.PhylogeneticCell;
+import application.fxobjects.phylogeny.TreeLayout;
 import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
@@ -13,33 +16,36 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Daphne van Tetering on 4-5-2016.
+ * Created by Niek van der Laan on 5-9-2016
  */
-public class GraphController extends Controller<ScrollPane> {
-    private Graph graph;
+public class TreeController extends Controller<ScrollPane> {
+    private TreeItem root;
     private MainController mainController;
-    private GraphMouseHandling graphMouseHandling;
+    //private GraphMouseHandling graphMouseHandling;
 
     private javafx.geometry.Rectangle2D screenSize;
 
-    public GraphController(MainController controller, Graph g) {
+    public TreeController(MainController controller, TreeItem root) {
         super(new ScrollPane());
-        this.graph = g;
+        this.root = root;
         this.mainController = controller;
-        this.graphMouseHandling = new GraphMouseHandling(graph);
+        //this.graphMouseHandling = new GraphMouseHandling(graph);
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
+        /*
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if(event.getDeltaY() != 0) {
                 event.consume();
             }
         });
+        */
+
         init();
     }
 
-    public Graph getGraph() { return graph; }
+    public TreeItem getRootNode() { return root; }
 
 
     @Override
@@ -50,26 +56,10 @@ public class GraphController extends Controller<ScrollPane> {
     public void init() {
         System.out.println("init");
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents();
 
-        // add components to graph pane
-        root.getChildren().addAll(graph.getModel().getAddedEdges());
-        root.getChildren().addAll(graph.getModel().getAddedCells());
-
-        for(Cell cell : graph.getModel().getAddedCells()) {
-            graphMouseHandling.setMouseHandling(cell);
-        }
-
-        // remove components from graph pane
-        root.getChildren().removeAll(graph.getModel().getRemovedCells());
-        root.getChildren().removeAll(graph.getModel().getRemovedEdges());
-
-        graph.endUpdate();
-
-
-        CellLayout layout = new BaseLayout(graph, 20,(int) (screenSize.getHeight()-25)/2);
+        root.getChildren().add(new PhylogeneticCell(1, "test"));
+        CellLayout layout = new TreeLayout(this.root, 20,(int) (screenSize.getHeight()-25)/2);
         layout.execute();
-
         this.getRoot().setContent(root);
     }
 }
