@@ -45,6 +45,9 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    /**
+     * Method to fill the graph.
+     */
     public void fillGraph() {
         Graph graph = new Graph();
         GraphController graphController = new GraphController(this, graph);
@@ -53,13 +56,19 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
-    public void createMenu(){
-        MenuFactory menuFactory = new MenuFactory(this);
-        menuBar = menuFactory.createMenu(menuBar);
+    /**
+     * Method that creates the Menubar.
+     */
+    public void createMenu() {
+        MenuFactory mf = new MenuFactory(this);
+        menuBar = mf.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
 
     }
 
+    /**
+     * Switches the scene.
+     */
     public void switchScene() {
         fillGraph();
     }
