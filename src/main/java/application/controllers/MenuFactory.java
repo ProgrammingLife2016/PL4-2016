@@ -13,7 +13,8 @@ import javafx.scene.input.KeyCombination;
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class MenuFactory {
-    private static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts, showPhylogeneticTree, showGenomeSequence, test;
+    private static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
+            showPhylogeneticTree, showGenomeSequence, test;
     private static MainController mainController;
 
     /**
@@ -22,8 +23,7 @@ public class MenuFactory {
      * @param controller the mainController to use.
      */
     public MenuFactory(MainController controller) {
-        this.mainController = controller;
-
+        mainController = controller;
     }
 
     /**

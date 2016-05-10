@@ -53,12 +53,9 @@ public class ZoomController extends BorderPane {
 
     /**
      * Init method.
-     *
-     * @return the pane.
      */
     public void init() {
         this.setBottom(zoomBox.getZoomBox());
-
     }
 
     /**

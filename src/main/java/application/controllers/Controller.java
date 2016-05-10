@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 /**
  * Controller class, used when creating other controllers.
