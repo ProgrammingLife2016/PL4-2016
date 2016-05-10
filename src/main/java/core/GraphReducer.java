@@ -24,12 +24,12 @@ public final class GraphReducer {
         for (int idx = 1; idx <= nodeMap.size(); idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) { continue; }
-            for (int childId : parent.getLinks(nodeMap)) {
+            for (int childId : parent.getLinks()) {
                 Node child = nodeMap.get(childId);
                 if (child == null) { continue; }
 
-                if (!child.getParents(nodeMap).contains(parent.getId())) {
-                        child.addParent(parent.getId());
+                if (!child.getParents().contains(parent.getId())) {
+                    child.addParent(parent.getId());
                 }
             }
         }
@@ -40,7 +40,8 @@ public final class GraphReducer {
      * @param startMap  An uncollapsed node map.
      * @return  A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap) {
+    public static List<HashMap<Integer, Node>>
+    createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
 
         for (int i = 1;; i++) {
@@ -49,9 +50,9 @@ public final class GraphReducer {
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMaps.get(i).size();
 
-            // Don't make any new zoom level if the number of nodes after reduction is only 10 less
+            // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) < 10) {
+            if ((previousMapSize - currentMapSize) <= 2) {
                 return levelMaps;
             }
         }
@@ -68,16 +69,18 @@ public final class GraphReducer {
 
         for (int idx = 1; idx <= map.size(); idx++) {
             Node parent = nodeMap.get(idx);
-            if (parent == null) { continue; }
-
-            collapseNodeBubbles(nodeMap, parent);
-            //collapseNodeSequence(nodeMap, parent);
+            if (parent == null) {
+                continue;
+            }
+            collapseSymmetricalNodeBubble(nodeMap, parent);
+            collapseAsymmetricalNodeBubble(nodeMap, parent);
+            collapseNodeSequence(nodeMap, parent);
         }
 
         return nodeMap;
     }
 
-    
+
     /**
      * Collapse a parent and its grandchild horizontally.
      * @param nodeMap   A HashMap containing all nodes in the graph.
@@ -85,24 +88,59 @@ public final class GraphReducer {
      * @return  Whether the horizontal collapse action has succeeded.
      */
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
+        Boolean res = false;
+        // Links must be present from parent --> child
         if (parent == null) { return false; }
-        if (parent.getLinks(nodeMap).size() != 1) { return false; }
-        int childId = parent.getLinks(nodeMap).get(0);
-        Node child = nodeMap.get(childId);
 
-        if (child.getLinks(nodeMap).size() != 1) { return false; }
-        if (child.getParents(nodeMap).size() != 1) { return false; }
-        int grandChildId = child.getLinks(nodeMap).get(0);
-        Node grandChild = nodeMap.get(grandChildId);
+        List<Integer> childrenIds = parent.getLinks(nodeMap);
+        if (childrenIds.size() != 1) { return false; }
 
-        if (grandChild.getParents(nodeMap).size() != 1) { return false; }
-        if (grandChild.getLinks(nodeMap).size() != 1) { return false; }
+        for (int idx = 0; idx < childrenIds.size(); idx++) {
+            Node child = nodeMap.get(childrenIds.get(idx));
 
-        nodeMap.remove(child.getId());
-        parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
-        grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
+            // A child may only have one parent and grandchild
+            if (child.getLinks(nodeMap).size() != 1) { return false; }
+            if (child.getParents(nodeMap).size() != 1) { return false; }
+            Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
-        return true;
+            // Set new child of parent
+            parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
+            // Set new parent of grandchild
+            grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
+            // Remove child node
+            nodeMap.remove(child.getId());
+            res = true;
+        }
+
+        return res;
+    }
+
+    /**
+     * Collapse a child1, if child2 is a grandchild of child1.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param parent    A given parent node to be collapsed with a number of its children.
+     * @return  Whether nodes have been collapsed.
+     */
+    public static Boolean
+    collapseAsymmetricalNodeBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+        List<Integer> children = parent.getLinks(nodeMap);
+        if (children.size() == 2) {
+            int child1Id = children.get(0);
+            int child2Id = children.get(1);
+
+            List<Integer> child1ChildrenIds = nodeMap.get(child1Id).getLinks(nodeMap);
+            List<Integer> child2ChildrenIds = nodeMap.get(child2Id).getLinks(nodeMap);
+
+            if (child1ChildrenIds.contains(child2Id)) {
+                nodeMap.remove(child1Id);
+                return true;
+            } else if (child2ChildrenIds.contains(child1Id)) {
+                nodeMap.remove(child2Id);
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -113,47 +151,27 @@ public final class GraphReducer {
      * @return  Whether nodes have been collapsed.
      */
     public static Boolean
-    collapseNodeBubbles(HashMap<Integer, Node> nodeMap, Node parent) {
-        Boolean res = false;
-        List<Integer> childrenIds = parent.getLinks(nodeMap);
-        if (childrenIds.size() > 4) { return res; }
+    collapseSymmetricalNodeBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+        List<Integer> children = parent.getLinks(nodeMap);
+        if (children.size() <= 1) { return false; }
 
-        for (int childId : childrenIds) {
-            Node child = nodeMap.get(childId);
-            if (collapseCheck(nodeMap, parent, child)) {
-                nodeMap.remove(child.getId());
-                if (!res) { res = true; }
-            }
+        // Check whether all children only have one child
+        for (int i = 0; i < children.size(); i++) {
+            if (nodeMap.get(children.get(i)).getLinks(nodeMap).size() != 1) { return false; }
         }
 
-        return res;
-    }
+        // Check all grand children are the same
+        for (int i = 0; i < children.size() - 1; i++) {
+            Integer grandChild1 = nodeMap.get(children.get(i)).getLinks(nodeMap).get(0);
+            Integer grandChild2 = nodeMap.get(children.get(i + 1)).getLinks(nodeMap).get(0);
+            if (!grandChild1.equals(grandChild2)) { return false; }
+        }
 
+        // Remove redundant nodes in bubble
+        for (int i = 1; i < children.size(); i++) {
+            nodeMap.remove(children.get(i));
+        }
 
-    /**
-     * Check whether a node can be collapsed / removed.
-     * @param nodeMap   A HashMap containing all nodes in the graph.
-     * @param startNode    A parent node linked to a to be collapsed node.
-     * @param currentNode   A node to be removed / collapsed.
-     * @return  Whether currentNode can be removed / collapsed.
-     */
-    public static Boolean
-    collapseCheck(HashMap<Integer, Node> nodeMap, Node startNode, Node currentNode) {
-        List<Integer> startNodeChildrenIds = startNode.getLinks(nodeMap);
-        List<Integer> currentNodeChildrenIds = currentNode.getLinks(nodeMap);
-
-        if (startNodeChildrenIds.size() < 2) { return false; }
-
-        // Check will fail if startNode == CurrentNode
-        if (currentNodeChildrenIds.size() != 1) { return false; }
-
-        // startNode - Child X - 1x GrandChild (This might be redundant with collapseNodeSequence()
-        if (startNodeChildrenIds.contains(currentNode)) { return true; }
-
-
-        Node currentNodeChild = nodeMap.get(currentNodeChildrenIds.get(0));
-        if (currentNodeChild == null) { return false; }
-
-        return currentNodeChild.getGenomes().containsAll(startNode.getGenomes());
+        return true;
     }
 }

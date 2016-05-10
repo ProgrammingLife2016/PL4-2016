@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -130,59 +129,12 @@ public class GraphReducerTest {
         assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
     }
 
-    /**
-     * Test the collapseCheck method with too few nodes.
-     */
-    @Test
-    public void collapseCheckTooFewNodes() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(1);
-        nodeMap.get(1).addLink(2);
-
-        assertFalse(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(1)));
-    }
-
-    /**
-     * Test the collapseCheck method with too few nodes.
-     */
-    @Test
-    public void collapseCheckTooManyGrandChildren() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(1);
-        nodeMap.get(1).addLink(2);
-
-        assertFalse(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(1)));
-    }
-    /**
-     * Test the collapseCheck method with not a bubble.
-     */
-    @Test
-    public void collapseCheckFalse() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-        nodeMap.get(1).addLink(2);
-        nodeMap.get(2).addLink(3);
-
-        assertFalse(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(2)));
-    }
-
-    /**
-     * Test the collapseCheck method with a bubble.
-     */
-    @Test
-    public void testCollapseCheckTrue() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(4);
-        nodeMap.get(1).addLink(2);
-        nodeMap.get(1).addLink(3);
-        nodeMap.get(2).addLink(4);
-        nodeMap.get(3).addLink(4);
-
-        assertTrue(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(2)));
-        assertTrue(GraphReducer.collapseCheck(nodeMap, nodeMap.get(1), nodeMap.get(3)));
-    }
 
     /**
      * Test the collapsing of a parent with four children.
      */
     @Test
-    public void testCollapseNodeBubbles() {
+    public void testcollapseSymmetricalNodeBubble() {
         HashMap<Integer, Node> nodeMap = createNodeMap(6);
 
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3, 4, 5)));
@@ -195,16 +147,16 @@ public class GraphReducerTest {
 
         assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 4);
         assertTrue(nodeMap.get(6).getParents(nodeMap).size() == 4);
-        GraphReducer.collapseNodeBubbles(nodeMap, nodeMap.get(1));
+        GraphReducer.collapseSymmetricalNodeBubble(nodeMap, nodeMap.get(1));
         assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(5).getId());
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(2).getId());
 
-        assertNull(nodeMap.get(2));
         assertNull(nodeMap.get(3));
         assertNull(nodeMap.get(4));
+        assertNull(nodeMap.get(5));
 
-        assertTrue(nodeMap.get(5).getParents(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(5).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
+        assertTrue(nodeMap.get(2).getParents(nodeMap).size() == 1);
+        assertTrue(nodeMap.get(2).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
     }
 
     /**
