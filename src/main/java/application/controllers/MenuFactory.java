@@ -8,18 +8,31 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class MenuFactory {
-    private static MenuItem loadPhylogeneticTree,loadGenome,resetView, shortcuts, showPhylogeneticTree, showGenomeSequence, test;
+    private static MenuItem loadPhylogeneticTree, loadGenome,
+            resetView, shortcuts, showPhylogeneticTree, showGenomeSequence, test;
     private static MainController mainController;
 
+    /**
+     * Constructor method for this class.
+     *
+     * @param controller the mainController to use.
+     */
     public MenuFactory(MainController controller) {
         this.mainController = controller;
 
     }
 
+    /**
+     * Method that creates a Menu.
+     *
+     * @param bar a MenuBar.
+     * @return the completed MenuBar.
+     */
     public static MenuBar createMenu(MenuBar bar) {
 
         Menu fileMenu = initFileMenu();
@@ -52,21 +65,26 @@ public class MenuFactory {
     }
 
     private static Menu initFileMenu() {
-        loadGenome = initMenuItem("Load Genome Sequence", new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN), t -> WindowFactory.createDirectoryChooser());
-        loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree", new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN), null);
+        loadGenome = initMenuItem("Load Genome Sequence",
+                new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
+                t -> WindowFactory.createDirectoryChooser());
+        loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
+                new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
+                null);
 
         Menu fileMenu = initMenu("File", loadGenome, loadPhylogeneticTree);
         return fileMenu;
 
     }
 
-    private static Menu initMenu(String title, final MenuItem... items){
+    private static Menu initMenu(String title, final MenuItem... items) {
         Menu newMenu = new Menu(title);
         newMenu.getItems().addAll(items);
         return newMenu;
     }
 
-    private static MenuItem initMenuItem(String title, KeyCombination combination, EventHandler<ActionEvent> handler) {
+    private static MenuItem initMenuItem(String title, KeyCombination combination,
+                                         EventHandler<ActionEvent> handler) {
         MenuItem newItem = new MenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
