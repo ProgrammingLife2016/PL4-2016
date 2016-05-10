@@ -151,19 +151,27 @@ public class Node {
         this.zIndex = zIndex;
     }
 
-    public List<Integer> getLinks() { return links; }
+    public List<Integer> getLinks() {
+        return links;
+    }
 
     public void setLinks(List<Integer> links) {
         this.links = links;
     }
 
-    public List<Integer> getParents() { return parents; }
+    public List<Integer> getParents() {
+        return parents;
+    }
 
-    public void setParents(List<Integer> parents) { this.parents = parents; }
+    public void setParents(List<Integer> parents) {
+        this.parents = parents;
+    }
 
     public List<String> getGenomes() {
         return genomes;
     }
 
-
+    public void setGenomes(List<String> genomes) {
+        this.genomes = genomes;
+    }
 }

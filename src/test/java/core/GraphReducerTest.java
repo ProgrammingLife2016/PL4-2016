@@ -2,10 +2,7 @@ package core;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -191,5 +188,43 @@ public class GraphReducerTest {
         for (int i = 2; i < nodeMapList.size(); i++) {
             assertTrue(nodeMapList.get(i).size() < 51);
         }
+    }
+
+    /**
+     * Test the addGenomes method with data lists without any overlap.
+     */
+    @Test
+    public void testAddGenomesNoOverlap() {
+        List<String> l1 = new ArrayList<String>();
+        List<String> l2 = new ArrayList<String>();
+
+        l1.add("a");
+        l2.add("b");
+
+        List<String> l3 = GraphReducer.addGenomes(l1, l2);
+        assertTrue(l3.size() == 2);
+        assertTrue(l3.contains("a"));
+        assertTrue(l3.contains("b"));
+    }
+
+    /**
+     * Test the addGenomes method with overlapping data lists.
+     */
+    @Test
+    public void testAddGenomesWithOverlap() {
+        List<String> l1 = new ArrayList<String>();
+        List<String> l2 = new ArrayList<String>();
+
+        l1.add("a");
+        l1.add("b");
+
+        l2.add("b");
+        l2.add("c");
+
+        List<String> l3 = GraphReducer.addGenomes(l1, l2);
+        assertTrue(l3.size() == 3);
+        assertTrue(l3.contains("a"));
+        assertTrue(l3.contains("b"));
+        assertTrue(l3.contains("c"));
     }
 }

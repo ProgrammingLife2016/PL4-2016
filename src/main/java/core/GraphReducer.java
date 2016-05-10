@@ -1,10 +1,7 @@
 package core;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -103,6 +100,7 @@ public final class GraphReducer {
             if (child.getParents(nodeMap).size() != 1) { return false; }
             Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
+            List<String> childGenomes = child.getGenomes();
             // Set new child of parent
             parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
             // Set new parent of grandchild
@@ -132,9 +130,11 @@ public final class GraphReducer {
             List<Integer> child2ChildrenIds = nodeMap.get(child2Id).getLinks(nodeMap);
 
             if (child1ChildrenIds.contains(child2Id)) {
+                List<String> child1Genomes = nodeMap.get(child1Id).getGenomes();
                 nodeMap.remove(child1Id);
                 return true;
             } else if (child2ChildrenIds.contains(child1Id)) {
+                List<String> child2Genomes = nodeMap.get(child2Id).getGenomes();
                 nodeMap.remove(child2Id);
                 return true;
             }
@@ -169,9 +169,28 @@ public final class GraphReducer {
 
         // Remove redundant nodes in bubble
         for (int i = 1; i < children.size(); i++) {
-            nodeMap.remove(children.get(i));
+            int childId = children.get(i);
+            Node child = nodeMap.get(childId);
+
+            if (child != null) {
+                List<String> childGenomes = child.getGenomes();
+                nodeMap.remove(childId);
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Adds a list of genomes to another list.
+     * @param base  Base list of genomes.
+     * @param toAdd List of genomes to add to the list
+     * @return  A concatenated list of all genomes without duplicates.
+     */
+    public static List<String> addGenomes(List<String> base, List<String> toAdd) {
+        Set<String> hs = new LinkedHashSet<String>(base);
+        hs.addAll(toAdd);
+
+        return new ArrayList<String>(hs);
     }
 }
