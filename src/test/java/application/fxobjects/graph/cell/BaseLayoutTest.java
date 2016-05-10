@@ -14,11 +14,11 @@ import static org.mockito.Mockito.mock;
  * Test class for BaseLayout.java.
  *
  * @author Arthur Breurkes.
- * @since 04-05-2016
  * @version 1.0
+ * @since 04-05-2016
  */
 @SuppressWarnings({
-       "checkstyle:magicnumber"
+        "checkstyle:magicnumber"
 })
 public class BaseLayoutTest {
     private BaseLayout baseLayout;
@@ -28,15 +28,17 @@ public class BaseLayoutTest {
 
     /**
      * Set up method for testing purposes.
+     *
      * @throws Exception possible Exception.
      */
     @Before
     public void setUp() throws Exception {
-        baseLayout = new BaseLayout(null, 0,0);
+        baseLayout = new BaseLayout(null, 0, 0);
     }
 
     /**
      * Test whether the constructor works correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -46,6 +48,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getOffset() and setOffset() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -57,6 +60,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getGraph() and setGraph() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -68,6 +72,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getCurrentX() and setCurrentX() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -79,6 +84,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getCurrentY() and setCurrentY() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -90,6 +96,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getLastTyp() and setLastType() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -101,6 +108,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getCellCount() and setCellCount() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -112,6 +120,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getMaxDepth() and setMaxDepth() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -123,6 +132,7 @@ public class BaseLayoutTest {
 
     /**
      * Test whether getCount() and setCount() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test

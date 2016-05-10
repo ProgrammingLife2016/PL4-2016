@@ -1,7 +1,13 @@
 package core;
 
-import application.fxobjects.graph.cell.*;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.Edge;
+import application.fxobjects.graph.cell.RectangleCell;
+import application.fxobjects.graph.cell.PhylogeneticCell;
+import application.fxobjects.graph.cell.TriangleCell;
+
 import core.graph.cell.CellType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +39,7 @@ public class Model {
     public Model() {
         graphParent = new RectangleCell(1, "");
 
-       // clear model, create lists
+        // clear model, create lists
         clear();
     }
 
@@ -65,6 +71,7 @@ public class Model {
 
     /**
      * Get a list of added cells.
+     *
      * @return A list of added cells.
      */
     public List<Cell> getAddedCells() {
@@ -73,6 +80,7 @@ public class Model {
 
     /**
      * Get a list of removed cells.
+     *
      * @return A list of removed cells.
      */
     public List<Cell> getRemovedCells() {
@@ -81,6 +89,7 @@ public class Model {
 
     /**
      * Get a list of all cells.
+     *
      * @return A list of all cells.
      */
     public List<Cell> getAllCells() {
@@ -89,6 +98,7 @@ public class Model {
 
     /**
      * Get a list of added edges.
+     *
      * @return A list of all added edges.
      */
     public List<Edge> getAddedEdges() {
@@ -97,6 +107,7 @@ public class Model {
 
     /**
      * Get a list of removed edges.
+     *
      * @return A list of removed edges.
      */
     public List<Edge> getRemovedEdges() {
@@ -105,6 +116,7 @@ public class Model {
 
     /**
      * Get a list of all edges.
+     *
      * @return A list of all edges.
      */
     public List<Edge> getAllEdges() {
@@ -113,8 +125,9 @@ public class Model {
 
     /**
      * Method to add a Cell (Node).
-     * @param id the id, which represents the sequence.
-     * @param seq The genome sequence of a cell.
+     *
+     * @param id   the id, which represents the sequence.
+     * @param seq  The genome sequence of a cell.
      * @param type The type of cell.
      */
     public void addCell(int id, String seq, CellType type) {
@@ -142,6 +155,7 @@ public class Model {
 
     /**
      * Method to add a Cell (Node).
+     *
      * @param cell The cell (Node) to add.
      */
     private void addCell(Cell cell) {
@@ -155,6 +169,7 @@ public class Model {
 
     /**
      * Add a level map to the model.
+     *
      * @param levelMap HashMap containing all nodes of a certain zoomlevel.
      */
     public void addLevelMap(HashMap<Integer, Node> levelMap) {
@@ -163,6 +178,7 @@ public class Model {
 
     /**
      * Return a list of level maps.
+     *
      * @return A list of level maps.
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
@@ -171,6 +187,7 @@ public class Model {
 
     /**
      * Set a list of level maps.
+     *
      * @param levelMaps A list of level maps.
      */
     public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
@@ -179,8 +196,10 @@ public class Model {
 
     /**
      * Method to add an Edge to the model.
+     *
      * @param sourceId From.
      * @param targetId To.
+     * @param width the width of de Edge.
      */
     public void addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);
@@ -189,14 +208,14 @@ public class Model {
         if (sourceCell != null && targetCell != null) {
             Edge edge = new Edge(sourceCell, targetCell, width);
             addedEdges.add(edge);
-        }
-        else {
+        } else {
             System.out.println("Nullpointer in edge, Edge not added.");
         }
     }
 
     /**
      * Attach all cells which don't have a parent to graphParent.
+     *
      * @param cellList List of cells without a parent.
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
@@ -211,6 +230,7 @@ public class Model {
 
     /**
      * Remove the graphParent reference if it is set
+     *
      * @param cellList List of cells to be removed from the graph
      */
     public void disconnectFromGraphParent(List<Cell> cellList) {

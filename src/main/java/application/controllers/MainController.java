@@ -23,6 +23,7 @@ public class MainController extends Controller<BorderPane> {
     MenuBar menuBar;
 
     static Rectangle2D screenSize;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -59,7 +60,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method that creates the Menubar.
      */
-    public void createMenu(){
+    public void createMenu() {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);

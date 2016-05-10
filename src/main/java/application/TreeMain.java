@@ -19,12 +19,12 @@ public class TreeMain {
     }
 
     TreeItem root;
-    int current_depth = 0;
+    int currentDepth = 0;
 
     /**
      * The setup method for this class.
      *
-     * @throws IOException
+     * @throws 'IOException'
      */
     void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
