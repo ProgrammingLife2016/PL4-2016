@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private MainController mainController;

@@ -3,7 +3,6 @@ package application.controllers;
 import application.fxobjects.ZoomBox;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -13,6 +12,7 @@ import javafx.stage.Screen;
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ZoomController extends BorderPane {
 
     private ZoomBox zoomBox;
@@ -23,10 +23,8 @@ public class ZoomController extends BorderPane {
 
     /**
      * Constructor method.
-     *
-     * @param content Unused.
      */
-    public ZoomController(Node content) {
+    public ZoomController() {
         zoomBox = new ZoomBox();
 
         screenSize = Screen.getPrimary().getVisualBounds();

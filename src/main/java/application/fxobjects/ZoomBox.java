@@ -148,12 +148,11 @@ public class ZoomBox extends ScrollPane {
                     * delta)) {
                 scaleZoomRectOut(-delta);
             }
-        } else if (-delta < 0.0) {
-            if ((zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
-                    && zoomRect.getWidth() + delta * (zoomRect.getWidth()
-                    * zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
-                scaleZoomRectIn(-delta);
-            }
+        } else if (-delta < 0.0
+                && (zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
+                && zoomRect.getWidth() + delta * (zoomRect.getWidth()
+                * zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
+            scaleZoomRectIn(-delta);
         }
     }
 

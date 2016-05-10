@@ -9,6 +9,7 @@ import java.util.List;
  * @since 27-04-2016
  * @version 1.0
  */
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
     private int offset;
     private Graph graph;
@@ -45,7 +46,7 @@ public class BaseLayout extends CellLayout {
      */
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
-        boolean done = false;
+        //boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:

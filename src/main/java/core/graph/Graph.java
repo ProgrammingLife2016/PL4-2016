@@ -22,6 +22,7 @@ import java.util.Queue;
 /**
  * Class representing a graph.
  */
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
 public class Graph {
 
     private Model model;
@@ -51,7 +52,7 @@ public class Graph {
 
         nodeMap = parser.readGFA(inputStream);
 
-        Node root = (nodeMap.get(1));
+        Node root = nodeMap.get(1);
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
         Object r = root.getGenomes().get(0);
@@ -140,7 +141,7 @@ public class Graph {
         Queue<TreeItem> q = new LinkedList<>();
         ArrayList<Integer> done = new ArrayList<>();
 
-        System.out.println((current.getName()));
+        System.out.println(current.getName());
         q.add(current);
         model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
         System.out.println("Cell added: " + i);

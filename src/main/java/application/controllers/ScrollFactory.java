@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollBar;
 /**
  * Created by Daphne van Tetering on 5-5-2016.
  */
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ScrollFactory {
     private MainController mainController;
 
