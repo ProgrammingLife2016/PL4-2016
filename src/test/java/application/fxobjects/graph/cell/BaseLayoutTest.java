@@ -17,9 +17,7 @@ import static org.mockito.Mockito.mock;
  * @version 1.0
  * @since 04-05-2016
  */
-@SuppressWarnings({
-        "checkstyle:magicnumber"
-})
+@SuppressWarnings("checkstyle:magicnumber")
 public class BaseLayoutTest {
     private BaseLayout baseLayout;
 
