@@ -32,7 +32,7 @@ public class BaseLayoutTest {
      */
     @Before
     public void setUp() throws Exception {
-        baseLayout = new BaseLayout(null, 0,0);
+        baseLayout = new BaseLayout(null, 0, 0);
     }
 
     /**

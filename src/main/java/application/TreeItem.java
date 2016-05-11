@@ -1,7 +1,6 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -12,21 +11,23 @@ import java.util.concurrent.CopyOnWriteArraySet;
  *
  * @author Albert Smit
  * @author Rutger van den Berg
- *
  */
 public class TreeItem {
     /**
      * The list of children of this node.
      */
     private final Set<TreeItem> children;
+
     /**
      * The distance between samples. This is an optional field.
      */
     private double distance;
+
     /**
      * The name of the sample. This is an optional field.
      */
     private String name;
+
     /**
      * The parent node, null when this node is the root node.
      */
@@ -39,6 +40,7 @@ public class TreeItem {
     public TreeItem() {
         children = new CopyOnWriteArraySet<TreeItem>();
     }
+
     /**
      * Method to determine the amount of descendant nodes each node has.
      *
@@ -72,8 +74,7 @@ public class TreeItem {
      * PhylogeneticTreeItem child to the ArrayList storing the children of this
      * node.
      *
-     * @param child
-     *            the PhylogeneticTreeItem that needs to be added to the tree
+     * @param child the PhylogeneticTreeItem that needs to be added to the tree
      */
     public void addChild(final TreeItem child) {
         children.add(child);
@@ -139,8 +140,7 @@ public class TreeItem {
     /**
      * Sets this nodes distance to the passed double.
      *
-     * @param distance
-     *            the distance between the nodes
+     * @param distance the distance between the nodes
      */
     public void setDistance(final double distance) {
         this.distance = distance;
@@ -149,8 +149,7 @@ public class TreeItem {
     /**
      * Set this nodes name to the passed String.
      *
-     * @param name
-     *            the name of this node
+     * @param name the name of this node
      */
     public void setName(final String name) {
         this.name = name;
@@ -160,16 +159,14 @@ public class TreeItem {
      * Compares this with another Object. returns true when both are the same.
      * two PhylogeneticTreeItems are considered the same when both have the
      * same:
-     *
+     * <p/>
      * <ol>
      * <li>name or both have no name</li>
      * <li>distance</li>
      * <li>children, order does not matter</li>
      * </ol>
      *
-     * @param obj
-     *            the object to compare with
-     *
+     * @param obj the object to compare with
      * @return true if both are the same, otherwise false
      */
     @Override
@@ -202,8 +199,7 @@ public class TreeItem {
      * the parent and also add itself to the list of children in the parent
      * node.
      *
-     * @param parentNode
-     *            the node that will be this nodes parent
+     * @param parentNode the node that will be this nodes parent
      */
     public void setParent(final TreeItem parentNode) {
         this.parent = parentNode;
@@ -226,9 +222,8 @@ public class TreeItem {
     }
 
     /**
-     * @param depth
-     *            The depth of this treeitem as compared to the depth of the
-     *            treeitem on which toString was called.
+     * @param depth The depth of this treeitem as compared to the depth of the
+     *              treeitem on which toString was called.
      * @return Recursive string representation.
      */
     private String toStringWithDepth(final int depth) {

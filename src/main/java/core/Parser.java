@@ -1,10 +1,8 @@
 package core;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -39,15 +37,14 @@ public class Parser {
 			while ((nextLine = bReader.readLine()) != null) {
                 String[] content = nextLine.trim().split("\\s+");
                 switch (nextLine.charAt(0)) {
-					case 'H':
-						break;
+					case 'H': break;
 					case 'S':
 						int id = Integer.parseInt(content[1]);
                         String sequence = content[2];
                         int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
 						String[] genomes = content[4].split(":")[2].split(";");
 						for (int i = 0; i < genomes.length; i++) {
-							genomes[i] = genomes[i].substring(0,genomes[i].length()-6);
+							genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
 						}
 
 						if (!nodeMap.containsKey(id)) {
@@ -64,11 +61,9 @@ public class Parser {
                         int dest = Integer.parseInt(content[3]);
                         nodeMap.get(orig).addLink(dest);
 						break;
-					default:
-						break;
+					default: break;
 				}
 			}
-
 			bReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();

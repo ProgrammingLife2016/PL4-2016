@@ -1,6 +1,11 @@
 package core;
 
-import application.fxobjects.graph.cell.*;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.Edge;
+import application.fxobjects.graph.cell.PhylogeneticCell;
+import application.fxobjects.graph.cell.RectangleCell;
+import application.fxobjects.graph.cell.TriangleCell;
+
 import core.graph.cell.CellType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -181,6 +186,7 @@ public class Model {
      * Method to add an Edge to the model.
      * @param sourceId From.
      * @param targetId To.
+     * @param width The width of the edge.
      */
     public void addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);

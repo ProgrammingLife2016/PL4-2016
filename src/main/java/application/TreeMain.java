@@ -10,27 +10,31 @@ import java.io.IOException;
  */
 public class TreeMain {
 
-
-    public TreeMain() {
-
-    }
-    TreeItem root;
-    int current_depth = 0;
-
-    void setup() throws IOException {
-        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new FileReader(f));
-        String t = r.readLine();
-        root = TreeParser.parse(t);
-        System.out.println(root.toString());
-    }
-
-    public static void main(String args[]) {
+    /**
+     * Main of this class.
+     */
+    public static void main() {
         try {
             TreeMain tm = new TreeMain();
             tm.setup();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    TreeItem root;
+    int currentDepth = 0;
+
+    /**
+     * The setup method for this class.
+     *
+     * @throws IOException Throws exception on read failure.
+     */
+    void setup() throws IOException {
+        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new FileReader(f));
+        String t = r.readLine();
+        root = TreeParser.parse(t);
+        System.out.println(root.toString());
     }
 }
