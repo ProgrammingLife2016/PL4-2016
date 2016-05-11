@@ -37,7 +37,7 @@ public class BaseLayout extends CellLayout {
         this.offset = offset;
         this.graph = graph;
         this.centerY = middle;
-        System.out.println(centerY + "   center Y");
+        //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
     }
 

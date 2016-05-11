@@ -2,6 +2,7 @@ package core.graph;
 
 import application.TreeItem;
 import application.TreeParser;
+
 import core.Model;
 import core.graph.cell.CellType;
 import core.Node;
@@ -46,7 +47,7 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      */
-    public void addGraphComponents() {
+    public boolean addGraphComponents() {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
@@ -73,6 +74,8 @@ public class Graph {
                         to.getGenomes()));
             }
         }
+
+        return true;
     }
 
     /**

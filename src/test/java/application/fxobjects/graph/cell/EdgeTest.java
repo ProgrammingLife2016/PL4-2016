@@ -13,8 +13,8 @@ import static org.mockito.Mockito.mock;
  * Test class for Edge.java.
  *
  * @author Arthur Breurkes.
- * @since 04-05-2016
  * @version 1.0
+ * @since 04-05-2016
  */
 public class EdgeTest {
     private Edge edge;
@@ -26,6 +26,7 @@ public class EdgeTest {
 
     /**
      * Set up method for testing purposes.
+     *
      * @throws Exception possible Exception.
      */
     @Before
@@ -35,6 +36,7 @@ public class EdgeTest {
 
     /**
      * Test whether the constructor works correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -44,6 +46,7 @@ public class EdgeTest {
 
     /**
      * Test whether getSource() and setSource() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -55,6 +58,7 @@ public class EdgeTest {
 
     /**
      * Test whether getTarget() and setTarget() work correctly.
+     *
      * @throws Exception possible Exception.
      */
     @Test
@@ -66,6 +70,7 @@ public class EdgeTest {
 
     /**
      * Test whether getLine() and setLine() work correcly.
+     *
      * @throws Exception possible Exception.
      */
     @Test

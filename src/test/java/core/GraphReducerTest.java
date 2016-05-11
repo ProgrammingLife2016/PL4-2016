@@ -172,7 +172,7 @@ public class GraphReducerTest {
         assertTrue(nodeMapList.size() > 1);
 
         for (int i = 2; i < nodeMapList.size(); i++) {
-            System.out.println(nodeMapList.get(i).size());
+            //System.out.println(nodeMapList.get(i).size());
             assertTrue(nodeMapList.get(i).size() < 51);
         }
     }
