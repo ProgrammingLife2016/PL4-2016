@@ -54,7 +54,7 @@ public class MainController extends Controller<BorderPane> {
 
         createMenu();
         createList();
-//        createInfoList();
+        //createInfoList();
 
 //        this.getRoot().getStylesheets().add("application/css/main.css");
 //        this.getRoot().getStyleClass().add("root");

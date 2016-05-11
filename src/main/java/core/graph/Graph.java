@@ -59,13 +59,19 @@ public class Graph {
             System.out.println("We already read the file");
         }
 
-        System.out.println("Ref is now: " + ref);
-
+        //Reset the model, since we have another reference.
         model = new Model();
 
         Node root = nodeMap.get(1);
 
-        model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        if (root.getGenomes().contains(ref)) {
+            model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        } else {
+            //This IS NOT the reference, this should be a TRIANGLE,
+            //but out program does not like it to be one.
+            model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+        }
+
         genomes.addAll(root.getGenomes());
 
         if (ref == null) {
@@ -177,6 +183,10 @@ public class Graph {
             }
         }
         endUpdate();
+    }
+
+    public HashMap<Integer, Node> getNodeMap() {
+        return nodeMap;
     }
 
     public List<String> getGenomes() {

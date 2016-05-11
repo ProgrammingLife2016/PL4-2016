@@ -1,13 +1,18 @@
 package application.fxobjects.graph.cell;
 
+import core.Node;
 import core.graph.Graph;
 import core.graph.cell.CellType;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class to create a proper layout fitting the corresponding data.
- * @since 27-04-2016
+ *
  * @version 1.0
+ * @since 27-04-2016
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
@@ -21,7 +26,6 @@ public class BaseLayout extends CellLayout {
     private double maxDistance;
 
     private static final int BASE_X = 200;
-    private static final int BASE_Y = 200;
 
     /**
      * Class constructor.
@@ -32,12 +36,12 @@ public class BaseLayout extends CellLayout {
      */
     public BaseLayout(Graph graph, int offset, int middle) {
         this.currentX = BASE_X;
-        this.currentY = BASE_Y;
+        this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
         this.centerY = middle;
-        System.out.println(centerY + "   center Y");
+        //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
     }
 
@@ -46,9 +50,15 @@ public class BaseLayout extends CellLayout {
      */
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
-        //boolean done = false;
+        ArrayList<Boolean> topLocation = new ArrayList<>();
+        topLocation.add(true);
+        List<Integer> top = new ArrayList<>();
+        //List<Integer> bottom = new ArrayList<>();
+        int count = 0;
         for (Cell cell : cells) {
+            count++;
             switch (cell.getType()) {
+
                 case RECTANGLE:
                     currentX += offset;
 
@@ -78,13 +88,22 @@ public class BaseLayout extends CellLayout {
 //                    cellCount = 0;
 //                    break;
                 case TRIANGLE:
+//
+//                    if (top.contains(count)) {
+//                        top = new ArrayList<>();
+//                        top.addAll(graph.getNodeMap().get(count).getLiveLinks(graph.getNodeMap()).stream().map(Node::getId).collect(Collectors.toList()));
+//
+//                        } else {
+//                        //Place under line
+//                    }
+
                     if (cellCount % 2 == 0) {
                         currentY += cellCount * offset;
                     } else {
                         currentY -= cellCount * offset;
                     }
 
-                    if (currentY == BASE_Y) {
+                    if (currentY == centerY) {
                         currentX += offset;
                     }
 
@@ -92,7 +111,7 @@ public class BaseLayout extends CellLayout {
                     cell.relocate(currentX, currentY);
 
                     // Don't draw triangles above rectangles
-                    if (currentY != BASE_Y) {
+                    if (currentY != centerY) {
                         currentX += offset;
                     }
                     break;
@@ -116,10 +135,12 @@ public class BaseLayout extends CellLayout {
     private int count = 0;
 
     //ToDo: relocate this method to phylogenetic class.
+
     /**
      * Layout method for phylogenetic tree.
-     * @param c cell to start from.
-     * @param depth allowed depth for traversal.
+     *
+     * @param c         cell to start from.
+     * @param depth     allowed depth for traversal.
      * @param downmoves amount of down moves to go down.
      */
     private void toCellWithDepth(Cell c, int depth, int downmoves) {
@@ -147,6 +168,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the offset.
+     *
      * @return offset.
      */
     public int getOffset() {
@@ -155,6 +177,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the offset.
+     *
      * @param offset value to set offset to.
      */
     public void setOffset(int offset) {
@@ -163,6 +186,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the Graph.
+     *
      * @return graph.
      */
     public Graph getGraph() {
@@ -171,6 +195,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the Graph.
+     *
      * @param graph Graph to be set.
      */
     public void setGraph(Graph graph) {
@@ -179,6 +204,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current X value.
+     *
      * @return currentX.
      */
     public int getCurrentX() {
@@ -187,6 +213,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current X value.
+     *
      * @param currentX value to set currentX to.
      */
     public void setCurrentX(int currentX) {
@@ -195,6 +222,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current Y value.
+     *
      * @return currentY.
      */
     public int getCurrentY() {
@@ -203,6 +231,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current Y value.
+     *
      * @param currentY value to set currentY to.
      */
     public void setCurrentY(int currentY) {
@@ -211,6 +240,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the last seen type of cell.
+     *
      * @return the last seen CellType.
      */
     public CellType getLastType() {
@@ -219,6 +249,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the last seen type of cell.
+     *
      * @param lastType CellType to be set.
      */
     public void setLastType(CellType lastType) {
@@ -227,6 +258,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the cell count.
+     *
      * @return cellCount.
      */
     public int getCellCount() {
@@ -235,6 +267,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the cell count.
+     *
      * @param cellCount the value to set cellCount to.
      */
     public void setCellCount(int cellCount) {
@@ -243,6 +276,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the maximum allowed depth.
+     *
      * @return maxDepth.
      */
     public int getMaxDepth() {
@@ -251,6 +285,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the maximum allowed depth.
+     *
      * @param maxDepth value to set maxDepth to.
      */
     public void setMaxDepth(int maxDepth) {
@@ -259,6 +294,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the count value.
+     *
      * @return count.
      */
     public int getCount() {
@@ -267,6 +303,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the count value.
+     *
      * @param count value to set count to.
      */
     public void setCount(int count) {
