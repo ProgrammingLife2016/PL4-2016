@@ -3,12 +3,14 @@ package application.controllers;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import core.graph.Graph;
 import javafx.stage.Screen;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,6 +31,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param controller the controller to use.
      * @param g          the graph.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(MainController controller, Graph g) {
         super(new ScrollPane());
         this.graph = g;
@@ -44,7 +47,11 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        init();
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -64,8 +71,9 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Init method for this class.
+     * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init() {
+    public void init() throws IOException {
         System.out.println("init");
         AnchorPane root = new AnchorPane();
         graph.addGraphComponents();
