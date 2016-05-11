@@ -3,7 +3,6 @@ package application.controllers;
 import application.fxobjects.ZoomBox;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -13,6 +12,7 @@ import javafx.stage.Screen;
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ZoomController extends BorderPane {
 
     private ZoomBox zoomBox;
@@ -21,7 +21,10 @@ public class ZoomController extends BorderPane {
     private Rectangle2D screenSize;
 
 
-    public ZoomController(Node content) {
+    /**
+     * Constructor method.
+     */
+    public ZoomController() {
         zoomBox = new ZoomBox();
 
         screenSize = Screen.getPrimary().getVisualBounds();
@@ -38,18 +41,19 @@ public class ZoomController extends BorderPane {
 
     /**
      * Getter for keyHandler.
+     *
      * @return the keyHandler.
      */
-    public KeyHandler getKeyHandler() { return keyHandler; }
+    public KeyHandler getKeyHandler() {
+        return keyHandler;
+    }
 
 
     /**
      * Init method.
-     * @return the pane.
      */
     public void init() {
         this.setBottom(zoomBox.getZoomBox());
-
     }
 
     /**
@@ -60,12 +64,9 @@ public class ZoomController extends BorderPane {
         @Override
         public void handle(ScrollEvent scrollEvent) {
 
-
             double delta = scrollEvent.getDeltaY();
-            {
-                zoomBox.zoom(delta);
-                scrollEvent.consume();
-            }
+            zoomBox.zoom(delta);
+            scrollEvent.consume();
         }
     }
 

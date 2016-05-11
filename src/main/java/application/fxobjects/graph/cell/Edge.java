@@ -15,6 +15,7 @@ public class Edge extends Group {
      * Edge constructor.
      * @param source cell for edge start.
      * @param target cell for edge destination.
+     * @param width width of the edge.
      */
     public Edge(Cell source, Cell target, int width) {
 
@@ -28,7 +29,7 @@ public class Edge extends Group {
 
         width /= 1;
 
-        line.setStrokeWidth(Math.max(width,1));
+        line.setStrokeWidth(Math.max(width, 1));
         line.startXProperty().bind(source.layoutXProperty().add(
         		source.getBoundsInParent().getWidth() / 2.0));
         line.startYProperty().bind(source.layoutYProperty().add(
