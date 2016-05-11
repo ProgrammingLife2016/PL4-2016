@@ -59,10 +59,10 @@ public class NodeTest {
         nodeMap.put(n2.getId(), n2);
         nodeMap.put(n3.getId(), n3);
 
-        List<Node> liveNodes = n1.getLiveLinks(nodeMap);
+        List<Integer> liveNodes = n1.getLinks(nodeMap);
         assertEquals(liveNodes.size(), 2);
-        assertEquals(liveNodes.get(0), n2);
-        assertEquals(liveNodes.get(1), n3);
+        assertTrue(liveNodes.get(0) == n2.getId());
+        assertTrue(liveNodes.get(1) == n3.getId());
     }
 
     /**
@@ -81,9 +81,9 @@ public class NodeTest {
         nodeMap.put(n1.getId(), n1);
         nodeMap.put(n2.getId(), n2);
 
-        List<Node> liveParents = n1.getLiveParents(nodeMap);
+        List<Integer> liveParents = n1.getParents(nodeMap);
         assertEquals(liveParents.size(), 1);
-        assertEquals(liveParents.get(0), n2);
+        assertTrue(liveParents.get(0) == n2.getId());
     }
 
     /**
@@ -102,9 +102,9 @@ public class NodeTest {
         nodeMap.put(n1.getId(), n1);
         nodeMap.put(n3.getId(), n2);
 
-        List<Node> liveParents = n1.getLiveParents(nodeMap);
+        List<Integer> liveParents = n1.getParents(nodeMap);
         assertEquals(liveParents.size(), 1);
-        assertEquals(liveParents.get(0), n2);
+        assertTrue(liveParents.get(0) == n2.getId());
     }
 
     /**
@@ -123,9 +123,9 @@ public class NodeTest {
         nodeMap.put(n1.getId(), n1);
         nodeMap.put(n2.getId(), n2);
 
-        List<Node> liveNodes = n1.getLiveLinks(nodeMap);
+        List<Integer> liveNodes = n1.getLinks(nodeMap);
         assertEquals(liveNodes.size(), 1);
-        assertEquals(liveNodes.get(0), n2);
+        assertTrue(liveNodes.get(0) == n2.getId());
     }
 
     /**

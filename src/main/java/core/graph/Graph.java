@@ -2,6 +2,7 @@ package core.graph;
 
 import application.TreeItem;
 import application.TreeParser;
+import core.GraphReducer;
 import core.Model;
 import core.graph.cell.CellType;
 import core.Node;
@@ -26,7 +27,6 @@ import java.util.Queue;
 public class Graph {
 
     private Model model;
-    private HashMap<Integer, Node> nodeMap;
 
     /**
      * Class constructor.
@@ -50,7 +50,11 @@ public class Graph {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
-        nodeMap = parser.readGFA(inputStream);
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        model.setLevelMaps(levelMaps);
+
+        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
 
         Node root = nodeMap.get(1);
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
@@ -59,11 +63,12 @@ public class Graph {
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-           // int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j : nodeMap.get(i).getLinks()) {
+            if (from == null) { continue; }
+
+            for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if (nodeMap.get(j).getGenomes().contains(r)) {
+                if (to.getGenomes().contains(r)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
