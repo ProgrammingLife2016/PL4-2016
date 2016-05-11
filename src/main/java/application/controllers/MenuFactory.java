@@ -52,12 +52,11 @@ public class MenuFactory {
     }
 
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null, event -> mainController.fillGraph(null));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillGraph("TKK_02_0006"));
+        showGenomeSequence = initMenuItem("Show Graph", null, event -> mainController.fillGraph(null));
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
         resetView = initMenuItem("Reset", null, null);
-        test = initMenuItem("Test", null, event -> mainController.fillGraph(null));
 
-        Menu viewMenu = initMenu("View", test, showGenomeSequence, showPhylogeneticTree, resetView);
+        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView);
         return viewMenu;
 
     }

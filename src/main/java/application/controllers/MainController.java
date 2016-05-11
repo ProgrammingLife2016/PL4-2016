@@ -3,11 +3,13 @@ package application.controllers;
 import core.graph.Graph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
@@ -53,10 +55,17 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    /**
+     * Create a list on the right side of the screen with all genomes.
+     */
     private void createList() {
         list = new ListView<>();
         ObservableList<String> items = FXCollections.observableArrayList(
                 "No Genomes Loaded.");
+        list.setOnMouseClicked(event -> {
+            fillGraph(list.getSelectionModel().getSelectedItem());
+            System.out.println(list.getSelectionModel().getSelectedItem());
+        });
         list.setItems(items);
         this.getRoot().setRight(list);
     }
@@ -71,7 +80,7 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
 
-        System.out.println(graphController.getGenomes().toString());
+        //System.out.println(graphController.getGenomes().toString());
 
     }
 
