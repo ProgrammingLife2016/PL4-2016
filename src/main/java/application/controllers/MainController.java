@@ -1,8 +1,6 @@
 package application.controllers;
 
-import application.TreeItem;
 import application.TreeMain;
-import application.TreeParser;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
@@ -66,7 +64,7 @@ public class MainController extends Controller<BorderPane> {
         try {
             TreeMain tm = new TreeMain();
             tm.setup();
-            TreeController treeController = new TreeController(this, tm.root);
+            TreeController treeController = new TreeController(this, tm.getTree());
             screen = treeController.getRoot();
         } catch (IOException e) {
             e.printStackTrace();

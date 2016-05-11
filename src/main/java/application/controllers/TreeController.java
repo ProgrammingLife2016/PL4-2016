@@ -1,33 +1,31 @@
 package application.controllers;
 
-import application.TreeItem;
-import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.PhylogeneticCell;
 import application.fxobjects.phylogeny.TreeLayout;
-import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import core.graph.Graph;
 import javafx.stage.Screen;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
 /**
  * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
-    private TreeItem root;
+    private Tree tree;
     private MainController mainController;
     //private GraphMouseHandling graphMouseHandling;
 
     private javafx.geometry.Rectangle2D screenSize;
 
-    public TreeController(MainController controller, TreeItem root) {
+    public TreeController(MainController controller, Tree tree) {
         super(new ScrollPane());
-        this.root = root;
+        this.tree = tree;
         this.mainController = controller;
         //this.graphMouseHandling = new GraphMouseHandling(graph);
         this.screenSize = Screen.getPrimary().getVisualBounds();
@@ -45,7 +43,7 @@ public class TreeController extends Controller<ScrollPane> {
         init();
     }
 
-    public TreeItem getRootNode() { return root; }
+    public Tree getTree() { return tree; }
 
 
     @Override
@@ -58,7 +56,7 @@ public class TreeController extends Controller<ScrollPane> {
         AnchorPane root = new AnchorPane();
 
         root.getChildren().add(new PhylogeneticCell(1, "test"));
-        CellLayout layout = new TreeLayout(this.root, 20,(int) (screenSize.getHeight()-25)/2);
+        CellLayout layout = new TreeLayout(tree.getRoot(), 20,(int) (screenSize.getHeight()-25)/2);
         layout.execute();
         this.getRoot().setContent(root);
     }

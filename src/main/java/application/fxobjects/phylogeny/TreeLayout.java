@@ -1,17 +1,20 @@
 package application.fxobjects.phylogeny;
 
-import application.TreeItem;
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
 import application.fxobjects.graph.cell.PhylogeneticCell;
 import core.graph.cell.CellType;
+
+import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
 /**
  * Created by Niek on 5/9/2016.
  */
 public class TreeLayout extends CellLayout{
 
-    private TreeItem root;
+    private TreeNode root;
     private int offset;
     private int currentX;
     private int currentY;
@@ -23,7 +26,7 @@ public class TreeLayout extends CellLayout{
     private static final int baseX = 200;
     private static final int baseY = 200;
 
-    public TreeLayout(TreeItem root, int offset, int middle) {
+    public TreeLayout(TreeNode root, int offset, int middle) {
         this.currentX = baseX;
         this.currentY = baseY;
         this.lastType = null;
