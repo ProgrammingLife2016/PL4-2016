@@ -2,6 +2,8 @@ package application.fxobjects.graph.cell;
 
 import core.graph.Graph;
 import core.graph.cell.CellType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ public class BaseLayout extends CellLayout {
      * @param offset Offset to be added on execute() call.
      * @param middle The center Y coordinate of the graph.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public BaseLayout(Graph graph, int offset, int middle) {
         this.currentX = BASE_X;
         this.currentY = BASE_Y;

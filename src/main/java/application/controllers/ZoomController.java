@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.fxobjects.ZoomBox;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyEvent;
@@ -24,11 +25,11 @@ public class ZoomController extends BorderPane {
     /**
      * Constructor method.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
         zoomBox = new ZoomBox();
 
         screenSize = Screen.getPrimary().getVisualBounds();
-
         zoomHandler = new ZoomHandler();
         keyHandler = new KeyHandler();
 
