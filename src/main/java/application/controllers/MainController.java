@@ -3,14 +3,13 @@ package application.controllers;
 import core.graph.Graph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Screen;
 
 import java.net.URL;
@@ -27,7 +26,11 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     MenuBar menuBar;
     @FXML
+    FlowPane pane;
+    @FXML
     ListView list;
+    @FXML
+    ListView infoList;
 
 
     static Rectangle2D screenSize;
@@ -48,11 +51,29 @@ public class MainController extends Controller<BorderPane> {
      */
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
+
         createMenu();
         createList();
+//        createInfoList();
 
 //        this.getRoot().getStylesheets().add("application/css/main.css");
 //        this.getRoot().getStyleClass().add("root");
+    }
+
+    private void createPane() {
+
+        pane = new FlowPane();
+        pane.getChildren();
+
+    }
+
+    private void createInfoList() {
+        infoList = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList(
+                "Select a Node to show info");
+        list.setOnMouseClicked(event -> System.out.println(list.getSelectionModel().getSelectedItem()));
+        list.setItems(items);
+        this.getRoot().setRight(list);
     }
 
     /**

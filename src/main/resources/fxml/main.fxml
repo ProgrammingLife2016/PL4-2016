@@ -10,10 +10,9 @@
         <top>
             <MenuBar fx:id="menuBar" useSystemMenuBar="true"/>
         </top>
-
-        <left>
+        <center>
             <ScrollPane fx:id="screen"/>
-        </left>
+        </center>
         <right>
             <ListView fx:id="list"/>
         </right>
