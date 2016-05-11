@@ -57,9 +57,10 @@ public class TreeController extends Controller<ScrollPane> {
 
         root.getChildren().addAll(tm.getModel().getAddedCells());
 
-        tm.endUpdate();
+
         System.out.println(tm.getModel().getAllCells());
         CellLayout layout = new BaseLayout(tm.getModel(), 20, (int) (screenSize.getHeight() - 25) / 2);
+        tm.endUpdate();
         layout.execute();
 
         this.getRoot().setContent(root);
