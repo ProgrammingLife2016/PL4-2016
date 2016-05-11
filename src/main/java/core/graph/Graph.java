@@ -61,14 +61,14 @@ public class Graph {
 
         Object r = root.getGenomes().get(0);
 
-        for (int i = 1; i <= nodeMap.size() ; i++) {
+        for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
             if (from == null) { continue; }
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if(to.getGenomes().contains(r)) {
+                if (to.getGenomes().contains(r)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
