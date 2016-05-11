@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
  * Class representing a Phylogenetic leave node shape.
  */
 public class PhylogeneticLeafCell extends Cell {
-    private final CellType type = CellType.PHYLOGENETIC;
+    private final CellType type = CellType.PHYLOGENETIC_LEAF;
     private Text text;
 
     /**

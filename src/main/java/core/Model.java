@@ -134,7 +134,7 @@ public class Model {
                 TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
-            case PHYLOGENETIC:
+            case PHYLOGENETIC_LEAF:
                 PhylogeneticLeafCell recCell = new PhylogeneticLeafCell(id, seq);
                 addCell(recCell);
                 break;
