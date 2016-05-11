@@ -10,6 +10,8 @@ import core.graph.Graph;
 import javafx.stage.Screen;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -74,9 +76,7 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
-        for (Cell cell : graph.getModel().getAddedCells()) {
-            graphMouseHandling.setMouseHandling(cell);
-        }
+        graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
 
         // remove components from graph pane
         root.getChildren().removeAll(graph.getModel().getRemovedCells());
@@ -89,5 +89,9 @@ public class GraphController extends Controller<ScrollPane> {
         layout.execute();
 
         this.getRoot().setContent(root);
+    }
+
+    public List<String> getGenomes() {
+        return graph.getGenomes();
     }
 }

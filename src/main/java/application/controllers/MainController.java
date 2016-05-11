@@ -1,14 +1,18 @@
 package application.controllers;
 
 import core.graph.Graph;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -21,6 +25,9 @@ public class MainController extends Controller<BorderPane> {
     ScrollPane screen;
     @FXML
     MenuBar menuBar;
+    @FXML
+    ListView list;
+
 
     static Rectangle2D screenSize;
     /**
@@ -40,9 +47,18 @@ public class MainController extends Controller<BorderPane> {
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
+        createList();
 
 //        this.getRoot().getStylesheets().add("application/css/main.css");
 //        this.getRoot().getStyleClass().add("root");
+    }
+
+    private void createList() {
+        list = new ListView<>();
+        ObservableList<String> items = FXCollections.observableArrayList(
+                "No Genomes Loaded.");
+        list.setItems(items);
+        this.getRoot().setRight(list);
     }
 
     /**
@@ -53,6 +69,9 @@ public class MainController extends Controller<BorderPane> {
         GraphController graphController = new GraphController(this, graph, ref);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
+        list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+        
+        System.out.println(graphController.getGenomes().toString());
 
     }
 

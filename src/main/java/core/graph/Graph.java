@@ -28,6 +28,8 @@ public class Graph {
     private Model model;
     private HashMap<Integer, Node> nodeMap;
 
+    private List<String> genomes = new ArrayList<>();
+
     /**
      * Class constructor.
      */
@@ -51,13 +53,22 @@ public class Graph {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
-        nodeMap = parser.readGFA(inputStream);
+        if (nodeMap == null) {
+            nodeMap = parser.readGFA(inputStream);
+        } else {
+            System.out.println("We already read the file");
+        }
+
+        System.out.println("Ref is now: "+ ref);
+
+        model = new Model();
 
         Node root = nodeMap.get(1);
+
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        genomes.addAll(root.getGenomes());
 
-
-        if (ref == null ) {
+        if (ref == null) {
             ref = root.getGenomes().get(0);
         }
 
@@ -66,12 +77,14 @@ public class Graph {
             // int numberOfLinks = nodeMap.get(i).getLinks().size();
             for (int j : nodeMap.get(i).getLinks()) {
                 Node to = nodeMap.get(j);
+                to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
                 if (nodeMap.get(j).getGenomes().contains(ref)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
+
                 //Add link from current cell to next cell
                 model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                         to.getGenomes()));
@@ -164,5 +177,9 @@ public class Graph {
             }
         }
         endUpdate();
+    }
+
+    public List<String> getGenomes() {
+        return genomes;
     }
 }

@@ -53,9 +53,9 @@ public class MenuFactory {
 
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null,event ->  mainController.fillGraph(null));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null,event ->  mainController.fillGraph("TKK_02_0006"));
         resetView = initMenuItem("Reset", null, null);
-        test = initMenuItem("Test", null, event -> mainController.switchScene());
+        test = initMenuItem("Test", null, event -> mainController.fillGraph(null));
 
         Menu viewMenu = initMenu("View", test, showGenomeSequence, showPhylogeneticTree, resetView);
         return viewMenu;
