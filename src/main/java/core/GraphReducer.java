@@ -1,7 +1,11 @@
 package core;
 
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -100,12 +104,11 @@ public final class GraphReducer {
             if (child.getParents(nodeMap).size() != 1) { return false; }
             Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
-            List<String> childGenomes = child.getGenomes();
-            // Set new child of parent
+            addGenomes(parent, child);
+            addGenomes(grandChild, child);
+
             parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
-            // Set new parent of grandchild
             grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
-            // Remove child node
             nodeMap.remove(child.getId());
             res = true;
         }
@@ -129,12 +132,16 @@ public final class GraphReducer {
             List<Integer> child1ChildrenIds = nodeMap.get(child1Id).getLinks(nodeMap);
             List<Integer> child2ChildrenIds = nodeMap.get(child2Id).getLinks(nodeMap);
 
+            Node child1 = nodeMap.get(child1Id);
+            Node child2 = nodeMap.get(child2Id);
+
             if (child1ChildrenIds.contains(child2Id)) {
-                List<String> child1Genomes = nodeMap.get(child1Id).getGenomes();
+                addGenomes(child2, child1);
                 nodeMap.remove(child1Id);
                 return true;
+
             } else if (child2ChildrenIds.contains(child1Id)) {
-                List<String> child2Genomes = nodeMap.get(child2Id).getGenomes();
+                addGenomes(child1, child2);
                 nodeMap.remove(child2Id);
                 return true;
             }
@@ -160,20 +167,21 @@ public final class GraphReducer {
             if (nodeMap.get(children.get(i)).getLinks(nodeMap).size() != 1) { return false; }
         }
 
-        // Check all grand children are the same
+        // Check whether all grand children are the same
         for (int i = 0; i < children.size() - 1; i++) {
             Integer grandChild1 = nodeMap.get(children.get(i)).getLinks(nodeMap).get(0);
             Integer grandChild2 = nodeMap.get(children.get(i + 1)).getLinks(nodeMap).get(0);
             if (!grandChild1.equals(grandChild2)) { return false; }
         }
 
+        Node child0 = nodeMap.get(children.get(0));
         // Remove redundant nodes in bubble
         for (int i = 1; i < children.size(); i++) {
             int childId = children.get(i);
             Node child = nodeMap.get(childId);
 
             if (child != null) {
-                List<String> childGenomes = child.getGenomes();
+                addGenomes(child0, child);
                 nodeMap.remove(childId);
             }
         }
@@ -183,14 +191,13 @@ public final class GraphReducer {
 
     /**
      * Adds a list of genomes to another list.
-     * @param base  Base list of genomes.
-     * @param toAdd List of genomes to add to the list
-     * @return  A concatenated list of all genomes without duplicates.
+     * @param base  Base node.
+     * @param toAdd Node of which its genome has to be added to the base node.
      */
-    public static List<String> addGenomes(List<String> base, List<String> toAdd) {
-        Set<String> hs = new LinkedHashSet<String>(base);
-        hs.addAll(toAdd);
+    public static void addGenomes(Node base, Node toAdd) {
+        Set<String> hs = new LinkedHashSet<String>(base.getGenomes());
+        hs.addAll(toAdd.getGenomes());
 
-        return new ArrayList<String>(hs);
+        base.setGenomes(new ArrayList<String>(hs));
     }
 }
