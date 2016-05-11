@@ -7,9 +7,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * Class representing a Rectangle shape. *
+ * Class representing a Phylogenetic leave node shape.
  */
-public class PhylogeneticCell extends Cell {
+public class PhylogeneticLeafCell extends Cell {
     private final CellType type = CellType.PHYLOGENETIC;
     private Text text;
 
@@ -18,7 +18,7 @@ public class PhylogeneticCell extends Cell {
      * @param id The ID of a cell.
      * @param name The genome sequence of a cell.
      */
-    public PhylogeneticCell(int id, String name) {
+    public PhylogeneticLeafCell(int id, String name) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(50);
@@ -26,8 +26,8 @@ public class PhylogeneticCell extends Cell {
         text.setVisible(false);
         text.setManaged(false);
         Rectangle view = new Rectangle(50, 50);
-        view.setStroke(Color.DODGERBLUE);
-        view.setFill(Color.DODGERBLUE);
+        view.setStroke(Color.LIGHTGREY);
+        view.setFill(Color.LIGHTGREY);
 
         pane.getChildren().addAll(view, text);
 

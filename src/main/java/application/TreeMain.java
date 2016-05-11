@@ -25,7 +25,6 @@ public class TreeMain {
         TreeParser tp = new TreeParser(r);
 
         tree = tp.tokenize("340tree.rooted.TKK");
-        System.out.println(tree.toString());
     }
 
     public Tree getTree() {

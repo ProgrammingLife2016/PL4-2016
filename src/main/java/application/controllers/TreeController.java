@@ -1,15 +1,15 @@
 package application.controllers;
 
 import application.fxobjects.graph.cell.CellLayout;
-import application.fxobjects.graph.cell.PhylogeneticCell;
+import application.fxobjects.graph.cell.PhylogeneticLeafCell;
 import application.fxobjects.phylogeny.TreeLayout;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
@@ -55,8 +55,9 @@ public class TreeController extends Controller<ScrollPane> {
         System.out.println("init");
         AnchorPane root = new AnchorPane();
 
-        root.getChildren().add(new PhylogeneticCell(1, "test"));
-        CellLayout layout = new TreeLayout(tree.getRoot(), 20,(int) (screenSize.getHeight()-25)/2);
+        LinkedList<TreeNode> leaves = tree.getLeaves(tree.getRoot());
+        root.getChildren().add(new PhylogeneticLeafCell(1, "test"));
+        CellLayout layout = new TreeLayout(tree.getRoot(), 20, (int) (screenSize.getHeight()-25)/2);
         layout.execute();
         this.getRoot().setContent(root);
     }
