@@ -1,16 +1,14 @@
 package application.controllers;
 
 import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
+import core.graph.Graph;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import core.graph.Graph;
 import javafx.stage.Screen;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,6 +28,7 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param controller the controller to use.
      * @param g          the graph.
+     * @param ref the reference string.
      */
     public GraphController(MainController controller, Graph g, Object ref) {
         super(new ScrollPane());
@@ -66,6 +65,8 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Init method for this class.
+     *
+     * @param ref the reference string.
      */
     public void init(Object ref) {
         System.out.println("init with ref: " + ref);
@@ -91,6 +92,11 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setContent(root);
     }
 
+    /**
+     * Getter method for the genomes.
+     *
+     * @return the list of genomes.
+     */
     public List<String> getGenomes() {
         return graph.getGenomes();
     }

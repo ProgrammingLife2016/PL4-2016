@@ -71,7 +71,8 @@ public class MainController extends Controller<BorderPane> {
         infoList = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList(
                 "Select a Node to show info");
-        list.setOnMouseClicked(event -> System.out.println(list.getSelectionModel().getSelectedItem()));
+        list.setOnMouseClicked(event ->
+                System.out.println(list.getSelectionModel().getSelectedItem()));
         list.setItems(items);
         this.getRoot().setRight(list);
     }
@@ -93,6 +94,8 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to fill the graph.
+     *
+     * @param ref the reference string.
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();

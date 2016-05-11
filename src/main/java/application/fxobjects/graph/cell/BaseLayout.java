@@ -1,12 +1,10 @@
 package application.fxobjects.graph.cell;
 
-import core.Node;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Class to create a proper layout fitting the corresponding data.
@@ -91,7 +89,8 @@ public class BaseLayout extends CellLayout {
 //
 //                    if (top.contains(count)) {
 //                        top = new ArrayList<>();
-//                        top.addAll(graph.getNodeMap().get(count).getLiveLinks(graph.getNodeMap()).stream().map(Node::getId).collect(Collectors.toList()));
+//                        top.addAll(graph.getNodeMap().get(count).getLiveLinks(graph.getNodeMap()).
+// stream().map(Node::getId).collect(Collectors.toList()));
 //
 //                        } else {
 //                        //Place under line

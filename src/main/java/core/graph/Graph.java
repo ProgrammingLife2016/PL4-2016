@@ -48,6 +48,8 @@ public class Graph {
 
     /**
      * Add the nodes and edges of the graph to the model.
+     *
+     * @param ref the reference string.
      */
     public void addGraphComponents(Object ref) {
         Parser parser = new Parser();
@@ -185,10 +187,20 @@ public class Graph {
         endUpdate();
     }
 
+    /**
+     * Getter method for the nodeMap.
+     *
+     * @return the nodemap.
+     */
     public HashMap<Integer, Node> getNodeMap() {
         return nodeMap;
     }
 
+    /**
+     * Getter method for the genomens.
+     *
+     * @return the genomes.
+     */
     public List<String> getGenomes() {
         return genomes;
     }
