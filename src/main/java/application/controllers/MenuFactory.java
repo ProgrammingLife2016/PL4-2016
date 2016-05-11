@@ -52,8 +52,8 @@ public class MenuFactory {
     }
 
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null,event ->  mainController.fillGraph(null));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null,event ->  mainController.fillGraph("TKK_02_0006"));
+        showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null, event -> mainController.fillGraph(null));
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillGraph("TKK_02_0006"));
         resetView = initMenuItem("Reset", null, null);
         test = initMenuItem("Test", null, event -> mainController.fillGraph(null));
 
@@ -82,7 +82,7 @@ public class MenuFactory {
     }
 
     private MenuItem initMenuItem(String title, KeyCombination combination,
-                                         EventHandler<ActionEvent> handler) {
+                                  EventHandler<ActionEvent> handler) {
         MenuItem newItem = new MenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);

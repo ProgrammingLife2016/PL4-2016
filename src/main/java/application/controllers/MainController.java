@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -30,6 +29,7 @@ public class MainController extends Controller<BorderPane> {
 
 
     static Rectangle2D screenSize;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -70,7 +70,7 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
-        
+
         System.out.println(graphController.getGenomes().toString());
 
     }

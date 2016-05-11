@@ -59,7 +59,7 @@ public class Graph {
             System.out.println("We already read the file");
         }
 
-        System.out.println("Ref is now: "+ ref);
+        System.out.println("Ref is now: " + ref);
 
         model = new Model();
 
