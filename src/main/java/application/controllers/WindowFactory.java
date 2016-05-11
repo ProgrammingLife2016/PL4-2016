@@ -9,20 +9,23 @@ import javafx.stage.Stage;
 
 /**
  * WindowFactory class.
+ *
  * @version 1.0
  * @since 25-04-2016
  */
-public class WindowFactory {
+public final class WindowFactory {
     static Rectangle2D screenSize;
     static Stage window;
 
     /**
-     * Constructor method for WindowFactory.
+     * Private class constructor.
      */
-    public WindowFactory(){}
+    private WindowFactory() {
+    }
 
     /**
      * Create method for windows.
+     *
      * @param c parent of the window
      * @return the constructed window.
      */
@@ -42,6 +45,7 @@ public class WindowFactory {
 
     /**
      * Method to create the scene.
+     *
      * @param parent parent object for the scene.
      * @return the constructed scene.
      */
@@ -50,6 +54,10 @@ public class WindowFactory {
         return scene;
     }
 
+    /**
+     * Method that creates a directoryChooser.
+     * @return the directoryChooser.
+     */
     public static DirectoryChooser createDirectoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Graph File");
@@ -58,8 +66,6 @@ public class WindowFactory {
 
         return directoryChooser;
     }
-
-
 
 
 }

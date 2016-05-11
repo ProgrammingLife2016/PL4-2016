@@ -26,7 +26,9 @@ public class ZoomBox extends ScrollPane {
     private double zoomBoxWidth;
     private double zoomBoxHeight;
 
-
+    /**
+     * Class constructor.
+     */
     public ZoomBox() {
         initVariables();
 
@@ -35,6 +37,9 @@ public class ZoomBox extends ScrollPane {
         right.getChildren().addAll(initZoomBox());
     }
 
+    /**
+     * Initialize the necessary attributes.
+     */
     private void initVariables() {
         screenSize = Screen.getPrimary().getVisualBounds();
         windowWidth = screenSize.getWidth();
@@ -45,6 +50,10 @@ public class ZoomBox extends ScrollPane {
         zoomBoxHeight = graphBoxHeight / 5.0;
     }
 
+    /**
+     * Initialize the zoom box.
+     * @return The zoom box.
+     */
     public Group initZoomBox() {
         Group zoomBox = new Group();
         double rectX = windowWidth - zoomBoxWidth - 20;
@@ -65,11 +74,21 @@ public class ZoomBox extends ScrollPane {
 
     }
 
+    /**
+     * Return the zoom box.
+     * @return The zoom box.
+     */
     public StackPane getZoomBox() {
         return right;
     }
 
 
+    /**
+     * Check the boundaries of the zoombox to see if a movement is allowed.
+     * @param offsetX   The offset changed in the X direction.
+     * @param offsetY   The offset changes in the Y direction.
+     * @return  True/False depending on the movement.
+     */
     public Boolean checkRectBoundaries(double offsetX, double offsetY) {
         Boolean res = true;
         if (offsetX < 0) {
@@ -89,6 +108,10 @@ public class ZoomBox extends ScrollPane {
         return res;
     }
 
+    /**
+     * zoom the view of zoombox in.
+     * @param delta Number of pixels to scale.
+     */
     public void scaleZoomRectIn(double delta) {
         if (zoomRect.getWidth() > 182.0) {
             double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
@@ -100,6 +123,10 @@ public class ZoomBox extends ScrollPane {
         }
     }
 
+    /**
+     * zoom the view of zoombox out.
+     * @param delta Number of pixels to scale.
+     */
     public void scaleZoomRectOut(double delta) {
         double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
         zoomRect.setWidth(zoomRect.getWidth() + delta);
@@ -110,20 +137,29 @@ public class ZoomBox extends ScrollPane {
 
     }
 
+    /**
+     * Zoom the zoombox based on a given delta.
+     * @param delta Offset to change.
+     */
     public void zoom(double delta) {
         if (-delta > 0.0) {
-            if (checkRectBoundaries(delta, (zoomRect.getHeight() / zoomRect.getWidth()) * delta) && checkRectBoundaries(-delta, -(zoomRect.getHeight() / zoomRect.getWidth()) * delta)) {
+            if (checkRectBoundaries(delta, (zoomRect.getHeight() / zoomRect.getWidth()) * delta)
+                    && checkRectBoundaries(-delta, -(zoomRect.getHeight() / zoomRect.getWidth())
+                    * delta)) {
                 scaleZoomRectOut(-delta);
             }
-        } else if (-delta < 0.0) {
-            if ((zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
-                    && zoomRect.getWidth() + delta * (zoomRect.getWidth() *
-                    zoomRect.getHeight()) >= (zoomRectBorder.getWidth() *0.05)) {
-                scaleZoomRectIn(-delta);
-            }
+        } else if (-delta < 0.0
+                && (zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
+                && zoomRect.getWidth() + delta * (zoomRect.getWidth()
+                * zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
+            scaleZoomRectIn(-delta);
         }
     }
 
+    /**
+     * Zoom using the ASDW keys.
+     * @param event A KeyEvent.
+     */
     public void moveRectangle(KeyEvent event) {
         double offset = 4;
         switch (event.getCode()) {
@@ -151,6 +187,4 @@ public class ZoomBox extends ScrollPane {
                 break;
         }
     }
-
-
 }

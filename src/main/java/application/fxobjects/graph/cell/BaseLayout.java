@@ -2,6 +2,8 @@ package application.fxobjects.graph.cell;
 
 import core.graph.Graph;
 import core.graph.cell.CellType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,7 @@ import java.util.List;
  * @since 27-04-2016
  * @version 1.0
  */
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
     private int offset;
     private Graph graph;
@@ -19,19 +22,20 @@ public class BaseLayout extends CellLayout {
     private int centerY;
     private double maxDistance;
 
-    private static final int baseX = 200;
-    private static final int baseY = 200;
+    private static final int BASE_X = 200;
+    private static final int BASE_Y = 200;
 
     /**
      * Class constructor.
      *
      * @param graph  A given graph.
      * @param offset Offset to be added on execute() call.
+     * @param middle The center Y coordinate of the graph.
      */
-
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public BaseLayout(Graph graph, int offset, int middle) {
-        this.currentX = baseX;
-        this.currentY = baseY;
+        this.currentX = BASE_X;
+        this.currentY = BASE_Y;
         this.lastType = null;
         this.offset = offset;
         this.graph = graph;
@@ -45,7 +49,7 @@ public class BaseLayout extends CellLayout {
      */
     public void execute() {
         List<Cell> cells = graph.getModel().getAllCells();
-        boolean done = false;
+        //boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
@@ -72,8 +76,8 @@ public class BaseLayout extends CellLayout {
 //                    if (lastType != CellType.TRIANGLE) {
 //                        currentX += offset;
 //                    }
-//                    cell.relocate(currentX, baseY);
-//                    currentY = baseY;
+//                    cell.relocate(currentX, BASE_Y);
+//                    currentY = BASE_Y;
 //                    cellCount = 0;
 //                    break;
                 case TRIANGLE:
@@ -83,7 +87,7 @@ public class BaseLayout extends CellLayout {
                         currentY -= cellCount * offset;
                     }
 
-                    if (currentY == baseY) {
+                    if (currentY == BASE_Y) {
                         currentX += offset;
                     }
 
@@ -91,7 +95,7 @@ public class BaseLayout extends CellLayout {
                     cell.relocate(currentX, currentY);
 
                     // Don't draw triangles above rectangles
-                    if (currentY != baseY) {
+                    if (currentY != BASE_Y) {
                         currentX += offset;
                     }
                     break;
@@ -113,6 +117,36 @@ public class BaseLayout extends CellLayout {
 
     private int maxDepth = 0;
     private int count = 0;
+
+    //ToDo: relocate this method to phylogenetic class.
+    /**
+     * Layout method for phylogenetic tree.
+     * @param c cell to start from.
+     * @param depth allowed depth for traversal.
+     * @param downmoves amount of down moves to go down.
+     */
+    private void toCellWithDepth(Cell c, int depth, int downmoves) {
+        //count leafs
+        if (c.getCellChildren().isEmpty()) {
+            count++;
+        }
+        if (depth > maxDepth) {
+            maxDepth = depth;
+        }
+        int childNumber = -1;
+        for (Cell child : c.getCellChildren()) {
+            childNumber++;
+            toCellWithDepth(child, depth + 1, downmoves + childNumber);
+        }
+        //System.out.println(downmoves + " " + depth);
+
+        if (c.getCellChildren().isEmpty()) {
+            c.relocate(maxDepth * 50, count * 50);
+        } else {
+            c.relocate(50 + depth * 50, count * 50);
+        }
+
+    }
 
     /**
      * Getter method for the offset.

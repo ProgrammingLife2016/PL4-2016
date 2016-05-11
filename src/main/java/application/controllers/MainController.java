@@ -4,6 +4,7 @@ import application.TreeItem;
 import application.TreeMain;
 import application.TreeParser;
 import core.graph.Graph;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.MenuBar;
@@ -26,7 +27,7 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     MenuBar menuBar;
 
-    static Rectangle2D screenSize;
+    Rectangle2D screenSize;
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -41,6 +42,7 @@ public class MainController extends Controller<BorderPane> {
      * @param location  location for relative paths.
      * @param resources resources to localize the root object.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
@@ -49,6 +51,9 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    /**
+     * Method to fill the graph.
+     */
     public void fillGraph() {
         Graph graph = new Graph();
         GraphController graphController = new GraphController(this, graph);
@@ -77,6 +82,9 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
+    /**
+     * Switches the scene.
+     */
     public void switchScene() {
         fillGraph();
     }
