@@ -1,5 +1,6 @@
 package application.controllers;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ScrollBar;
 
@@ -15,6 +16,7 @@ public class ScrollFactory {
      *
      * @param controller the controller to use.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ScrollFactory(MainController controller) {
         this.mainController = controller;
     }

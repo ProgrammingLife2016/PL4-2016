@@ -27,7 +27,6 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    double size;
     Map<Integer, Cell> cellMap; // <id,cell>
 
     List<HashMap<Integer, Node>> levelMaps;

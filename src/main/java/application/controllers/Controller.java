@@ -1,5 +1,6 @@
 package application.controllers;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,6 +33,7 @@ public abstract class Controller<T extends Parent> implements Initializable {
      * Method to load FXML files.
      * @param filePath location of the FXML file to be loaded.
      */
+    @SuppressFBWarnings({"OBL_UNSATISFIED_OBLIGATION", "UI_INHERITANCE_UNSAFE_GETRESOURCE"})
     public final void loadFXMLfile(String filePath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
