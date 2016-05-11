@@ -29,7 +29,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param controller the controller to use.
      * @param g          the graph.
      */
-    public GraphController(MainController controller, Graph g) {
+    public GraphController(MainController controller, Graph g, Object ref) {
         super(new ScrollPane());
         this.graph = g;
         this.mainController = controller;
@@ -44,7 +44,7 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        init();
+        init(ref);
     }
 
     /**
@@ -65,10 +65,10 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      */
-    public void init() {
-        System.out.println("init");
+    public void init(Object ref) {
+        System.out.println("init with ref: " + ref);
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents();
+        graph.addGraphComponents(ref);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());

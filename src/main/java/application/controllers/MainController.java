@@ -48,9 +48,9 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to fill the graph.
      */
-    public void fillGraph() {
+    public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(this, graph);
+        GraphController graphController = new GraphController(this, graph, ref);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
@@ -70,7 +70,7 @@ public class MainController extends Controller<BorderPane> {
      * Switches the scene.
      */
     public void switchScene() {
-        fillGraph();
+        fillGraph(null);
     }
 
 }

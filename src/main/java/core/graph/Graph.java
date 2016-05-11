@@ -37,6 +37,7 @@ public class Graph {
 
     /**
      * Get the model of the Graph.
+     *
      * @return The model of the graph.
      */
     public Model getModel() {
@@ -46,7 +47,7 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      */
-    public void addGraphComponents() {
+    public void addGraphComponents(Object ref) {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
@@ -55,15 +56,18 @@ public class Graph {
         Node root = nodeMap.get(1);
         model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        Object r = root.getGenomes().get(0);
+
+        if (ref == null ) {
+            ref = root.getGenomes().get(0);
+        }
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-           // int numberOfLinks = nodeMap.get(i).getLinks().size();
+            // int numberOfLinks = nodeMap.get(i).getLinks().size();
             for (int j : nodeMap.get(i).getLinks()) {
                 Node to = nodeMap.get(j);
                 //Add next cell
-                if (nodeMap.get(j).getGenomes().contains(r)) {
+                if (nodeMap.get(j).getGenomes().contains(ref)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
