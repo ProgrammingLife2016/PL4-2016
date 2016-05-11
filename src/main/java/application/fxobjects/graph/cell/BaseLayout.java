@@ -1,6 +1,6 @@
 package application.fxobjects.graph.cell;
 
-import core.graph.Graph;
+import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
     private int offset;
-    private Graph graph;
+    private Model model;
     private int currentX;
     private int currentY;
     private CellType lastType;
@@ -28,17 +28,17 @@ public class BaseLayout extends CellLayout {
     /**
      * Class constructor.
      *
-     * @param graph  A given graph.
+     * @param model  A given model.
      * @param offset Offset to be added on execute() call.
-     * @param middle The center Y coordinate of the graph.
+     * @param middle The center Y coordinate of the model.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public BaseLayout(Graph graph, int offset, int middle) {
+    public BaseLayout(Model model, int offset, int middle) {
         this.currentX = BASE_X;
         this.currentY = BASE_Y;
         this.lastType = null;
         this.offset = offset;
-        this.graph = graph;
+        this.model = model;
         this.centerY = middle;
         System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
@@ -48,8 +48,8 @@ public class BaseLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        List<Cell> cells = graph.getModel().getAllCells();
-        //boolean done = false;
+        List<Cell> cells = model.getAllCells();
+        boolean done = false;
         for (Cell cell : cells) {
             switch (cell.getType()) {
                 case RECTANGLE:
@@ -60,26 +60,6 @@ public class BaseLayout extends CellLayout {
 
                     cellCount = 1;
                     break;
-//                case TRIANGLE:
-//                    if (lastType == CellType.RECTANGLE) {
-//                        currentX += (offset / 2);
-//                        currentY = centerY - 100;
-//
-//                    } else {
-//                        currentX += offset;
-//                        currentY = centerY - (500/cellCount);
-//                    }
-//
-//
-//                    cellCount++;
-//                    //currentX -= (offset / 2);
-//                    if (lastType != CellType.TRIANGLE) {
-//                        currentX += offset;
-//                    }
-//                    cell.relocate(currentX, BASE_Y);
-//                    currentY = BASE_Y;
-//                    cellCount = 0;
-//                    break;
                 case TRIANGLE:
                     if (cellCount % 2 == 0) {
                         currentY += cellCount * offset;
@@ -99,14 +79,15 @@ public class BaseLayout extends CellLayout {
                         currentX += offset;
                     }
                     break;
-//                case PHYLOGENETIC:
-//                    if(!done) {
-//                        System.out.println("kachel");
-//                        cell.relocate(100, 100);
-//                        toCellWithDepth(cells.get(0), 0, 0);
-//                        done = true;
-//                        break;
-//                    }
+                case PHYLOGENETIC:
+                    if(!done) {
+                        System.out.println("kachel");
+                        currentY += offset;
+                        cell.relocate(currentX, currentY);
+                        toCellWithDepth(cells.get(0), 0, 0);
+                        done = true;
+                        break;
+                    }
                 default:
                     System.out.println("default");
                     break;
@@ -162,22 +143,6 @@ public class BaseLayout extends CellLayout {
      */
     public void setOffset(int offset) {
         this.offset = offset;
-    }
-
-    /**
-     * Getter method for the Graph.
-     * @return graph.
-     */
-    public Graph getGraph() {
-        return graph;
-    }
-
-    /**
-     * Setter method for the Graph.
-     * @param graph Graph to be set.
-     */
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 
     /**

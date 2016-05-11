@@ -56,17 +56,6 @@ public class BaseLayoutTest {
     }
 
     /**
-     * Test whether getGraph() and setGraph() work correctly.
-     * @throws Exception possible Exception.
-     */
-    @Test
-    public void testGetAndSetGraph() throws Exception {
-        baseLayout.setGraph(testGraph);
-
-        assertEquals(testGraph, baseLayout.getGraph());
-    }
-
-    /**
      * Test whether getCurrentX() and setCurrentX() work correctly.
      * @throws Exception possible Exception.
      */
