@@ -1,9 +1,11 @@
 package application.controllers;
 
-import application.fxobjects.graph.cell.CellLayout;
-import application.fxobjects.graph.cell.PhylogeneticLeafCell;
-import application.fxobjects.phylogeny.TreeLayout;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.PhylogeneticCell;
+import application.fxobjects.graph.cell.RectangleCell;
+import core.graph.Graph;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import java.net.URL;
@@ -30,15 +32,13 @@ public class TreeController extends Controller<ScrollPane> {
         //this.graphMouseHandling = new GraphMouseHandling(graph);
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        /*
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
-            if(event.getDeltaY() != 0) {
+            if (event.getDeltaY() != 0) {
                 event.consume();
             }
         });
-        */
 
         init();
     }
@@ -54,11 +54,14 @@ public class TreeController extends Controller<ScrollPane> {
     public void init() {
         System.out.println("init");
         AnchorPane root = new AnchorPane();
-
         LinkedList<TreeNode> leaves = tree.getLeaves(tree.getRoot());
-        root.getChildren().add(new PhylogeneticLeafCell(1, "test"));
-        CellLayout layout = new TreeLayout(tree.getRoot(), 20, (int) (screenSize.getHeight()-25)/2);
-        layout.execute();
+
+        for (TreeNode leaf : leaves) {
+            Cell cell = new RectangleCell(leaf.getKey(), leaf.getName());
+            cell.relocate(200, 200);
+            root.getChildren().add(cell);
+        }
+
         this.getRoot().setContent(root);
     }
 }

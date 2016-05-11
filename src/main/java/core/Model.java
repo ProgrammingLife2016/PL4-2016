@@ -2,7 +2,7 @@ package core;
 
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.Edge;
-import application.fxobjects.graph.cell.PhylogeneticLeafCell;
+import application.fxobjects.graph.cell.PhylogeneticCell;
 import application.fxobjects.graph.cell.RectangleCell;
 import application.fxobjects.graph.cell.TriangleCell;
 
@@ -134,8 +134,8 @@ public class Model {
                 TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
                 break;
-            case PHYLOGENETIC_LEAF:
-                PhylogeneticLeafCell recCell = new PhylogeneticLeafCell(id, seq);
+            case PHYLOGENETIC:
+                PhylogeneticCell recCell = new PhylogeneticCell(id, seq);
                 addCell(recCell);
                 break;
 

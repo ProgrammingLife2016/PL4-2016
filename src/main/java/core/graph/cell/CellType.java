@@ -6,6 +6,5 @@ package core.graph.cell;
 public enum CellType {
     RECTANGLE,
     TRIANGLE,
-    PHYLOGENETIC_LEAF,
-    PHYLOGENETIC_MIDDLE
+    PHYLOGENETIC
 }

@@ -2,7 +2,7 @@ package application.fxobjects.phylogeny;
 
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
-import application.fxobjects.graph.cell.PhylogeneticLeafCell;
+import application.fxobjects.graph.cell.PhylogeneticCell;
 import core.graph.cell.CellType;
 
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
@@ -36,7 +36,7 @@ public class TreeLayout extends CellLayout{
 
     @Override
     public void execute() {
-        Cell testCell = new PhylogeneticLeafCell(1, "Tester");
+        Cell testCell = new PhylogeneticCell(1, "Tester");
         testCell.relocate(currentX, currentY);
     }
 }

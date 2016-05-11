@@ -60,7 +60,7 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
-    public void fillTree(String tree) {
+    public void fillTree() {
         try {
             TreeMain tm = new TreeMain();
             tm.setup();
@@ -88,7 +88,7 @@ public class MainController extends Controller<BorderPane> {
     }
 
     public void switchTreeScene() {
-        fillTree("TODO");
+        fillTree();
     }
 
 }

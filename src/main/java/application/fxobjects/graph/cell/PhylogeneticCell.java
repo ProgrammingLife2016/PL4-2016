@@ -9,8 +9,8 @@ import javafx.scene.text.Text;
 /**
  * Class representing a Phylogenetic leave node shape.
  */
-public class PhylogeneticLeafCell extends Cell {
-    private final CellType type = CellType.PHYLOGENETIC_LEAF;
+public class PhylogeneticCell extends Cell {
+    private final CellType type = CellType.PHYLOGENETIC;
     private Text text;
 
     /**
@@ -18,7 +18,7 @@ public class PhylogeneticLeafCell extends Cell {
      * @param id The ID of a cell.
      * @param name The genome sequence of a cell.
      */
-    public PhylogeneticLeafCell(int id, String name) {
+    public PhylogeneticCell(int id, String name) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(50);
