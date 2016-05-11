@@ -2,9 +2,6 @@ package application.tree;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -24,7 +21,7 @@ public class TreeMain {
         }
     }
 
-    TreeParser.TreeItem root;
+    //TreeItem root;
     //int currentDepth = 0;
 
     /**
@@ -34,10 +31,10 @@ public class TreeMain {
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE", "OS_OPEN_STREAM"})
     void setup() throws IOException {
-        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new FileReader(f));
-        String t = r.readLine();
-        root = TreeParser.parse(t);
-        System.out.println(root.toString());
+        //File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+        //BufferedReader r = new BufferedReader(new FileReader(f));
+        //String t = r.readLine();
+        //root = TreeParser.parse(t);
+        //System.out.println(root.toString());
     }
 }
