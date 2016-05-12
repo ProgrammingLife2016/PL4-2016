@@ -21,6 +21,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Class constructor.
+     *
      * @param cellId The ID of the cell.
      */
     public Cell(int cellId) {
@@ -29,6 +30,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Add a cell as a child cell.
+     *
      * @param cell A cell to be added as a child cell.
      */
     public void addCellChild(Cell cell) {
@@ -37,6 +39,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Return all child cells.
+     *
      * @return A list of child cells.
      */
     public List<Cell> getCellChildren() {
@@ -45,6 +48,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Add a cell as a parent cell.
+     *
      * @param cell A cell to be added as a parent cell.
      */
     public void addCellParent(Cell cell) {
@@ -53,6 +57,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Return all parent cells.
+     *
      * @return A list of parent cells.
      */
     public List<Cell> getCellParents() {
@@ -61,6 +66,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Remove a given child cell.
+     *
      * @param cell A given child cell to be removed.
      */
     public void removeCellChild(Cell cell) {
@@ -69,6 +75,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Set the view of the cell and its children.
+     *
      * @param view A given view node.
      */
     public void setView(Node view) {
@@ -80,6 +87,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Return the view of the cell.
+     *
      * @return The view of the cell.
      */
     public Node getView() {
@@ -88,6 +96,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Return the id of the cell.
+     *
      * @return The cell ID.
      */
     public int getCellId() {
@@ -96,13 +105,15 @@ public abstract class Cell extends Pane {
 
     /**
      * Return the type of the Cell.
+     *
      * @return The type of the Cell.
      */
     public abstract CellType getType();
-    
+
     /**
      * Return the Cell's text.
+     *
      * @return The Cell's text.
-     */ 
+     */
     public abstract Text getText();
 }

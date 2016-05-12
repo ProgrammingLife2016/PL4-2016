@@ -11,6 +11,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class Graph {
 
     private Model model;
 
+    private List<String> genomes = new ArrayList<>();
+
     /**
      * Class constructor.
      */
@@ -31,6 +34,7 @@ public class Graph {
 
     /**
      * Get the model of the Graph.
+     *
      * @return The model of the graph.
      */
     public Model getModel() {
@@ -39,24 +43,44 @@ public class Graph {
 
     /**
      * Add the nodes and edges of the graph to the model.
+     *
+     * @param ref the reference string.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public void addGraphComponents() throws IOException {
+    public Boolean addGraphComponents(Object ref) throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        HashMap<Integer, Node> startMap = null;
+        if (startMap == null) {
+            startMap = parser.readGFA(inputStream);
+        } else {
+            System.out.println("We already read the file");
+        }
         inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         model.setLevelMaps(levelMaps);
 
+
+
+        //Reset the model, since we have another reference.
+        model = new Model();
         HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
 
         Node root = nodeMap.get(1);
-        model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
 
-        Object r = root.getGenomes().get(0);
+        if (root.getGenomes().contains(ref)) {
+            model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        } else {
+            model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+        }
+
+        genomes.addAll(root.getGenomes());
+
+        if (ref == null) {
+            ref = root.getGenomes().get(0);
+        }
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
@@ -64,17 +88,21 @@ public class Graph {
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
+                to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
-                if (to.getGenomes().contains(r)) {
+                if (nodeMap.get(j).getGenomes().contains(ref)) {
                     model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
                     model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
+
                 //Add link from current cell to next cell
                 model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                         to.getGenomes()));
             }
         }
+
+        return true;
     }
 
     /**
@@ -165,5 +193,14 @@ public class Graph {
 //            }
 //        }
         endUpdate();
+    }
+
+    /**
+     * Getter method for the genomens.
+     *
+     * @return the genomes.
+     */
+    public List<String> getGenomes() {
+        return genomes;
     }
 }

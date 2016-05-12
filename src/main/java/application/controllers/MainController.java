@@ -1,12 +1,16 @@
 package application.controllers;
 
 import core.graph.Graph;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Screen;
 
 import java.net.URL;
@@ -22,8 +26,16 @@ public class MainController extends Controller<BorderPane> {
     ScrollPane screen;
     @FXML
     MenuBar menuBar;
+    @FXML
+    FlowPane pane;
+    @FXML
+    ListView list;
+    @FXML
+    ListView infoList;
+
 
     Rectangle2D screenSize;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -41,20 +53,60 @@ public class MainController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
+
         createMenu();
+        createList();
+        //createInfoList();
 
 //        this.getRoot().getStylesheets().add("application/css/main.css");
 //        this.getRoot().getStyleClass().add("root");
     }
 
+    private void createPane() {
+
+        pane = new FlowPane();
+        pane.getChildren();
+
+    }
+
+    private void createInfoList() {
+        infoList = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList(
+                "Select a Node to show info");
+        list.setOnMouseClicked(event ->
+                System.out.println(list.getSelectionModel().getSelectedItem()));
+        list.setItems(items);
+        this.getRoot().setRight(list);
+    }
+
+    /**
+     * Create a list on the right side of the screen with all genomes.
+     */
+    private void createList() {
+        list = new ListView<>();
+        ObservableList<String> items = FXCollections.observableArrayList(
+                "No Genomes Loaded.");
+        list.setOnMouseClicked(event -> {
+            fillGraph(list.getSelectionModel().getSelectedItem());
+            System.out.println(list.getSelectionModel().getSelectedItem());
+        });
+        list.setItems(items);
+        this.getRoot().setRight(list);
+    }
+
     /**
      * Method to fill the graph.
+     *
+     * @param ref the reference string.
      */
-    public void fillGraph() {
+    public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(this, graph);
+        GraphController graphController = new GraphController(this, graph, ref);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
+        list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+
+        //System.out.println(graphController.getGenomes().toString());
 
     }
 
@@ -72,7 +124,7 @@ public class MainController extends Controller<BorderPane> {
      * Switches the scene.
      */
     public void switchScene() {
-        fillGraph();
+        fillGraph(null);
     }
 
 }
