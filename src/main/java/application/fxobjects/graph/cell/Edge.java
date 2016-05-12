@@ -91,4 +91,8 @@ public class Edge extends Group {
     public void setLine(Line line) {
         this.line = line;
     }
+
+    public String toString() {
+        return ("(" + source.getCellId() + ","+ target.getCellId()+")");
+    }
 }

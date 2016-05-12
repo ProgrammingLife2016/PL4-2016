@@ -2,6 +2,7 @@ package core.graph;
 
 import application.TreeItem;
 import application.TreeParser;
+
 import core.Model;
 import core.graph.cell.CellType;
 import core.Node;
@@ -51,7 +52,7 @@ public class Graph {
      *
      * @param ref the reference string.
      */
-    public void addGraphComponents(Object ref) {
+    public boolean addGraphComponents(Object ref) {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
 
@@ -98,6 +99,8 @@ public class Graph {
                         to.getGenomes()));
             }
         }
+
+        return true;
     }
 
     /**
