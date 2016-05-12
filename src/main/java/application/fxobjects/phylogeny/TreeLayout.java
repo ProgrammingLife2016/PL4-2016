@@ -53,7 +53,13 @@ public class TreeLayout extends CellLayout{
         drawLeaves();
 
         // Draw parent nodes and edges to the parent nodes
-        drawParents();
+        while (undrawnCells.size() != 0) {
+            drawParents();
+        }
+
+        System.out.println("Num cells: " + model.getAllCells().size());
+        System.out.println("Num drawn cells: " + drawnCells.size());
+        System.out.println("Num undrawn cells: " + undrawnCells.size());
 
     }
 
@@ -61,20 +67,25 @@ public class TreeLayout extends CellLayout{
      * Draw the parent of already drawn nodes and connect them using edges.
      */
     private void drawParents() {
-        List<TreeNode> leaves = model.getTree().getLeaves(model.getTree().getRoot());
-        for (TreeNode leave : leaves) {
-            TreeNode parentNode = leave.parent();
-            Cell parent = undrawnCells.get(parentNode.getKey());
+        HashMap<Integer, Cell> internalUndrawnCells = (HashMap<Integer, Cell>) undrawnCells.clone();
+
+        for (Cell parentCell : internalUndrawnCells.values()) {
+            TreeNode parentNode = model.getTree().getNodeByKey(parentCell.getCellId());
 
             if (parentNode == null) { continue; }
-            if (parent == null) { continue; }
+            if (parentCell == null) { continue; }
+            if (parentNode.numberChildren() != 2) { continue; }
 
-            List<TreeNode> siblings = model.getTree().getLeaves(parentNode);
-            List<Cell> leavesAsCells = TreeNodesToCells(siblings);
+            TreeNode childNode1 = parentNode.getChild(0);
+            TreeNode childNode2 = parentNode.getChild(1);
 
-            if (siblings.size() == 2) {
-                processParent(parent, leavesAsCells.get(0), leavesAsCells.get(1));
-            }
+            Cell childCell1 = TreeNodeToCell(childNode1);
+            Cell childCell2 = TreeNodeToCell(childNode2);
+
+            if (!drawnCells.containsValue(childCell1)) { continue; }
+            if (!drawnCells.containsValue(childCell2)) { continue; }
+
+            processParent(parentCell, childCell1, childCell2);
         }
     }
 
@@ -96,20 +107,13 @@ public class TreeLayout extends CellLayout{
     }
 
     /**
-     * Convert a list of Tree Nodes to a list of their corresponding Cells.
-     * @param treeNodes
+     * Convert a TreeNode to its corresponding Cell.
+     * @param treeNode
      * @return
      */
-    private List<Cell> TreeNodesToCells(List<TreeNode> treeNodes) {
-        List<Cell> cells = new ArrayList<Cell>();
-
-        for (TreeNode treeNode : treeNodes) {
-            int id = treeNode.getKey();
-            Cell cell = model.getAllCells().get(id);
-            cells.add(cell);
-        }
-
-        return cells;
+    private Cell TreeNodeToCell(TreeNode treeNode) {
+        int id = treeNode.getKey();
+        return model.getAllCells().get(id);
     }
 
 
