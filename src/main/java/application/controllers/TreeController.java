@@ -62,7 +62,7 @@ public class TreeController extends Controller<ScrollPane> {
             graphMouseHandling.setMouseHandling(cell);
         }
 
-        CellLayout layout = new TreeLayout(pt.getModel(), 50);
+        CellLayout layout = new TreeLayout(pt.getModel(), 25);
         pt.endUpdate();
         layout.execute();
 

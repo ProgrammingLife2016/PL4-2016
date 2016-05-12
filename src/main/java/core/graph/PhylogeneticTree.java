@@ -38,7 +38,7 @@ public class PhylogeneticTree {
      * Set-up the tree model from a Newick data file.
      * @throws IOException  Throw exception on read failure.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));

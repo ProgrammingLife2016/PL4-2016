@@ -4,8 +4,6 @@ import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.List;
-
 /**
  * Class to create a proper layout fitting the corresponding data.
  * @since 27-04-2016

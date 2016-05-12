@@ -67,11 +67,8 @@ public class TreeLayout extends CellLayout {
             if (parentNode == null) { continue; }
             if (parentNode.numberChildren() != 2) { continue; }
 
-            TreeNode childNode1 = parentNode.getChild(0);
-            TreeNode childNode2 = parentNode.getChild(1);
-
-            Cell childCell1 = treeNodeToCell(childNode1);
-            Cell childCell2 = treeNodeToCell(childNode2);
+            Cell childCell1 = treeNodeToCell(parentNode.getChild(0));
+            Cell childCell2 = treeNodeToCell(parentNode.getChild(1));
 
             if (!drawnCells.containsValue(childCell1)) { continue; }
             if (!drawnCells.containsValue(childCell2)) { continue; }
