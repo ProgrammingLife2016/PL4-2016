@@ -20,23 +20,19 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-    private MainController mainController;
     private GraphMouseHandling graphMouseHandling;
 
     private javafx.geometry.Rectangle2D screenSize;
 
     /**
      * Constructor method for this class.
-     *
-     * @param controller the controller to use.
      * @param g          the graph.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(MainController controller, Graph g) {
+    public GraphController(Graph g) {
         super(new ScrollPane());
         this.graph = g;
-        this.mainController = controller;
-        this.graphMouseHandling = new GraphMouseHandling(graph);
+        this.graphMouseHandling = new GraphMouseHandling();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -70,11 +66,10 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Init method for this class.
+     * Add edges and cells from the model to the gui.
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init() throws IOException {
-        System.out.println("init");
         AnchorPane root = new AnchorPane();
         graph.addGraphComponents();
 

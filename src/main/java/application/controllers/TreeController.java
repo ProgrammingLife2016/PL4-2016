@@ -1,35 +1,34 @@
 package application.controllers;
 
-import application.TreeMain;
-import application.fxobjects.graph.cell.*;
-import core.graph.Graph;
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.CellLayout;
+import core.graph.TreeMain;
+import application.fxobjects.phylogeny.TreeLayout;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
 
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
     private TreeMain tm;
-    private MainController mainController;
-    //private GraphMouseHandling graphMouseHandling;
+    private GraphMouseHandling graphMouseHandling;
 
     private javafx.geometry.Rectangle2D screenSize;
 
-    public TreeController(MainController controller, TreeMain tm) {
+    /**
+     * Class constructor.
+     * @param tm
+     */
+    public TreeController(TreeMain tm) {
         super(new ScrollPane());
         this.tm = tm;
-        this.mainController = controller;
-        //this.graphMouseHandling = new GraphMouseHandling(graph);
+        this.graphMouseHandling = new GraphMouseHandling();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -51,18 +50,22 @@ public class TreeController extends Controller<ScrollPane> {
 
     }
 
+    /**
+     * Add cells from the model to the gui.
+     */
     public void init() {
-        System.out.println("init");
         AnchorPane root = new AnchorPane();
-
         root.getChildren().addAll(tm.getModel().getAddedCells());
 
+        for (Cell cell : tm.getModel().getAddedCells()) {
+            graphMouseHandling.setMouseHandling(cell);
+        }
 
-        System.out.println(tm.getModel().getAllCells());
-        CellLayout layout = new BaseLayout(tm.getModel(), 20, (int) (screenSize.getHeight() - 25) / 2);
+        CellLayout layout = new TreeLayout(tm.getModel(), 50);
         tm.endUpdate();
         layout.execute();
 
+        root.getChildren().addAll(tm.getModel().getAddedEdges());
         this.getRoot().setContent(root);
     }
 }

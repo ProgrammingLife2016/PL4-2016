@@ -1,6 +1,6 @@
 package application.controllers;
 
-import application.TreeMain;
+import core.graph.TreeMain;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
  * MainController for GUI.
  */
 public class MainController extends Controller<BorderPane> {
-
 
     @FXML
     ScrollPane screen;
@@ -54,31 +53,30 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph() {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(this, graph);
+        GraphController graphController = new GraphController(graph);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
-
     }
 
+    /**
+     * Method to fill the tree.
+     */
     public void fillTree() {
         try {
             TreeMain tm = new TreeMain();
             tm.setup();
-            TreeController treeController = new TreeController(this, tm);
+            TreeController treeController = new TreeController(tm);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void createMenu(){
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
-
     }
 
     /**

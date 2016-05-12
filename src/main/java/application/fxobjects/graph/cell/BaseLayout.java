@@ -73,6 +73,7 @@ public class BaseLayout extends CellLayout {
 
                     cellCount++;
                     cell.relocate(currentX, currentY);
+                    cell.setRelocated(true);
 
                     // Don't draw triangles above rectangles
                     if (currentY != BASE_Y) {
@@ -80,14 +81,11 @@ public class BaseLayout extends CellLayout {
                     }
                     break;
                 case PHYLOGENETIC:
-                    if(!done) {
-                        System.out.println("kachel");
-                        currentY += offset;
-                        cell.relocate(currentX, currentY);
-                        toCellWithDepth(cells.get(0), 0, 0);
-                        done = true;
-                        break;
-                    }
+                    currentY += offset;
+                    cell.relocate(centerY, currentY);
+                    cell.setRelocated(true);
+
+                    break;
                 default:
                     System.out.println("default");
                     break;

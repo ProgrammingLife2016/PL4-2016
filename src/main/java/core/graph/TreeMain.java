@@ -1,9 +1,10 @@
-package application;
+package core.graph;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import core.Model;
@@ -41,10 +42,8 @@ public class TreeMain {
         TreeParser tp = new TreeParser(r);
 
         model.setTree(tp.tokenize("340tree.rooted.TKK"));
-        LinkedList<TreeNode> leaves = model.getTree().getLeaves(model.getTree().getRoot());
-
-        for (TreeNode leaf : leaves) {
-            model.addCell(leaf.getKey(), leaf.getName(), CellType.RECTANGLE);
+        for (TreeNode leaf : model.getTree().nodes) {
+            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
         }
     }
 
