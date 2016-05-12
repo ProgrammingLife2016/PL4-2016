@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.graph.cell.Cell;
 import core.graph.Graph;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -11,7 +12,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class GraphMouseHandling {
 
-    final DragContext dragContext = new DragContext();
+    //final DragContext dragContext = new DragContext();
 
     Graph graph;
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
@@ -20,11 +21,11 @@ public class GraphMouseHandling {
         System.out.println(node.getCellId());
     };
 
-    EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
+    /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
         //Node node = (Node) event.getSource();
         Cell node = (Cell) event.getSource();
         System.out.println(node.getCellId());
-    };
+    };*/
 
 
     EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
@@ -47,6 +48,7 @@ public class GraphMouseHandling {
      *
      * @param graph A given graph.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphMouseHandling(Graph graph) {
         this.graph = graph;
     }
@@ -68,10 +70,9 @@ public class GraphMouseHandling {
      * Used for dragging of nodes.
      * Unused at this point of time.
      */
-    class DragContext {
-
+    @SuppressFBWarnings({"SIC_INNER_SHOULD_BE_STATIC", "UUF_UNUSED_FIELD"})
+    static class DragContext {
         double x;
         double y;
-
     }
 }

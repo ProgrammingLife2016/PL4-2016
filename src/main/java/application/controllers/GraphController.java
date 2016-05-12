@@ -3,11 +3,13 @@ package application.controllers;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import core.graph.Graph;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,6 +32,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param g          the graph.
      * @param ref the reference string.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(MainController controller, Graph g, Object ref) {
         super(new ScrollPane());
         this.graph = g;
@@ -45,7 +48,11 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        init(ref);
+        try {
+            init(ref);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -67,9 +74,10 @@ public class GraphController extends Controller<ScrollPane> {
      * Init method for this class.
      *
      * @param ref the reference string.
+     * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref) {
-        System.out.println("init with ref: " + ref);
+    public void init(Object ref) throws IOException {
+        System.out.println("init");
         AnchorPane root = new AnchorPane();
         graph.addGraphComponents(ref);
 

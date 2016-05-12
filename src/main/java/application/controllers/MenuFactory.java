@@ -15,7 +15,7 @@ import javafx.scene.input.KeyCombination;
 public class MenuFactory {
     private static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, test;
-    private static MainController mainController;
+    private MainController mainController;
 
     /**
      * Constructor method for this class.

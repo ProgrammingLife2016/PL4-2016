@@ -1,24 +1,19 @@
 package core.graph;
 
-import application.TreeItem;
-import application.TreeParser;
-
+import core.GraphReducer;
 import core.Model;
 import core.graph.cell.CellType;
 import core.Node;
 import core.Parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Class representing a graph.
@@ -27,7 +22,6 @@ import java.util.Queue;
 public class Graph {
 
     private Model model;
-    private HashMap<Integer, Node> nodeMap;
 
     private List<String> genomes = new ArrayList<>();
 
@@ -51,19 +45,28 @@ public class Graph {
      * Add the nodes and edges of the graph to the model.
      *
      * @param ref the reference string.
+     * @throws IOException Throw exception on read GFA read failure.
      */
-    public boolean addGraphComponents(Object ref) {
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    public Boolean addGraphComponents(Object ref) throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-
-        if (nodeMap == null) {
-            nodeMap = parser.readGFA(inputStream);
+        HashMap<Integer, Node> startMap = null;
+        if (startMap == null) {
+            startMap = parser.readGFA(inputStream);
         } else {
             System.out.println("We already read the file");
         }
+        inputStream.close();
+
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        model.setLevelMaps(levelMaps);
+
+
 
         //Reset the model, since we have another reference.
         model = new Model();
+        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
 
         Node root = nodeMap.get(1);
 
@@ -83,8 +86,9 @@ public class Graph {
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-            // int numberOfLinks = nodeMap.get(i).getLinks().size();
-            for (int j : nodeMap.get(i).getLinks()) {
+            if (from == null) { continue; }
+
+            for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
@@ -150,53 +154,47 @@ public class Graph {
     /**
      * Implementing phylogenetic tree here.
      */
-    TreeItem current;
+    //TreeItem current;
 
     /**
      * Setup method for the PHYLOGENETIC Tree.
      *
      * @throws IOException Throw exception on read failure.
      */
+    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     void setup() throws IOException {
-        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new FileReader(f));
-        String t = r.readLine();
-        current = TreeParser.parse(t);
-
-        Model model = getModel();
-        int i = 1;
-
-        Queue<TreeItem> q = new LinkedList<>();
-        ArrayList<Integer> done = new ArrayList<>();
-
-        System.out.println(current.getName());
-        q.add(current);
-        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
-        System.out.println("Cell added: " + i);
-
-        while (!q.isEmpty()) {
-            current = q.poll();
-            //From node
-            int j = i;
-
-            for (TreeItem child : current.getChildren()) {
-                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
-                System.out.println("Cell added: " + i);
-                model.addEdge(j, i, 1);
-                System.out.println("Link added: " + j + ", " + i);
-                q.add(child);
-            }
-        }
+//        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
+//        BufferedReader r = new BufferedReader(new FileReader(f));
+//        String t = r.readLine();
+//        r.close();
+//
+//        current = TreeParser.parse(t);
+//
+//        Model model = getModel();
+//        int i = 1;
+//
+//        Queue<TreeItem> q = new LinkedList<>();
+//        //ArrayList<Integer> done = new ArrayList<>();
+//
+//        System.out.println(current.getName());
+//        q.add(current);
+//        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
+//        System.out.println("Cell added: " + i);
+//
+//        while (!q.isEmpty()) {
+//            current = q.poll();
+//            //From node
+//            int j = i;
+//
+//            for (TreeItem child : current.getChildren()) {
+//                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
+//                System.out.println("Cell added: " + i);
+//                model.addEdge(j, i, 1);
+//                System.out.println("Link added: " + j + ", " + i);
+//                q.add(child);
+//            }
+//        }
         endUpdate();
-    }
-
-    /**
-     * Getter method for the nodeMap.
-     *
-     * @return the nodemap.
-     */
-    public HashMap<Integer, Node> getNodeMap() {
-        return nodeMap;
     }
 
     /**

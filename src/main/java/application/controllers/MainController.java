@@ -3,6 +3,7 @@ package application.controllers;
 import core.graph.Graph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.ListView;
@@ -33,7 +34,7 @@ public class MainController extends Controller<BorderPane> {
     ListView infoList;
 
 
-    static Rectangle2D screenSize;
+    Rectangle2D screenSize;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -49,6 +50,7 @@ public class MainController extends Controller<BorderPane> {
      * @param location  location for relative paths.
      * @param resources resources to localize the root object.
      */
+    @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
 

@@ -85,12 +85,12 @@ public class Node {
      * @param nodeMap A HashMap of all existing nodes.
      * @return A list of parents which are not null.
      */
-    public List<Node> getLiveParents(HashMap<Integer, Node> nodeMap) {
-        List<Node> liveParents = new ArrayList<>();
+    public List<Integer> getParents(HashMap<Integer, Node> nodeMap) {
+        List<Integer> liveParents = new ArrayList<>();
 
         for (int id : parents) {
             Node parent = nodeMap.get(id);
-            if (parent != null) {  liveParents.add(parent); }
+            if (parent != null) {  liveParents.add(parent.getId()); }
         }
 
         return liveParents;
@@ -101,12 +101,12 @@ public class Node {
      * @param nodeMap A HashMap of all existing nodes.
      * @return A list of links which are not null.
      */
-    public List<Node> getLiveLinks(HashMap<Integer, Node> nodeMap) {
-        List<Node> liveLinks = new ArrayList<>();
+    public List<Integer> getLinks(HashMap<Integer, Node> nodeMap) {
+        List<Integer> liveLinks = new ArrayList<>();
 
         for (int id : links) {
             Node child = nodeMap.get(id);
-            if (child != null) { liveLinks.add(child); }
+            if (child != null) { liveLinks.add(child.getId()); }
         }
 
         return liveLinks;
@@ -163,11 +163,15 @@ public class Node {
         return parents;
     }
 
-    public void setParents(List<Integer> parents) { this.parents = parents; }
+    public void setParents(List<Integer> parents) {
+        this.parents = parents;
+    }
 
     public List<String> getGenomes() {
         return genomes;
     }
 
-
+    public void setGenomes(List<String> genomes) {
+        this.genomes = genomes;
+    }
 }
