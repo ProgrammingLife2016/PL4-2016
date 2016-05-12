@@ -73,8 +73,6 @@ public class Graph {
         if (root.getGenomes().contains(ref)) {
             model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
         } else {
-            //This IS NOT the reference, this should be a TRIANGLE,
-            //but out program does not like it to be one.
             model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
         }
 

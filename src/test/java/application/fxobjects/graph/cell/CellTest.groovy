@@ -18,44 +18,4 @@ class CellTest extends GroovyTestCase {
     void testConstructor() {
         assertNotNull(c);
     }
-
-    void testAddCellChild() {
-
-    }
-
-    void testGetCellChildren() {
-
-    }
-
-    void testAddCellParent() {
-
-    }
-
-    void testGetCellParents() {
-
-    }
-
-    void testRemoveCellChild() {
-
-    }
-
-    void testSetView() {
-
-    }
-
-    void testGetView() {
-
-    }
-
-    void testGetCellId() {
-
-    }
-
-    void testGetType() {
-
-    }
-
-    void testGetText() {
-
-    }
 }

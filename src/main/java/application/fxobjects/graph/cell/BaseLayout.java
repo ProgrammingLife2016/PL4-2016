@@ -66,37 +66,7 @@ public class BaseLayout extends CellLayout {
 
                     cellCount = 1;
                     break;
-//                case TRIANGLE:
-//                    if (lastType == CellType.RECTANGLE) {
-//                        currentX += (offset / 2);
-//                        currentY = centerY - 100;
-//
-//                    } else {
-//                        currentX += offset;
-//                        currentY = centerY - (500/cellCount);
-//                    }
-//
-//
-//                    cellCount++;
-//                    //currentX -= (offset / 2);
-//                    if (lastType != CellType.TRIANGLE) {
-//                        currentX += offset;
-//                    }
-//                    cell.relocate(currentX, BASE_Y);
-//                    currentY = BASE_Y;
-//                    cellCount = 0;
-//                    break;
                 case TRIANGLE:
-//
-//                    if (top.contains(count)) {
-//                        top = new ArrayList<>();
-//                        top.addAll(graph.getNodeMap().get(count).getLiveLinks(graph.getNodeMap()).
-// stream().map(Node::getId).collect(Collectors.toList()));
-//
-//                        } else {
-//                        //Place under line
-//                    }
-
                     if (cellCount % 2 == 0) {
                         currentY += cellCount * offset;
                     } else {
@@ -115,14 +85,6 @@ public class BaseLayout extends CellLayout {
                         currentX += offset;
                     }
                     break;
-//                case PHYLOGENETIC:
-//                    if(!done) {
-//                        System.out.println("kachel");
-//                        cell.relocate(100, 100);
-//                        toCellWithDepth(cells.get(0), 0, 0);
-//                        done = true;
-//                        break;
-//                    }
                 default:
                     System.out.println("default");
                     break;

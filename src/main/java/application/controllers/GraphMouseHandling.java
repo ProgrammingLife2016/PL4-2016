@@ -17,8 +17,6 @@ public class GraphMouseHandling {
     Graph graph;
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
-        //graph.addGraphComponents(null);
-        System.out.println(node.getCellId());
     };
 
     /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {

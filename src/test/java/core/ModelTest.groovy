@@ -76,44 +76,4 @@ class ModelTest extends GroovyTestCase {
         assertTrue("[(3,4)]".equals("" + m.getAddedEdges()));
 
     }
-
-    void testGetRemovedEdges() {
-
-    }
-
-    void testGetAllEdges() {
-
-    }
-
-    void testAddCell() {
-
-    }
-
-    void testAddLevelMap() {
-
-    }
-
-    void testGetLevelMaps() {
-
-    }
-
-    void testSetLevelMaps() {
-
-    }
-
-    void testAddEdge() {
-
-    }
-
-    void testAttachOrphansToGraphParent() {
-
-    }
-
-    void testDisconnectFromGraphParent() {
-
-    }
-
-    void testMerge() {
-
-    }
 }
