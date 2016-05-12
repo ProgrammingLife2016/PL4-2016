@@ -43,7 +43,10 @@ public class GraphMouseHandling {
      * Class constructor.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphMouseHandling() {}
+    public GraphMouseHandling() {
+
+    }
+
     /**
      * Assign mouse events handlers to a given Node.
      *

@@ -99,25 +99,4 @@ public class BaseLayoutTest {
         assertEquals(42, baseLayout.getCellCount());
     }
 
-    /**
-     * Test whether getMaxDepth() and setMaxDepth() work correctly.
-     * @throws Exception possible Exception.
-     */
-    @Test
-    public void testGetAndSetMaxDepth() throws Exception {
-        baseLayout.setMaxDepth(42);
-
-        assertEquals(42, baseLayout.getMaxDepth());
-    }
-
-    /**
-     * Test whether getCount() and setCount() work correctly.
-     * @throws Exception possible Exception.
-     */
-    @Test
-    public void testGetAndSetCount() throws Exception {
-        baseLayout.setCount(42);
-
-        assertEquals(42, baseLayout.getCount());
-    }
 }

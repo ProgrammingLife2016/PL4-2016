@@ -34,6 +34,10 @@ public class PhylogeneticCell extends Cell {
         setView(pane);
     }
 
+    /**
+     * Set the name of a sample.
+     * @param text The name of a sample.
+     */
     public void setText(Text text) {
         this.text = text;
     }

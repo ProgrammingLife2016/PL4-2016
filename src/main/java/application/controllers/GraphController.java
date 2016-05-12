@@ -86,7 +86,8 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().removeAll(graph.getModel().getRemovedEdges());
 
         graph.endUpdate();
-        CellLayout layout = new BaseLayout(graph.getModel(), 20, (int) (screenSize.getHeight() - 25) / 2);
+        CellLayout layout = new BaseLayout(graph.getModel(), 20,
+                (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
 
         this.getRoot().setContent(root);

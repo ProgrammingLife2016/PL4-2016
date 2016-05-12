@@ -72,10 +72,18 @@ public class Model {
         addedEdges.clear();
     }
 
+    /**
+     * Get the phylogenetic tree.
+     * @return The phylogenetic tree.
+     */
     public Tree getTree() {
         return tree;
     }
 
+    /**
+     * Set the phylogenetic tree.
+     * @param tree The phylogenetic tree.
+     */
     public void setTree(Tree tree) {
         this.tree = tree;
     }

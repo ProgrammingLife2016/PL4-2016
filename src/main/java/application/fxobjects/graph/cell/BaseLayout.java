@@ -48,9 +48,7 @@ public class BaseLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        List<Cell> cells = model.getAllCells();
-        boolean done = false;
-        for (Cell cell : cells) {
+        for (Cell cell : model.getAllCells()) {
             switch (cell.getType()) {
                 case RECTANGLE:
                     currentX += offset;
@@ -80,12 +78,6 @@ public class BaseLayout extends CellLayout {
                         currentX += offset;
                     }
                     break;
-                case PHYLOGENETIC:
-                    currentY += offset;
-                    cell.relocate(centerY, currentY);
-                    cell.setRelocated(true);
-
-                    break;
                 default:
                     System.out.println("default");
                     break;
@@ -94,38 +86,6 @@ public class BaseLayout extends CellLayout {
         }
     }
 
-    private int maxDepth = 0;
-    private int count = 0;
-
-    //ToDo: relocate this method to phylogenetic class.
-    /**
-     * Layout method for phylogenetic tree.
-     * @param c cell to start from.
-     * @param depth allowed depth for traversal.
-     * @param downmoves amount of down moves to go down.
-     */
-    private void toCellWithDepth(Cell c, int depth, int downmoves) {
-        //count leafs
-        if (c.getCellChildren().isEmpty()) {
-            count++;
-        }
-        if (depth > maxDepth) {
-            maxDepth = depth;
-        }
-        int childNumber = -1;
-        for (Cell child : c.getCellChildren()) {
-            childNumber++;
-            toCellWithDepth(child, depth + 1, downmoves + childNumber);
-        }
-        //System.out.println(downmoves + " " + depth);
-
-        if (c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth * 50, count * 50);
-        } else {
-            c.relocate(50 + depth * 50, count * 50);
-        }
-
-    }
 
     /**
      * Getter method for the offset.
@@ -205,37 +165,5 @@ public class BaseLayout extends CellLayout {
      */
     public void setCellCount(int cellCount) {
         this.cellCount = cellCount;
-    }
-
-    /**
-     * Getter method for the maximum allowed depth.
-     * @return maxDepth.
-     */
-    public int getMaxDepth() {
-        return maxDepth;
-    }
-
-    /**
-     * Setter method for the maximum allowed depth.
-     * @param maxDepth value to set maxDepth to.
-     */
-    public void setMaxDepth(int maxDepth) {
-        this.maxDepth = maxDepth;
-    }
-
-    /**
-     * Getter method for the count value.
-     * @return count.
-     */
-    public int getCount() {
-        return count;
-    }
-
-    /**
-     * Setter method for the count value.
-     * @param count value to set count to.
-     */
-    public void setCount(int count) {
-        this.count = count;
     }
 }

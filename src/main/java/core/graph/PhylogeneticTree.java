@@ -4,27 +4,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import core.Model;
 import core.graph.cell.CellType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
 /**
+ * Class representing a phylogenetic tree.
  * Created by Niek on 4/25/2016.
  */
-public class TreeMain {
+public class PhylogeneticTree {
 
-    private Tree tree;
     private Model model;
 
     /**
      * Class constructor.
      */
-    public TreeMain() {
+    public PhylogeneticTree() {
         this.model = new Model();
     }
 
@@ -36,6 +34,11 @@ public class TreeMain {
         return model;
     }
 
+    /**
+     * Set-up the tree model from a Newick data file.
+     * @throws IOException  Throw exception on read failure.
+     */
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public void setup() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));

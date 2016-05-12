@@ -1,6 +1,6 @@
 package application.controllers;
 
-import core.graph.TreeMain;
+import core.graph.PhylogeneticTree;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
@@ -59,13 +59,13 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to fill the tree.
+     * Method to fill the phylogenetic tree.
      */
     public void fillTree() {
         try {
-            TreeMain tm = new TreeMain();
-            tm.setup();
-            TreeController treeController = new TreeController(tm);
+            PhylogeneticTree pt = new PhylogeneticTree();
+            pt.setup();
+            TreeController treeController = new TreeController(pt);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
         } catch (IOException e) {
@@ -73,19 +73,25 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
-    public void createMenu(){
+    /**
+     * Method to create the menu bar.
+     */
+    public void createMenu() {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
     }
 
     /**
-     * Switches the scene.
+     * Switches the scene to the graph view.
      */
     public void switchScene() {
         fillGraph();
     }
 
+    /**
+     * Switches the scene to the phylogenetic tree view.
+     */
     public void switchTreeScene() {
         fillTree();
     }

@@ -53,7 +53,8 @@ public class MenuFactory {
 
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Pick reference Genome Sequence", null, null);
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.switchTreeScene());
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null,
+                event -> mainController.switchTreeScene());
         resetView = initMenuItem("Reset", null, null);
         test = initMenuItem("Test", null, event -> mainController.switchScene());
 

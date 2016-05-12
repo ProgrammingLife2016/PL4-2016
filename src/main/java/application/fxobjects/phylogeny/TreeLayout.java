@@ -2,49 +2,46 @@ package application.fxobjects.phylogeny;
 
 import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
-import application.fxobjects.graph.cell.Edge;
-import application.fxobjects.graph.cell.PhylogeneticCell;
 import core.Model;
-import core.graph.cell.CellType;
 
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
+ * This class is responsible for properly drawing the phylogenetic tree.
  * Created by Niek on 5/9/2016.
  */
-public class TreeLayout extends CellLayout{
+public class TreeLayout extends CellLayout {
 
     private int offset;
     private Model model;
-    private int currentX;
     private int currentY;
-    private int cellCount = 0;
-
-    private static final int BASE_X = 0;
-    private static final int BASE_Y = 0;
 
     private HashMap<Integer, Cell> drawnCells;
     private HashMap<Integer, Cell> undrawnCells;
 
+    /**
+     * Class constructor.
+     *
+     * @param model  A given model.
+     * @param offset Offset to be added on execute() call.
+     */
     public TreeLayout(Model model, int offset) {
-        this.currentX = BASE_X;
-        this.currentY = BASE_Y;
-        this.offset = offset;
         this.model = model;
+        this.offset = offset;
 
         drawnCells = new HashMap<Integer, Cell>();
         undrawnCells = new HashMap<Integer, Cell>();
     }
 
+    /**
+     * Controls the drawing of all nodes in the phylogenetic tree.
+     */
     @Override
     public void execute() {
-        int count = 0;
 
-        // Initially all nodes are undrawn
+        // Initialize all nodes as undrawn
         for (Cell cell : model.getAllCells()) {
             undrawnCells.put(cell.getCellId(), cell);
         }
@@ -56,11 +53,6 @@ public class TreeLayout extends CellLayout{
         while (undrawnCells.size() != 0) {
             drawParents();
         }
-
-        System.out.println("Num cells: " + model.getAllCells().size());
-        System.out.println("Num drawn cells: " + drawnCells.size());
-        System.out.println("Num undrawn cells: " + undrawnCells.size());
-
     }
 
     /**
@@ -73,14 +65,13 @@ public class TreeLayout extends CellLayout{
             TreeNode parentNode = model.getTree().getNodeByKey(parentCell.getCellId());
 
             if (parentNode == null) { continue; }
-            if (parentCell == null) { continue; }
             if (parentNode.numberChildren() != 2) { continue; }
 
             TreeNode childNode1 = parentNode.getChild(0);
             TreeNode childNode2 = parentNode.getChild(1);
 
-            Cell childCell1 = TreeNodeToCell(childNode1);
-            Cell childCell2 = TreeNodeToCell(childNode2);
+            Cell childCell1 = treeNodeToCell(childNode1);
+            Cell childCell2 = treeNodeToCell(childNode2);
 
             if (!drawnCells.containsValue(childCell1)) { continue; }
             if (!drawnCells.containsValue(childCell2)) { continue; }
@@ -101,17 +92,18 @@ public class TreeLayout extends CellLayout{
             TreeNode nodeByCell = model.getTree().getNodeByKey(cellId);
 
             if (nodeByCell.isLeaf()) {
-                relocateCell(cell, leafX, currentY += offset);
+                currentY += offset;
+                relocateCell(cell, leafX, currentY);
             }
         }
     }
 
     /**
      * Convert a TreeNode to its corresponding Cell.
-     * @param treeNode
-     * @return
+     * @param treeNode  A TreeNode to get its Cell from.
+     * @return  The Cell matching the given TreeNode.
      */
-    private Cell TreeNodeToCell(TreeNode treeNode) {
+    private Cell treeNodeToCell(TreeNode treeNode) {
         int id = treeNode.getKey();
         return model.getAllCells().get(id);
     }
@@ -119,14 +111,13 @@ public class TreeLayout extends CellLayout{
 
     /**
      * Relocate the parent and add the edges from the parent to the two leaves.
-     * @param parent
-     * @param child1
-     * @param child2
+     * @param parent    A given parent cell.
+     * @param child1    Child cell 1 of the parent.
+     * @param child2    Child cell 2 of the parent.
      */
     private void processParent(Cell parent, Cell child1, Cell child2) {
-
-        int newX = (int)Math.min(child1.getLayoutX(), child2.getLayoutX()) - 50;
-        int newY = ((int)(child1.getLayoutY() + child2.getLayoutY()) / 2);
+        int newX = (int) Math.min(child1.getLayoutX(), child2.getLayoutX()) - 50;
+        int newY = (int) (child1.getLayoutY() + child2.getLayoutY()) / 2;
 
         model.addEdge(parent.getCellId(), child1.getCellId(), 1);
         model.addEdge(parent.getCellId(), child2.getCellId(), 1);
@@ -136,12 +127,11 @@ public class TreeLayout extends CellLayout{
 
     /**
      * Relocate a cell and mark it as 'drawn'.
-     * @param cell
-     * @param x
-     * @param y
+     * @param cell  The cell to relocate.
+     * @param x The new X coordinate of the cell.
+     * @param y The new Y coordinate of the cell.
      */
     private void relocateCell(Cell cell, int x, int y) {
-
         cell.relocate(x, y);
         undrawnCells.remove(cell.getCellId());
         drawnCells.put(cell.getCellId(), cell);
