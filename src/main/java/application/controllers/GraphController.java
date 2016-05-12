@@ -1,17 +1,17 @@
 package application.controllers;
 
 import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.Cell;
 import application.fxobjects.graph.cell.CellLayout;
+import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import core.graph.Graph;
 import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -27,9 +27,10 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      * @param g          the graph.
+     * @param ref the reference string.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g) {
+    public GraphController(Graph g, Object ref) {
         super(new ScrollPane());
         this.graph = g;
         this.graphMouseHandling = new GraphMouseHandling();
@@ -44,7 +45,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init();
+            init(ref);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,20 +67,21 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Add edges and cells from the model to the gui.
+     * Init method for this class.
+     *
+     * @param ref the reference string.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init() throws IOException {
+    public void init(Object ref) throws IOException {
+        System.out.println("init");
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents();
+        graph.addGraphComponents(ref);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
-        for (Cell cell : graph.getModel().getAddedCells()) {
-            graphMouseHandling.setMouseHandling(cell);
-        }
+        graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
 
         // remove components from graph pane
         root.getChildren().removeAll(graph.getModel().getRemovedCells());
@@ -91,5 +93,14 @@ public class GraphController extends Controller<ScrollPane> {
         layout.execute();
 
         this.getRoot().setContent(root);
+    }
+
+    /**
+     * Getter method for the genomes.
+     *
+     * @return the list of genomes.
+     */
+    public List<String> getGenomes() {
+        return graph.getGenomes();
     }
 }

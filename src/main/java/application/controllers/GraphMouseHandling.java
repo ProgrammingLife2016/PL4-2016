@@ -11,11 +11,11 @@ import javafx.scene.input.MouseEvent;
  * Class responsible for the handling of mouse events
  */
 public class GraphMouseHandling {
+
     //final DragContext dragContext = new DragContext();
 
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
-        System.out.println(node.getCellId());
     };
 
     /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {

@@ -4,10 +4,13 @@ import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.List;
+
 /**
  * Class to create a proper layout fitting the corresponding data.
- * @since 27-04-2016
+ *
  * @version 1.0
+ * @since 27-04-2016
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
@@ -21,7 +24,6 @@ public class BaseLayout extends CellLayout {
     private double maxDistance;
 
     private static final int BASE_X = 200;
-    private static final int BASE_Y = 200;
 
     /**
      * Class constructor.
@@ -33,12 +35,12 @@ public class BaseLayout extends CellLayout {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public BaseLayout(Model model, int offset, int middle) {
         this.currentX = BASE_X;
-        this.currentY = BASE_Y;
+        this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
-        System.out.println(centerY + "   center Y");
+        //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
     }
 
@@ -46,8 +48,11 @@ public class BaseLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        for (Cell cell : model.getAllCells()) {
+        List<Cell> cells = model.getAllCells();
+
+        for (Cell cell : cells) {
             switch (cell.getType()) {
+
                 case RECTANGLE:
                     currentX += offset;
 
@@ -63,7 +68,7 @@ public class BaseLayout extends CellLayout {
                         currentY -= cellCount * offset;
                     }
 
-                    if (currentY == BASE_Y) {
+                    if (currentY == centerY) {
                         currentX += offset;
                     }
 
@@ -72,7 +77,7 @@ public class BaseLayout extends CellLayout {
                     cell.setRelocated(true);
 
                     // Don't draw triangles above rectangles
-                    if (currentY != BASE_Y) {
+                    if (currentY != centerY) {
                         currentX += offset;
                     }
                     break;
@@ -84,9 +89,9 @@ public class BaseLayout extends CellLayout {
         }
     }
 
-
     /**
      * Getter method for the offset.
+     *
      * @return offset.
      */
     public int getOffset() {
@@ -95,6 +100,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the offset.
+     *
      * @param offset value to set offset to.
      */
     public void setOffset(int offset) {
@@ -103,6 +109,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current X value.
+     *
      * @return currentX.
      */
     public int getCurrentX() {
@@ -111,6 +118,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current X value.
+     *
      * @param currentX value to set currentX to.
      */
     public void setCurrentX(int currentX) {
@@ -119,6 +127,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the current Y value.
+     *
      * @return currentY.
      */
     public int getCurrentY() {
@@ -127,6 +136,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the current Y value.
+     *
      * @param currentY value to set currentY to.
      */
     public void setCurrentY(int currentY) {
@@ -135,6 +145,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the last seen type of cell.
+     *
      * @return the last seen CellType.
      */
     public CellType getLastType() {
@@ -143,6 +154,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the last seen type of cell.
+     *
      * @param lastType CellType to be set.
      */
     public void setLastType(CellType lastType) {
@@ -151,6 +163,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Getter method for the cell count.
+     *
      * @return cellCount.
      */
     public int getCellCount() {
@@ -159,6 +172,7 @@ public class BaseLayout extends CellLayout {
 
     /**
      * Setter method for the cell count.
+     *
      * @param cellCount the value to set cellCount to.
      */
     public void setCellCount(int cellCount) {
