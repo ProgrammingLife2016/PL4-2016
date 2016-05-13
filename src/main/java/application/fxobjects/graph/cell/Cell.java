@@ -132,4 +132,13 @@ public abstract class Cell extends Pane {
     public void setRelocated(boolean relocated) {
         this.relocated = relocated;
     }
+
+    /**
+     * toString method.
+     *
+     * @return this to string.
+     */
+    public String toString() {
+        return cellId + "";
+    }
 }
