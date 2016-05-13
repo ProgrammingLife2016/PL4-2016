@@ -1,15 +1,9 @@
 package core;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.RectangleCell;
 import core.graph.cell.CellType;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.*;
 
 /**
  * Created by Ties on 11-5-2016.
@@ -86,7 +80,7 @@ public class ModelTest {
     public void testGetAllCells() {
         Model m = new Model();
         m.clear();
-        Cell c = mock(Cell.class);
+
         m.addCell(3, "A", CellType.RECTANGLE);
         m.merge();
         assertEquals("[" + "3" + "]", m.getAllCells().toString());
@@ -98,9 +92,6 @@ public class ModelTest {
     @Test
     public void testGetAddedEdges() {
         Model m = new Model();
-
-        Cell c1 = new RectangleCell(3, "A");
-        Cell c2 = new RectangleCell(4, "B");
 
         m.addCell(3, "A", CellType.RECTANGLE);
         m.addCell(4, "B", CellType.RECTANGLE);

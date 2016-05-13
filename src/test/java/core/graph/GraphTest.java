@@ -2,9 +2,6 @@ package core.graph;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static junit.framework.TestCase.assertNotNull;
 
 /**
@@ -48,21 +45,5 @@ public class GraphTest {
     @Test
     public void testAddGraphComponents() {
         //assertTrue(gh.addGraphComponents());
-    }
-
-    /**
-     * Test for the intersection method.
-     */
-    @Test
-    public void testIntersection() {
-        List l1 = new ArrayList();
-        List l2 = new ArrayList();
-
-        l1.add("a");
-        l2.add("a");
-        l1.add("b");
-        l2.add("c");
-
-        //assertEquals(1,g.intersection(l1,l2));
     }
 }
