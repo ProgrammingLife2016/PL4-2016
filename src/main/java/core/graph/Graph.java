@@ -46,23 +46,17 @@ public class Graph {
      *
      * @param ref the reference string.
      * @throws IOException Throw exception on read GFA read failure.
+     * @return  Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref) throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = null;
-        if (startMap == null) {
-            startMap = parser.readGFA(inputStream);
-        } else {
-            System.out.println("We already read the file");
-        }
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
         inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         model.setLevelMaps(levelMaps);
-
-
 
         //Reset the model, since we have another reference.
         model = new Model();

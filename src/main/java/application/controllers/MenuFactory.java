@@ -14,7 +14,7 @@ import javafx.scene.input.KeyCombination;
  */
 public class MenuFactory {
     private static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
-            showPhylogeneticTree, showGenomeSequence, test;
+            showPhylogeneticTree, showGenomeSequence;
     private MainController mainController;
 
     /**
@@ -54,7 +54,8 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event ->
                 mainController.fillGraph(null));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, null);
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
+                mainController.fillTree());
         resetView = initMenuItem("Reset", null, null);
 
         Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView);

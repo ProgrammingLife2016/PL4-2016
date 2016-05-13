@@ -1,5 +1,6 @@
 package application.controllers;
 
+import core.graph.PhylogeneticTree;
 import core.graph.Graph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Screen;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,7 +22,6 @@ import java.util.ResourceBundle;
  * MainController for GUI.
  */
 public class MainController extends Controller<BorderPane> {
-
 
     @FXML
     ScrollPane screen;
@@ -62,22 +63,20 @@ public class MainController extends Controller<BorderPane> {
 //        this.getRoot().getStyleClass().add("root");
     }
 
-    private void createPane() {
-
-        pane = new FlowPane();
-        pane.getChildren();
-
-    }
-
-    private void createInfoList() {
-        infoList = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList(
-                "Select a Node to show info");
-        list.setOnMouseClicked(event ->
-                System.out.println(list.getSelectionModel().getSelectedItem()));
-        list.setItems(items);
-        this.getRoot().setRight(list);
-    }
+//    private void createPane() {
+//        pane = new FlowPane();
+//        pane.getChildren();
+//    }
+//
+//    private void createInfoList() {
+//        infoList = new ListView<String>();
+//        ObservableList<String> items = FXCollections.observableArrayList(
+//                "Select a Node to show info");
+//        list.setOnMouseClicked(event ->
+//                System.out.println(list.getSelectionModel().getSelectedItem()));
+//        list.setItems(items);
+//        this.getRoot().setRight(list);
+//    }
 
     /**
      * Create a list on the right side of the screen with all genomes.
@@ -101,30 +100,48 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(this, graph, ref);
+        GraphController graphController = new GraphController(graph, ref);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
-
-        //System.out.println(graphController.getGenomes().toString());
-
     }
 
     /**
-     * Method that creates the Menubar.
+     * Method to fill the phylogenetic tree.
+     */
+    public void fillTree() {
+        try {
+            PhylogeneticTree pt = new PhylogeneticTree();
+            pt.setup();
+            TreeController treeController = new TreeController(pt);
+            screen = treeController.getRoot();
+            this.getRoot().setCenter(screen);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method to create the menu bar.
      */
     public void createMenu() {
-        MenuFactory mf = new MenuFactory(this);
-        menuBar = mf.createMenu(menuBar);
+        MenuFactory menuFactory = new MenuFactory(this);
+        menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
-
     }
 
     /**
-     * Switches the scene.
+     * Switches the scene to the graph view.
      */
     public void switchScene() {
         fillGraph(null);
+    }
+
+    /**
+     * Switches the scene to the phylogenetic tree view.
+     */
+    public void switchTreeScene() {
+        fillTree();
     }
 
 }

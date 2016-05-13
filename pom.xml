@@ -275,6 +275,11 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <version>2.5.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.qurben</groupId>
+            <artifactId>libnewicktree</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

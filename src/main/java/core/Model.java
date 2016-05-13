@@ -7,6 +7,8 @@ import application.fxobjects.graph.cell.RectangleCell;
 import application.fxobjects.graph.cell.TriangleCell;
 
 import core.graph.cell.CellType;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,8 @@ public class Model {
 
     List<HashMap<Integer, Node>> levelMaps;
 
+    Tree tree;
+
     /**
      * Class constructor.
      */
@@ -45,7 +49,6 @@ public class Model {
      * Remove all cells and edges.
      */
     public void clear() {
-
         allCells = new ArrayList<>();
         addedCells = new ArrayList<>();
         removedCells = new ArrayList<>();
@@ -57,6 +60,8 @@ public class Model {
         cellMap = new HashMap<>(); // <id,cell>
 
         levelMaps = new ArrayList<>();
+
+        tree = new Tree();
     }
 
     /**
@@ -65,6 +70,22 @@ public class Model {
     public void clearAddedLists() {
         addedCells.clear();
         addedEdges.clear();
+    }
+
+    /**
+     * Get the phylogenetic tree.
+     * @return The phylogenetic tree.
+     */
+    public Tree getTree() {
+        return tree;
+    }
+
+    /**
+     * Set the phylogenetic tree.
+     * @param tree The phylogenetic tree.
+     */
+    public void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     /**
@@ -122,14 +143,11 @@ public class Model {
      * @param type The type of cell.
      */
     public void addCell(int id, String seq, CellType type) {
-
         switch (type) {
-
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, seq);
                 addCell(rectangleCell);
                 break;
-
             case TRIANGLE:
                 TriangleCell circleCell = new TriangleCell(id, seq);
                 addCell(circleCell);
@@ -138,7 +156,6 @@ public class Model {
                 PhylogeneticCell recCell = new PhylogeneticCell(id, seq);
                 addCell(recCell);
                 break;
-
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }
@@ -149,7 +166,6 @@ public class Model {
      * @param cell The cell (Node) to add.
      */
     private void addCell(Cell cell) {
-
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
 
@@ -194,8 +210,7 @@ public class Model {
         if (sourceCell != null && targetCell != null) {
             Edge edge = new Edge(sourceCell, targetCell, width);
             addedEdges.add(edge);
-        }
-        else {
+        } else {
             System.out.println("Nullpointer in edge, Edge not added.");
         }
     }

@@ -1,9 +1,9 @@
 package application.fxobjects.graph.cell;
 
-import core.graph.Graph;
+import core.Model;
 import core.graph.cell.CellType;
-import java.util.ArrayList;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class BaseLayout extends CellLayout {
     private int offset;
-    private Graph graph;
+    private Model model;
     private int currentX;
     private int currentY;
     private CellType lastType;
@@ -28,17 +28,17 @@ public class BaseLayout extends CellLayout {
     /**
      * Class constructor.
      *
-     * @param graph  A given graph.
+     * @param model  A given model.
      * @param offset Offset to be added on execute() call.
-     * @param middle The center Y coordinate of the graph.
+     * @param middle The center Y coordinate of the model.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public BaseLayout(Graph graph, int offset, int middle) {
+    public BaseLayout(Model model, int offset, int middle) {
         this.currentX = BASE_X;
         this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
-        this.graph = graph;
+        this.model = model;
         this.centerY = middle;
         //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
@@ -48,14 +48,9 @@ public class BaseLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        List<Cell> cells = graph.getModel().getAllCells();
-        ArrayList<Boolean> topLocation = new ArrayList<>();
-        topLocation.add(true);
-        List<Integer> top = new ArrayList<>();
-        //List<Integer> bottom = new ArrayList<>();
-        int count = 0;
+        List<Cell> cells = model.getAllCells();
+
         for (Cell cell : cells) {
-            count++;
             switch (cell.getType()) {
 
                 case RECTANGLE:
@@ -79,6 +74,7 @@ public class BaseLayout extends CellLayout {
 
                     cellCount++;
                     cell.relocate(currentX, currentY);
+                    cell.setRelocated(true);
 
                     // Don't draw triangles above rectangles
                     if (currentY != centerY) {
@@ -91,41 +87,6 @@ public class BaseLayout extends CellLayout {
             }
             lastType = cell.getType();
         }
-    }
-
-    private int maxDepth = 0;
-    private int count = 0;
-
-    //ToDo: relocate this method to phylogenetic class.
-
-    /**
-     * Layout method for phylogenetic tree.
-     *
-     * @param c         cell to start from.
-     * @param depth     allowed depth for traversal.
-     * @param downmoves amount of down moves to go down.
-     */
-    private void toCellWithDepth(Cell c, int depth, int downmoves) {
-        //count leafs
-        if (c.getCellChildren().isEmpty()) {
-            count++;
-        }
-        if (depth > maxDepth) {
-            maxDepth = depth;
-        }
-        int childNumber = -1;
-        for (Cell child : c.getCellChildren()) {
-            childNumber++;
-            toCellWithDepth(child, depth + 1, downmoves + childNumber);
-        }
-        //System.out.println(downmoves + " " + depth);
-
-        if (c.getCellChildren().isEmpty()) {
-            c.relocate(maxDepth * 50, count * 50);
-        } else {
-            c.relocate(50 + depth * 50, count * 50);
-        }
-
     }
 
     /**
@@ -144,24 +105,6 @@ public class BaseLayout extends CellLayout {
      */
     public void setOffset(int offset) {
         this.offset = offset;
-    }
-
-    /**
-     * Getter method for the Graph.
-     *
-     * @return graph.
-     */
-    public Graph getGraph() {
-        return graph;
-    }
-
-    /**
-     * Setter method for the Graph.
-     *
-     * @param graph Graph to be set.
-     */
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 
     /**
@@ -234,41 +177,5 @@ public class BaseLayout extends CellLayout {
      */
     public void setCellCount(int cellCount) {
         this.cellCount = cellCount;
-    }
-
-    /**
-     * Getter method for the maximum allowed depth.
-     *
-     * @return maxDepth.
-     */
-    public int getMaxDepth() {
-        return maxDepth;
-    }
-
-    /**
-     * Setter method for the maximum allowed depth.
-     *
-     * @param maxDepth value to set maxDepth to.
-     */
-    public void setMaxDepth(int maxDepth) {
-        this.maxDepth = maxDepth;
-    }
-
-    /**
-     * Getter method for the count value.
-     *
-     * @return count.
-     */
-    public int getCount() {
-        return count;
-    }
-
-    /**
-     * Setter method for the count value.
-     *
-     * @param count value to set count to.
-     */
-    public void setCount(int count) {
-        this.count = count;
     }
 }

@@ -20,24 +20,20 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-    private MainController mainController;
     private GraphMouseHandling graphMouseHandling;
 
     private javafx.geometry.Rectangle2D screenSize;
 
     /**
      * Constructor method for this class.
-     *
-     * @param controller the controller to use.
      * @param g          the graph.
      * @param ref the reference string.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(MainController controller, Graph g, Object ref) {
+    public GraphController(Graph g, Object ref) {
         super(new ScrollPane());
         this.graph = g;
-        this.mainController = controller;
-        this.graphMouseHandling = new GraphMouseHandling(graph);
+        this.graphMouseHandling = new GraphMouseHandling();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -92,9 +88,8 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().removeAll(graph.getModel().getRemovedEdges());
 
         graph.endUpdate();
-
-
-        CellLayout layout = new BaseLayout(graph, 20, (int) (screenSize.getHeight() - 25) / 2);
+        CellLayout layout = new BaseLayout(graph.getModel(), 20,
+                (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
 
         this.getRoot().setContent(root);
