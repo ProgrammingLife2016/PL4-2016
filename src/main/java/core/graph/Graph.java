@@ -107,9 +107,6 @@ public class Graph {
         // the parent
         getModel().attachOrphansToGraphParent(model.getAddedCells());
 
-        // remove reference to graphParent
-        getModel().disconnectFromGraphParent(model.getRemovedCells());
-
         // merge added & removed cells with all cells
         getModel().merge();
     }

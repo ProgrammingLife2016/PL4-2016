@@ -23,13 +23,11 @@ public class Model {
 
     List<Cell> allCells;
     List<Cell> addedCells;
-    List<Cell> removedCells;
 
     List<Edge> allEdges;
     List<Edge> addedEdges;
-    List<Edge> removedEdges;
 
-    Map<Integer, Cell> cellMap; // <id,cell>
+    Map<Integer, Cell> cellMap;
 
     List<HashMap<Integer, Node>> levelMaps;
 
@@ -51,13 +49,11 @@ public class Model {
     public void clear() {
         allCells = new ArrayList<>();
         addedCells = new ArrayList<>();
-        removedCells = new ArrayList<>();
 
         allEdges = new ArrayList<>();
         addedEdges = new ArrayList<>();
-        removedEdges = new ArrayList<>();
 
-        cellMap = new HashMap<>(); // <id,cell>
+        cellMap = new HashMap<>();
 
         levelMaps = new ArrayList<>();
 
@@ -97,14 +93,6 @@ public class Model {
     }
 
     /**
-     * Get a list of removed cells.
-     * @return A list of removed cells.
-     */
-    public List<Cell> getRemovedCells() {
-        return removedCells;
-    }
-
-    /**
      * Get a list of all cells.
      * @return A list of all cells.
      */
@@ -118,14 +106,6 @@ public class Model {
      */
     public List<Edge> getAddedEdges() {
         return addedEdges;
-    }
-
-    /**
-     * Get a list of removed edges.
-     * @return A list of removed edges.
-     */
-    public List<Edge> getRemovedEdges() {
-        return removedEdges;
     }
 
     /**
@@ -244,20 +224,12 @@ public class Model {
      * Add and remove cells from the allCells list.
      */
     public void merge() {
-
         // cells
         allCells.addAll(addedCells);
-        allCells.removeAll(removedCells);
-
         addedCells.clear();
-        removedCells.clear();
 
         // edges
         allEdges.addAll(addedEdges);
-        allEdges.removeAll(removedEdges);
-
         addedEdges.clear();
-        removedEdges.clear();
-
     }
 }
