@@ -16,8 +16,6 @@
             <ScrollPane fx:id="screen"/>
         </center>
         <right>
-            <VBox fx:id="listVBox">
-            </VBox>
         </right>
     </BorderPane>
 

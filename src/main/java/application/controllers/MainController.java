@@ -4,6 +4,7 @@ import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
@@ -95,7 +96,6 @@ public class MainController extends Controller<BorderPane> {
         createNodeInfo();
 
         listVBox.getChildren().addAll(list, infoList);
-        this.getRoot().setRight(listVBox);
     }
 
     /**
@@ -136,6 +136,7 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+        showListVBox();
     }
 
     /**
@@ -151,6 +152,7 @@ public class MainController extends Controller<BorderPane> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        hideListVBox();
     }
 
     /**
@@ -176,11 +178,17 @@ public class MainController extends Controller<BorderPane> {
         fillTree();
     }
 
-    public void hideListVBox() {
-        listVBox.setVisible(false);
+    /**
+     * Show the info panel.
+     */
+    private void showListVBox() {
+        this.getRoot().setRight(listVBox);
     }
 
-    public void showListVBox() {
-        listVBox.setVisible(false);
+    /**
+     * Hide the info panel.
+     */
+    private void hideListVBox() {
+        this.getRoot().getChildren().remove(listVBox);
     }
 }
