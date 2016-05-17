@@ -77,8 +77,8 @@ public class NodeTest {
         n.addAllGenome(genomes);
 
         List<String> expectedGenomes = new ArrayList<String>();
+        expectedGenomes.add(genomes[0]);
         expectedGenomes.add(genomes[1]);
-        expectedGenomes.add(genomes[2]);
 
         assertEquals(expectedGenomes, n.getGenomes());
     }
