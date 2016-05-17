@@ -1,13 +1,11 @@
 package application.controllers;
 
-import core.graph.PhylogeneticTree;
 import core.graph.Graph;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
