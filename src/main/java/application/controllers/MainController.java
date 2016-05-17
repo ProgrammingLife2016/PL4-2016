@@ -1,12 +1,12 @@
 package application.controllers;
 
-import core.graph.PhylogeneticTree;
 import core.graph.Graph;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
@@ -103,14 +103,13 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createList() {
         list = new ListView<>();
-
-        ObservableList<String> items = FXCollections.observableArrayList(
-                "No Genomes Loaded.");
+        list.setPlaceholder(new Label("No Genomes Loaded."));
         list.setOnMouseClicked(event -> {
-            fillGraph(list.getSelectionModel().getSelectedItem());
+            if(!(list.getSelectionModel().getSelectedItem()==(null))) {
+                fillGraph(list.getSelectionModel().getSelectedItem());
+            }
             System.out.println(list.getSelectionModel().getSelectedItem());
         });
-        list.setItems(items);
     }
 
     /**
