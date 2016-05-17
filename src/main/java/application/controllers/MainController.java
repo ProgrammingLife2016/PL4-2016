@@ -4,7 +4,6 @@ import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
@@ -20,6 +19,8 @@ import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -63,31 +64,12 @@ public class MainController extends Controller<BorderPane> {
 
         createMenu();
         createInfoList();
-        //createInfoList();
-
-//        this.getRoot().getStylesheets().add("application/css/main.css");
-//        this.getRoot().getStyleClass().add("root");
     }
-
-//    private void createPane() {
-//        pane = new FlowPane();
-//        pane.getChildren();
-//    }
-//
-//    private void createInfoList() {
-//        infoList = new ListView<String>();
-//        ObservableList<String> items = FXCollections.observableArrayList(
-//                "Select a Node to show info");
-//        list.setOnMouseClicked(event ->
-//                System.out.println(list.getSelectionModel().getSelectedItem()));
-//        list.setItems(items);
-//        this.getRoot().setRight(list);
-//    }
 
     /**
      * On the right side of the screen, create a VBox showing:
-     *  - A list with all genome strains.
-     *  - A box with info on a selected node.
+     * - A list with all genome strains.
+     * - A box with info on a selected node.
      */
     private void createInfoList() {
         listVBox = new VBox();
@@ -105,7 +87,7 @@ public class MainController extends Controller<BorderPane> {
         list = new ListView<>();
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.setOnMouseClicked(event -> {
-            if(!(list.getSelectionModel().getSelectedItem()==(null))) {
+            if (!(list.getSelectionModel().getSelectedItem() == (null))) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
             }
             System.out.println(list.getSelectionModel().getSelectedItem());
@@ -135,7 +117,9 @@ public class MainController extends Controller<BorderPane> {
         GraphController graphController = new GraphController(graph, ref);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
-        list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
         showListVBox();
     }
 
