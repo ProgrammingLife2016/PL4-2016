@@ -12,6 +12,9 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 
 import java.io.IOException;
@@ -32,7 +35,9 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     ListView list;
     @FXML
-    ListView infoList;
+    TextFlow infoList;
+    @FXML
+    VBox listVBox;
 
 
     Rectangle2D screenSize;
@@ -56,7 +61,7 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
 
         createMenu();
-        createList();
+        createInfoList();
         //createInfoList();
 
 //        this.getRoot().getStylesheets().add("application/css/main.css");
@@ -79,10 +84,26 @@ public class MainController extends Controller<BorderPane> {
 //    }
 
     /**
+     * On the right side of the screen, create a VBox showing:
+     *  - A list with all genome strains.
+     *  - A box with info on a selected node.
+     */
+    private void createInfoList() {
+        listVBox = new VBox();
+
+        createList();
+        createNodeInfo();
+
+        listVBox.getChildren().addAll(list, infoList);
+        this.getRoot().setRight(listVBox);
+    }
+
+    /**
      * Create a list on the right side of the screen with all genomes.
      */
     private void createList() {
         list = new ListView<>();
+
         ObservableList<String> items = FXCollections.observableArrayList(
                 "No Genomes Loaded.");
         list.setOnMouseClicked(event -> {
@@ -90,7 +111,19 @@ public class MainController extends Controller<BorderPane> {
             System.out.println(list.getSelectionModel().getSelectedItem());
         });
         list.setItems(items);
-        this.getRoot().setRight(list);
+    }
+
+    /**
+     * Create an info panel to show the information on a node.
+     */
+    private void createNodeInfo() {
+        infoList = new TextFlow();
+
+        //ToDo: add more Text for extra info.
+        Text seq = new Text();
+        seq.setText("Test");
+
+        infoList.getChildren().addAll(seq);
     }
 
     /**
