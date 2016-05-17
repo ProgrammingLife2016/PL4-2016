@@ -177,4 +177,11 @@ public class MainController extends Controller<BorderPane> {
         fillTree();
     }
 
+    public void hideListVBox() {
+        listVBox.setVisible(false);
+    }
+
+    public void showListVBox() {
+        listVBox.setVisible(false);
+    }
 }
