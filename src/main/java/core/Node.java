@@ -9,7 +9,6 @@ import java.util.List;
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
-@SuppressWarnings("checkstyle:javadocmethod")
 public class Node {
 
     /**
@@ -36,6 +35,7 @@ public class Node {
      * List of ids of parent Nodes which have this node as child.
      */
     private List<Integer> parents;
+
     /**
      * List of genomes of which this node is a part.
      */
@@ -131,46 +131,98 @@ public class Node {
 
     /** Getters & Setters. **/
 
+    /**
+     * Get the node id.
+     * @return The node id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Set the node id.
+     * @param id The node id.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Get the nucleotide sequence.
+     * @return The nucleotide sequence.
+     */
     public String getSequence() {
         return sequence;
     }
 
+    /**
+     * Set the nucleotide sequence.
+     * @param sequence The nucleotide sequence.
+     */
     public void setSequence(String sequence) {
         this.sequence = sequence;
     }
 
+    /**
+     * Get the zIndex.
+      * @return The zIndex.
+     */
     public int getzIndex() {
         return zIndex;
     }
 
+    /**
+     * Set the zIndex.
+     * @param zIndex The zIndex.
+     */
     public void setzIndex(int zIndex) {
         this.zIndex = zIndex;
     }
 
+    /**
+     * Get the node's children.
+     * @return The node's children.
+     */
     public List<Integer> getLinks() {
         return links;
     }
 
+    /**
+     * Set the node's children.
+     * @param links The node's children.
+     */
     public void setLinks(List<Integer> links) {
         this.links = links;
     }
 
+    /**
+     * Get the node's parents.
+     * @return The node's parents.
+     */
     public List<Integer> getParents() {
         return parents;
     }
 
+    /**
+     * Set the node's parents.
+     * @param parents The node's parents.
+     */
     public void setParents(List<Integer> parents) {
         this.parents = parents;
     }
 
+    /**
+     * Get the genomes through the node.
+     * @return The genomes through the node.
+     */
     public List<String> getGenomes() {
         return genomes;
     }
 
+    /**
+     * Set the genomes through the node.
+     * @param genomes The genomes through the node.
+     */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }
