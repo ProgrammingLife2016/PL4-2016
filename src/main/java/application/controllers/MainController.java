@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
@@ -83,13 +85,14 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createList() {
         list = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList(
-                "No Genomes Loaded.");
+        list.setPlaceholder(new Label("No Genomes Loaded."));
         list.setOnMouseClicked(event -> {
-            fillGraph(list.getSelectionModel().getSelectedItem());
+            if(!list.getSelectionModel().getSelectedItem().equals(null)) {
+                fillGraph(list.getSelectionModel().getSelectedItem());
+            }
             System.out.println(list.getSelectionModel().getSelectedItem());
         });
-        list.setItems(items);
+
         this.getRoot().setRight(list);
     }
 
