@@ -1,5 +1,6 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,7 @@ public class ParserTest {
     /**
      * Test the readGFA method.
      */
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     @Test
     public void readGFA() {
         HashMap<Integer, Node> map = new HashMap<Integer, Node>();
@@ -54,7 +56,7 @@ public class ParserTest {
             assertEquals(Character.toString((char) ('A' + i - 1)), n.getSequence());
             assertEquals(i, n.getzIndex());
             assertEquals("GENOME_1", n.getGenomes().get(0));
-            assertEquals(new Integer(i + 1), n.getLinks().get(0));
+            assertEquals(Integer.valueOf(i + 1), n.getLinks().get(0));
         }
     }
 
