@@ -43,9 +43,10 @@ public class Node {
 
     /**
      * Node constructor.
-     * @param id - Node identifier.
+     *
+     * @param id  - Node identifier.
      * @param seq - Actual nucleic acid sequence contents of the node.
-     * @param z - The 'depth' of the node in the genome.
+     * @param z   - The 'depth' of the node in the genome.
      */
     public Node(int id, String seq, int z) {
         this.id = id;
@@ -58,6 +59,7 @@ public class Node {
 
     /**
      * Add a link to another node.
+     *
      * @param link - The other node to which this one is linked.
      */
     public void addLink(int link) {
@@ -66,6 +68,7 @@ public class Node {
 
     /**
      * Add a parent node's Id which links this node.
+     *
      * @param parent - A parent node.
      */
     public void addParent(int parent) {
@@ -74,6 +77,7 @@ public class Node {
 
     /**
      * Add a genome to the node.
+     *
      * @param s - The other node to which this one is linked.
      */
     public void addAllGenome(String[] s) {
@@ -82,6 +86,7 @@ public class Node {
 
     /**
      * Gets all live parents by comparing the link list with all existing nodes.
+     *
      * @param nodeMap A HashMap of all existing nodes.
      * @return A list of parents which are not null.
      */
@@ -90,7 +95,9 @@ public class Node {
 
         for (int id : parents) {
             Node parent = nodeMap.get(id);
-            if (parent != null) {  liveParents.add(parent.getId()); }
+            if (parent != null) {
+                liveParents.add(parent.getId());
+            }
         }
 
         return liveParents;
@@ -98,6 +105,7 @@ public class Node {
 
     /**
      * Gets all live links by comparing the link list with all existing nodes.
+     *
      * @param nodeMap A HashMap of all existing nodes.
      * @return A list of links which are not null.
      */
@@ -106,7 +114,9 @@ public class Node {
 
         for (int id : links) {
             Node child = nodeMap.get(id);
-            if (child != null) { liveLinks.add(child.getId()); }
+            if (child != null) {
+                liveLinks.add(child.getId());
+            }
         }
 
         return liveLinks;
@@ -129,7 +139,9 @@ public class Node {
                 + '}';
     }
 
-    /** Getters & Setters. **/
+    /**
+     * Getters & Setters.
+     **/
 
     public int getId() {
         return id;
@@ -167,18 +179,30 @@ public class Node {
         this.parents = parents;
     }
 
+    /**
+     * Returns the genomes as a list.
+     * @return the genomes.
+     */
     public List<String> getGenomes() {
         return genomes;
     }
 
+    /**
+     * Returns the genomes as a string.
+     * @return the String.
+     */
     public String getGenomesAsString() {
         String toret = "";
-        for(String s:getGenomes()) {
-            toret+= " • " + s + "\n";
+        for (String s : getGenomes()) {
+            toret += " • " + s + "\n";
         }
         return toret;
     }
 
+    /**
+     * Setter for the genomes.
+     * @param genomes the genomes to set this.genomes to.
+     */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }

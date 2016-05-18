@@ -3,12 +3,9 @@ package application.controllers;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
@@ -180,7 +177,7 @@ public class MainController extends Controller<BorderPane> {
      * Switches the scene to the graph view.
      */
     public void switchScene(int delta) {
-        currentView+=delta;
+        currentView += delta;
 
     }
 
