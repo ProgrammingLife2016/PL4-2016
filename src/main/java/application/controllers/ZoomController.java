@@ -49,6 +49,7 @@ public class ZoomController extends BorderPane {
         return keyHandler;
     }
 
+    public ZoomBox getZoomBox() { return zoomBox; }
 
     /**
      * Init method.

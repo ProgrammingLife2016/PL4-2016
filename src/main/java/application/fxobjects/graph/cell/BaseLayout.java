@@ -22,6 +22,7 @@ public class BaseLayout extends CellLayout {
     private int cellCount = 0;
     private int centerY;
     private double maxDistance;
+    private double maxWidth;
 
     private static final int BASE_X = 200;
 
@@ -42,6 +43,8 @@ public class BaseLayout extends CellLayout {
         this.centerY = middle;
         //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
+        this.maxWidth = 0;
+
     }
 
     /**
@@ -55,6 +58,9 @@ public class BaseLayout extends CellLayout {
 
                 case RECTANGLE:
                     currentX += offset;
+                    if (currentX > maxWidth) {
+                        maxWidth = currentX;
+                    }
 
                     currentY = centerY;
                     cell.relocate(currentX, currentY);
@@ -70,6 +76,9 @@ public class BaseLayout extends CellLayout {
 
                     if (currentY == centerY) {
                         currentX += offset;
+                        if (currentX > maxWidth) {
+                            maxWidth = currentX;
+                        }
                     }
 
                     cellCount++;
@@ -79,10 +88,13 @@ public class BaseLayout extends CellLayout {
                     // Don't draw triangles above rectangles
                     if (currentY != centerY) {
                         currentX += offset;
+                        if (currentX > maxWidth) {
+                            maxWidth = currentX;
+                        }
                     }
+                    maxWidth += offset;
                     break;
                 default:
-                    System.out.println("default");
                     break;
             }
             lastType = cell.getType();
@@ -178,4 +190,6 @@ public class BaseLayout extends CellLayout {
     public void setCellCount(int cellCount) {
         this.cellCount = cellCount;
     }
+
+    public double getMaxWidth() { return maxWidth; }
 }

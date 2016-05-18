@@ -104,6 +104,13 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+        this.getRoot().setBottom(graphController.getZoomController().getZoomBox().getZoomBox());
+
+//        try {
+//            graphController.takeSnapshot();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

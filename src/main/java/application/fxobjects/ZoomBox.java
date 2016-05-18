@@ -68,7 +68,6 @@ public class ZoomBox extends ScrollPane {
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
 
-
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
         return zoomBox;
 
