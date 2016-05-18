@@ -1,19 +1,14 @@
 package core.graph;
 
-import core.GraphReducer;
-import core.Model;
+import core.*;
 import core.graph.cell.CellType;
-import core.Node;
-import core.Parser;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class representing a graph.
@@ -42,10 +37,19 @@ public class Graph {
     }
 
     /**
+     * Set the model of the Graph.
+     *
+     * @param model The model of the graph.
+     */
+    public void setModel(Model model) {
+        this.model = model;
+    }
+    /**
      * Read a node map from a gfa file on disk.
      * @return  A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
      */
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
@@ -61,7 +65,6 @@ public class Graph {
      * @param ref the reference string.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public void addGraphComponents(Object ref) throws IOException {
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(getNodeMapFromFile());
         model.setLevelMaps(levelMaps);
@@ -146,7 +149,7 @@ public class Graph {
     /**
      * Setter method for the genomens.
      *
-     * @return the genomes.
+     * @param genomes the genomes.
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;

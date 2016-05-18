@@ -1,10 +1,6 @@
 package core.graph;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import core.Model;
 import core.graph.cell.CellType;
@@ -37,15 +33,11 @@ public class PhylogeneticTree {
     }
 
     /**
-     * Add TreeNodes to the model.
-     * @throws IOException  Throw exception on read failure.
+     * Set the model of the Tree.
+     * @param model The model of the Tree.
      */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public void setup() throws IOException {
-        model.setTree(getTreeFromFile());
-        for (TreeNode leaf : model.getTree().nodes) {
-            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
-        }
+    public void setModel(Model model) {
+        this.model = model;
     }
 
     /**
@@ -53,11 +45,23 @@ public class PhylogeneticTree {
      * @return  A Newick tree.
      * @throws IOException  Throw exception on read failure.
      */
-    public Tree getTreeFromFile() throws FileNotFoundException {
+    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
+    public Tree getTreeFromFile() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));
         TreeParser tp = new TreeParser(r);
 
         return tp.tokenize("340tree.rooted.TKK");
+    }
+
+    /**
+     * Add TreeNodes to the model.
+     * @throws IOException  Throw exception on read failure.
+     */
+    public void setup() throws IOException {
+        model.setTree(getTreeFromFile());
+        for (TreeNode leaf : model.getTree().nodes) {
+            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
+        }
     }
 }

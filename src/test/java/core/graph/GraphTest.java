@@ -6,14 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by user on 18-5-2016.
@@ -21,6 +17,9 @@ import static org.junit.Assert.assertNotNull;
 public class GraphTest {
     private Graph g;
 
+    /**
+     * Initialize a new graph instance.
+     */
     @Before
     public void setUp() {
         g = new Graph();
@@ -55,6 +54,15 @@ public class GraphTest {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Test the addGraphComponents method.
+     */
+    @Test
+    public void testAddGraphComponents() {
+        Model model = mock(Model.class);
+        g.setModel(model);
     }
 
     /**
