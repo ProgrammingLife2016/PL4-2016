@@ -60,7 +60,7 @@ public class Graph {
 
         //Reset the model, since we have another reference.
         model = new Model();
-        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
+        HashMap<Integer, Node> nodeMap = levelMaps.get(0);
 
         Node root = nodeMap.get(1);
 

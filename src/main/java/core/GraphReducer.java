@@ -60,12 +60,32 @@ public final class GraphReducer {
     }
 
     /**
+     * Copy all values of a given node map.
+     * @param map   A node map to be copied.
+     * @return  A copied node map.
+     */
+    private static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
+        HashMap<Integer, Node> res = new HashMap<Integer, Node>();
+        for (int i : map.keySet()) {
+            Node n = map.get(i);
+            Node newNode = new Node(n.getId(), n.getSequence(), n.getzIndex());
+            newNode.setLinks(n.getLinks());
+            newNode.setParents(n.getParents());
+            newNode.setGenomes(n.getGenomes());
+            res.put(i, newNode);
+        }
+
+        return res;
+    }
+
+    /**
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      * @param map   A HashMap containing all nodes in the graph.
      * @return	A collapsed map.
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
-        HashMap<Integer, Node> nodeMap = (HashMap<Integer, Node>) map.clone();
+        HashMap<Integer, Node> nodeMap = copyNodeMap(map);
+
         determineParents(nodeMap);
 
         for (int idx = 1; idx <= map.size(); idx++) {
