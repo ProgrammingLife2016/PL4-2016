@@ -5,6 +5,8 @@ import core.Model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -40,14 +42,14 @@ public class PhylogeneticTreeTest {
      */
     @Test
     public void testSetup() {
+        try {
+            Model model = pt.getModel();
+            assertEquals(0, model.getTree().getLeafCount());
 
-    }
-
-    /**
-     * Test the endUpdate method.
-     */
-    @Test
-    public void testEndUpdate() {
-
+            pt.setup();
+            assertNotEquals(0, model.getTree().getLeafCount());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

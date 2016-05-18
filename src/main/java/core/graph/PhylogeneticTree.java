@@ -49,11 +49,4 @@ public class PhylogeneticTree {
             model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
         }
     }
-
-    /**
-     * Method that updates the model.
-     */
-    public void endUpdate() {
-        model.merge();
-    }
 }

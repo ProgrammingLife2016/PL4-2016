@@ -63,7 +63,6 @@ public class TreeController extends Controller<ScrollPane> {
         }
 
         CellLayout layout = new TreeLayout(pt.getModel(), 25);
-        pt.endUpdate();
         layout.execute();
 
         root.getChildren().addAll(pt.getModel().getAddedEdges());
