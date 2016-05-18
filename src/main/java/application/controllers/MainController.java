@@ -41,6 +41,8 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     VBox listVBox;
     @FXML
+    Text id;
+    @FXML
     Text seq;
 
 
@@ -107,18 +109,20 @@ public class MainController extends Controller<BorderPane> {
         infoList = new TextFlow();
 
         //ToDo: add more Text for extra info.
+        id = new Text();
+        id.setText("ID: \n");
         seq = new Text();
-        seq.setText("ID: ");
+        seq.setText("Seq: ");
        
-        infoList.getChildren().addAll(seq);
+        infoList.getChildren().addAll(id, seq);
     }
 
     /**
      * Modify the information of the Node.
-     * @param info desired info.
+     * @param ID desired info.
      */
-    public void modifyNodeInfo(String info) {
-        seq.setText("ID: " + info);
+    public void modifyNodeInfo(String ID) {
+        id.setText("ID: " + ID + "\n");
     }
 
     /**
