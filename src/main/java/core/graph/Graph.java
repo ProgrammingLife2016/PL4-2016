@@ -129,64 +129,6 @@ public class Graph {
     }
 
     /**
-     * Unused at this point of time.
-     */
-    public void addPhylogeneticTree() {
-
-        try {
-            setup();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Implementing phylogenetic tree here.
-     */
-    //TreeItem current;
-
-    /**
-     * Setup method for the PHYLOGENETIC Tree.
-     *
-     * @throws IOException Throw exception on read failure.
-     */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    void setup() throws IOException {
-//        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-//        BufferedReader r = new BufferedReader(new FileReader(f));
-//        String t = r.readLine();
-//        r.close();
-//
-//        current = TreeParser.parse(t);
-//
-//        Model model = getModel();
-//        int i = 1;
-//
-//        Queue<TreeItem> q = new LinkedList<>();
-//        //ArrayList<Integer> done = new ArrayList<>();
-//
-//        System.out.println(current.getName());
-//        q.add(current);
-//        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
-//        System.out.println("Cell added: " + i);
-//
-//        while (!q.isEmpty()) {
-//            current = q.poll();
-//            //From node
-//            int j = i;
-//
-//            for (TreeItem child : current.getChildren()) {
-//                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
-//                System.out.println("Cell added: " + i);
-//                model.addEdge(j, i, 1);
-//                System.out.println("Link added: " + j + ", " + i);
-//                q.add(child);
-//            }
-//        }
-        endUpdate();
-    }
-
-    /**
      * Getter method for the genomens.
      *
      * @return the genomes.

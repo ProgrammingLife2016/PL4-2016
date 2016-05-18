@@ -2,6 +2,7 @@ package core.graph;
 
 import application.fxobjects.graph.cell.PhylogeneticCell;
 import core.Model;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ public class PhylogeneticTreeTest {
     public void testConstructor() {
         assertNotNull(pt);
     }
+
     /**
      * Test the getModel method.
      */
@@ -38,16 +40,13 @@ public class PhylogeneticTreeTest {
     }
 
     /**
-     * Test the setup method.
+     * Test the getTreeFromFile method.
      */
     @Test
-    public void testSetup() {
+    public void testGetTreeFromFile() {
         try {
-            Model model = pt.getModel();
-            assertEquals(0, model.getTree().getLeafCount());
-
-            pt.setup();
-            assertNotEquals(0, model.getTree().getLeafCount());
+            Tree tree = pt.getTreeFromFile();
+            assertNotEquals(0, tree.getLeafCount());
         } catch (IOException e) {
             e.printStackTrace();
         }
