@@ -123,18 +123,6 @@ public class ModelTest {
     }
 
     /**
-     * Test the addLevelMap method.
-     */
-    @Test
-    public void testAddLevelMap() {
-        Model m = new Model();
-
-        HashMap<Integer, Node> levelMap = new HashMap<>();
-        m.addLevelMap(levelMap);
-        assertEquals(1, m.getLevelMaps().size());
-    }
-
-    /**
      * Test the getLevelMaps method.
      */
     @Test

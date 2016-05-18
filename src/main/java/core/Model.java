@@ -154,14 +154,6 @@ public class Model {
     }
 
     /**
-     * Add a level map to the model.
-     * @param levelMap HashMap containing all nodes of a certain zoomlevel.
-     */
-    public void addLevelMap(HashMap<Integer, Node> levelMap) {
-        this.levelMaps.add(levelMap);
-    }
-
-    /**
      * Return a list of level maps.
      * @return A list of level maps.
      */
