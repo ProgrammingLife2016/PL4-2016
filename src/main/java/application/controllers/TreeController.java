@@ -21,12 +21,13 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Class constructor.
-     * @param pt    A phylogenetic tree.
+     *
+     * @param pt A phylogenetic tree.
      */
-    public TreeController(PhylogeneticTree pt) {
+    public TreeController(PhylogeneticTree pt, MainController m) {
         super(new ScrollPane());
         this.pt = pt;
-        this.graphMouseHandling = new GraphMouseHandling();
+        this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -41,9 +42,12 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Get the phylogenetic tree.
+     *
      * @return The phylogenetic tree.
      */
-    public PhylogeneticTree getPT() { return pt; }
+    public PhylogeneticTree getPT() {
+        return pt;
+    }
 
 
     @Override

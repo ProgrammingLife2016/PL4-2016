@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.Main;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import core.graph.Graph;
@@ -26,14 +27,15 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Constructor method for this class.
-     * @param g          the graph.
+     *
+     * @param g   the graph.
      * @param ref the reference string.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref) {
+    public GraphController(Graph g, Object ref, MainController m) {
         super(new ScrollPane());
         this.graph = g;
-        this.graphMouseHandling = new GraphMouseHandling();
+        this.graphMouseHandling = new GraphMouseHandling(m);
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

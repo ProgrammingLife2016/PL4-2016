@@ -63,7 +63,7 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
 
         createMenu();
-        createInfoList();
+        createInfoList("");
     }
 
     /**
@@ -71,13 +71,17 @@ public class MainController extends Controller<BorderPane> {
      * - A list with all genome strains.
      * - A box with info on a selected node.
      */
-    private void createInfoList() {
+    private void createInfoList(String info) {
         listVBox = new VBox();
 
-        createList();
-        createNodeInfo();
+        if(info == "") {
+            createList();
+        }
+
+        createNodeInfo(info);
 
         listVBox.getChildren().addAll(list, infoList);
+
     }
 
     /**
@@ -97,13 +101,13 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Create an info panel to show the information on a node.
      */
-    private void createNodeInfo() {
+    public void createNodeInfo(String info) {
         infoList = new TextFlow();
 
         //ToDo: add more Text for extra info.
         Text seq = new Text();
-        seq.setText("Test");
-
+        seq.setText("ID: " + info);
+       
         infoList.getChildren().addAll(seq);
     }
 
@@ -114,7 +118,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(graph, ref);
+        GraphController graphController = new GraphController(graph, ref, this);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         List<String> genomes = graphController.getGenomes();
@@ -130,7 +134,7 @@ public class MainController extends Controller<BorderPane> {
         try {
             PhylogeneticTree pt = new PhylogeneticTree();
             pt.setup();
-            TreeController treeController = new TreeController(pt);
+            TreeController treeController = new TreeController(pt, this);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
         } catch (IOException e) {

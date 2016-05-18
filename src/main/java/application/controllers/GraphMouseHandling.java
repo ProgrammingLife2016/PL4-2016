@@ -11,11 +11,15 @@ import javafx.scene.input.MouseEvent;
  * Class responsible for the handling of mouse events
  */
 public class GraphMouseHandling {
+    MainController mainController;
 
     //final DragContext dragContext = new DragContext();
 
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
+        System.out.println(node.getCellId());
+        mainController.createNodeInfo(node.getCellId()+"");
+
     };
 
     /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
@@ -43,8 +47,8 @@ public class GraphMouseHandling {
      * Class constructor.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphMouseHandling() {
-
+    public GraphMouseHandling(MainController m) {
+        mainController = m;
     }
 
     /**
