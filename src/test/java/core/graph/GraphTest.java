@@ -88,6 +88,6 @@ public class GraphTest {
         g.setGenomes(genomes);
         assertEquals(2, g.getGenomes().size());
         assertEquals("1", g.getGenomes().get(0));
-        assertEquals("2", g.getGenomes().get(0));
+        assertEquals("2", g.getGenomes().get(1));
     }
 }
