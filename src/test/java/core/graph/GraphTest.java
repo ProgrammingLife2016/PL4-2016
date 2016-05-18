@@ -71,17 +71,17 @@ public class GraphTest {
      * added to the model.
      * @throws IOException Throw exception on file read failure.
      */
-    @Test
-    public void testAddGraphComponents() throws IOException {
-        g.setModel(mockedModel);
-        g.setresetModel(false);
-
-        assertEquals(mockedModel, g.getModel());
-
-        g.addGraphComponents(null);
-        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
-        verify(mockedModel, atLeast(1)).addEdge(anyInt(), anyInt(), anyInt());
-    }
+//    @Test
+//    public void testAddGraphComponents() throws IOException {
+//        g.setModel(mockedModel);
+//        g.setresetModel(false);
+//
+//        assertEquals(mockedModel, g.getModel());
+//
+//        g.addGraphComponents(null);
+//        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+//        verify(mockedModel, atLeast(1)).addEdge(anyInt(), anyInt(), anyInt());
+//    }
 
     /**
      * Test the intersection method.
