@@ -171,6 +171,14 @@ public class Node {
         return genomes;
     }
 
+    public String getGenomesAsString() {
+        String toret = "";
+        for(String s:getGenomes()) {
+            toret+= " • " + s + "\n";
+        }
+        return toret;
+    }
+
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }

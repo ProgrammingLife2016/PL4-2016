@@ -24,8 +24,8 @@ public class GraphMouseHandling {
         System.out.println(mainController.getGraphController().getGraph().getModel().getLevelMaps().size());
 
         String info = "";
-        info += "Id: \n" + clicked.getId() + "\n";
-        info += "Genomes in Node: \n" + clicked.getGenomes().toString() + "\n";
+        info += "Genome ID: " + clicked.getId() + "\n";
+        info += clicked.getGenomes().size() + " Genomes in Node: \n" + clicked.getGenomesAsString() + "\n";
         info += "Seq: \n" + clicked.getSequence() + "\n";
 
         mainController.modifyNodeInfo(info);
