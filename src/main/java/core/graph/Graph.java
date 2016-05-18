@@ -56,10 +56,11 @@ public class Graph {
         inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
-        model.setLevelMaps(levelMaps);
 
         //Reset the model, since we have another reference.
         model = new Model();
+        model.setLevelMaps(levelMaps);
+
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
         } else if (depth < 0) {
