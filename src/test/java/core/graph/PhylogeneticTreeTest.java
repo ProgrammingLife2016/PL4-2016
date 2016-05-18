@@ -1,21 +1,24 @@
 package core.graph;
 
 import core.Model;
+import core.graph.cell.CellType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by user on 18-5-2016.
  */
 public class PhylogeneticTreeTest {
 
-    PhylogeneticTree pt;
+    private PhylogeneticTree pt;
+
+    private Model mockedModel;
 
     /**
      * Setup a new Phylogenetic Tree instance.
@@ -23,6 +26,9 @@ public class PhylogeneticTreeTest {
     @Before
     public void setUp() {
         pt = new PhylogeneticTree();
+        mockedModel = mock(Model.class);
+
+        when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
     }
 
     /**
@@ -60,7 +66,12 @@ public class PhylogeneticTreeTest {
      */
     @Test
     public void testSetup() {
-        Model model = mock(Model.class);
-        pt.setModel(model);
+        pt.setModel(mockedModel);
+        try {
+            pt.setup();
+            verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

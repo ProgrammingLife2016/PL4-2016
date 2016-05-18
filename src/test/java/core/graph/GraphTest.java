@@ -2,20 +2,27 @@ package core.graph;
 
 import core.Model;
 import core.Node;
+import core.graph.cell.CellType;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by user on 18-5-2016.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class GraphTest {
     private Graph g;
+
+    private Model mockedModel;
 
     /**
      * Initialize a new graph instance.
@@ -23,6 +30,9 @@ public class GraphTest {
     @Before
     public void setUp() {
         g = new Graph();
+        mockedModel = mock(Model.class);
+
+        when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
     }
 
     /**
@@ -57,12 +67,20 @@ public class GraphTest {
     }
 
     /**
-     * Test the addGraphComponents method.
+     * Test the addGraphComponents method to see whether edges and cells are actually
+     * added to the model.
+     * @throws IOException Throw exception on file read failure.
      */
     @Test
-    public void testAddGraphComponents() {
-        Model model = mock(Model.class);
-        g.setModel(model);
+    public void testAddGraphComponents() throws IOException {
+        g.setModel(mockedModel);
+        g.setresetModel(false);
+
+        assertEquals(mockedModel, g.getModel());
+
+        g.addGraphComponents(null);
+        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+        verify(mockedModel, atLeast(1)).addEdge(anyInt(), anyInt(), anyInt());
     }
 
     /**

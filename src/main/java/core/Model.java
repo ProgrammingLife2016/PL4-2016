@@ -121,8 +121,9 @@ public class Model {
      * @param id the id, which represents the sequence.
      * @param seq The genome sequence of a cell.
      * @param type The type of cell.
+     * @return True for testing purposes.
      */
-    public void addCell(int id, String seq, CellType type) {
+    public Boolean addCell(int id, String seq, CellType type) {
         switch (type) {
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, seq);
@@ -139,18 +140,23 @@ public class Model {
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }
+
+        return false;
     }
 
     /**
      * Method to add a Cell (Node).
      * @param cell The cell (Node) to add.
+     * @return True for testing purposes.
      */
-    public void addCell(Cell cell) {
+    public Boolean addCell(Cell cell) {
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
 
             cellMap.put(cell.getCellId(), cell);
         }
+
+        return true;
     }
 
     /**
@@ -174,8 +180,10 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      * @param width The width of the edge.
+     * @return True for testing purposes.
+
      */
-    public void addEdge(int sourceId, int targetId, int width) {
+    public Boolean addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
@@ -185,6 +193,8 @@ public class Model {
         } else {
             System.out.println("Nullpointer in edge, Edge not added.");
         }
+
+        return true;
     }
 
     /**

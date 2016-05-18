@@ -55,12 +55,14 @@ public class PhylogeneticTree {
     }
 
     /**
-     * Add TreeNodes to the model.
+     * Add TreeNodes to the model to see whether cells are actually added to the model.
      * @throws IOException  Throw exception on read failure.
      */
     public void setup() throws IOException {
-        model.setTree(getTreeFromFile());
-        for (TreeNode leaf : model.getTree().nodes) {
+        Tree tree = getTreeFromFile();
+        model.setTree(tree);
+
+        for (TreeNode leaf : tree.nodes) {
             model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
         }
     }

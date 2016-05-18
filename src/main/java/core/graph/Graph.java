@@ -16,9 +16,12 @@ import java.util.*;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
 public class Graph {
 
+    private Boolean resetModel = true;
+
     private Model model;
 
     private List<String> genomes = new ArrayList<>();
+
 
     /**
      * Class constructor.
@@ -27,23 +30,6 @@ public class Graph {
         this.model = new Model();
     }
 
-    /**
-     * Get the model of the Graph.
-     *
-     * @return The model of the graph.
-     */
-    public Model getModel() {
-        return model;
-    }
-
-    /**
-     * Set the model of the Graph.
-     *
-     * @param model The model of the graph.
-     */
-    public void setModel(Model model) {
-        this.model = model;
-    }
     /**
      * Read a node map from a gfa file on disk.
      * @return  A node map read from file.
@@ -70,7 +56,10 @@ public class Graph {
         model.setLevelMaps(levelMaps);
 
         //Reset the model, since we have another reference.
-        model = new Model();
+        if (resetModel) {
+            model = new Model();
+        }
+
         HashMap<Integer, Node> nodeMap = levelMaps.get(0);
 
         Node root = nodeMap.get(1);
@@ -112,12 +101,11 @@ public class Graph {
      * Method that updates the model.
      */
     public void endUpdate() {
-        // every cell must have a parent, if it doesn't, then the graphParent is
-        // the parent
-        getModel().attachOrphansToGraphParent(model.getAddedCells());
+        // every cell must have a parent, if it doesn't, then the graphParent is the parent.
+        model.attachOrphansToGraphParent(model.getAddedCells());
 
         // merge added & removed cells with all cells
-        getModel().merge();
+        model.merge();
     }
 
     /**
@@ -137,6 +125,33 @@ public class Graph {
         return i;
     }
 
+    /**
+     * Set whether the model should be reset in the addGraphComponents method.
+     * This option is only used for testing purposes to allow for mocks.
+     * @param resetModel whether the model should be reset in the addGraphComponents method.
+     */
+    public void setresetModel(Boolean resetModel) {
+        this.resetModel = resetModel;
+    }
+
+    /**
+     * Get the model of the Graph.
+     *
+     * @return The model of the graph.
+     */
+    public Model getModel() {
+        return model;
+    }
+
+    /**
+     * Set the model of the Graph.
+     *
+     * @param model The model of the graph.
+     */
+    public void setModel(Model model) {
+        this.model = model;
+    }
+    
     /**
      * Getter method for the genomens.
      *
