@@ -145,7 +145,7 @@ public class Model {
      * Method to add a Cell (Node).
      * @param cell The cell (Node) to add.
      */
-    private void addCell(Cell cell) {
+    public void addCell(Cell cell) {
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
 

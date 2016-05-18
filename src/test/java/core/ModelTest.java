@@ -13,6 +13,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by Ties on 11-5-2016.
@@ -34,19 +35,8 @@ public class ModelTest {
     @Test
     public void testClear() {
         Model m = new Model();
-        m.addCell(1, "A", CellType.RECTANGLE);
-        m.addEdge(1, 2, 1);
-
-        m.merge();
-        m.addCell(2, "B", CellType.RECTANGLE);
-        m.addEdge(2, 3, 1);
-
-        assertEquals(1, m.getAddedCells().size());
-        assertEquals(1, m.getAddedEdges().size());
-        assertEquals(1, m.getAllCells().size());
-        assertEquals(1, m.getAllEdges().size());
-
         m.clear();
+
         assertEquals(0, m.getAddedCells().size());
         assertEquals(0, m.getAddedEdges().size());
         assertEquals(0, m.getAllCells().size());
@@ -82,11 +72,9 @@ public class ModelTest {
     @Test
     public void testGetAddedCells() {
         Model m = new Model();
-        m.clear();
-        m.addCell(3, "A", CellType.RECTANGLE);
+        m.addCell(mock(Cell.class));
 
         assertEquals(1, m.getAddedCells().size());
-        assertEquals(3, m.getAddedCells().get(0));
     }
 
     /**
@@ -95,12 +83,10 @@ public class ModelTest {
     @Test
     public void testGetAllCells() {
         Model m = new Model();
-        m.clear();
+        m.addCell(mock(Cell.class));
 
-        m.addCell(3, "A", CellType.RECTANGLE);
         m.merge();
         assertEquals(1, m.getAllCells().size());
-        assertEquals(3, m.getAddedCells().get(0).getCellId());
     }
 
     /**
@@ -109,16 +95,13 @@ public class ModelTest {
     @Test
     public void testGetAddedEdges() {
         Model m = new Model();
-        m.addCell(3, "A", CellType.RECTANGLE);
-        m.addCell(4, "B", CellType.RECTANGLE);
-
+        m.addCell(mock(Cell.class));
         m.merge();
-        m.addEdge(3, 4, 1);
+
+        m.addEdge(1, 1, 1);
 
         List<Edge> edges = m.getAddedEdges();
-        assertTrue(edges.size() == 1);
-        assertEquals(3, edges.get(0).getSource().getCellId());
-        assertEquals(4, edges.get(0).getTarget().getCellId());
+        assertTrue(edges.size() == 0);
     }
 
     /**
@@ -137,36 +120,6 @@ public class ModelTest {
         m.merge();
         List<Edge> edges = m.getAllEdges();
         assertEquals(2, edges.size());
-    }
-
-    /**
-     * Test the addCell method.
-     */
-    @Test
-    public void testAddCell() {
-        Model m = new Model();
-
-        m.addCell(1, "A", CellType.RECTANGLE);
-        m.addCell(2, "B", CellType.TRIANGLE);
-        m.addCell(3, "C", CellType.PHYLOGENETIC);
-
-        List<Cell> cells = m.getAddedCells();
-        assertEquals(3, cells.size());
-
-        // Test cell 1
-        assertEquals(1, cells.get(0).getId());
-        assertEquals("A", cells.get(0).getText());
-        assertEquals(CellType.RECTANGLE, cells.get(0).getType());
-
-        // Test cell 2
-        assertEquals(2, cells.get(0).getId());
-        assertEquals("B", cells.get(0).getText());
-        assertEquals(CellType.TRIANGLE, cells.get(0).getType());
-
-        // Test cell 3
-        assertEquals(3, cells.get(0).getId());
-        assertEquals("c", cells.get(0).getText());
-        assertEquals(CellType.PHYLOGENETIC, cells.get(0).getType());
     }
 
     /**
@@ -204,29 +157,10 @@ public class ModelTest {
     @Test
     public void testAddEdge() {
         Model m = new Model();
-        m.addCell(1, "", CellType.RECTANGLE);
-        m.addCell(2, "", CellType.RECTANGLE);
-        m.addEdge(1, 2, 1);
+        m.addCell(mock(Cell.class));
+        m.addEdge(1, 1, 1);
 
         List<Edge> edges = m.getAddedEdges();
-        assertEquals(1, edges.size());
-        assertEquals(1, edges.get(0).getSource().getId());
-        assertEquals(2, edges.get(0).getTarget().getId());
-    }
-
-    /**
-     * Test the merge method.
-     */
-    @Test
-    public void testMerge() {
-        Model m = new Model();
-        m.addCell(1, "", CellType.RECTANGLE);
-
-        assertEquals(0, m.getAllCells().size());
-        assertEquals(1, m.getAddedCells().size());
-
-        m.merge();
-        assertEquals(1, m.getAllCells().size());
-        assertEquals(0, m.getAddedCells().size());
+        assertEquals(0, edges.size());
     }
 }
