@@ -1,49 +1,65 @@
 package core.graph;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
- * Created by Ties on 11-5-2016.
+ * Created by user on 18-5-2016.
  */
 public class GraphTest {
 
-    Graph gh = new Graph();
+    @Before
+    public void setUp() {
 
-    /**
-     * Setup for this test.
-     */
-    @Test
-    public void setup() {
-//        try {
-//            //gh.addGraphComponents(null);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
-     * Test is onject is not null.
-     */
-    @Test
-    public void testConstructor() {
-        assertNotNull(gh.getModel());
-    }
-
-    /**
-     * Since we dont know which file we read, we can only assert NOT null.
+     * Test the getModel method.
      */
     @Test
     public void testGetModel() {
-        assertNotNull(gh.getModel() == null);
+
     }
 
     /**
-     * Method will return true is it successfully loads a file.
+     * Test the addGraphComponents method.
      */
     @Test
     public void testAddGraphComponents() {
-        //assertTrue(gh.addGraphComponents());
+
+    }
+
+    /**
+     * Test the endUpdate method.
+     */
+    @Test
+    public void testEndUpdate() {
+
+    }
+
+    /**
+     * Test the addPhylogeneticTree method
+     */
+    @Test
+    public void testAddPhylogeneticTree() {
+
+    }
+
+    /**
+     * Test the setup method.
+     */
+    @Test
+    public void testSetup() {
+
+    }
+
+    /**
+     * Test the getGenomes method.
+     */
+    @Test
+    public void testGetGenomes() {
+
     }
 }
