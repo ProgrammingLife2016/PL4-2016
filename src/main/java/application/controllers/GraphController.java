@@ -32,7 +32,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref the reference string.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref, MainController m) {
+    public GraphController(Graph g, Object ref, MainController m, int depth) {
         super(new ScrollPane());
         this.graph = g;
         this.graphMouseHandling = new GraphMouseHandling(m);
@@ -47,7 +47,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init(ref);
+            init(ref, depth);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,10 +74,10 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref the reference string.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref) throws IOException {
-        System.out.println("init");
+    public void init(Object ref, int depth) throws IOException {
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents(ref);
+
+        graph.addGraphComponents(ref, depth);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());

@@ -211,7 +211,7 @@ public class Model {
             Edge edge = new Edge(sourceCell, targetCell, width);
             addedEdges.add(edge);
         } else {
-            System.out.println("Nullpointer in edge, Edge not added.");
+            //System.out.println("Nullpointer in edge, Edge not added.");
         }
     }
 

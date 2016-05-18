@@ -18,7 +18,7 @@ public class GraphMouseHandling {
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
         System.out.println(node.getCellId());
-        mainController.modifyNodeInfo(node.getCellId()+"");
+        mainController.modifyNodeInfo(node.getCellId() + "");
 
     };
 
@@ -53,6 +53,7 @@ public class GraphMouseHandling {
 
     /**
      * Assign mouse events handlers to a given Node.
+     *
      * @param node Node to get mouse handlers assigned.
      */
     public void setMouseHandling(final Node node) {

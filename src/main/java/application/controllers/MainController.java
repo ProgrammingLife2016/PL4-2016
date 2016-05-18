@@ -31,6 +31,8 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     ScrollPane screen;
     @FXML
+    ScrollPane screen2;
+    @FXML
     MenuBar menuBar;
     @FXML
     FlowPane pane;
@@ -44,6 +46,8 @@ public class MainController extends Controller<BorderPane> {
     Text id;
     @FXML
     Text seq;
+
+    private int currentView = 0;
 
 
     Rectangle2D screenSize;
@@ -78,7 +82,7 @@ public class MainController extends Controller<BorderPane> {
     private void createInfoList(String info) {
         listVBox = new VBox();
 
-        if(info == "") {
+        if (info == "") {
             createList();
         }
 
@@ -113,12 +117,13 @@ public class MainController extends Controller<BorderPane> {
         id.setText("ID: \n");
         seq = new Text();
         seq.setText("Seq: ");
-       
+
         infoList.getChildren().addAll(id, seq);
     }
 
     /**
      * Modify the information of the Node.
+     *
      * @param ID desired info.
      */
     public void modifyNodeInfo(String ID) {
@@ -132,12 +137,15 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(graph, ref, this);
+        GraphController graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
+
         this.getRoot().setCenter(screen);
+
         List<String> genomes = graphController.getGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
+
         showListVBox();
     }
 
@@ -169,8 +177,9 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Switches the scene to the graph view.
      */
-    public void switchScene() {
-        fillGraph(null);
+    public void switchScene(int delta) {
+        currentView+=delta;
+
     }
 
     /**

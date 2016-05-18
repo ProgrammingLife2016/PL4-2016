@@ -45,11 +45,11 @@ public class Graph {
      * Add the nodes and edges of the graph to the model.
      *
      * @param ref the reference string.
+     * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
-     * @return  Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref) throws IOException {
+    public Boolean addGraphComponents(Object ref, int depth) throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
@@ -60,7 +60,14 @@ public class Graph {
 
         //Reset the model, since we have another reference.
         model = new Model();
-        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
+
+        if (depth > levelMaps.size() - 1) {
+            depth = levelMaps.size() - 1;
+        } else if (depth < 0) {
+            depth = 0;
+        }
+
+        HashMap<Integer, Node> nodeMap = levelMaps.get(0);
 
         Node root = nodeMap.get(1);
 
@@ -78,7 +85,9 @@ public class Graph {
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-            if (from == null) { continue; }
+            if (from == null) {
+                continue;
+            }
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
@@ -102,6 +111,7 @@ public class Graph {
     /**
      * Method that updates the model.
      */
+
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is
         // the parent
