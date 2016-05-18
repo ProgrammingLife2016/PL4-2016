@@ -42,20 +42,28 @@ public class Graph {
     }
 
     /**
-     * Add the nodes and edges of the graph to the model.
-     *
-     * @param ref the reference string.
+     * Read a node map from a gfa file on disk.
+     * @return  A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
-     * @return  Boolean used for testing purposes.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref) throws IOException {
+    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
         inputStream.close();
 
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        return startMap;
+    }
+
+    /**
+     * Add the nodes and edges of the graph to the model.
+     *
+     * @param ref the reference string.
+     * @throws IOException Throw exception on read GFA read failure.
+     */
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    public void addGraphComponents(Object ref) throws IOException {
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(getNodeMapFromFile());
         model.setLevelMaps(levelMaps);
 
         //Reset the model, since we have another reference.
@@ -95,8 +103,6 @@ public class Graph {
                         to.getGenomes()));
             }
         }
-
-        return true;
     }
 
     /**
@@ -118,7 +124,7 @@ public class Graph {
      * @param l2 The second list.
      * @return Number of element that exist in both lists.
      */
-    private int intersection(List<String> l1, List<String> l2) {
+    public int intersection(List<String> l1, List<String> l2) {
         int i = 0;
         for (String s : l1) {
             if (l2.contains(s)) {
@@ -135,5 +141,14 @@ public class Graph {
      */
     public List<String> getGenomes() {
         return genomes;
+    }
+
+    /**
+     * Setter method for the genomens.
+     *
+     * @return the genomes.
+     */
+    public void setGenomes(List<String> genomes) {
+        this.genomes = genomes;
     }
 }
