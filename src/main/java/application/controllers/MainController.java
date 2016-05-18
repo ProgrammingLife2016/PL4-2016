@@ -40,6 +40,8 @@ public class MainController extends Controller<BorderPane> {
     TextFlow infoList;
     @FXML
     VBox listVBox;
+    @FXML
+    Text seq;
 
 
     Rectangle2D screenSize;
@@ -78,7 +80,7 @@ public class MainController extends Controller<BorderPane> {
             createList();
         }
 
-        createNodeInfo(info);
+        createNodeInfo();
 
         listVBox.getChildren().addAll(list, infoList);
 
@@ -101,14 +103,22 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Create an info panel to show the information on a node.
      */
-    public void createNodeInfo(String info) {
+    private void createNodeInfo() {
         infoList = new TextFlow();
 
         //ToDo: add more Text for extra info.
-        Text seq = new Text();
-        seq.setText("ID: " + info);
+        seq = new Text();
+        seq.setText("ID: ");
        
         infoList.getChildren().addAll(seq);
+    }
+
+    /**
+     * Modify the information of the Node.
+     * @param info desired info.
+     */
+    public void modifyNodeInfo(String info) {
+        seq.setText("ID: " + info);
     }
 
     /**
