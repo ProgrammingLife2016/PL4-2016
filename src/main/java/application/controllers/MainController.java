@@ -3,9 +3,12 @@ package application.controllers;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
@@ -44,8 +47,6 @@ public class MainController extends Controller<BorderPane> {
     VBox listVBox;
     @FXML
     Text id;
-    @FXML
-    Text seq;
 
     private int currentView = 0;
     private GraphController graphController;
@@ -115,11 +116,11 @@ public class MainController extends Controller<BorderPane> {
 
         //ToDo: add more Text for extra info.
         id = new Text();
-        id.setText("ID: \n");
-        seq = new Text();
-        seq.setText("Seq: ");
+        id.setText("Select Node to view info");
+        id.setWrappingWidth(20);
+        id.maxWidth(60);
 
-        infoList.getChildren().addAll(id, seq);
+        infoList.getChildren().addAll(id);
     }
 
     /**
@@ -128,7 +129,7 @@ public class MainController extends Controller<BorderPane> {
      * @param ID desired info.
      */
     public void modifyNodeInfo(String ID) {
-        id.setText("ID: " + ID + "\n");
+        id.setText(ID);
     }
 
     /**

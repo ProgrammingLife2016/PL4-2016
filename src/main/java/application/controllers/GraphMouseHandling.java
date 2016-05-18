@@ -19,17 +19,16 @@ public class GraphMouseHandling {
         Cell node = (Cell) event.getSource();
         System.out.println(node.getCellId());
 
-        //core.Node clicked = mainController.getGraphController().getGraph().getModel().getLevelMaps().get(0).get(node.getCellId());
+        core.Node clicked = mainController.getGraphController().getGraph().getModel().getLevelMaps().get(0).get(node.getCellId());
 
         System.out.println(mainController.getGraphController().getGraph().getModel().getLevelMaps().size());
 
         String info = "";
-//        info += "Id: \n" + clicked.getId() + "\n";
-//        info += "Genomes" +
-//                " in Node: \n" + clicked.getGenomes().toString();
-//        info += "Seq: \n" + clicked.getSequence() + "\n";
+        info += "Id: \n" + clicked.getId() + "\n";
+        info += "Genomes in Node: \n" + clicked.getGenomes().toString() + "\n";
+        info += "Seq: \n" + clicked.getSequence() + "\n";
 
-        //mainController.modifyNodeInfo(info);
+        mainController.modifyNodeInfo(info);
     };
 
     /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
