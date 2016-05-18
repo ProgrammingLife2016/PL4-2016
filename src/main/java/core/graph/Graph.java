@@ -60,14 +60,12 @@ public class Graph {
 
         //Reset the model, since we have another reference.
         model = new Model();
-
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
         } else if (depth < 0) {
             depth = 0;
         }
-
-        HashMap<Integer, Node> nodeMap = levelMaps.get(0);
+        HashMap<Integer, Node> nodeMap = levelMaps.get(9);
 
         Node root = nodeMap.get(1);
 

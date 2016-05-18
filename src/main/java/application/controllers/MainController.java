@@ -48,6 +48,7 @@ public class MainController extends Controller<BorderPane> {
     Text seq;
 
     private int currentView = 0;
+    private GraphController graphController;
 
 
     Rectangle2D screenSize;
@@ -137,7 +138,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(graph, ref, this, currentView);
+        graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
 
         this.getRoot().setCenter(screen);
@@ -201,5 +202,9 @@ public class MainController extends Controller<BorderPane> {
      */
     private void hideListVBox() {
         this.getRoot().getChildren().remove(listVBox);
+    }
+
+    public GraphController getGraphController() {
+        return graphController;
     }
 }
