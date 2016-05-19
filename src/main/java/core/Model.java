@@ -191,6 +191,7 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      * @param width    The width of the edge.
+     * @return  True for testing purposes.
      */
     public Boolean addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);

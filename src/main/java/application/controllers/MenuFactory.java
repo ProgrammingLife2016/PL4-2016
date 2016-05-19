@@ -64,8 +64,8 @@ public class MenuFactory {
         resetView = initMenuItem("Reset", null, event ->
                 mainController.switchScene(+100));
 
-        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree
-                , zoomIn, zoomOut, resetView);
+        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, zoomIn,
+                zoomOut, resetView);
         return viewMenu;
 
     }

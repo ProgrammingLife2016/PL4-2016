@@ -236,11 +236,14 @@ public class Node {
      * @return the String.
      */
     public String getGenomesAsString() {
-        String toret = "";
+        StringBuilder sb = new StringBuilder();
+
         for (String s : getGenomes()) {
-            toret += " • " + s + "\n";
+            sb.append(" • ");
+            sb.append(s);
+            sb.append('\n');
         }
-        return toret;
+        return sb.toString();
     }
 
     /**
