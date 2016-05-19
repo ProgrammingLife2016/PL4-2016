@@ -87,7 +87,7 @@ public class MainController extends Controller<BorderPane> {
         infoScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         infoScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         infoScroller.prefHeightProperty().bind(listVBox.heightProperty());
-        infoScroller.prefWidthProperty().bind(listVBox.widthProperty());
+        infoScroller.prefWidth(screenSize.getWidth() / 5);
 
         if (info == "") {
             createList();
@@ -106,6 +106,7 @@ public class MainController extends Controller<BorderPane> {
     private void createList() {
         list = new ListView<>();
         list.setPlaceholder(new Label("No Genomes Loaded."));
+        list.prefHeightProperty().bind(listVBox.heightProperty());
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == (null))) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
