@@ -29,13 +29,9 @@ import java.util.ResourceBundle;
 public class MainController extends Controller<BorderPane> {
 
     @FXML
-    ScrollPane screen;
+    private ScrollPane screen;
     @FXML
-    ScrollPane screen2;
-    @FXML
-    MenuBar menuBar;
-    @FXML
-    FlowPane pane;
+    private MenuBar menuBar;
     @FXML
     ListView list;
     @FXML
@@ -124,8 +120,6 @@ public class MainController extends Controller<BorderPane> {
 
         id = new Text();
         id.setText("Select Node to view info");
-        id.setWrappingWidth(20);
-        id.maxWidth(60);
 
         infoList.getChildren().addAll(id);
     }
