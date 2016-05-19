@@ -44,8 +44,7 @@ public class MenuFactory {
 
 
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB),
-                event -> mainController.switchScene(-1));
+        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
 
         Menu helpMenu = initMenu("Help", shortcuts);
         return helpMenu;
@@ -57,9 +56,15 @@ public class MenuFactory {
                 mainController.fillGraph(null));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        resetView = initMenuItem("Reset", null, null);
+        MenuItem zoomOut = initMenuItem("Zoom out",null,event ->
+                mainController.switchScene(+1));
+        MenuItem zoomIn = initMenuItem("Zoom in",null,event ->
+                mainController.switchScene(-1));
 
-        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView);
+        resetView = initMenuItem("Reset", null, event ->
+                mainController.switchScene(+100));
+
+        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree,zoomIn,zoomOut, resetView);
         return viewMenu;
 
     }

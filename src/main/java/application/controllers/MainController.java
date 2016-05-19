@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.Main;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -11,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -33,17 +33,17 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
     @FXML
-    ListView list;
+    private ListView list;
     @FXML
-    TextFlow infoList;
+    private TextFlow infoList;
     @FXML
-    VBox listVBox;
+    private VBox listVBox;
     @FXML
-    Text id;
+    private Text id;
     @FXML
-    ScrollPane infoScroller;
+    private ScrollPane infoScroller;
 
-    private int currentView = 0;
+    private int currentView = 9;
     private GraphController graphController;
 
 
@@ -185,6 +185,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void switchScene(int delta) {
         currentView += delta;
+        currentView = Math.max(0,currentView);
+
+        currentView = Math.min(9,currentView);
+        fillGraph(null);
 
     }
 

@@ -66,7 +66,8 @@ public class Graph {
         } else if (depth < 0) {
             depth = 0;
         }
-        HashMap<Integer, Node> nodeMap = levelMaps.get(9);
+        HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+        System.out.println("Loading map: " + depth);
 
         Node root = nodeMap.get(1);
 
