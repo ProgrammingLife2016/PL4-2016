@@ -87,10 +87,6 @@ public class GraphController extends Controller<ScrollPane> {
 
         graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
 
-        // remove components from graph pane
-        root.getChildren().removeAll(graph.getModel().getRemovedCells());
-        root.getChildren().removeAll(graph.getModel().getRemovedEdges());
-
         graph.endUpdate();
         CellLayout layout = new BaseLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);

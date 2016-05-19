@@ -23,11 +23,9 @@ public class Model {
 
     private List<Cell> allCells;
     private List<Cell> addedCells;
-    private List<Cell> removedCells;
 
     private List<Edge> allEdges;
     private List<Edge> addedEdges;
-    private List<Edge> removedEdges;
 
     private Map<Integer, Cell> cellMap; // <id,cell>
 
@@ -51,13 +49,11 @@ public class Model {
     public void clear() {
         allCells = new ArrayList<>();
         addedCells = new ArrayList<>();
-        removedCells = new ArrayList<>();
 
         allEdges = new ArrayList<>();
         addedEdges = new ArrayList<>();
-        removedEdges = new ArrayList<>();
 
-        cellMap = new HashMap<>(); // <id,cell>
+        cellMap = new HashMap<>();
 
         levelMaps = new ArrayList<>();
 
@@ -100,15 +96,6 @@ public class Model {
     }
 
     /**
-     * Get a list of removed cells.
-     *
-     * @return A list of removed cells.
-     */
-    public List<Cell> getRemovedCells() {
-        return removedCells;
-    }
-
-    /**
      * Get a list of all cells.
      *
      * @return A list of all cells.
@@ -127,15 +114,6 @@ public class Model {
     }
 
     /**
-     * Get a list of removed edges.
-     *
-     * @return A list of removed edges.
-     */
-    public List<Edge> getRemovedEdges() {
-        return removedEdges;
-    }
-
-    /**
      * Get a list of all edges.
      *
      * @return A list of all edges.
@@ -150,8 +128,9 @@ public class Model {
      * @param id   the id, which represents the sequence.
      * @param seq  The genome sequence of a cell.
      * @param type The type of cell.
+     * @return True for testing purposes.
      */
-    public void addCell(int id, String seq, CellType type) {
+    public Boolean addCell(int id, String seq, CellType type) {
         switch (type) {
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, seq);
@@ -168,28 +147,24 @@ public class Model {
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);
         }
+
+        return false;
     }
 
     /**
      * Method to add a Cell (Node).
      *
      * @param cell The cell (Node) to add.
+     * @return True for testing purposes.
      */
-    private void addCell(Cell cell) {
+    public Boolean addCell(Cell cell) {
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
 
             cellMap.put(cell.getCellId(), cell);
         }
-    }
 
-    /**
-     * Add a level map to the model.
-     *
-     * @param levelMap HashMap containing all nodes of a certain zoomlevel.
-     */
-    public void addLevelMap(HashMap<Integer, Node> levelMap) {
-        this.levelMaps.add(levelMap);
+        return true;
     }
 
     /**
@@ -217,7 +192,7 @@ public class Model {
      * @param targetId To.
      * @param width    The width of the edge.
      */
-    public void addEdge(int sourceId, int targetId, int width) {
+    public Boolean addEdge(int sourceId, int targetId, int width) {
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
@@ -225,6 +200,8 @@ public class Model {
             Edge edge = new Edge(sourceCell, targetCell, width);
             addedEdges.add(edge);
         }
+
+        return true;
     }
 
     /**
@@ -258,20 +235,12 @@ public class Model {
      * Add and remove cells from the allCells list.
      */
     public void merge() {
-
         // cells
         allCells.addAll(addedCells);
-        allCells.removeAll(removedCells);
-
         addedCells.clear();
-        removedCells.clear();
 
         // edges
         allEdges.addAll(addedEdges);
-        allEdges.removeAll(removedEdges);
-
         addedEdges.clear();
-        removedEdges.clear();
-
     }
 }
