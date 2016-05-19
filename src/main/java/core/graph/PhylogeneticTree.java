@@ -1,14 +1,12 @@
 package core.graph;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
 /**
@@ -35,25 +33,37 @@ public class PhylogeneticTree {
     }
 
     /**
+     * Set the model of the Tree.
+     * @param model The model of the Tree.
+     */
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    /**
      * Set-up the tree model from a Newick data file.
+     * @return  A Newick tree.
      * @throws IOException  Throw exception on read failure.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public void setup() throws IOException {
+    public Tree getTreeFromFile() throws IOException {
         File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new FileReader(f));
         TreeParser tp = new TreeParser(r);
 
-        model.setTree(tp.tokenize("340tree.rooted.TKK"));
-        for (TreeNode leaf : model.getTree().nodes) {
-            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
-        }
+        return tp.tokenize("340tree.rooted.TKK");
     }
 
     /**
-     * Method that updates the model.
+     * Add TreeNodes to the model to see whether cells are actually added to the model.
+     * @throws IOException  Throw exception on read failure.
      */
-    public void endUpdate() {
-        model.merge();
+    public void setup() throws IOException {
+        Tree tree = getTreeFromFile();
+        model.setTree(tree);
+
+        for (TreeNode leaf : tree.nodes) {
+            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
+        }
     }
 }
