@@ -111,7 +111,6 @@ public class MainController extends Controller<BorderPane> {
     private void createNodeInfo() {
         infoList = new TextFlow();
 
-        //ToDo: add more Text for extra info.
         id = new Text();
         id.setText("Select Node to view info");
         id.setWrappingWidth(20);

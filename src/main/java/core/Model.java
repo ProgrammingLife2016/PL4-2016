@@ -19,21 +19,21 @@ import java.util.Map;
  */
 public class Model {
 
-    Cell graphParent;
+    private Cell graphParent;
 
-    List<Cell> allCells;
-    List<Cell> addedCells;
-    List<Cell> removedCells;
+    private List<Cell> allCells;
+    private List<Cell> addedCells;
+    private List<Cell> removedCells;
 
-    List<Edge> allEdges;
-    List<Edge> addedEdges;
-    List<Edge> removedEdges;
+    private List<Edge> allEdges;
+    private List<Edge> addedEdges;
+    private List<Edge> removedEdges;
 
-    Map<Integer, Cell> cellMap; // <id,cell>
+    private Map<Integer, Cell> cellMap; // <id,cell>
 
-    List<HashMap<Integer, Node>> levelMaps;
+    private List<HashMap<Integer, Node>> levelMaps;
 
-    Tree tree;
+    private Tree tree;
 
     /**
      * Class constructor.
