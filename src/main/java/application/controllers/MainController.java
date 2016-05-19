@@ -44,6 +44,8 @@ public class MainController extends Controller<BorderPane> {
     VBox listVBox;
     @FXML
     Text id;
+    @FXML
+    ScrollPane infoScroller;
 
     private int currentView = 0;
     private GraphController graphController;
@@ -80,6 +82,12 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createInfoList(String info) {
         listVBox = new VBox();
+        infoScroller = new ScrollPane();
+
+        infoScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        infoScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        infoScroller.prefHeightProperty().bind(listVBox.heightProperty());
+        infoScroller.prefWidthProperty().bind(listVBox.widthProperty());
 
         if (info == "") {
             createList();
@@ -87,7 +95,8 @@ public class MainController extends Controller<BorderPane> {
 
         createNodeInfo();
 
-        listVBox.getChildren().addAll(list, infoList);
+        infoScroller.setContent(infoList);
+        listVBox.getChildren().addAll(list, infoScroller);
 
     }
 
@@ -110,6 +119,8 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createNodeInfo() {
         infoList = new TextFlow();
+        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
+        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
 
         id = new Text();
         id.setText("Select Node to view info");
