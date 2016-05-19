@@ -26,14 +26,17 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Constructor method for this class.
-     * @param g          the graph.
-     * @param ref the reference string.
+     *
+     * @param g     the graph.
+     * @param ref   the reference string.
+     * @param m     the mainController.
+     * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref) {
+    public GraphController(Graph g, Object ref, MainController m, int depth) {
         super(new ScrollPane());
         this.graph = g;
-        this.graphMouseHandling = new GraphMouseHandling();
+        this.graphMouseHandling = new GraphMouseHandling(m);
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -45,7 +48,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init(ref);
+            init(ref, depth);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,13 +72,14 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref) throws IOException {
-        System.out.println("init");
+    public void init(Object ref, int depth) throws IOException {
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents(ref);
+
+        graph.addGraphComponents(ref, depth);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());

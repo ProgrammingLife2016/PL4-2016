@@ -49,18 +49,31 @@ public class Graph {
      * Add the nodes and edges of the graph to the model.
      *
      * @param ref the reference string.
+     * @param depth the depth to draw.
+     * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void addGraphComponents(Object ref) throws IOException {
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(getNodeMapFromFile());
-        model.setLevelMaps(levelMaps);
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    public Boolean addGraphComponents(Object ref, int depth)
+            throws IOException {
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        inputStream.close();
+
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
 
         //Reset the model, since we have another reference.
-        if (resetModel) {
-            model = new Model();
-        }
+        model = new Model();
+        model.setLevelMaps(levelMaps);
 
-        HashMap<Integer, Node> nodeMap = levelMaps.get(0);
+        if (depth > levelMaps.size() - 1) {
+            depth = levelMaps.size() - 1;
+        } else if (depth < 0) {
+            depth = 0;
+        }
+        HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+        System.out.println("Loading map: " + depth);
 
         Node root = nodeMap.get(1);
 
@@ -78,7 +91,9 @@ public class Graph {
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-            if (from == null) { continue; }
+            if (from == null) {
+                continue;
+            }
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
@@ -95,11 +110,14 @@ public class Graph {
                         to.getGenomes()));
             }
         }
+
+        return true;
     }
 
     /**
      * Method that updates the model.
      */
+
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
         model.attachOrphansToGraphParent(model.getAddedCells());
