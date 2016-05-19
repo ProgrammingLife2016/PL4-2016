@@ -19,13 +19,16 @@ public class GraphMouseHandling {
         Cell node = (Cell) event.getSource();
         System.out.println(node.getCellId());
 
-        core.Node clicked = mainController.getGraphController().getGraph().getModel().getLevelMaps().get(0).get(node.getCellId());
+        core.Node clicked = mainController.getGraphController().getGraph()
+                .getModel().getLevelMaps().get(0).get(node.getCellId());
 
-        System.out.println(mainController.getGraphController().getGraph().getModel().getLevelMaps().size());
+        System.out.println(mainController.getGraphController().getGraph()
+                .getModel().getLevelMaps().size());
 
         String info = "";
         info += "Genome ID: " + clicked.getId() + "\n";
-        info += clicked.getGenomes().size() + " Genomes in Node: \n" + clicked.getGenomesAsString() + "\n";
+        info += clicked.getGenomes().size() + " Genomes in Node: \n"
+                + clicked.getGenomesAsString() + "\n";
         info += "Seq: \n" + clicked.getSequence() + "\n";
 
         mainController.modifyNodeInfo(info);
@@ -54,6 +57,8 @@ public class GraphMouseHandling {
 
     /**
      * Class constructor.
+     *
+     * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphMouseHandling(MainController m) {

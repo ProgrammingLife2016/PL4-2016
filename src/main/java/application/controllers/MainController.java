@@ -123,10 +123,10 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Modify the information of the Node.
      *
-     * @param ID desired info.
+     * @param iD desired info.
      */
-    public void modifyNodeInfo(String ID) {
-        id.setText(ID);
+    public void modifyNodeInfo(String iD) {
+        id.setText(iD);
     }
 
     /**
@@ -175,6 +175,8 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Switches the scene to the graph view.
+     *
+     * @param delta the diff in view to apply.
      */
     public void switchScene(int delta) {
         currentView += delta;
@@ -202,6 +204,11 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().getChildren().remove(listVBox);
     }
 
+    /**
+     * Getter method for the graphController.
+     *
+     * @return the graphController.
+     */
     public GraphController getGraphController() {
         return graphController;
     }

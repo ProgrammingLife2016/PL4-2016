@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.Main;
 import application.fxobjects.graph.cell.BaseLayout;
 import application.fxobjects.graph.cell.CellLayout;
 import core.graph.Graph;
@@ -30,6 +29,8 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param g   the graph.
      * @param ref the reference string.
+     * @param m the mainController.
+     * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(Graph g, Object ref, MainController m, int depth) {
@@ -72,6 +73,7 @@ public class GraphController extends Controller<ScrollPane> {
      * Init method for this class.
      *
      * @param ref the reference string.
+     * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) throws IOException {

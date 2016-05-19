@@ -44,7 +44,8 @@ public class MenuFactory {
 
 
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), event -> mainController.switchScene(-1));
+        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB),
+                event -> mainController.switchScene(-1));
 
         Menu helpMenu = initMenu("Help", shortcuts);
         return helpMenu;
