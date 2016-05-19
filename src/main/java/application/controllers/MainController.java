@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.Main;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -185,9 +184,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void switchScene(int delta) {
         currentView += delta;
-        currentView = Math.max(0,currentView);
+        currentView = Math.max(0, currentView);
 
-        currentView = Math.min(9,currentView);
+        currentView = Math.min(9, currentView);
         fillGraph(null);
 
     }

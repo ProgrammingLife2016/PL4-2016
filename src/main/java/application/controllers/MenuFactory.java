@@ -56,15 +56,16 @@ public class MenuFactory {
                 mainController.fillGraph(null));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        MenuItem zoomOut = initMenuItem("Zoom out",null,event ->
+        MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));
-        MenuItem zoomIn = initMenuItem("Zoom in",null,event ->
+        MenuItem zoomIn = initMenuItem("Zoom in", null, event ->
                 mainController.switchScene(-1));
 
         resetView = initMenuItem("Reset", null, event ->
                 mainController.switchScene(+100));
 
-        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree,zoomIn,zoomOut, resetView);
+        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree
+                , zoomIn, zoomOut, resetView);
         return viewMenu;
 
     }

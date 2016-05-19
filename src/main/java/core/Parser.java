@@ -35,7 +35,8 @@ public class Parser {
      */
     @SuppressWarnings("checkstyle:magicnumbers")
     @SuppressFBWarnings("I18N")
-    public final HashMap<Integer, Node> readGFA(final InputStream input)
+    public final HashMap<Integer, Node>
+        readGFA(final InputStream input)
             throws IOException {
         BufferedReader bReader;
         bReader = new BufferedReader(new InputStreamReader(input));

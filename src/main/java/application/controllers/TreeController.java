@@ -23,6 +23,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
+     * @param m the mainController.
      */
     public TreeController(PhylogeneticTree pt, MainController m) {
         super(new ScrollPane());

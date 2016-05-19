@@ -27,9 +27,9 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param g   the graph.
-     * @param ref the reference string.
-     * @param m the mainController.
+     * @param g     the graph.
+     * @param ref   the reference string.
+     * @param m     the mainController.
      * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
@@ -72,7 +72,7 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
      * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */

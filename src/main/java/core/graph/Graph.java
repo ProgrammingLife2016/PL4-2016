@@ -45,11 +45,13 @@ public class Graph {
      * Add the nodes and edges of the graph to the model.
      *
      * @param ref the reference string.
+     * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth) throws IOException {
+    public Boolean addGraphComponents(Object ref, int depth)
+            throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
