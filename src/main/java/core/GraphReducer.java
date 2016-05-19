@@ -224,7 +224,16 @@ public final class GraphReducer {
             }
         }
 
+        // If one of the children in the bubble has a genome contains more than one nucleotide
+        // then abort.
+        for (int i = 0; i < children.size(); i++) {
+            if (nodeMap.get(children.get(i)).getSequence().length() > 1) {
+                return false;
+            }
+        }
+
         Node child0 = nodeMap.get(children.get(0));
+
         // Remove redundant nodes in bubble
         for (int i = 1; i < children.size(); i++) {
             int childId = children.get(i);
