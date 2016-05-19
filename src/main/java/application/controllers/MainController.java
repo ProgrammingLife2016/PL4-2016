@@ -127,10 +127,10 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Modify the information of the Node.
      *
-     * @param iD desired info.
+     * @param id desired info.
      */
-    public void modifyNodeInfo(String iD) {
-        id.setText(iD);
+    public void modifyNodeInfo(String id) {
+        this.id.setText(id);
     }
 
     /**
