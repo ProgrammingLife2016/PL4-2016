@@ -1,11 +1,15 @@
 package application.fxobjects;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
@@ -35,6 +39,8 @@ public class ZoomBox extends ScrollPane {
         right = new StackPane();
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
+
+        this.setOnKeyPressed(new KeyHandler());
     }
 
     /**
@@ -58,17 +64,22 @@ public class ZoomBox extends ScrollPane {
         Group zoomBox = new Group();
         double rectX = windowWidth - zoomBoxWidth - 20;
 
+        Image image = new Image("/new_snapshot.png");
+        ImagePattern pattern = new ImagePattern(image);
+
+
         zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
-        zoomRectBorder.setFill(Color.WHITE);
+        zoomRectBorder.setFill(pattern);
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
 
-        zoomRect = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
+        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
 
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
+
         return zoomBox;
 
     }
@@ -186,4 +197,18 @@ public class ZoomBox extends ScrollPane {
                 break;
         }
     }
+
+    /**
+     * Handles the move funtion.
+     */
+    private class KeyHandler implements EventHandler<KeyEvent> {
+
+        @Override
+        public void handle(KeyEvent event) {
+            System.out.println("key handler");
+            moveRectangle(event);
+        }
+
+    }
+
 }

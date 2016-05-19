@@ -34,7 +34,7 @@ public class ZoomController extends BorderPane {
         keyHandler = new KeyHandler();
 
 //        this.setOnScroll(new ZoomHandler());
-//        this.setOnKeyPressed(new KeyHandler());
+        this.setOnKeyPressed(new KeyHandler());
 
         init();
     }
@@ -79,6 +79,7 @@ public class ZoomController extends BorderPane {
 
         @Override
         public void handle(KeyEvent event) {
+            System.out.println("key handler");
             zoomBox.moveRectangle(event);
         }
 

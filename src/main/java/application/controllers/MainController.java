@@ -12,6 +12,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 
 import java.io.IOException;
@@ -104,13 +105,10 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
-        this.getRoot().setBottom(graphController.getZoomController().getZoomBox().getZoomBox());
 
-//        try {
-//            graphController.takeSnapshot();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
     }
 
     /**

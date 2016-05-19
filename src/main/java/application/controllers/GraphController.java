@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +50,8 @@ public class GraphController extends Controller<ScrollPane> {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
+
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -121,6 +124,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     public void takeSnapshot() throws IOException {
         WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
+
         WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
         System.out.println("take snapshot");
