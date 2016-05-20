@@ -1,9 +1,19 @@
 package core;
 
+import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.graph.cell.Edge;
 import core.graph.cell.CellType;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by Ties on 11-5-2016.
@@ -11,7 +21,7 @@ import static org.junit.Assert.*;
 public class ModelTest {
 
     /**
-     * Test for constructor.
+     * Test the constructor.
      */
     @Test
     public void testConstructor() {
@@ -20,7 +30,7 @@ public class ModelTest {
     }
 
     /**
-     * Test for method clear in Model.
+     * Test the clear method by clearing a set model.
      */
     @Test
     public void testClear() {
@@ -31,16 +41,13 @@ public class ModelTest {
         assertEquals(0, m.getAddedEdges().size());
         assertEquals(0, m.getAllCells().size());
         assertEquals(0, m.getAllEdges().size());
-        assertEquals(0, m.getRemovedCells().size());
-        assertEquals(0, m.getRemovedEdges().size());
     }
 
     /**
-     * Test for method clearaddedlist in model.
+     * Test for clearAddedList by clearing a set addedList.
      */
     @Test
     public void testClearAddedLists() {
-
         Model m = new Model();
         m.clearAddedLists();
 
@@ -48,59 +55,100 @@ public class ModelTest {
     }
 
     /**
-     * Test for method getAddedCells in model.
+     * Test the getTree method.
+     */
+    @Test
+    public void testGetTree() {
+        Model m = new Model();
+        Tree tree = new Tree();
+
+        m.setTree(tree);
+        assertEquals(tree, m.getTree());
+    }
+
+    /**
+     * Test the getAddedCells method.
      */
     @Test
     public void testGetAddedCells() {
         Model m = new Model();
-        m.clear();
-        m.addCell(3, "A", CellType.RECTANGLE);
+        m.addCell(mock(Cell.class));
 
-        assertEquals("[" + 3 + "]", m.getAddedCells().toString());
+        assertEquals(1, m.getAddedCells().size());
     }
 
     /**
-     * Test for Getter.
-     */
-    @Test
-    public void testGetRemovedCells() {
-        Model m = new Model();
-        m.clear();
-
-        m.addCell(3, "A", CellType.RECTANGLE);
-
-        assertEquals("[]", m.getRemovedCells().toString());
-
-    }
-
-    /**
-     * Test for getter.
+     * Test the getAllCells method.
      */
     @Test
     public void testGetAllCells() {
         Model m = new Model();
-        m.clear();
+        m.addCell(mock(Cell.class));
 
-        m.addCell(3, "A", CellType.RECTANGLE);
         m.merge();
-        assertEquals("[" + "3" + "]", m.getAllCells().toString());
+        assertEquals(1, m.getAllCells().size());
     }
 
     /**
-     * Test for getter.
+     * Test the getAddedEdges method.
      */
     @Test
     public void testGetAddedEdges() {
         Model m = new Model();
-
-        m.addCell(3, "A", CellType.RECTANGLE);
-        m.addCell(4, "B", CellType.RECTANGLE);
-
+        m.addCell(mock(Cell.class));
         m.merge();
 
-        m.addEdge(3, 4, 1);
+        m.addEdge(1, 1, 1);
 
-        assertTrue("[(3,4)]".equals("" + m.getAddedEdges()));
+        List<Edge> edges = m.getAddedEdges();
+        assertTrue(edges.size() == 0);
+    }
 
+    /**
+     * Test the getAllEdges method.
+     */
+    @Test
+    public void testGetAllEdges() {
+        Model m = new Model();
+        m.addCell(1, "", CellType.RECTANGLE);
+        m.addCell(2, "", CellType.RECTANGLE);
+        m.addCell(3, "", CellType.RECTANGLE);
+
+        m.addEdge(1, 2, 1);
+        m.addEdge(2, 3, 1);
+
+        m.merge();
+        List<Edge> edges = m.getAllEdges();
+        assertEquals(2, edges.size());
+    }
+
+    /**
+     * Test the getLevelMaps method.
+     */
+    @Test
+    public void testGetLevelMaps() {
+        Model m = new Model();
+        HashMap<Integer, Node> levelMap1 = new HashMap<>();
+        HashMap<Integer, Node> levelMap2 = new HashMap<>();
+        List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
+
+        levelMaps.add(levelMap1);
+        levelMaps.add(levelMap2);
+
+        m.setLevelMaps(levelMaps);
+        assertEquals(2, m.getLevelMaps().size());
+    }
+
+    /**
+     * Test the addEdge method.
+     */
+    @Test
+    public void testAddEdge() {
+        Model m = new Model();
+        m.addCell(mock(Cell.class));
+        m.addEdge(1, 1, 1);
+
+        List<Edge> edges = m.getAddedEdges();
+        assertEquals(0, edges.size());
     }
 }

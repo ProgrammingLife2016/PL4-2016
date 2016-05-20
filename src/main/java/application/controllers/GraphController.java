@@ -1,7 +1,6 @@
 package application.controllers;
 
 import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.CellLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -27,25 +25,27 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-
     private ZoomController zoomController;
-
+    private GraphMouseHandling graphMouseHandling;
     private Rectangle2D screenSize;
-
     private double maxWidth;
 
     /**
      * Constructor method for this class.
-     * @param g          the graph.
-     * @param ref the reference string.
+     *
+     * @param g     the graph.
+     * @param ref   the reference string.
+     * @param m     the mainController.
+     * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref) {
+    public GraphController(Graph g, Object ref, MainController m, int depth) {
         super(new ScrollPane());
         this.graph = g;
         this.zoomController = new ZoomController();
         this.maxWidth = 0;
-        //this.graphMouseHandling = new GraphMouseHandling();
+        this.graphMouseHandling = new GraphMouseHandling(m);
+
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -59,7 +59,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init(ref);
+            init(ref, depth);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,22 +84,20 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref) throws IOException {
+    public void init(Object ref, int depth) throws IOException {
         AnchorPane root = new AnchorPane();
-        graph.addGraphComponents(ref);
+
+        graph.addGraphComponents(ref, depth);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
        // graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
-
-        // remove components from graph pane
-        root.getChildren().removeAll(graph.getModel().getRemovedCells());
-        root.getChildren().removeAll(graph.getModel().getRemovedEdges());
 
         graph.endUpdate();
         BaseLayout layout = new BaseLayout(graph.getModel(), 20,

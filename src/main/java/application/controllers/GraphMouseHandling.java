@@ -11,22 +11,27 @@ import javafx.scene.input.MouseEvent;
  * Class responsible for the handling of mouse events
  */
 public class GraphMouseHandling {
+    MainController mainController;
 
     //final DragContext dragContext = new DragContext();
 
     EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
-    };
-
-    /*EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        //Node node = (Node) event.getSource();
-        Cell node = (Cell) event.getSource();
         System.out.println(node.getCellId());
-    };*/
 
+        core.Node clicked = mainController.getGraphController().getGraph()
+                .getModel().getLevelMaps().get(0).get(node.getCellId());
 
-    EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
+        System.out.println(mainController.getGraphController().getGraph()
+                .getModel().getLevelMaps().size());
 
+        String info = "";
+        info += "Genome ID: " + clicked.getId() + "\n";
+        info += clicked.getGenomes().size() + " Genomes in Node: \n"
+                + clicked.getGenomesAsString() + "\n";
+        info += "Seq: \n" + clicked.getSequence() + "\n";
+
+        mainController.modifyNodeInfo(info);
     };
 
     EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
@@ -41,10 +46,12 @@ public class GraphMouseHandling {
 
     /**
      * Class constructor.
+     *
+     * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphMouseHandling() {
-
+    public GraphMouseHandling(MainController m) {
+        mainController = m;
     }
 
     /**
@@ -54,8 +61,6 @@ public class GraphMouseHandling {
      */
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
-        //node.setOnMouseDragged(onMouseDraggedEventHandler);
-        node.setOnMouseReleased(onMouseReleasedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
         node.setOnMouseExited(onMouseExitedEventHandler);
     }

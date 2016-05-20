@@ -58,6 +58,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Initialize the zoom box.
+     *
      * @return The zoom box.
      */
     public Group initZoomBox() {
@@ -86,6 +87,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Return the zoom box.
+     *
      * @return The zoom box.
      */
     public StackPane getZoomBox() {
@@ -95,9 +97,10 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Check the boundaries of the zoombox to see if a movement is allowed.
-     * @param offsetX   The offset changed in the X direction.
-     * @param offsetY   The offset changes in the Y direction.
-     * @return  True/False depending on the movement.
+     *
+     * @param offsetX The offset changed in the X direction.
+     * @param offsetY The offset changes in the Y direction.
+     * @return True/False depending on the movement.
      */
     public Boolean checkRectBoundaries(double offsetX, double offsetY) {
         Boolean res = true;
@@ -120,6 +123,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * zoom the view of zoombox in.
+     *
      * @param delta Number of pixels to scale.
      */
     public void scaleZoomRectIn(double delta) {
@@ -135,6 +139,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * zoom the view of zoombox out.
+     *
      * @param delta Number of pixels to scale.
      */
     public void scaleZoomRectOut(double delta) {
@@ -149,6 +154,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Zoom the zoombox based on a given delta.
+     *
      * @param delta Offset to change.
      */
     public void zoom(double delta) {
@@ -168,6 +174,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Zoom using the ASDW keys.
+     *
      * @param event A KeyEvent.
      */
     public void moveRectangle(KeyEvent event) {
