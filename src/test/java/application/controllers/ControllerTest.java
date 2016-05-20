@@ -26,6 +26,9 @@ public class ControllerTest {
         @Mock
         Observer mockedObserver;
 
+        /**
+         * Set up method.
+         */
         @Before
         public void setUp() {
 
@@ -50,7 +53,7 @@ public class ControllerTest {
 
 
         /**
-         * Test whether the root is set correctly
+         * Test whether the root is retrieved correctly.
          */
         @Test
         public void testGetRoot() {
@@ -61,6 +64,9 @@ public class ControllerTest {
         }
 
 
+        /**
+         * Test whether the root is set correctly.
+         */
         @Test
         public void testSetRoot() {
                 mc = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);

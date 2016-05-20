@@ -55,6 +55,9 @@ public class MainControllerTest {
     */
 
 
+    /**
+     * Test for the FillTree method.
+     */
     @Test
     public void testFillTree() {
 
@@ -70,11 +73,17 @@ public class MainControllerTest {
     }
     */
 
+    /**
+     * Test for the SwitchScene method.
+     */
     @Test
     public void testSwitchScene() {
 
     }
 
+    /**
+     * Test for the SwitchTreeScene method.
+     */
     @Test
     public void testSwitchTreeScene() {
 
