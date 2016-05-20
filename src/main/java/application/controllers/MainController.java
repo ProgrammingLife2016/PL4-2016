@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -31,17 +32,13 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane screen;
     @FXML
     private MenuBar menuBar;
-    @FXML
-    private ListView list;
-    @FXML
-    private TextFlow infoList;
-    @FXML
-    private VBox listVBox;
-    @FXML
-    private Text id;
-    @FXML
-    private ScrollPane infoScroller;
 
+
+    private ListView list;
+    private TextFlow infoList;
+    private VBox listVBox;
+    private Text id;
+    private ScrollPane infoScroller;
     private int currentView = 9;
     private GraphController graphController;
 
@@ -91,8 +88,8 @@ public class MainController extends Controller<BorderPane> {
         createNodeInfo();
 
         infoScroller.setContent(infoList);
-        listVBox.getChildren().addAll(list, infoScroller);
 
+        listVBox.getChildren().addAll(list, infoScroller);
     }
 
     /**
@@ -106,7 +103,6 @@ public class MainController extends Controller<BorderPane> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
             }
-            System.out.println(list.getSelectionModel().getSelectedItem());
         });
     }
 
@@ -115,8 +111,9 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createNodeInfo() {
         infoList = new TextFlow();
-        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
-        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
+//        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
+//        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
+
 
         id = new Text();
         id.setText("Select Node to view info");
@@ -144,6 +141,9 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
 
         this.getRoot().setCenter(screen);
+        System.out.println(screen);
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
 
         List<String> genomes = graphController.getGenomes();
         genomes.sort(Comparator.naturalOrder());
@@ -162,6 +162,7 @@ public class MainController extends Controller<BorderPane> {
             TreeController treeController = new TreeController(pt, this);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
+            this.getRoot().setBottom(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
