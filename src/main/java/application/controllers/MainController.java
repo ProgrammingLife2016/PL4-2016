@@ -162,6 +162,7 @@ public class MainController extends Controller<BorderPane> {
             TreeController treeController = new TreeController(pt, this);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
+            this.getRoot().setBottom(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
