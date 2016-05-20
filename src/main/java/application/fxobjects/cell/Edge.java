@@ -1,4 +1,4 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell;
 
 import javafx.scene.Group;
 import javafx.scene.shape.Line;

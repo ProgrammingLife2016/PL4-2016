@@ -1,7 +1,7 @@
 package core;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.Edge;
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
 import core.graph.cell.CellType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Test;

@@ -1,5 +1,7 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.graph;
 
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
 import javafx.scene.shape.Line;
 import org.junit.Before;
 import org.junit.Test;

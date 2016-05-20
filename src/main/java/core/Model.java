@@ -1,11 +1,12 @@
 package core;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.Edge;
-import application.fxobjects.graph.cell.PhylogeneticCell;
-import application.fxobjects.graph.cell.RectangleCell;
-import application.fxobjects.graph.cell.TriangleCell;
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.tree.LeafCell;
+import application.fxobjects.cell.graph.RectangleCell;
+import application.fxobjects.cell.graph.TriangleCell;
 
+import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
@@ -126,23 +127,27 @@ public class Model {
      * Method to add a Cell (Node).
      *
      * @param id   the id, which represents the sequence.
-     * @param seq  The genome sequence of a cell.
+     * @param text  The text of a cell.
      * @param type The type of cell.
      * @return True for testing purposes.
      */
-    public Boolean addCell(int id, String seq, CellType type) {
+    public Boolean addCell(int id, String text, CellType type) {
         switch (type) {
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, seq);
+                RectangleCell rectangleCell = new RectangleCell(id, text);
                 addCell(rectangleCell);
                 break;
             case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id, seq);
+                TriangleCell circleCell = new TriangleCell(id, text);
                 addCell(circleCell);
                 break;
-            case PHYLOGENETIC:
-                PhylogeneticCell recCell = new PhylogeneticCell(id, seq);
-                addCell(recCell);
+            case TREELEAF:
+                LeafCell leafCell = new LeafCell(id, text);
+                addCell(leafCell);
+                break;
+            case TREEMIDDLE:
+                MiddleCell middleCell = new MiddleCell(id);
+                addCell(middleCell);
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);

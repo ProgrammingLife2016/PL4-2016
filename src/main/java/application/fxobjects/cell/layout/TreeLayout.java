@@ -1,7 +1,7 @@
-package application.fxobjects.phylogeny;
+package application.fxobjects.cell.layout;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.CellLayout;
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.tree.MiddleCell;
 import core.Model;
 
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
@@ -42,7 +42,7 @@ public class TreeLayout extends CellLayout {
     public void execute() {
 
         // Initialize all nodes as undrawn
-        for (Cell cell : model.getAllCells()) {
+        for (Cell cell : model.getAddedCells()) {
             undrawnCells.put(cell.getCellId(), cell);
         }
 
@@ -53,6 +53,36 @@ public class TreeLayout extends CellLayout {
         while (undrawnCells.size() != 0) {
             drawParents();
         }
+    }
+
+    /**
+     * relocate all leaves to the right of the screen
+     */
+    private void drawLeaves() {
+        final int leafX = model.getTree().getHeight() * 50;
+
+        for (int i = 0; i < model.getAddedCells().size(); i++) {
+            Cell cell = undrawnCells.get(i);
+            int cellId = cell.getCellId();
+            TreeNode nodeByCell = model.getTree().getNodeByKey(cellId);
+
+            if (nodeByCell.isLeaf()) {
+                currentY += offset;
+                relocateCell(cell, leafX, currentY);
+            }
+
+        }
+    }
+
+    /**
+     * Convert a TreeNode to its corresponding Cell.
+     *
+     * @param treeNode  A TreeNode to get its Cell from.
+     * @return  The Cell matching the given TreeNode.
+     */
+    private Cell treeNodeToCell(TreeNode treeNode) {
+        int id = treeNode.getKey();
+        return model.getAddedCells().get(id);
     }
 
     /**
@@ -78,52 +108,48 @@ public class TreeLayout extends CellLayout {
     }
 
     /**
-     * relocate all leaves to the right of the screen
-     */
-    private void drawLeaves() {
-        final int leafX = model.getTree().getHeight() * 50;
-
-        for (int i = 0; i < model.getAllCells().size(); i++) {
-            Cell cell = undrawnCells.get(i);
-            int cellId = cell.getCellId();
-            TreeNode nodeByCell = model.getTree().getNodeByKey(cellId);
-
-            if (nodeByCell.isLeaf()) {
-                currentY += offset;
-                relocateCell(cell, leafX, currentY);
-            }
-        }
-    }
-
-    /**
-     * Convert a TreeNode to its corresponding Cell.
-     * @param treeNode  A TreeNode to get its Cell from.
-     * @return  The Cell matching the given TreeNode.
-     */
-    private Cell treeNodeToCell(TreeNode treeNode) {
-        int id = treeNode.getKey();
-        return model.getAllCells().get(id);
-    }
-
-
-    /**
      * Relocate the parent and add the edges from the parent to the two leaves.
+     *
      * @param parent    A given parent cell.
      * @param child1    Child cell 1 of the parent.
      * @param child2    Child cell 2 of the parent.
      */
     private void processParent(Cell parent, Cell child1, Cell child2) {
-        int newX = (int) Math.min(child1.getLayoutX(), child2.getLayoutX()) - 50;
-        int newY = (int) (child1.getLayoutY() + child2.getLayoutY()) / 2;
+        int parentX = (int) Math.min(child1.getLayoutX(), child2.getLayoutX()) - (int) (2 * offset);
+        int parentY = (int) (child1.getLayoutY() + child2.getLayoutY()) / 2;
 
-        model.addEdge(parent.getCellId(), child1.getCellId(), 1);
-        model.addEdge(parent.getCellId(), child2.getCellId(), 1);
+        relocateCell(parent, parentX, parentY);
+        drawPerpendicularEdges(parent, child1, child2);
+    }
 
-        relocateCell(parent, newX, newY);
+
+    /**
+     * Draw perpendicular lines between a parent node and its children by inserting
+     * two invisible helper middle cells.
+     *
+     * @param parent    A given parent cell.
+     * @param child1    Child cell 1 of the parent.
+     * @param child2    Child cell 2 of the parent.
+     */
+    private void drawPerpendicularEdges(Cell parent, Cell child1, Cell child2) {
+        Cell upperCorner = new MiddleCell(model.getAddedCells().size());
+        Cell lowerCorner = new MiddleCell(model.getAddedCells().size() + 1);
+
+        model.addCell(upperCorner);
+        model.addCell(lowerCorner);
+
+        model.addEdge(parent.getCellId(), upperCorner.getCellId(), 1);
+        model.addEdge(upperCorner.getCellId(), child1.getCellId(), 1);
+        model.addEdge(parent.getCellId(), lowerCorner.getCellId(), 1);
+        model.addEdge(lowerCorner.getCellId(), child2.getCellId(), 1);
+
+        relocateCell(upperCorner, (int) parent.getLayoutX(), (int) child1.getLayoutY());
+        relocateCell(lowerCorner, (int) parent.getLayoutX(), (int) child2.getLayoutY());
     }
 
     /**
      * Relocate a cell and mark it as 'drawn'.
+     *
      * @param cell  The cell to relocate.
      * @param x The new X coordinate of the cell.
      * @param y The new Y coordinate of the cell.

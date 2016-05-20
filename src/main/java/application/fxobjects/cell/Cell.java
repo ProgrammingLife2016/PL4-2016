@@ -1,4 +1,4 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell;
 
 import java.util.ArrayList;
 import java.util.List;

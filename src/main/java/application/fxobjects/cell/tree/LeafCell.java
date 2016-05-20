@@ -1,5 +1,6 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.tree;
 
+import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -7,18 +8,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * Class representing a Phylogenetic leave node shape.
+ * Class representing a Phylogenetic leave node.
  */
-public class PhylogeneticCell extends Cell {
-    private final CellType type = CellType.PHYLOGENETIC;
+public class LeafCell extends Cell {
+    private final CellType type = CellType.TREELEAF;
     private Text text;
 
     /**
-     * Rectangle cell constructor.
-     * @param id The ID of a cell.
-     * @param name The genome sequence of a cell.
+     * Phylogenetic leave cell constructor.
+     * @param id The ID of the cell.
+     * @param name The name of the genome.
      */
-    public PhylogeneticCell(int id, String name) {
+    public LeafCell(int id, String name) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(10);
