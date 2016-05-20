@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -195,6 +197,28 @@ public class GraphReducerTest {
         assertTrue(nodeMap.get(2).getGenomes().size() == 2);
         assertTrue(nodeMap.get(2).getGenomes().contains("b"));
         assertTrue(nodeMap.get(2).getGenomes().contains("c"));
+    }
+
+    /**
+     * Test the collapse of a four-Node bubble with one of the bubbles oontaining a sequence
+     * that has more than one nucleotide.
+     */
+    @Test
+    public void testCollapseSymmetricalNodeBubbleWithComplexBubble() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(4);
+
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+
+        nodeMap.get(2).setSequence("ACTG");
+        nodeMap.get(3).setSequence("A");
+
+        GraphReducer.determineParents(nodeMap);
+        assertFalse(GraphReducer.collapseSymmetricalNodeBubble(nodeMap, nodeMap.get(1)));
+
+        assertNotNull(nodeMap.get(2));
+        assertNotNull(nodeMap.get(3));
     }
 
     /**
