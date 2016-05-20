@@ -1,19 +1,14 @@
 package core.graph;
 
-import core.GraphReducer;
-import core.Model;
+import core.*;
 import core.graph.cell.CellType;
-import core.Node;
-import core.Parser;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class representing a graph.
@@ -21,9 +16,12 @@ import java.util.List;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
 public class Graph {
 
+    private Boolean resetModel = true;
+
     private Model model;
 
     private List<String> genomes = new ArrayList<>();
+
 
     /**
      * Class constructor.
@@ -33,34 +31,49 @@ public class Graph {
     }
 
     /**
-     * Get the model of the Graph.
-     *
-     * @return The model of the graph.
+     * Read a node map from a gfa file on disk.
+     * @return  A node map read from file.
+     * @throws IOException Throw exception on read GFA read failure.
      */
-    public Model getModel() {
-        return model;
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        inputStream.close();
+
+        return startMap;
     }
 
     /**
      * Add the nodes and edges of the graph to the model.
      *
      * @param ref the reference string.
+     * @param depth the depth to draw.
+     * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
-     * @return  Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref) throws IOException {
+    public Boolean addGraphComponents(Object ref, int depth)
+            throws IOException {
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
         inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
-        model.setLevelMaps(levelMaps);
 
         //Reset the model, since we have another reference.
         model = new Model();
-        HashMap<Integer, Node> nodeMap = levelMaps.get(levelMaps.size() - 1);
+        model.setLevelMaps(levelMaps);
+
+        if (depth > levelMaps.size() - 1) {
+            depth = levelMaps.size() - 1;
+        } else if (depth < 0) {
+            depth = 0;
+        }
+        HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+        System.out.println("Loading map: " + depth);
 
         Node root = nodeMap.get(1);
 
@@ -78,7 +91,9 @@ public class Graph {
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
-            if (from == null) { continue; }
+            if (from == null) {
+                continue;
+            }
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
@@ -102,16 +117,13 @@ public class Graph {
     /**
      * Method that updates the model.
      */
-    public void endUpdate() {
-        // every cell must have a parent, if it doesn't, then the graphParent is
-        // the parent
-        getModel().attachOrphansToGraphParent(model.getAddedCells());
 
-        // remove reference to graphParent
-        getModel().disconnectFromGraphParent(model.getRemovedCells());
+    public void endUpdate() {
+        // every cell must have a parent, if it doesn't, then the graphParent is the parent.
+        model.attachOrphansToGraphParent(model.getAddedCells());
 
         // merge added & removed cells with all cells
-        getModel().merge();
+        model.merge();
     }
 
     /**
@@ -121,7 +133,7 @@ public class Graph {
      * @param l2 The second list.
      * @return Number of element that exist in both lists.
      */
-    private int intersection(List<String> l1, List<String> l2) {
+    public int intersection(List<String> l1, List<String> l2) {
         int i = 0;
         for (String s : l1) {
             if (l2.contains(s)) {
@@ -132,63 +144,32 @@ public class Graph {
     }
 
     /**
-     * Unused at this point of time.
+     * Set whether the model should be reset in the addGraphComponents method.
+     * This option is only used for testing purposes to allow for mocks.
+     * @param resetModel whether the model should be reset in the addGraphComponents method.
      */
-    public void addPhylogeneticTree() {
-
-        try {
-            setup();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setresetModel(Boolean resetModel) {
+        this.resetModel = resetModel;
     }
 
     /**
-     * Implementing phylogenetic tree here.
-     */
-    //TreeItem current;
-
-    /**
-     * Setup method for the PHYLOGENETIC Tree.
+     * Get the model of the Graph.
      *
-     * @throws IOException Throw exception on read failure.
+     * @return The model of the graph.
      */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    void setup() throws IOException {
-//        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-//        BufferedReader r = new BufferedReader(new FileReader(f));
-//        String t = r.readLine();
-//        r.close();
-//
-//        current = TreeParser.parse(t);
-//
-//        Model model = getModel();
-//        int i = 1;
-//
-//        Queue<TreeItem> q = new LinkedList<>();
-//        //ArrayList<Integer> done = new ArrayList<>();
-//
-//        System.out.println(current.getName());
-//        q.add(current);
-//        model.addCell(i, current.getName(), CellType.PHYLOGENETIC);
-//        System.out.println("Cell added: " + i);
-//
-//        while (!q.isEmpty()) {
-//            current = q.poll();
-//            //From node
-//            int j = i;
-//
-//            for (TreeItem child : current.getChildren()) {
-//                model.addCell(++i, child.getName(), CellType.PHYLOGENETIC);
-//                System.out.println("Cell added: " + i);
-//                model.addEdge(j, i, 1);
-//                System.out.println("Link added: " + j + ", " + i);
-//                q.add(child);
-//            }
-//        }
-        endUpdate();
+    public Model getModel() {
+        return model;
     }
 
+    /**
+     * Set the model of the Graph.
+     *
+     * @param model The model of the graph.
+     */
+    public void setModel(Model model) {
+        this.model = model;
+    }
+    
     /**
      * Getter method for the genomens.
      *
@@ -196,5 +177,14 @@ public class Graph {
      */
     public List<String> getGenomes() {
         return genomes;
+    }
+
+    /**
+     * Setter method for the genomens.
+     *
+     * @param genomes the genomes.
+     */
+    public void setGenomes(List<String> genomes) {
+        this.genomes = genomes;
     }
 }

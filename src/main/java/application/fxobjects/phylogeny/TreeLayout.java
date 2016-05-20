@@ -81,7 +81,7 @@ public class TreeLayout extends CellLayout {
      * relocate all leaves to the right of the screen
      */
     private void drawLeaves() {
-        final int leafX = model.getTree().getHeight() * 100;
+        final int leafX = model.getTree().getHeight() * 50;
 
         for (int i = 0; i < model.getAllCells().size(); i++) {
             Cell cell = undrawnCells.get(i);

@@ -1,21 +1,26 @@
 package application.controllers;
 
-import core.graph.PhylogeneticTree;
 import core.graph.Graph;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -24,15 +29,18 @@ import java.util.ResourceBundle;
 public class MainController extends Controller<BorderPane> {
 
     @FXML
-    ScrollPane screen;
+    private ScrollPane screen;
     @FXML
-    MenuBar menuBar;
-    @FXML
-    FlowPane pane;
-    @FXML
-    ListView list;
-    @FXML
-    ListView infoList;
+    private MenuBar menuBar;
+
+
+    private ListView list;
+    private TextFlow infoList;
+    private VBox listVBox;
+    private Text id;
+    private ScrollPane infoScroller;
+    private int currentView = 9;
+    private GraphController graphController;
 
 
     Rectangle2D screenSize;
@@ -56,41 +64,64 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
 
         createMenu();
-        createList();
-        //createInfoList();
-
-//        this.getRoot().getStylesheets().add("application/css/main.css");
-//        this.getRoot().getStyleClass().add("root");
+        createInfoList("");
     }
+    private void createInfoList(String info) {
+        listVBox = new VBox();
+        infoScroller = new ScrollPane();
 
-//    private void createPane() {
-//        pane = new FlowPane();
-//        pane.getChildren();
-//    }
-//
-//    private void createInfoList() {
-//        infoList = new ListView<String>()
-//        ObservableList<String> items = FXCollections.observableArrayList(
-//                "Select a Node to show info");
-//        list.setOnMouseClicked(event ->
-//                System.out.println(list.getSelectionModel().getSelectedItem()));
-//        list.setItems(items);
-//        this.getRoot().setRight(list);
-//    }
+        infoScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        infoScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        infoScroller.prefHeightProperty().bind(listVBox.heightProperty());
+        infoScroller.prefWidth(screenSize.getWidth() / 5);
+
+        if (info.isEmpty()) {
+            createList();
+        }
+
+        createNodeInfo();
+
+        infoScroller.setContent(infoList);
+
+        listVBox.getChildren().addAll(list, infoScroller);
+    }
 
     /**
      * Create a list on the right side of the screen with all genomes.
      */
     public void createList() {
         list = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList(
-                "No Genomes Loaded.");
+        list.setPlaceholder(new Label("No Genomes Loaded."));
+        list.prefHeightProperty().bind(listVBox.heightProperty());
         list.setOnMouseClicked(event -> {
-            fillGraph(list.getSelectionModel().getSelectedItem());
-            System.out.println(list.getSelectionModel().getSelectedItem());
+            if (!(list.getSelectionModel().getSelectedItem() == null)) {
+                fillGraph(list.getSelectionModel().getSelectedItem());
+            }
         });
-        list.setItems(items);
-        this.getRoot().setRight(list);
+    }
+
+    /**
+     * Create an info panel to show the information on a node.
+     */
+    private void createNodeInfo() {
+        infoList = new TextFlow();
+//        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
+//        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
+
+
+        id = new Text();
+        id.setText("Select Node to view info");
+
+        infoList.getChildren().addAll(id);
+    }
+
+    /**
+     * Modify the information of the Node.
+     *
+     * @param id desired info.
+     */
+    public void modifyNodeInfo(String id) {
+        this.id.setText(id);
     }
 
     /**
@@ -100,10 +131,19 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        GraphController graphController = new GraphController(graph, ref);
+        graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
+
         this.getRoot().setCenter(screen);
-        list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
+        System.out.println(screen);
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
+
+        showListVBox();
     }
 
     /**
@@ -113,12 +153,14 @@ public class MainController extends Controller<BorderPane> {
         try {
             PhylogeneticTree pt = new PhylogeneticTree();
             pt.setup();
-            TreeController treeController = new TreeController(pt);
+            TreeController treeController = new TreeController(pt, this);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
+            this.getRoot().setBottom(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        hideListVBox();
     }
 
     /**
@@ -132,9 +174,16 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Switches the scene to the graph view.
+     *
+     * @param delta the diff in view to apply.
      */
-    public void switchScene() {
+    public void switchScene(int delta) {
+        currentView += delta;
+        currentView = Math.max(0, currentView);
+
+        currentView = Math.min(9, currentView);
         fillGraph(null);
+
     }
 
     /**
@@ -144,4 +193,26 @@ public class MainController extends Controller<BorderPane> {
         fillTree();
     }
 
+    /**
+     * Show the info panel.
+     */
+    private void showListVBox() {
+        this.getRoot().setRight(listVBox);
+    }
+
+    /**
+     * Hide the info panel.
+     */
+    private void hideListVBox() {
+        this.getRoot().getChildren().remove(listVBox);
+    }
+
+    /**
+     * Getter method for the graphController.
+     *
+     * @return the graphController.
+     */
+    public GraphController getGraphController() {
+        return graphController;
+    }
 }

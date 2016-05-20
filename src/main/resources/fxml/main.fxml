@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ListView?>
-<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.layout.BorderPane?>
 
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
         <top>
             <MenuBar fx:id="menuBar" useSystemMenuBar="true"/>
@@ -14,7 +13,6 @@
             <ScrollPane fx:id="screen"/>
         </center>
         <right>
-            <ListView fx:id="list"/>
         </right>
     </BorderPane>
 
