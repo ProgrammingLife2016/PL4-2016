@@ -69,7 +69,7 @@ public class MainController extends Controller<BorderPane> {
 //    }
 //
 //    private void createInfoList() {
-//        infoList = new ListView<String>();
+//        infoList = new ListView<String>()
 //        ObservableList<String> items = FXCollections.observableArrayList(
 //                "Select a Node to show info");
 //        list.setOnMouseClicked(event ->
@@ -81,7 +81,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Create a list on the right side of the screen with all genomes.
      */
-    private void createList() {
+    public void createList() {
         list = new ListView<>();
         ObservableList<String> items = FXCollections.observableArrayList(
                 "No Genomes Loaded.");
