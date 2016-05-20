@@ -47,8 +47,8 @@ public class PhylogeneticTree {
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile() throws IOException {
-        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new FileReader(f));
+        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         TreeParser tp = new TreeParser(r);
 
         return tp.tokenize("340tree.rooted.TKK");
