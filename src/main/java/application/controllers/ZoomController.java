@@ -28,12 +28,10 @@ public class ZoomController extends BorderPane {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
         zoomBox = new ZoomBox();
-
         screenSize = Screen.getPrimary().getVisualBounds();
         zoomHandler = new ZoomHandler();
         keyHandler = new KeyHandler();
 
-//        this.setOnScroll(new ZoomHandler());
         this.setOnKeyPressed(new KeyHandler());
 
         init();
@@ -79,7 +77,6 @@ public class ZoomController extends BorderPane {
 
         @Override
         public void handle(KeyEvent event) {
-            System.out.println("key handler");
             zoomBox.moveRectangle(event);
         }
 

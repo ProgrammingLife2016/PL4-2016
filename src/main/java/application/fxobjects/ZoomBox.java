@@ -141,7 +141,7 @@ public class ZoomBox extends ScrollPane {
         double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
         zoomRect.setWidth(zoomRect.getWidth() + delta);
         zoomRect.setHeight(zoomRect.getHeight() + adj);
-        
+
         zoomRect.setX(zoomRect.getX() - 0.5 * delta);
         zoomRect.setY(zoomRect.getY() - 0.5 * adj);
 
@@ -205,7 +205,6 @@ public class ZoomBox extends ScrollPane {
 
         @Override
         public void handle(KeyEvent event) {
-            System.out.println("key handler");
             moveRectangle(event);
         }
 

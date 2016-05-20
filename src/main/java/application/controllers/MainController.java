@@ -88,7 +88,6 @@ public class MainController extends Controller<BorderPane> {
                 "No Genomes Loaded.");
         list.setOnMouseClicked(event -> {
             fillGraph(list.getSelectionModel().getSelectedItem());
-            System.out.println(list.getSelectionModel().getSelectedItem());
         });
         list.setItems(items);
         this.getRoot().setRight(list);
@@ -105,7 +104,6 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
         list.setItems(FXCollections.observableArrayList(graphController.getGenomes()));
-
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
 

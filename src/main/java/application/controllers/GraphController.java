@@ -27,7 +27,6 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-    //private GraphMouseHandling graphMouseHandling;
 
     private ZoomController zoomController;
 
@@ -50,8 +49,8 @@ public class GraphController extends Controller<ScrollPane> {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
 
+        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -107,7 +106,6 @@ public class GraphController extends Controller<ScrollPane> {
                 (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
         maxWidth = layout.getMaxWidth();
-        System.out.println(maxWidth);
         this.getRoot().setContent(root);
 
         takeSnapshot();
@@ -124,13 +122,10 @@ public class GraphController extends Controller<ScrollPane> {
 
     public void takeSnapshot() throws IOException {
         WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-
         WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
-        System.out.println("take snapshot");
         File output = new File("new_snapshot.png");
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
-
     }
 
 

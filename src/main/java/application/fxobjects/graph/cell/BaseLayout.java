@@ -41,7 +41,6 @@ public class BaseLayout extends CellLayout {
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
-        //System.out.println(centerY + "   center Y");
         this.maxDistance = middle;
         this.maxWidth = 0;
 
