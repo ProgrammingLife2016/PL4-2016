@@ -26,6 +26,7 @@ public class PhylogeneticTree {
 
     /**
      * Get the model of the Tree.
+     *
      * @return The model of the Tree.
      */
     public Model getModel() {
@@ -34,6 +35,7 @@ public class PhylogeneticTree {
 
     /**
      * Set the model of the Tree.
+     *
      * @param model The model of the Tree.
      */
     public void setModel(Model model) {
@@ -42,13 +44,14 @@ public class PhylogeneticTree {
 
     /**
      * Set-up the tree model from a Newick data file.
-     * @return  A Newick tree.
-     * @throws IOException  Throw exception on read failure.
+     *
+     * @return A Newick tree.
+     * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile() throws IOException {
-        File f = new File("src/main/resources/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new FileReader(f));
+        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         TreeParser tp = new TreeParser(r);
 
         return tp.tokenize("340tree.rooted.TKK");
@@ -56,7 +59,8 @@ public class PhylogeneticTree {
 
     /**
      * Add TreeNodes to the model to see whether cells are actually added to the model.
-     * @throws IOException  Throw exception on read failure.
+     *
+     * @throws IOException Throw exception on read failure.
      */
     public void setup() throws IOException {
         Tree tree = getTreeFromFile();
@@ -65,5 +69,12 @@ public class PhylogeneticTree {
         for (TreeNode leaf : tree.nodes) {
             model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
         }
+    }
+
+    /**
+     * Method that updates the model.
+     */
+    public void endUpdate() {
+        model.merge();
     }
 }
