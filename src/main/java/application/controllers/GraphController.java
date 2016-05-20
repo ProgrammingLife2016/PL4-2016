@@ -28,7 +28,8 @@ public class GraphController extends Controller<ScrollPane> {
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
     private Rectangle2D screenSize;
-    private double maxWidth;
+    private int maxWidth;
+    private int maxHeight;
 
     /**
      * Constructor method for this class.
@@ -45,8 +46,8 @@ public class GraphController extends Controller<ScrollPane> {
         this.zoomController = new ZoomController();
         this.maxWidth = 0;
         this.graphMouseHandling = new GraphMouseHandling(m);
-
         this.screenSize = Screen.getPrimary().getVisualBounds();
+        this.maxHeight = (int) screenSize.getHeight();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -97,16 +98,16 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
-       // graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
+        graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
 
         graph.endUpdate();
         BaseLayout layout = new BaseLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
-        maxWidth = layout.getMaxWidth();
+        maxWidth = (int) layout.getMaxWidth();
         this.getRoot().setContent(root);
 
-        takeSnapshot();
+        //takeSnapshot();
     }
 
     /**
@@ -119,10 +120,11 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     public void takeSnapshot() throws IOException {
-        WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
+        SnapshotParameters snapshotParameters = new SnapshotParameters();
+        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
+        WritableImage snapshot = this.getRoot().snapshot(snapshotParameters, new WritableImage(maxWidth+50,maxHeight));
 
-        File output = new File("new_snapshot.png");
+        File output = new File("snapshot.png");
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
     }
 
