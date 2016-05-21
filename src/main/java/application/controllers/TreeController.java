@@ -1,9 +1,8 @@
 package application.controllers;
 
-import application.fxobjects.graph.cell.Cell;
-import application.fxobjects.graph.cell.CellLayout;
+import application.fxobjects.cell.layout.CellLayout;
 import core.graph.PhylogeneticTree;
-import application.fxobjects.phylogeny.TreeLayout;
+import application.fxobjects.cell.layout.TreeLayout;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -12,23 +11,20 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Class responsible for settig up the scroll pane containing the phylogenetic tree.
+ * Class responsible for setting up the scroll pane containing the phylogenetic tree.
  * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
-    private GraphMouseHandling graphMouseHandling;
 
     /**
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
-     * @param m the mainController.
      */
-    public TreeController(PhylogeneticTree pt, MainController m) {
+    public TreeController(PhylogeneticTree pt) {
         super(new ScrollPane());
         this.pt = pt;
-        this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -61,16 +57,11 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void init() {
         AnchorPane root = new AnchorPane();
-        root.getChildren().addAll(pt.getModel().getAddedCells());
-
-        for (Cell cell : pt.getModel().getAddedCells()) {
-            graphMouseHandling.setMouseHandling(cell);
-        }
-
-        CellLayout layout = new TreeLayout(pt.getModel(), 25);
-        pt.endUpdate();
+        CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
 
+        // Add all cells and edges to the anchor pane
+        root.getChildren().addAll(pt.getModel().getAddedCells());
         root.getChildren().addAll(pt.getModel().getAddedEdges());
         this.getRoot().setContent(root);
     }

@@ -1,5 +1,6 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.layout;
 
+import application.fxobjects.cell.Cell;
 import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -13,7 +14,7 @@ import java.util.List;
  * @since 27-04-2016
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
-public class BaseLayout extends CellLayout {
+public class GraphLayout extends CellLayout {
     private int offset;
     private Model model;
     private int currentX;
@@ -34,7 +35,7 @@ public class BaseLayout extends CellLayout {
      * @param middle The center Y coordinate of the model.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public BaseLayout(Model model, int offset, int middle) {
+    public GraphLayout(Model model, int offset, int middle) {
         this.currentX = BASE_X;
         this.currentY = middle;
         this.lastType = null;

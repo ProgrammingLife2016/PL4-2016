@@ -1,4 +1,4 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.layout;
 
 /**
  * Abstract cell layout class.

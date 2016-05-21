@@ -1,6 +1,6 @@
 package application.controllers;
 
-import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.cell.Cell;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;

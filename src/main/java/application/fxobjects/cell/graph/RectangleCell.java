@@ -1,39 +1,34 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.graph;
 
+import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * Class representing a Triangle shape.
+ * Class representing a Rectangle shape. *
  */
-@SuppressWarnings("CheckStyle.JavadocMethod")
-public class TriangleCell extends Cell {
-    private final CellType type = CellType.TRIANGLE;
+public class RectangleCell extends Cell {
+    private final CellType type = CellType.RECTANGLE;
     private Text text;
 
     /**
-     * Triangle cell constructor.
+     * Rectangle cell constructor.
      * @param id The ID of a cell.
      * @param seq The genome sequence of a cell.
      */
-    public TriangleCell(int id, String seq) {
+    public RectangleCell(int id, String seq) {
         super(id);
-        double width = 10;
-        double height = 10;
-
         StackPane pane = new StackPane();
         pane.setMaxHeight(10);
         text = new Text(seq);
         text.setVisible(false);
         text.setManaged(false);
-
-        Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
-
-        view.setStroke(Color.RED);
-        view.setFill(Color.RED);
+        Rectangle view = new Rectangle(10, 10);
+        view.setStroke(Color.DODGERBLUE);
+        view.setFill(Color.DODGERBLUE);
 
         pane.getChildren().addAll(view, text);
 
@@ -42,7 +37,7 @@ public class TriangleCell extends Cell {
 
     /**
      * Return the type of the Cell.
-     * @return The type of the Cell.
+     * @return the type of the Cell.
      */
     public CellType getType() {
         return type;
@@ -50,7 +45,7 @@ public class TriangleCell extends Cell {
 
     /**
      * Return the Cell's text.
-     * @return The Cell's text.
+     * @return the Cell's text.
      */
     public Text getText() {
         return text;
