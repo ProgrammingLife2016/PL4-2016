@@ -159,7 +159,7 @@ public class MainController extends Controller<BorderPane> {
         try {
             PhylogeneticTree pt = new PhylogeneticTree();
             pt.setup();
-            TreeController treeController = new TreeController(pt, this);
+            TreeController treeController = new TreeController(pt);
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
             this.getRoot().setBottom(null);

@@ -18,6 +18,7 @@ public class Edge extends Group {
      * @param source cell for edge start.
      * @param target cell for edge destination.
      * @param width  width of the edge.
+     * @param type   the type of the edge (graph or tree edge)
      */
     public Edge(Cell source, Cell target, int width, EdgeType type) {
         this.source = source;
@@ -41,6 +42,7 @@ public class Edge extends Group {
                     target.getBoundsInParent().getWidth() / 2.0));
             line.endYProperty().bind(target.layoutYProperty().add(
                     target.getBoundsInParent().getHeight() / 2.0));
+
         } else if (type == EdgeType.TREE) {
             line.startXProperty().bind(source.layoutXProperty());
             line.startYProperty().bind(source.layoutYProperty());

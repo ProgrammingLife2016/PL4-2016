@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.layout.CellLayout;
 import core.graph.PhylogeneticTree;
 import application.fxobjects.cell.layout.TreeLayout;
@@ -12,23 +11,20 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Class responsible for settig up the scroll pane containing the phylogenetic tree.
+ * Class responsible for setting up the scroll pane containing the phylogenetic tree.
  * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
-    private GraphMouseHandling graphMouseHandling;
 
     /**
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
-     * @param m the mainController.
      */
-    public TreeController(PhylogeneticTree pt, MainController m) {
+    public TreeController(PhylogeneticTree pt) {
         super(new ScrollPane());
         this.pt = pt;
-        this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -61,11 +57,6 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void init() {
         AnchorPane root = new AnchorPane();
-
-        //for (Cell cell : pt.getModel().getAddedCells()) {
-        //    graphMouseHandling.setMouseHandling(cell);
-        //}
-
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
 
