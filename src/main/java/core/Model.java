@@ -8,6 +8,7 @@ import application.fxobjects.cell.graph.TriangleCell;
 
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
+import core.graph.cell.EdgeType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
 import java.util.ArrayList;
@@ -196,14 +197,15 @@ public class Model {
      * @param sourceId From.
      * @param targetId To.
      * @param width    The width of the edge.
+     * @param type     The type of edge.
      * @return  True for testing purposes.
      */
-    public Boolean addEdge(int sourceId, int targetId, int width) {
+    public Boolean addEdge(int sourceId, int targetId, int width, EdgeType type) {
         Cell sourceCell = cellMap.get(sourceId);
         Cell targetCell = cellMap.get(targetId);
 
         if (sourceCell != null && targetCell != null) {
-            Edge edge = new Edge(sourceCell, targetCell, width);
+            Edge edge = new Edge(sourceCell, targetCell, width, type);
             addedEdges.add(edge);
         }
 

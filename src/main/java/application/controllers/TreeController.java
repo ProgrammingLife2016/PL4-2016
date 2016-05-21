@@ -62,12 +62,11 @@ public class TreeController extends Controller<ScrollPane> {
     public void init() {
         AnchorPane root = new AnchorPane();
 
-        for (Cell cell : pt.getModel().getAddedCells()) {
-            graphMouseHandling.setMouseHandling(cell);
-        }
+        //for (Cell cell : pt.getModel().getAddedCells()) {
+        //    graphMouseHandling.setMouseHandling(cell);
+        //}
 
-        CellLayout layout = new TreeLayout(pt.getModel(), 20);
-        //pt.endUpdate();
+        CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
 
         // Add all cells and edges to the anchor pane

@@ -54,7 +54,7 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event ->
                 mainController.fillGraph(null));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic PhylogeneticTree", null, event ->
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));

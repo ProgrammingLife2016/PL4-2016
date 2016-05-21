@@ -1,5 +1,6 @@
 package application.fxobjects.cell;
 
+import core.graph.cell.EdgeType;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 
@@ -18,8 +19,7 @@ public class Edge extends Group {
      * @param target cell for edge destination.
      * @param width  width of the edge.
      */
-    public Edge(Cell source, Cell target, int width) {
-
+    public Edge(Cell source, Cell target, int width, EdgeType type) {
         this.source = source;
         this.target = target;
 
@@ -30,19 +30,25 @@ public class Edge extends Group {
 
         width /= 1;
 
-        line.setStrokeWidth(Math.max(width, 1));
-        line.startXProperty().bind(source.layoutXProperty().add(
-                source.getBoundsInParent().getWidth() / 2.0));
-        line.startYProperty().bind(source.layoutYProperty().add(
-                source.getBoundsInParent().getHeight() / 2.0));
+        if (type == EdgeType.GRAPH) {
+            line.setStrokeWidth(Math.max(width, 1));
+            line.startXProperty().bind(source.layoutXProperty().add(
+                    source.getBoundsInParent().getWidth() / 2.0));
+            line.startYProperty().bind(source.layoutYProperty().add(
+                    source.getBoundsInParent().getHeight() / 2.0));
 
-        line.endXProperty().bind(target.layoutXProperty().add(
-                target.getBoundsInParent().getWidth() / 2.0));
-        line.endYProperty().bind(target.layoutYProperty().add(
-                target.getBoundsInParent().getHeight() / 2.0));
+            line.endXProperty().bind(target.layoutXProperty().add(
+                    target.getBoundsInParent().getWidth() / 2.0));
+            line.endYProperty().bind(target.layoutYProperty().add(
+                    target.getBoundsInParent().getHeight() / 2.0));
+        } else if (type == EdgeType.TREE) {
+            line.startXProperty().bind(source.layoutXProperty());
+            line.startYProperty().bind(source.layoutYProperty());
+            line.endXProperty().bind(target.layoutXProperty());
+            line.endYProperty().bind(target.layoutYProperty());
+        }
 
         getChildren().add(line);
-
     }
 
     /**

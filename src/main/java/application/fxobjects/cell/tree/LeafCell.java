@@ -2,9 +2,11 @@ package application.fxobjects.cell.tree;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
@@ -21,16 +23,8 @@ public class LeafCell extends Cell {
      */
     public LeafCell(int id, String name) {
         super(id);
-        StackPane pane = new StackPane();
-        pane.setMaxHeight(10);
-        text = new Text(name);
-        text.setVisible(false);
-        text.setManaged(false);
-        Rectangle view = new Rectangle(10, 10);
-        view.setStroke(Color.LIGHTGREY);
-        view.setFill(Color.LIGHTGREY);
-
-        pane.getChildren().addAll(view, text);
+        StackPane pane = new StackPane(new Label(name));
+        pane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
         setView(pane);
     }

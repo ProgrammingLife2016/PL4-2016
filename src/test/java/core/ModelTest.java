@@ -3,6 +3,7 @@ package core;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import core.graph.cell.CellType;
+import core.graph.cell.EdgeType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Test;
 
@@ -98,7 +99,7 @@ public class ModelTest {
         m.addCell(mock(Cell.class));
         m.merge();
 
-        m.addEdge(1, 1, 1);
+        m.addEdge(1, 1, 1, EdgeType.GRAPH);
 
         List<Edge> edges = m.getAddedEdges();
         assertTrue(edges.size() == 0);
@@ -114,8 +115,8 @@ public class ModelTest {
         m.addCell(2, "", CellType.RECTANGLE);
         m.addCell(3, "", CellType.RECTANGLE);
 
-        m.addEdge(1, 2, 1);
-        m.addEdge(2, 3, 1);
+        m.addEdge(1, 2, 1, EdgeType.GRAPH);
+        m.addEdge(2, 3, 1, EdgeType.GRAPH);
 
         m.merge();
         List<Edge> edges = m.getAllEdges();
@@ -146,7 +147,7 @@ public class ModelTest {
     public void testAddEdge() {
         Model m = new Model();
         m.addCell(mock(Cell.class));
-        m.addEdge(1, 1, 1);
+        m.addEdge(1, 1, 1, EdgeType.GRAPH);
 
         List<Edge> edges = m.getAddedEdges();
         assertEquals(0, edges.size());
