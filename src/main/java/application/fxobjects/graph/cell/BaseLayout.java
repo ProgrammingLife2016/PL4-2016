@@ -24,7 +24,7 @@ public class BaseLayout extends CellLayout {
     private double maxDistance;
     private double maxWidth;
 
-    private static final int BASE_X = 200;
+    private static final int BASE_X = 175;
 
     /**
      * Class constructor.
