@@ -60,7 +60,7 @@ public class Parser {
                         if (!(sequence.contains("A") || sequence.contains("C")
                                 || sequence.contains("T") || sequence.contains("G"))) {
                             //System.out.println("Node: " + id + " Contains NOT(ATCG). Seq: "
-                                    //+ sequence);
+                                   // + sequence);
                         }
                     } else {
                         nodeMap.get(id).setSequence(sequence);

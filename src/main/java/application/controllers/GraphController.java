@@ -51,8 +51,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
-
+        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {

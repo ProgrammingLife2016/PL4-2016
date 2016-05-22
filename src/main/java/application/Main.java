@@ -1,6 +1,5 @@
 package application;
 
-import application.controllers.Controller;
 import application.controllers.MainController;
 import application.controllers.WindowFactory;
 import javafx.application.Application;

@@ -1,5 +1,6 @@
 package application.fxobjects;
 
+import application.controllers.ZoomController;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -28,18 +29,21 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
+    private ZoomController zoomController;
+    private KeyHandler keyHandler;
 
     /**
      * Class constructor.
      */
-    public ZoomBox() {
+    public ZoomBox(ZoomController z) {
+        this.zoomController = z;
+        this.keyHandler = new KeyHandler();
         initVariables();
-
         right = new StackPane();
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
-        this.setOnKeyPressed(new KeyHandler());
+        this.setOnKeyPressed(keyHandler);
     }
 
     /**
@@ -92,6 +96,8 @@ public class ZoomBox extends ScrollPane {
     public StackPane getZoomBox() {
         return right;
     }
+
+    public KeyHandler getKeyHandler() {return keyHandler; }
 
 
     /**
@@ -177,7 +183,7 @@ public class ZoomBox extends ScrollPane {
      * @param event A KeyEvent.
      */
     public void moveRectangle(KeyEvent event) {
-        double offset = 4;
+        double offset = 10;
         switch (event.getCode()) {
             case A:
                 if (checkRectBoundaries(-offset, 0)) {
@@ -193,7 +199,6 @@ public class ZoomBox extends ScrollPane {
                 break;
         }
     }
-
     /**
      * Handles the move funtion.
      */
@@ -205,5 +210,4 @@ public class ZoomBox extends ScrollPane {
         }
 
     }
-
 }

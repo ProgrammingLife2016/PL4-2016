@@ -41,8 +41,6 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane infoScroller;
     private int currentView = 9;
     private GraphController graphController;
-    private ZoomController zoomController;
-
     Rectangle2D screenSize;
 
     /**
@@ -64,12 +62,7 @@ public class MainController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
-
-        this.zoomController = new ZoomController();
-        screen.addEventFilter(KeyEvent.KEY_PRESSED, zoomController.getKeyHandler());
-
         createMenu();
-        createInfoList("");
     }
 
     /**
@@ -108,10 +101,12 @@ public class MainController extends Controller<BorderPane> {
         list.prefHeightProperty().bind(listVBox.heightProperty());
         list.prefWidthProperty().bind(listVBox.widthProperty());
 
+        list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
+        infoScroller.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
+
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
-                System.out.println("list width: " + list.getWidth());
             }
         });
     }
@@ -123,7 +118,6 @@ public class MainController extends Controller<BorderPane> {
         infoList = new TextFlow();
         infoList.prefHeightProperty().bind(infoScroller.heightProperty());
         infoList.prefWidthProperty().bind(infoScroller.widthProperty());
-
 
         id = new Text();
         id.setText("Select Node to view info");
@@ -154,9 +148,12 @@ public class MainController extends Controller<BorderPane> {
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
 
+        createInfoList("");
+
         List<String> genomes = graphController.getGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
+
 
         showListVBox();
     }

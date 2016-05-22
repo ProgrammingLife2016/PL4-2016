@@ -20,9 +20,6 @@ import java.util.ResourceBundle;
 public class ZoomController extends Controller<BorderPane> {
 
     private ZoomBox zoomBox;
-    private KeyHandler keyHandler;
-    private Rectangle2D screenSize;
-
 
     /**
      * Constructor method.
@@ -30,23 +27,11 @@ public class ZoomController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
         super(new BorderPane());
-        zoomBox = new ZoomBox();
-        screenSize = Screen.getPrimary().getVisualBounds();
-        keyHandler = new KeyHandler();
-
-        this.getRoot().setOnKeyPressed(new KeyHandler());
+        zoomBox = new ZoomBox(this);
 
         init();
     }
 
-    /**
-     * Getter for keyHandler.
-     *
-     * @return the keyHandler.
-     */
-    public KeyHandler getKeyHandler() {
-        return keyHandler;
-    }
 
     public ZoomBox getZoomBox() { return zoomBox; }
 
@@ -62,15 +47,4 @@ public class ZoomController extends Controller<BorderPane> {
 
     }
 
-    /**
-     * Handles the move funtion.
-     */
-    private class KeyHandler implements EventHandler<KeyEvent> {
-
-        @Override
-        public void handle(KeyEvent event) {
-            zoomBox.moveRectangle(event);
-        }
-
-    }
 }
