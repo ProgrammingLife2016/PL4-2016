@@ -57,7 +57,7 @@ class GraphMouseHandling {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphMouseHandling(MainController m) {
+    GraphMouseHandling(MainController m) {
         this.mainController = m;
     }
 
