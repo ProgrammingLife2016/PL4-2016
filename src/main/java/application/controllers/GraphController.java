@@ -53,6 +53,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
 
+
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
                 event.consume();
@@ -78,9 +79,7 @@ public class GraphController extends Controller<ScrollPane> {
     public ZoomController getZoomController() { return zoomController; }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
+    public void initialize(URL location, ResourceBundle resources) { }
 
     /**
      * Init method for this class.

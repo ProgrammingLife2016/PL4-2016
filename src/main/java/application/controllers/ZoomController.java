@@ -9,15 +9,17 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
 @SuppressWarnings("PMD.UnusedPrivateField")
-public class ZoomController extends BorderPane {
+public class ZoomController extends Controller<BorderPane> {
 
     private ZoomBox zoomBox;
-    private ZoomHandler zoomHandler;
     private KeyHandler keyHandler;
     private Rectangle2D screenSize;
 
@@ -27,16 +29,15 @@ public class ZoomController extends BorderPane {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
+        super(new BorderPane());
         zoomBox = new ZoomBox();
         screenSize = Screen.getPrimary().getVisualBounds();
-        zoomHandler = new ZoomHandler();
         keyHandler = new KeyHandler();
 
-        this.setOnKeyPressed(new KeyHandler());
+        this.getRoot().setOnKeyPressed(new KeyHandler());
 
         init();
     }
-
 
     /**
      * Getter for keyHandler.
@@ -53,21 +54,12 @@ public class ZoomController extends BorderPane {
      * Init method.
      */
     public void init() {
-        this.setBottom(zoomBox.getZoomBox());
+        this.getRoot().setBottom(zoomBox.getZoomBox());
     }
 
-    /**
-     * Handler for the zoom function.
-     */
-    private class ZoomHandler implements EventHandler<ScrollEvent> {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
-        @Override
-        public void handle(ScrollEvent scrollEvent) {
-
-            double delta = scrollEvent.getDeltaY();
-            zoomBox.zoom(delta);
-            scrollEvent.consume();
-        }
     }
 
     /**

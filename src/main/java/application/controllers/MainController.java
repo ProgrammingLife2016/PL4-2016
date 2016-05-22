@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,7 +34,6 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
-
     private ListView list;
     private TextFlow infoList;
     private VBox listVBox;
@@ -41,7 +41,7 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane infoScroller;
     private int currentView = 9;
     private GraphController graphController;
-
+    private ZoomController zoomController;
 
     Rectangle2D screenSize;
 
@@ -50,8 +50,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public MainController() {
         super(new BorderPane());
+
         loadFXMLfile("/fxml/main.fxml");
     }
+
 
     /**
      * Initialize method for the controller.
@@ -62,6 +64,9 @@ public class MainController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
         screenSize = Screen.getPrimary().getVisualBounds();
+
+        this.zoomController = new ZoomController();
+        screen.addEventFilter(KeyEvent.KEY_PRESSED, zoomController.getKeyHandler());
 
         createMenu();
         createInfoList("");
@@ -76,6 +81,9 @@ public class MainController extends Controller<BorderPane> {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
 
+        listVBox.setPrefWidth(248.0);
+        listVBox.setMaxWidth(248.0);
+
         infoScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         infoScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         infoScroller.prefHeightProperty().bind(listVBox.heightProperty());
@@ -88,7 +96,6 @@ public class MainController extends Controller<BorderPane> {
         createNodeInfo();
 
         infoScroller.setContent(infoList);
-
         listVBox.getChildren().addAll(list, infoScroller);
     }
 
@@ -99,9 +106,12 @@ public class MainController extends Controller<BorderPane> {
         list = new ListView<>();
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.prefHeightProperty().bind(listVBox.heightProperty());
+        list.prefWidthProperty().bind(listVBox.widthProperty());
+
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
+                System.out.println("list width: " + list.getWidth());
             }
         });
     }
@@ -111,8 +121,8 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createNodeInfo() {
         infoList = new TextFlow();
-//        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
-//        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
+        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
+        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
 
 
         id = new Text();
@@ -139,9 +149,8 @@ public class MainController extends Controller<BorderPane> {
         Graph graph = new Graph();
         graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
-
         this.getRoot().setCenter(screen);
-        System.out.println(screen);
+
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
 

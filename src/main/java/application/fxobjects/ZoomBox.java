@@ -189,16 +189,6 @@ public class ZoomBox extends ScrollPane {
                     zoomRect.setX(zoomRect.getX() + offset);
                 }
                 break;
-            case W:
-                if (checkRectBoundaries(0, -offset)) {
-                    zoomRect.setY(zoomRect.getY() - offset);
-                }
-                break;
-            case S:
-                if (checkRectBoundaries(0, offset)) {
-                    zoomRect.setY(zoomRect.getY() + offset);
-                }
-                break;
             default:
                 break;
         }

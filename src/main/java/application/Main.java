@@ -14,7 +14,7 @@ public class Main extends Application {
     /**
      * MainController used for the application.
      */
-    private Controller mainController;
+    private MainController mainController;
 
     /**
      * Usual main method to start the application.
@@ -34,5 +34,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         mainController = new MainController();
         WindowFactory.createWindow(mainController.getRoot());
+
+
     }
 }
