@@ -224,13 +224,13 @@ public final class GraphReducer {
             }
         }
 
-        // If one of the children in the bubble has a piece of DNA sequence containing more
-        // than one nucleotide then abort.
-        for (int i = 0; i < children.size(); i++) {
-            if (nodeMap.get(children.get(i)).getSequence().length() > 1) {
-                return false;
-            }
-        }
+//        // If one of the children in the bubble has a piece of DNA sequence containing more
+//        // than one nucleotide then abort.
+//        for (int i = 0; i < children.size(); i++) {
+//            if (nodeMap.get(children.get(i)).getSequence().length() > 1) {
+//                return false;
+//            }
+//        }
 
         Node child0 = nodeMap.get(children.get(0));
 
