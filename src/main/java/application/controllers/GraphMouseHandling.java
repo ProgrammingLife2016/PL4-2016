@@ -14,8 +14,6 @@ import javafx.scene.input.MouseEvent;
 class GraphMouseHandling {
     private MainController mainController;
 
-    final DragContext dragContext = new DragContext();
-
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
 
@@ -36,11 +34,8 @@ class GraphMouseHandling {
 
         double offsetX = event.getSceneX();
         double offsetY = event.getSceneY();
+
         event.getSceneX();
-        // adjust the offset in case we are zoomed
-        double scale = 1;
-        offsetX /= scale;
-        offsetY /= scale;
         node.relocate(offsetX, offsetY);
     };
 
@@ -48,6 +43,7 @@ class GraphMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
+        cell.getText().setVisible(true);
     };
 
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
@@ -76,15 +72,5 @@ class GraphMouseHandling {
         node.setOnMouseExited(onMouseExitedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnDragDetected(onMouseDraggedEventHandler);
-    }
-
-    /**
-     * Used for dragging of nodes.
-     * Unused at this point of time.
-     */
-    @SuppressFBWarnings({"SIC_INNER_SHOULD_BE_STATIC", "UUF_UNUSED_FIELD"})
-    static class DragContext {
-        double x;
-        double y;
     }
 }
