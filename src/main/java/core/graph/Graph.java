@@ -3,6 +3,7 @@ package core.graph;
 import core.*;
 import core.graph.cell.CellType;
 
+import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -107,7 +108,7 @@ public class Graph {
 
                 //Add link from current cell to next cell
                 model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                        to.getGenomes()));
+                        to.getGenomes()), EdgeType.GRAPH);
             }
         }
 

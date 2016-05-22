@@ -1,7 +1,7 @@
 package application.controllers;
 
-import application.fxobjects.graph.cell.BaseLayout;
-import application.fxobjects.graph.cell.Cell;
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.embed.swing.SwingFXUtils;
@@ -108,7 +108,7 @@ public class GraphController extends Controller<ScrollPane> {
         //.forEach(graphMouseHandling.setMouseHandling());
 
         graph.endUpdate();
-        BaseLayout layout = new BaseLayout(graph.getModel(), 20,
+        GraphLayout layout = new GraphLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
         maxWidth = (int) layout.getMaxWidth();
@@ -130,7 +130,7 @@ public class GraphController extends Controller<ScrollPane> {
      * Method take a snapshot of the current graph.
      * ---- not used because of a null pointer ---
      * TO DO: fix.
-     * @throws IOException
+     * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
         SnapshotParameters snapshotParameters = new SnapshotParameters();

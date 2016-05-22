@@ -1,36 +1,34 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.tree;
 
+import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * Class representing a Rectangle shape. *
+ * Class representing a Phylogenetic middle node.
  */
-public class RectangleCell extends Cell {
-    private final CellType type = CellType.RECTANGLE;
+@SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
+public class MiddleCell extends Cell {
+    private final CellType type = CellType.TREEMIDDLE;
     private Text text;
 
     /**
-     * Rectangle cell constructor.
-     * @param id The ID of a cell.
-     * @param seq The genome sequence of a cell.
+     * Middle cell constructor.
+     * @param id The ID of the cell.
      */
-    public RectangleCell(int id, String seq) {
+    public MiddleCell(int id) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(10);
-        text = new Text(seq);
-        text.setVisible(false);
-        text.setManaged(false);
         Rectangle view = new Rectangle(10, 10);
-        view.setStroke(Color.DODGERBLUE);
-        view.setFill(Color.DODGERBLUE);
+        view.setStroke(Color.TRANSPARENT);
+        view.setFill(Color.TRANSPARENT);
 
-        pane.getChildren().addAll(view, text);
-
+        pane.getChildren().addAll(view);
         setView(pane);
     }
 

@@ -1,5 +1,6 @@
-package application.fxobjects.graph.cell;
+package application.fxobjects.cell.graph;
 
+import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import org.junit.Before;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
- * Test class for BaseLayout.java.
+ * Test class for GraphLayout.java.
  *
  * @author Arthur Breurkes.
  * @since 04-05-2016
@@ -20,8 +21,8 @@ import static org.mockito.Mockito.mock;
 @SuppressWarnings({
        "checkstyle:magicnumber"
 })
-public class BaseLayoutTest {
-    private BaseLayout baseLayout;
+public class GraphLayoutTest {
+    private GraphLayout graphLayout;
 
     @Mock
     public final Graph testGraph = mock(Graph.class);
@@ -32,7 +33,7 @@ public class BaseLayoutTest {
      */
     @Before
     public void setUp() throws Exception {
-        baseLayout = new BaseLayout(null, 0, 0);
+        graphLayout = new GraphLayout(null, 0, 0);
     }
 
     /**
@@ -41,7 +42,7 @@ public class BaseLayoutTest {
      */
     @Test
     public void testConstructor() throws Exception {
-        assertNotNull(baseLayout);
+        assertNotNull(graphLayout);
     }
 
     /**
@@ -50,9 +51,9 @@ public class BaseLayoutTest {
      */
     @Test
     public void testGetAndSetOffset() throws Exception {
-        baseLayout.setOffset(0);
+        graphLayout.setOffset(0);
 
-        assertEquals(0, baseLayout.getOffset());
+        assertEquals(0, graphLayout.getOffset());
     }
 
     /**
@@ -61,9 +62,9 @@ public class BaseLayoutTest {
      */
     @Test
     public void testGetAndSetCurrentX() throws Exception {
-        baseLayout.setCurrentX(42);
+        graphLayout.setCurrentX(42);
 
-        assertEquals(42, baseLayout.getCurrentX());
+        assertEquals(42, graphLayout.getCurrentX());
     }
 
     /**
@@ -72,9 +73,9 @@ public class BaseLayoutTest {
      */
     @Test
     public void testGetAndSetCurrentY() throws Exception {
-        baseLayout.setCurrentY(42);
+        graphLayout.setCurrentY(42);
 
-        assertEquals(42, baseLayout.getCurrentY());
+        assertEquals(42, graphLayout.getCurrentY());
     }
 
     /**
@@ -83,9 +84,9 @@ public class BaseLayoutTest {
      */
     @Test
     public void testGetAndSetLastType() throws Exception {
-        baseLayout.setLastType(CellType.RECTANGLE);
+        graphLayout.setLastType(CellType.RECTANGLE);
 
-        assertEquals(CellType.RECTANGLE, baseLayout.getLastType());
+        assertEquals(CellType.RECTANGLE, graphLayout.getLastType());
     }
 
     /**
@@ -94,9 +95,9 @@ public class BaseLayoutTest {
      */
     @Test
     public void testGetAndSetCellCount() throws Exception {
-        baseLayout.setCellCount(42);
+        graphLayout.setCellCount(42);
 
-        assertEquals(42, baseLayout.getCellCount());
+        assertEquals(42, graphLayout.getCellCount());
     }
 
 }

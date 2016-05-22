@@ -25,18 +25,18 @@ public class PhylogeneticTree {
     }
 
     /**
-     * Get the model of the Tree.
+     * Get the model of the PhylogeneticTree.
      *
-     * @return The model of the Tree.
+     * @return The model of the PhylogeneticTree.
      */
     public Model getModel() {
         return model;
     }
 
     /**
-     * Set the model of the Tree.
+     * Set the model of the PhylogeneticTree.
      *
-     * @param model The model of the Tree.
+     * @param model The model of the PhylogeneticTree.
      */
     public void setModel(Model model) {
         this.model = model;
@@ -58,7 +58,7 @@ public class PhylogeneticTree {
     }
 
     /**
-     * Add TreeNodes to the model to see whether cells are actually added to the model.
+     * Add TreeNodes to the model.
      *
      * @throws IOException Throw exception on read failure.
      */
@@ -66,8 +66,12 @@ public class PhylogeneticTree {
         Tree tree = getTreeFromFile();
         model.setTree(tree);
 
-        for (TreeNode leaf : tree.nodes) {
-            model.addCell(leaf.getKey(), leaf.getName(), CellType.PHYLOGENETIC);
+        for (TreeNode node : tree.nodes) {
+            if (node.isLeaf()) {
+                model.addCell(node.getKey(), node.getName(), CellType.TREELEAF);
+            } else {
+                model.addCell(node.getKey(), node.getName(), CellType.TREEMIDDLE);
+            }
         }
     }
 

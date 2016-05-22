@@ -2,7 +2,6 @@ package core.graph;
 
 import core.Model;
 import core.graph.cell.CellType;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.*;
 
 import java.io.IOException;
@@ -54,7 +53,7 @@ public class PhylogeneticTreeTest {
     @Test
     public void testGetTreeFromFile() {
         try {
-            Tree tree = pt.getTreeFromFile();
+            net.sourceforge.olduvai.treejuxtaposer.drawer.Tree tree = pt.getTreeFromFile();
             assertNotEquals(0, tree.getLeafCount());
         } catch (IOException e) {
             e.printStackTrace();
