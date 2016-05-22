@@ -104,9 +104,7 @@ public class GraphController extends Controller<ScrollPane> {
         for (Cell c : list) {
             graphMouseHandling.setMouseHandling(c);
         }
-
-        //.forEach(graphMouseHandling.setMouseHandling());
-
+        
         graph.endUpdate();
         GraphLayout layout = new GraphLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);
