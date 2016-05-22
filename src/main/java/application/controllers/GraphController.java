@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -98,8 +99,12 @@ public class GraphController extends Controller<ScrollPane> {
         root.getChildren().addAll(graph.getModel().getAddedEdges());
         root.getChildren().addAll(graph.getModel().getAddedCells());
 
-        graph.getModel().getAddedCells().forEach(graphMouseHandling::setMouseHandling);
+        List<Cell> list = graph.getModel().getAddedCells();
 
+        for (Cell c : list) {
+            graphMouseHandling.setMouseHandling(c);
+        }
+        
         graph.endUpdate();
         GraphLayout layout = new GraphLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);
