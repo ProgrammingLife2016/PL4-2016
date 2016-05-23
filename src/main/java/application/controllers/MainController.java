@@ -32,14 +32,12 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane screen;
     @FXML
     private MenuBar menuBar;
-
-
     private ListView list;
     private TextFlow infoList;
     private VBox listVBox;
     private Text id;
     private ScrollPane infoScroller;
-    private int currentView = 9;
+    private int currentView = 0;
     private GraphController graphController;
 
 
@@ -51,6 +49,14 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
+    }
+
+    /**
+     * Getter method for the current view level.
+     * @return the current view level.
+     */
+    public int getCurrentView() {
+        return currentView;
     }
 
     /**
@@ -179,10 +185,8 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-
-        currentView = Math.min(9, currentView);
+        currentView = Math.min(graphController.getGraph().getModel().getLevelMapsSize() - 1, currentView);
         fillGraph(null);
-
     }
 
     /**

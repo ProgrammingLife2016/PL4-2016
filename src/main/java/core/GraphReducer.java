@@ -106,7 +106,7 @@ public final class GraphReducer {
                 continue;
             }
             collapseBubble(nodeMap, parent);
-            collapseIndel(nodeMap, parent);
+            //collapseIndel(nodeMap, parent);
             //collapseNodeSequence(nodeMap, parent);
         }
 

@@ -82,6 +82,14 @@ public class Model {
     }
 
     /**
+     * Retrieves the size of the levelMaps list.
+     * @return the size of the levelMaps list.
+     */
+    public int getLevelMapsSize() {
+        return levelMaps.size();
+    }
+
+    /**
      * Set the phylogenetic tree.
      *
      * @param tree The phylogenetic tree.
