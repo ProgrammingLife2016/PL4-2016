@@ -63,6 +63,7 @@ public class Graph {
         inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        System.out.println("levelmap size: " + levelMaps.size());
 
         //Reset the model, since we have another reference.
         model = new Model();
