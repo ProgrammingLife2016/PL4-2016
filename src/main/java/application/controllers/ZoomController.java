@@ -26,7 +26,7 @@ public class ZoomController extends Controller<BorderPane> {
     /**
      * Method to create the ZoomBox, which will be controlled
      * by the ZoomController
-     * @return
+     * @return the created ZoomBox
      */
     public ZoomBox createZoomBox() {
         ZoomBox z = new ZoomBox(this);

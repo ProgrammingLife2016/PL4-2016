@@ -130,7 +130,8 @@ public class GraphController extends Controller<ScrollPane> {
     public void takeSnapshot() throws IOException {
         WritableImage image = new WritableImage(maxWidth + 50,
                 (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
+        WritableImage snapshot = this.getRoot().getContent().snapshot(
+                new SnapshotParameters(), image);
 
         File output = new File("/snapshot.png");
         output.deleteOnExit();
