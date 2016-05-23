@@ -19,8 +19,9 @@ public class Graph {
 
     private Boolean resetModel = true;
 
-    private Model model;
-    private Model model2;
+    private Model zoomIn;
+    private Model current;
+    private Model zoomOut;
 
     private List<String> genomes = new ArrayList<>();
 
@@ -33,8 +34,9 @@ public class Graph {
      * Class constructor.
      */
     public Graph() throws IOException {
-        model = new Model();
-        model2 = new Model();
+        zoomIn = new Model();
+        current = new Model();
+        zoomOut = new Model();
 
         Parser parser = new Parser();
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
@@ -85,9 +87,12 @@ public class Graph {
 //        }
 
         //Reset the model, since we have another reference.
-        model = new Model();
-        model.setLevelMaps(levelMaps);
+        current = new Model();
+        current.setLevelMaps(levelMaps);
 
+
+
+        //generateModel(current,depth);
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
@@ -103,9 +108,9 @@ public class Graph {
         }
 
         if (root.getGenomes().contains(ref)) {
-            model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+            current.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
         } else {
-            model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+            current.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
         }
 
         genomes.addAll(root.getGenomes());
@@ -121,18 +126,18 @@ public class Graph {
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
                 if (nodeMap.get(j).getGenomes().contains(ref)) {
-                    model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                    current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
-                    model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                    current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
 
                 //Add link from current cell to next cell
-                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                current.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                         to.getGenomes()), EdgeType.GRAPH);
             }
         }
 
-        model.setLayout();
+        current.setLayout();
 
         return true;
     }
@@ -143,10 +148,10 @@ public class Graph {
 
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
-        model.attachOrphansToGraphParent(model.getAddedCells());
+        current.attachOrphansToGraphParent(current.getAddedCells());
 
         // merge added & removed cells with all cells
-        model.merge();
+        current.merge();
     }
 
     /**
@@ -182,7 +187,7 @@ public class Graph {
      * @return The model of the graph.
      */
     public Model getModel() {
-        return model;
+        return current;
     }
 
     /**
@@ -191,7 +196,7 @@ public class Graph {
      * @param model The model of the graph.
      */
     public void setModel(Model model) {
-        this.model = model;
+        this.current = model;
     }
 
     /**
