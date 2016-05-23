@@ -79,11 +79,6 @@ public class ZoomBox extends ScrollPane {
     public Group initZoomBox() {
         Group zoomBox = new Group();
 
-//        String property = "java.io.tmpdir";
-//        String tempDir = System.getProperty(property);
-//        tempDir += "/snapshot.png";
-//        System.out.println(tempDir);
-
         String snapshot = "/snapshot.png";
         FileInputStream stream = null;
         try {

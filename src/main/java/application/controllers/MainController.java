@@ -107,12 +107,9 @@ public class MainController extends Controller<BorderPane> {
                 fillGraph(list.getSelectionModel().getSelectedItem());
                 try {
                     graphController.takeSnapshot();
-                    //graphController.getZoomController().getZoomBox().initZoomBox();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
