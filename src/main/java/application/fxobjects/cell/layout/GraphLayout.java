@@ -67,33 +67,41 @@ public class GraphLayout extends CellLayout {
                 currentX += offset;
 
                 cellCount = cell.getCellChildren().size();
+                if(cellCount<2){
+                    continue;
+                }
+                int yOffset = 5*offset;
                 int oddChildOffset = 0;
-                int evenChildOffset = offset / 2;
-                int modifier = 1;
+                int evenChildOffset = (yOffset) / 2;
+                int modifier = -1;
                 for (Cell child : cell.getCellChildren()){
+
+
                     if(cellCount % 2 == 0){
+
                         child.relocate(currentX, currentY - evenChildOffset);
-                        evenChildOffset = evenChildOffset * (modifier*-1);
+                        evenChildOffset = (yOffset /2) * modifier;
+                        child.setRelocated(true);
+
+                        modifier *= -1;
                         if(modifier > 0){
                             modifier++;
-                        }else {
-                            modifier--;
                         }
-                        modifier *= -1;
-
-                        child.setRelocated(true);
                     } else{
+                        System.out.println(child.getCellId() + ": " +cellCount +", "+ oddChildOffset+" mod: "+ modifier);
+
                         child.relocate(currentX, currentY - oddChildOffset);
-                        oddChildOffset = oddChildOffset + (offset * (modifier*-1));
-                        if(modifier > 0){
-                            modifier++;
-                        }else {
+                        oddChildOffset = ((yOffset) * modifier);
+                        child.setRelocated(true);
+
+                        modifier *= -1;
+                        if(modifier < 0){
                             modifier--;
                         }
-                        modifier *= -1;
-
-                        child.setRelocated(true);
                     }
+
+
+
                 }
             }
         }
