@@ -52,7 +52,6 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -79,9 +78,7 @@ public class GraphController extends Controller<ScrollPane> {
     public ZoomController getZoomController() { return zoomController; }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
+    public void initialize(URL location, ResourceBundle resources) { }
 
     /**
      * Init method for this class.
@@ -112,8 +109,15 @@ public class GraphController extends Controller<ScrollPane> {
         maxWidth = (int) layout.getMaxWidth();
         this.getRoot().setContent(root);
 
-        //takeSnapshot();
     }
+
+    /**
+     * Method to attach the keyHandler to the root of the Controller
+     */
+    public void initKeyHandler() {
+        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
+    }
+
 
     /**
      * Getter method for the genomes.
@@ -126,19 +130,16 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method take a snapshot of the current graph.
-     * ---- not used because of a null pointer ---
-     * TO DO: fix.
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().snapshot(
-                snapshotParameters, new WritableImage(maxWidth + 50, maxHeight));
+        WritableImage image = new WritableImage(maxWidth + 50,
+                (int) screenSize.getHeight());
+        WritableImage snapshot = this.getRoot().getContent().snapshot(
+                new SnapshotParameters(), image);
 
-        File output = new File("snapshot.png");
+        File output = new File("/snapshot.png");
+        output.deleteOnExit();
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
     }
-
-
 }

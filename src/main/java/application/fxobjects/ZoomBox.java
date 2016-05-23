@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -28,18 +30,19 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
+    private KeyHandler keyHandler;
 
     /**
      * Class constructor.
      */
     public ZoomBox() {
+        this.keyHandler = new KeyHandler();
         initVariables();
-
         right = new StackPane();
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
-        this.setOnKeyPressed(new KeyHandler());
+        this.setOnKeyPressed(keyHandler);
     }
 
     /**
@@ -53,6 +56,16 @@ public class ZoomBox extends ScrollPane {
         graphBoxHeight = windowHeight - 10;
         zoomBoxWidth = graphBoxWidth / 5.0;
         zoomBoxHeight = graphBoxHeight / 5.0;
+
+        double rectX = windowWidth - zoomBoxWidth - 20;
+        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
+        zoomRectBorder.setStroke(Color.LIGHTGREY);
+        zoomRectBorder.setStrokeWidth(3);
+
+        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
+        zoomRect.setFill(Color.TRANSPARENT);
+        zoomRect.setStroke(Color.BLACK);
+        zoomRect.setStrokeWidth(3);
     }
 
     /**
@@ -62,22 +75,19 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        double rectX = windowWidth - zoomBoxWidth - 20;
 
-        Image image = new Image("/new_snapshot.png");
+        String snapshot = "/snapshot.png";
+        FileInputStream stream = null;
+        try {
+             stream = new FileInputStream(snapshot);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Image image = new Image(stream);
         ImagePattern pattern = new ImagePattern(image);
 
-
-        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRectBorder.setFill(pattern);
-        zoomRectBorder.setStroke(Color.LIGHTGREY);
-        zoomRectBorder.setStrokeWidth(3);
-
-        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
-        zoomRect.setFill(Color.TRANSPARENT);
-        zoomRect.setStroke(Color.BLACK);
-        zoomRect.setStrokeWidth(3);
-
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
@@ -89,9 +99,9 @@ public class ZoomBox extends ScrollPane {
      *
      * @return The zoom box.
      */
-    public StackPane getZoomBox() {
-        return right;
-    }
+    public StackPane getZoomBox() { return right; }
+
+    public KeyHandler getKeyHandler() { return keyHandler; }
 
 
     /**
@@ -177,7 +187,7 @@ public class ZoomBox extends ScrollPane {
      * @param event A KeyEvent.
      */
     public void moveRectangle(KeyEvent event) {
-        double offset = 4;
+        double offset = 10;
         switch (event.getCode()) {
             case A:
                 if (checkRectBoundaries(-offset, 0)) {
@@ -189,23 +199,12 @@ public class ZoomBox extends ScrollPane {
                     zoomRect.setX(zoomRect.getX() + offset);
                 }
                 break;
-            case W:
-                if (checkRectBoundaries(0, -offset)) {
-                    zoomRect.setY(zoomRect.getY() - offset);
-                }
-                break;
-            case S:
-                if (checkRectBoundaries(0, offset)) {
-                    zoomRect.setY(zoomRect.getY() + offset);
-                }
-                break;
             default:
                 break;
         }
     }
-
     /**
-     * Handles the move funtion.
+     * Handles the move function
      */
     private class KeyHandler implements EventHandler<KeyEvent> {
 
@@ -213,7 +212,5 @@ public class ZoomBox extends ScrollPane {
         public void handle(KeyEvent event) {
             moveRectangle(event);
         }
-
     }
-
 }
