@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Model containing all nodes and edges.
@@ -250,5 +251,25 @@ public class Model {
         // edges
         allEdges.addAll(addedEdges);
         addedEdges.clear();
+    }
+
+    /**
+     * Get the incoming edge from a given child.
+     * @param c the child node.
+     * @return the incoming edge.
+     */
+    public Edge getEdgeFromChild(Cell c) {
+        return addedEdges.stream().filter(e ->
+                e.getTarget().equals(c)).findFirst().orElse(null);
+    }
+
+    /**
+     * Get the outgoing edge from a given Parent.
+     * @param p the parent node.
+     * @return the incoming edge.
+     */
+    public List<Edge> getEdgeFromParent(Cell p) {
+        return addedEdges.stream().filter(e ->
+                e.getSource().equals(p)).collect(Collectors.toList());
     }
 }
