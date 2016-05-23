@@ -8,24 +8,15 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -86,6 +77,10 @@ public class GraphController extends Controller<ScrollPane> {
         return graph;
     }
 
+    /**
+     * Getter method for the ZoomController
+     * @return the ZoomController
+     */
     public ZoomController getZoomController() {
         return zoomController;
     }
@@ -142,6 +137,11 @@ public class GraphController extends Controller<ScrollPane> {
         return graph.getGenomes();
     }
 
+    /**
+     * Getter method for the position of the generated
+     * snapshot
+     * @return the position of the snapshot
+     */
     public String getPosition() {
         return position;
     }

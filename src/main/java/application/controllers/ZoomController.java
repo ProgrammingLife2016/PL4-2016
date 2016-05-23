@@ -18,6 +18,7 @@ public class ZoomController extends Controller<BorderPane> {
 
     /**
      * Constructor method.
+     * @param  g the GraphController currently active
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController(GraphController g) {

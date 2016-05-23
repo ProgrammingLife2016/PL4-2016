@@ -37,6 +37,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Class constructor.
+     * @param g the GraphController currently active
      */
     public ZoomBox(GraphController g) {
         this.keyHandler = new KeyHandler();
@@ -110,6 +111,10 @@ public class ZoomBox extends ScrollPane {
         return right;
     }
 
+    /**
+     * Getter for the KeyHandler
+     * @return the KeyHandler
+     */
     public KeyHandler getKeyHandler() {
         return keyHandler;
     }
