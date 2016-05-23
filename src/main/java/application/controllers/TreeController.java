@@ -22,8 +22,8 @@ import java.util.ResourceBundle;
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
-    private List<Edge> selectedStrains;
-    private List<Edge> collectedStrains;
+    private List<Cell> selectedStrains;
+    private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
 
     /**
@@ -89,9 +89,16 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void selectStrains() {
         collectedStrains.forEach(e -> {
-            if(selectedStrains.contains(e)) selectedStrains.remove(e);
+            if (selectedStrains.contains(e)) selectedStrains.remove(e);
             else selectedStrains.add(e);
         });
+    }
+
+    /**
+     * Colors the selected strains after un-hover.
+     */
+    public void colorSelectedStrains() {
+        selectedStrains.forEach(this::applyCellHighlight);
     }
 
     /**
@@ -103,6 +110,7 @@ public class TreeController extends Controller<ScrollPane> {
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
         collectedStrains.clear();
+        collectedStrains.add(cell);
 
         applyColorUpwards(parentList, Color.RED, 4.0);
     }
@@ -116,6 +124,7 @@ public class TreeController extends Controller<ScrollPane> {
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
         collectedStrains.clear();
+        collectedStrains.add(cell);
 
         applyColorUpwards(parentList, Color.BLACK, 1.0);
     }
@@ -162,11 +171,8 @@ public class TreeController extends Controller<ScrollPane> {
      * @param s the given stroke.
      */
     private void applyColorOnSelf(Edge e, Color c, double s) {
-        if (!selectedStrains.contains(e)) {
-            e.getLine().setStroke(c);
-            e.getLine().setStrokeWidth(s);
-        }
-        collectedStrains.add(e);
+        e.getLine().setStroke(c);
+        e.getLine().setStrokeWidth(s);
     }
 
     /**
@@ -183,11 +189,8 @@ public class TreeController extends Controller<ScrollPane> {
 
             if (next.getCellId() != 0) {
                 Edge e = pt.getModel().getEdgeFromChild(next);
-                if (!selectedStrains.contains(e)) {
-                    e.getLine().setStroke(c);
-                    e.getLine().setStrokeWidth(s);
-                }
-                collectedStrains.add(e);
+                e.getLine().setStroke(c);
+                e.getLine().setStrokeWidth(s);
             }
         }
     }
@@ -207,13 +210,11 @@ public class TreeController extends Controller<ScrollPane> {
             if (!(next instanceof LeafCell)) {
                 List<Edge> edges = pt.getModel().getEdgeFromParent(next);
                 edges.forEach(e -> {
-                    if (!selectedStrains.contains(e)) {
-                        e.getLine().setStroke(c);
-                        e.getLine().setStrokeWidth(s);
-                    }
+                    e.getLine().setStroke(c);
+                    e.getLine().setStrokeWidth(s);
                 });
-                collectedStrains.addAll(edges);
             }
+            else collectedStrains.add(next);
         }
     }
 }

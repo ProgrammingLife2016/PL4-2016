@@ -42,6 +42,7 @@ public class TreeMouseHandling {
         else {
             mainController.getTreeController().revertEdgeHighlight((Edge) event.getSource());
         }
+        mainController.getTreeController().colorSelectedStrains();
     };
 
     /**
