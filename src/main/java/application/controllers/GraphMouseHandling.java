@@ -41,7 +41,7 @@ class GraphMouseHandling {
 
 
     EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
-
+        ((Node)event.getSource()).setCursor(Cursor.HAND);
     };
 
     EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {

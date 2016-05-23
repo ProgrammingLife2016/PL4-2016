@@ -23,6 +23,10 @@ public class Graph {
 
     private List<String> genomes = new ArrayList<>();
 
+    private HashMap<Integer, Node> startMap;
+
+    private List<HashMap<Integer, Node>> levelMaps;
+
 
     /**
      * Class constructor.
@@ -57,12 +61,15 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-        inputStream.close();
 
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        //Only parse the file when we didn't do it already
+        if(startMap==null) {
+            Parser parser = new Parser();
+            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+            startMap = parser.readGFA(inputStream);
+            levelMaps = GraphReducer.createLevelMaps(startMap);
+            inputStream.close();
+        }
 
         //Reset the model, since we have another reference.
         model = new Model();
@@ -73,10 +80,15 @@ public class Graph {
         } else if (depth < 0) {
             depth = 0;
         }
+
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-        //System.out.println("Loading map: " + depth);
+        System.out.println("Loading map: " + depth);
 
         Node root = nodeMap.get(1);
+
+        if (ref == null) {
+            ref = root.getGenomes().get(0);
+        }
 
         if (root.getGenomes().contains(ref)) {
             model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
@@ -85,10 +97,6 @@ public class Graph {
         }
 
         genomes.addAll(root.getGenomes());
-
-        if (ref == null) {
-            ref = root.getGenomes().get(0);
-        }
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
