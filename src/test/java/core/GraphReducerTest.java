@@ -200,28 +200,6 @@ public class GraphReducerTest {
     }
 
     /**
-     * Test the collapse of a four-Node bubble with one of the bubbles oontaining a sequence
-     * that has more than one nucleotide.
-     */
-    @Test
-    public void testCollapseSymmetricalNodeBubbleWithComplexBubble() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(4);
-
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
-        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-
-        nodeMap.get(2).setSequence("ACTG");
-        nodeMap.get(3).setSequence("A");
-
-        GraphReducer.determineParents(nodeMap);
-        assertFalse(GraphReducer.collapseSymmetricalNodeBubble(nodeMap, nodeMap.get(1)));
-
-        assertNotNull(nodeMap.get(2));
-        assertNotNull(nodeMap.get(3));
-    }
-
-    /**
      * Test the collapsing of a triangle of nodes.
      */
     @Test
