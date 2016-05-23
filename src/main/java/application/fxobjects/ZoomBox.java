@@ -12,11 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -73,14 +70,15 @@ public class ZoomBox extends ScrollPane {
         Group zoomBox = new Group();
         double rectX = windowWidth - zoomBoxWidth - 20;
 
-        String property = "java.io.tmpdir";
-        String tempDir = System.getProperty(property);
-        tempDir += "/snapshot.png";
-        System.out.println(tempDir);
+//        String property = "java.io.tmpdir";
+//        String tempDir = System.getProperty(property);
+//        tempDir += "/snapshot.png";
+//        System.out.println(tempDir);
 
+        String snapshot = "/snapshot.png";
         FileInputStream stream = null;
         try {
-             stream = new FileInputStream(tempDir);
+             stream = new FileInputStream(snapshot);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -216,7 +214,7 @@ public class ZoomBox extends ScrollPane {
         }
     }
     /**
-     * Handles the move funjava.lang.Integerction.
+     * Handles the move function
      */
     private class KeyHandler implements EventHandler<KeyEvent> {
 

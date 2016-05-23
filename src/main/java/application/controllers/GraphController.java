@@ -127,16 +127,28 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        String snapshot = "snapshot";
-        File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        File tempFile = File.createTempFile(snapshot, ".png", tempDir);
-        FileWriter fileWriter = new FileWriter(tempFile, true);
-        StringBuffer sb = new StringBuffer();
-        BufferedWriter bw = new BufferedWriter(fileWriter);
-        bw.write(sb.toString());
-        bw.close();
+//        String snapshot = "snapshot";
+//        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+//        File tempFile = File.createTempFile(snapshot, ".png", tempDir);
+//        FileWriter fileWriter = new FileWriter(tempFile, true);
+//        StringBuffer sb = new StringBuffer();
+//        BufferedWriter bw = new BufferedWriter(fileWriter);
+//        bw.write(sb.toString());
+//        bw.close();
+//
+//        System.out.println(tempFile.getAbsolutePath());
 
-        System.out.println(tempFile.getAbsolutePath());
+
+
+        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
+       //  WritableImage snapshot = this.getRoot().snapshot(new SnapshotParameters(), new WritableImage(maxWidth + 50, maxHeight));
+         WritableImage image = new WritableImage(maxWidth + 50, (int) screenSize.getHeight());
+         WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
+
+         //File output = new File("snapshot.png");
+        File output = new File("/snapshot.png");
+        output.deleteOnExit();
+        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
 
     }
 }

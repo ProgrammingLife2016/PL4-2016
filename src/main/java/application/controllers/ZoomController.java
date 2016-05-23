@@ -29,7 +29,6 @@ public class ZoomController extends Controller<BorderPane> {
         super(new BorderPane());
     }
 
-
     public ZoomBox createZoomBox() {
         ZoomBox z = new ZoomBox(this);
         zoomBox = z;
