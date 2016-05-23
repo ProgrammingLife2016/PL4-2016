@@ -27,6 +27,11 @@ public class Node {
     private String sequence;
 
     /**
+     * The number of underlying collapses.
+     */
+    private int collapseLevel;
+
+    /**
      * 'Depth' of the node in the genome.
      */
     private int zIndex;
@@ -74,6 +79,8 @@ public class Node {
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
+
+        this.collapseLevel = 0;
     }
 
     /**
@@ -208,6 +215,21 @@ public class Node {
      */
     public void setSequence(String sequence) {
         this.sequence = sequence;
+    }
+
+    /**
+     * Get the collapse level.
+     * @return The collapse level.
+     */
+    public int getCollapseLevel() {
+        return collapseLevel;
+    }
+
+    /**
+     * Increment the collapse level.
+     */
+    public void incrementCollapseLevel() {
+        this.collapseLevel++;
     }
 
     /**

@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 /**
@@ -151,53 +148,38 @@ public class GraphReducerTest {
 //        assertTrue(nodeMap.get(3).getGenomes().contains("c"));
 //    }
 //
-//    /**
-//     * Test the collapsing of a parent with two children.
-//     */
-//    @Test
-//    public void testCollapseBubble() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(4);
+    /**
+     * Test the collapsing of a parent with two children.
+     */
+    @Test
+    public void testCollapseBubble() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(6);
+        nodeMap.get(1).setSequence("A");
+
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5, 6)));
+
+        GraphReducer.determineParents(nodeMap);
+        assertEquals(0, nodeMap.get(1).getCollapseLevel());
+        assertEquals(NodeType.BASE, nodeMap.get(1).getType());
+
+        // Collapse the bubble
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+
+        assertEquals(2, nodeMap.get(1).getLinks(nodeMap).size());
+        assertEquals(5, (int) nodeMap.get(1).getLinks(nodeMap).get(0));
+        assertEquals(6, (int) nodeMap.get(1).getLinks(nodeMap).get(1));
+        assertEquals(1, nodeMap.get(1).getCollapseLevel());
+        assertEquals(NodeType.BUBBLE, nodeMap.get(1).getType());
+        assertEquals("", nodeMap.get(1).getSequence());
+
+        assertNull(nodeMap.get(2));
+        assertNull(nodeMap.get(3));
+        assertNull(nodeMap.get(4));
+    }
 //
-//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
-//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-//
-//        GraphReducer.determineParents(nodeMap);
-//        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
-//
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(2).getId());
-//
-//        assertNull(nodeMap.get(3));
-//
-//        assertTrue(nodeMap.get(2).getParents(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(2).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-//    }
-//
-//    /**
-//     * Test the genome stacking of a collapse of a four-Node bubble.
-//     */
-//    @Test
-//    public void testCollapseBubbleGenomeStacking() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(4);
-//
-//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
-//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-//
-//        String[] genome2 = {"b"};
-//        String[] genome3 = {"c"};
-//
-//        nodeMap.get(2).addAllGenome(genome2);
-//        nodeMap.get(3).addAllGenome(genome3);
-//
-//        GraphReducer.determineParents(nodeMap);
-//        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
-//
-//        assertTrue(nodeMap.get(2).getGenomes().size() == 2);
-//        assertTrue(nodeMap.get(2).getGenomes().contains("b"));
-//        assertTrue(nodeMap.get(2).getGenomes().contains("c"));
-//    }
 //
 //    /**
 //     * Test the collapsing of a triangle of nodes.

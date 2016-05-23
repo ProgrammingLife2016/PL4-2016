@@ -5,9 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -60,7 +58,8 @@ public final class GraphReducer {
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMaps.get(i).size();
-
+            System.out.println("Previous Map: " + (i - 1) + ", Map size: " + previousMapSize
+                    + ", Map: " + i + ", Map size: " + currentMapSize);
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= 2) {
@@ -106,7 +105,7 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            //collapseBubble(nodeMap, parent);
+            collapseBubble(nodeMap, parent);
             collapseIndel(nodeMap, parent);
             //collapseNodeSequence(nodeMap, parent);
         }
@@ -176,18 +175,14 @@ public final class GraphReducer {
             Node child2 = nodeMap.get(child2Id);
 
             if (child1ChildrenIds.contains(child2Id)) {
+                parent.incrementCollapseLevel();
                 parent.setType(NodeType.INDEL);
-                parent.setLinks(child2ChildrenIds);
-
                 nodeMap.remove(child1Id);
-                nodeMap.remove(child2Id);
                 return true;
 
             } else if (child2ChildrenIds.contains(child1Id)) {
+                parent.incrementCollapseLevel();
                 parent.setType(NodeType.INDEL);
-                parent.setLinks(child1ChildrenIds);
-
-                nodeMap.remove(child1Id);
                 nodeMap.remove(child2Id);
                 return true;
             }
@@ -226,11 +221,15 @@ public final class GraphReducer {
                 return false;
             }
         }
+        // At this point all children have the same grand child
+
 
         Node child0 = nodeMap.get(children.get(0));
+        int grandChildId = child0.getLinks(nodeMap).get(0);
+        Node grandChild = nodeMap.get(grandChildId);
 
         // Remove redundant nodes in bubble
-        for (int i = 1; i < children.size(); i++) {
+        for (int i = 0; i < children.size(); i++) {
             int childId = children.get(i);
             Node child = nodeMap.get(childId);
 
@@ -239,7 +238,13 @@ public final class GraphReducer {
             }
         }
 
+        // Set the children of the grand child to the parent
+        parent.setLinks(grandChild.getLinks());
+        nodeMap.remove(grandChildId);
+
+        parent.incrementCollapseLevel();
         parent.setType(NodeType.BUBBLE);
+        parent.setSequence("");
         return true;
     }
 }

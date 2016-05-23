@@ -2,6 +2,8 @@ package core;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.tree.LeafCell;
 import application.fxobjects.cell.graph.RectangleCell;
 import application.fxobjects.cell.graph.TriangleCell;
@@ -141,6 +143,14 @@ public class Model {
             case TRIANGLE:
                 TriangleCell circleCell = new TriangleCell(id, text);
                 addCell(circleCell);
+                break;
+            case BUBBLE:
+                BubbleCell bubbleCell = new BubbleCell(id, text);
+                addCell(bubbleCell);
+                break;
+            case INDEL:
+                IndelCell indelCell = new IndelCell(id, text);
+                addCell(indelCell);
                 break;
             case TREELEAF:
                 LeafCell leafCell = new LeafCell(id, text);

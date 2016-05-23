@@ -17,16 +17,20 @@ public class BubbleCell extends Cell {
     /**
      * Bubble cell constructor.
      * @param id The ID of a cell.
+     * @param collapseLevel The collapse level of a cell.
      */
-    public BubbleCell(int id) {
+    public BubbleCell(int id, String collapseLevel) {
         super(id);
         StackPane pane = new StackPane();
         pane.setMaxHeight(10);
-        Circle view = new Circle(10);
+        text = new Text(collapseLevel);
+        text.setVisible(false);
+        text.setManaged(false);
+        Circle view = new Circle(5);
         view.setStroke(Color.YELLOW);
         view.setFill(Color.YELLOW);
 
-        pane.getChildren().addAll(view);
+        pane.getChildren().addAll(view, text);
         setView(pane);
     }
 

@@ -100,10 +100,19 @@ public class Graph {
                 Node to = nodeMap.get(j);
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
-                if (nodeMap.get(j).getGenomes().contains(ref)) {
-                    model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                } else {
-                    model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+
+                NodeType type = nodeMap.get(j).getType();
+
+                if (type == NodeType.BASE) {
+                    if (nodeMap.get(j).getGenomes().contains(ref)) {
+                        model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                    } else {
+                        model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                    }
+                } else if (type == NodeType.BUBBLE) {
+                    model.addCell(to.getId(), to.getSequence(), CellType.BUBBLE);
+                } else if (type == NodeType.INDEL) {
+                    model.addCell(to.getId(), to.getSequence(), CellType.INDEL);
                 }
 
                 //Add link from current cell to next cell

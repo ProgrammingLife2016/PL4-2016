@@ -57,6 +57,8 @@ public class GraphLayout extends CellLayout {
             switch (cell.getType()) {
 
                 case RECTANGLE:
+                case BUBBLE:
+                case INDEL:
                     currentX += offset;
                     if (currentX > maxWidth) {
                         maxWidth = currentX;
@@ -68,7 +70,7 @@ public class GraphLayout extends CellLayout {
                     cellCount = 1;
                     break;
                 case TRIANGLE:
-                    if (cellCount % 2 == 0) {
+                        if (cellCount % 2 == 0) {
                         currentY += cellCount * offset;
                     } else {
                         currentY -= cellCount * offset;

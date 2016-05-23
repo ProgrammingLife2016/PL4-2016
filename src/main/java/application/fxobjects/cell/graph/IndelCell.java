@@ -17,21 +17,24 @@ public class IndelCell extends Cell {
     /**
      * Indel cell constructor.
      * @param id The ID of a cell.
+     * @param collapseLevel The collapse level of a cell.
      */
-    public IndelCell(int id) {
+    public IndelCell(int id, String collapseLevel) {
         super(id);
         double width = 10;
         double height = 10;
 
         StackPane pane = new StackPane();
         pane.setMaxHeight(10);
-
+        text = new Text(collapseLevel);
+        text.setVisible(false);
+        text.setManaged(false);
         Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
 
         view.setStroke(Color.YELLOW);
         view.setFill(Color.YELLOW);
 
-        pane.getChildren().addAll(view);
+        pane.getChildren().addAll(view, text);
         setView(pane);
     }
 
