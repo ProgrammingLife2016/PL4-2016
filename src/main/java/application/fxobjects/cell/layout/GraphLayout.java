@@ -85,7 +85,6 @@ public class GraphLayout extends CellLayout {
 
                     cellCount++;
                     cell.relocate(currentX, currentY);
-                    cell.setRelocated(true);
 
                     // Don't draw triangles above rectangles
                     if (currentY != centerY) {
