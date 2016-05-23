@@ -106,8 +106,8 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            collapseSymmetricalNodeBubble(nodeMap, parent);
-            collapseAsymmetricalNodeBubble(nodeMap, parent);
+            collapseBubble(nodeMap, parent);
+            collapseIndel(nodeMap, parent);
             collapseNodeSequence(nodeMap, parent);
         }
 
@@ -166,7 +166,7 @@ public final class GraphReducer {
      * @return Whether nodes have been collapsed.
      */
     public static Boolean
-    collapseAsymmetricalNodeBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+    collapseIndel(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
         if (children.size() == 2) {
             int child1Id = children.get(0);
@@ -202,7 +202,9 @@ public final class GraphReducer {
      * @return Whether nodes have been collapsed.
      */
     public static Boolean
-    collapseSymmetricalNodeBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+    collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+        NodeType newNodeType = NodeType.BUBBLE;
+        
         List<Integer> children = parent.getLinks(nodeMap);
         if (children.size() <= 1) {
             return false;

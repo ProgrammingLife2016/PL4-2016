@@ -17,6 +17,11 @@ public class Node {
     private int id;
 
     /**
+     * The type of node.
+     */
+    private NodeType type;
+
+    /**
      * Actual nucleic acid sequence of the node.
      */
     private String sequence;
@@ -49,7 +54,21 @@ public class Node {
      * @param z   - The 'depth' of the node in the genome.
      */
     public Node(int id, String seq, int z) {
+        this(id, NodeType.BASE, seq, z);
+    }
+
+
+    /**
+     * Node constructor.
+     *
+     * @param id  - Node identifier.
+     * @param type - The type of node.
+     * @param seq - Actual nucleic acid sequence contents of the node.
+     * @param z   - The 'depth' of the node in the genome.
+     */
+    public Node(int id, NodeType type, String seq, int z) {
         this.id = id;
+        this.type = type;
         this.sequence = seq;
         this.zIndex = z;
         this.links = new ArrayList<>();
@@ -157,6 +176,22 @@ public class Node {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * Get the node type.
+     * @return The node type.
+     */
+    public NodeType getType() {
+        return type;
+    }
+
+    /**
+     * Set the node type.
+     * @param type The node type.
+     */
+    public void setType(NodeType type) {
+        this.type = type;
     }
 
     /**

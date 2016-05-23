@@ -155,7 +155,7 @@ public class GraphReducerTest {
      * Test the collapsing of a parent with two children.
      */
     @Test
-    public void testCollapseSymmetricalNodeBubble() {
+    public void testCollapseBubble() {
         HashMap<Integer, Node> nodeMap = createNodeMap(4);
 
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
@@ -163,7 +163,7 @@ public class GraphReducerTest {
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
 
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseSymmetricalNodeBubble(nodeMap, nodeMap.get(1)));
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
 
         assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
         assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(2).getId());
@@ -178,7 +178,7 @@ public class GraphReducerTest {
      * Test the genome stacking of a collapse of a four-Node bubble.
      */
     @Test
-    public void testCollapseSymmetricalNodeBubbleGenomeStacking() {
+    public void testCollapseBubbleGenomeStacking() {
         HashMap<Integer, Node> nodeMap = createNodeMap(4);
 
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
@@ -192,7 +192,7 @@ public class GraphReducerTest {
         nodeMap.get(3).addAllGenome(genome3);
 
         GraphReducer.determineParents(nodeMap);
-        GraphReducer.collapseSymmetricalNodeBubble(nodeMap, nodeMap.get(1));
+        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
 
         assertTrue(nodeMap.get(2).getGenomes().size() == 2);
         assertTrue(nodeMap.get(2).getGenomes().contains("b"));
@@ -203,13 +203,13 @@ public class GraphReducerTest {
      * Test the collapsing of a triangle of nodes.
      */
     @Test
-    public void testCollapseAsymmetricalNodeBubble() {
+    public void testCollapseIndel() {
         HashMap<Integer, Node> nodeMap = createNodeMap(3);
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
         nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
 
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseAsymmetricalNodeBubble(nodeMap, nodeMap.get(1)));
+        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
 
         assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
         assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
@@ -224,7 +224,7 @@ public class GraphReducerTest {
      * Test the genome stacking of a node-triangle.
      */
     @Test
-    public void testCollapseAsymmetricalNodeBubbleGenomeStacking() {
+    public void testCollapseIndelGenomeStacking() {
         HashMap<Integer, Node> nodeMap = createNodeMap(3);
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
         nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
@@ -238,7 +238,7 @@ public class GraphReducerTest {
         nodeMap.get(3).addAllGenome(genome3);
 
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseAsymmetricalNodeBubble(nodeMap, nodeMap.get(1)));
+        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
 
         assertTrue(nodeMap.get(3).getGenomes().size() == 2);
         assertTrue(nodeMap.get(3).getGenomes().contains("b"));
