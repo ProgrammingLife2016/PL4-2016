@@ -131,11 +131,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        graphController = new GraphController(graph, ref, this, 0);
+        graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
 
         this.getRoot().setCenter(screen);
-        System.out.println(screen);
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
 

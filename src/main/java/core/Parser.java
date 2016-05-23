@@ -57,11 +57,11 @@ public class Parser {
 
                     if (!nodeMap.containsKey(id)) {
                         nodeMap.put(id, new Node(id, sequence, z));
-                        if (!(sequence.contains("A") || sequence.contains("C")
-                                || sequence.contains("T") || sequence.contains("G"))) {
-                            System.out.println("Node: " + id + " Contains NOT(ATCG). Seq: "
-                                    + sequence);
-                        }
+//                        if (!(sequence.contains("A") || sequence.contains("C")
+//                                || sequence.contains("T") || sequence.contains("G"))) {
+//                            System.out.println("Node: " + id + " Contains NOT(ATCG). Seq: "
+//                                    + sequence);
+//                        }
                     } else {
                         nodeMap.get(id).setSequence(sequence);
                         nodeMap.get(id).setzIndex(z);
