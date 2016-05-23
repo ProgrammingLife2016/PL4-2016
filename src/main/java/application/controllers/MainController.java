@@ -62,12 +62,6 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
-
-    /**
-     * On the right side of the screen, create a VBox showing:
-     * - A list with all genome strains.
-     * - A box with info on a selected node.
-     */
     private void createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -93,7 +87,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Create a list on the right side of the screen with all genomes.
      */
-    private void createList() {
+    public void createList() {
         list = new ListView<>();
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.prefHeightProperty().bind(listVBox.heightProperty());

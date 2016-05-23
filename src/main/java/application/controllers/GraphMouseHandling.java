@@ -4,18 +4,17 @@ import application.fxobjects.cell.Cell;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
 /**
  * Class responsible for the handling of mouse events
  */
-public class GraphMouseHandling {
-    MainController mainController;
+class GraphMouseHandling {
+    private MainController mainController;
 
-    //final DragContext dragContext = new DragContext();
-
-    EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
+    private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
 
         core.Node clicked = mainController.getGraphController().getGraph()
@@ -29,12 +28,21 @@ public class GraphMouseHandling {
 
         mainController.modifyNodeInfo(info);
     };
+    
+    private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
+        Node node = (Node) event.getSource();
 
-    EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
+        double offsetX = event.getSceneX();
+        double offsetY = event.getSceneY();
 
+        event.getSceneX();
+        node.relocate(offsetX, offsetY);
     };
 
-    EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
+
+    private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
+        Cell cell = (Cell) event.getSource();
+        cell.setCursor(Cursor.HAND);
 
     };
 
@@ -44,7 +52,7 @@ public class GraphMouseHandling {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphMouseHandling(MainController m) {
+    GraphMouseHandling(MainController m) {
         this.mainController = m;
     }
 
@@ -56,16 +64,7 @@ public class GraphMouseHandling {
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
-        node.setOnMouseExited(onMouseExitedEventHandler);
-    }
-
-    /**
-     * Used for dragging of nodes.
-     * Unused at this point of time.
-     */
-    @SuppressFBWarnings({"SIC_INNER_SHOULD_BE_STATIC", "UUF_UNUSED_FIELD"})
-    static class DragContext {
-        double x;
-        double y;
+        node.setOnMouseDragged(onMouseDraggedEventHandler);
+        node.setOnDragDetected(onMouseDraggedEventHandler);
     }
 }
