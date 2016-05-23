@@ -13,6 +13,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
@@ -68,9 +73,20 @@ public class ZoomBox extends ScrollPane {
         Group zoomBox = new Group();
         double rectX = windowWidth - zoomBoxWidth - 20;
 
-        Image image = new Image("/snapshot.png");
-        ImagePattern pattern = new ImagePattern(image);
+        String property = "java.io.tmpdir";
+        String tempDir = System.getProperty(property);
+        tempDir += "/snapshot.png";
+        System.out.println(tempDir);
 
+        FileInputStream stream = null;
+        try {
+             stream = new FileInputStream(tempDir);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Image image = new Image(stream);
+        ImagePattern pattern = new ImagePattern(image);
 
         zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRectBorder.setFill(pattern);
@@ -200,7 +216,7 @@ public class ZoomBox extends ScrollPane {
         }
     }
     /**
-     * Handles the move funtion.
+     * Handles the move funjava.lang.Integerction.
      */
     private class KeyHandler implements EventHandler<KeyEvent> {
 
@@ -208,6 +224,5 @@ public class ZoomBox extends ScrollPane {
         public void handle(KeyEvent event) {
             moveRectangle(event);
         }
-
     }
 }

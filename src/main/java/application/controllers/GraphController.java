@@ -13,7 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -51,7 +53,6 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -107,6 +108,11 @@ public class GraphController extends Controller<ScrollPane> {
 
     }
 
+    public void initKeyHandler() {
+        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
+    }
+
+
     /**
      * Getter method for the genomes.
      *
@@ -121,10 +127,16 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        WritableImage image = new WritableImage(maxWidth + 50, (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
+        String snapshot = "snapshot";
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        File tempFile = File.createTempFile(snapshot, ".png", tempDir);
+        FileWriter fileWriter = new FileWriter(tempFile, true);
+        StringBuffer sb = new StringBuffer();
+        BufferedWriter bw = new BufferedWriter(fileWriter);
+        bw.write(sb.toString());
+        bw.close();
 
-        File output = new File("/snapshot.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+        System.out.println(tempFile.getAbsolutePath());
+
     }
 }

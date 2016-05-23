@@ -27,20 +27,18 @@ public class ZoomController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
         super(new BorderPane());
-        zoomBox = new ZoomBox(this);
-
-        init();
     }
 
+
+    public ZoomBox createZoomBox() {
+        ZoomBox z = new ZoomBox(this);
+        zoomBox = z;
+
+        this.getRoot().setBottom(zoomBox.getZoomBox());
+        return zoomBox;
+    }
 
     public ZoomBox getZoomBox() { return zoomBox; }
-
-    /**
-     * Init method.
-     */
-    public void init() {
-        this.getRoot().setBottom(zoomBox.getZoomBox());
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

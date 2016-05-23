@@ -18,7 +18,7 @@ public final class GraphReducer {
     private GraphReducer() {
     }
 
-    private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<HashMap<Integer, Node>>();
+    private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
 
     /**
      * Give all nodes a list of its parents.
@@ -77,7 +77,7 @@ public final class GraphReducer {
      */
     @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     private static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
-        HashMap<Integer, Node> res = new HashMap<Integer, Node>();
+        HashMap<Integer, Node> res = new HashMap<>();
         for (int i : map.keySet()) {
             Node n = map.get(i);
             Node newNode = new Node(n.getId(), n.getSequence(), n.getzIndex());
@@ -228,7 +228,6 @@ public final class GraphReducer {
         // than one nucleotide then abort.
         for (int i = 0; i < children.size(); i++) {
             if (nodeMap.get(children.get(i)).getSequence().length() > 1) {
-//                return false;
             }
         }
 
@@ -255,9 +254,9 @@ public final class GraphReducer {
      * @param toAdd Node of which its genome has to be added to the base node.
      */
     public static void addGenomes(Node base, Node toAdd) {
-        Set<String> hs = new LinkedHashSet<String>(base.getGenomes());
+        Set<String> hs = new LinkedHashSet<>(base.getGenomes());
         hs.addAll(toAdd.getGenomes());
 
-        base.setGenomes(new ArrayList<String>(hs));
+        base.setGenomes(new ArrayList<>(hs));
     }
 }

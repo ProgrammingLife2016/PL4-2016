@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
@@ -144,8 +143,17 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
+        try {
+            graphController.takeSnapshot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
 
         createInfoList("");
 
@@ -153,14 +161,8 @@ public class MainController extends Controller<BorderPane> {
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
 
-
         showListVBox();
 
-        try {
-            graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
