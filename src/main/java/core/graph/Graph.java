@@ -1,15 +1,18 @@
 package core.graph;
 
-import core.*;
+import core.GraphReducer;
+import core.Model;
+import core.Node;
+import core.Parser;
 import core.graph.cell.CellType;
-
 import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class representing a graph.
@@ -88,6 +91,18 @@ public class Graph {
         }
         current = generateModel(ref, depth);
 
+        //@TODO In thread zetten.
+        // @TODO Switch methode maken.
+        //@TODO check maken of we al kunnen switchen(Is de thread al klaar?)
+
+//        new Thread("joop"){
+//            public void run() {
+//                //zoomOut = generateModel(ref, depth-1);
+//            }
+//        }.run();
+//
+//        zoomIn = generateModel(ref, depth + 1);
+
         return true;
     }
 
@@ -105,7 +120,10 @@ public class Graph {
             current.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
         }
 
+
+        genomes = new ArrayList<>();
         genomes.addAll(root.getGenomes());
+
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);

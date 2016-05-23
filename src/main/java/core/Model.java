@@ -267,7 +267,7 @@ public class Model {
         GraphLayout layout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
 
-        System.out.println(("KUTKACHEL" + addedCells.size()));
+        //System.out.println(("KUTKACHEL" + addedCells.size()));
         layout.execute();
         maxWidth = (int) layout.getMaxWidth();
     }
