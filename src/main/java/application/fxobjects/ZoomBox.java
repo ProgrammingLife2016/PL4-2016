@@ -31,7 +31,6 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
-    private ZoomController zoomController;
     private KeyHandler keyHandler;
 
     /**
@@ -39,7 +38,6 @@ public class ZoomBox extends ScrollPane {
      * @param z ZoomController which controls the class
      */
     public ZoomBox(ZoomController z) {
-        this.zoomController = z;
         this.keyHandler = new KeyHandler();
         initVariables();
         right = new StackPane();
