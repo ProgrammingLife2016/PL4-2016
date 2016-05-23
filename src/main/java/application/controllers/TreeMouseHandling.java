@@ -33,80 +33,20 @@ public class TreeMouseHandling {
 
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         if(event.getSource() instanceof Cell) {
-            Cell node = (Cell) event.getSource();
-            List<Cell> parentList = new ArrayList<>();
-            parentList.add(node);
-
-            while(!parentList.isEmpty()) {
-                Cell next = parentList.remove(0);
-                parentList.addAll(next.getCellParents());
-
-                if (next.getCellId() != 0) {
-                    Edge edge = mainController.getTreeController().getPT().getModel().getEdgeFromChild(next);
-                    edge.getLine().setStroke(Color.RED);
-                    edge.getLine().setStrokeWidth(4.0);
-                }
-            }
+            mainController.getTreeController().applyCellHighlight((Cell) event.getSource());
         }
         else {
-            Edge node = (Edge) event.getSource();
-            List<Cell> parentList = new ArrayList<>();
-            parentList.add(node.getTarget());
-            node.getLine().setStroke(Color.RED);
-            node.getLine().setStrokeWidth(4.0);
+            mainController.getTreeController().applyEdgeHighlight((Edge) event.getSource());
 
-
-            while(!parentList.isEmpty()) {
-                Cell next = parentList.remove(0);
-                parentList.addAll(next.getCellChildren());
-
-                if(!(next instanceof LeafCell)) {
-                    List<Edge> edges = mainController.getTreeController().getPT().getModel().getEdgeFromParent(next);
-                    edges.forEach(e -> {
-                        e.getLine().setStroke(Color.RED);
-                        e.getLine().setStrokeWidth(4.0);
-                    });
-                }
-            }
         }
     };
 
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
         if(event.getSource() instanceof Cell) {
-            Cell node = (Cell) event.getSource();
-            List<Cell> childList = new ArrayList<>();
-            childList.add(node);
-
-            while(!childList.isEmpty()) {
-                Cell next = childList.remove(0);
-                childList.addAll(next.getCellParents());
-
-                if(next.getCellId() != 0) {
-                    Edge edge = mainController.getTreeController().getPT().getModel().getEdgeFromChild(next);
-                    edge.getLine().setStroke(Color.BLACK);
-                    edge.getLine().setStrokeWidth(1.0);
-                }
-            }
+            mainController.getTreeController().revertCellHighlight((Cell) event.getSource());
         }
         else {
-            Edge node = (Edge) event.getSource();
-            List<Cell> childList = new ArrayList<>();
-            childList.add(node.getTarget());
-            node.getLine().setStroke(Color.BLACK);
-            node.getLine().setStrokeWidth(1.0);
-
-            while(!childList.isEmpty()) {
-                Cell next = childList.remove(0);
-                childList.addAll(next.getCellChildren());
-
-                if(!(next instanceof LeafCell)) {
-                    List<Edge> edges = mainController.getTreeController().getPT().getModel().getEdgeFromParent(next);
-                    edges.forEach(e -> {
-                        e.getLine().setStroke(Color.BLACK);
-                        e.getLine().setStrokeWidth(1.0);
-                    });
-                }
-            }
+            mainController.getTreeController().revertEdgeHighlight((Edge) event.getSource());
         }
     };
 
