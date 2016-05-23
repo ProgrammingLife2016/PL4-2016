@@ -3,9 +3,9 @@ package application.controllers;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import application.fxobjects.cell.layout.CellLayout;
+import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
 import core.graph.PhylogeneticTree;
-import application.fxobjects.cell.layout.TreeLayout;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
+    private List<Edge> selectedStrains;
+    private List<Edge> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
 
     /**
@@ -32,6 +34,8 @@ public class TreeController extends Controller<ScrollPane> {
     public TreeController(PhylogeneticTree pt, MainController m) {
         super(new ScrollPane());
         this.pt = pt;
+        this.selectedStrains = new ArrayList<>();
+        this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -81,29 +85,44 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Selects strains to keep them highlighted.
+     */
+    public void selectStrains() {
+        collectedStrains.forEach(e -> {
+            if(selectedStrains.contains(e)) selectedStrains.remove(e);
+            else selectedStrains.add(e);
+        });
+    }
+
+    /**
      * Applies the highlight in the phylogenetic tree on hovering over a leafNode.
+     *
      * @param cell the Cell being hovered over.
      */
     public void applyCellHighlight(Cell cell) {
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
+        collectedStrains.clear();
 
         applyColorUpwards(parentList, Color.RED, 4.0);
     }
 
     /**
      * Reverts the highlight in the phylogenetic tree on losing hover over a leafNode.
+     *
      * @param cell the Cell which is no longer being hovered over.
      */
     public void revertCellHighlight(Cell cell) {
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
+        collectedStrains.clear();
 
         applyColorUpwards(parentList, Color.BLACK, 1.0);
     }
 
     /**
      * Applies the highlight in the phylogenetic tree on hovering over an Edge.
+     *
      * @param edge the Edge being hovered over.
      */
     public void applyEdgeHighlight(Edge edge) {
@@ -111,6 +130,7 @@ public class TreeController extends Controller<ScrollPane> {
         List<Cell> childList = new ArrayList<>();
         parentList.add(edge.getSource());
         childList.add(edge.getTarget());
+        collectedStrains.clear();
 
         applyColorOnSelf(edge, Color.RED, 4.0);
         applyColorUpwards(parentList, Color.RED, 4.0);
@@ -119,6 +139,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Reverts the highlight in the phylogenetic tree on losing hover over an Edge.
+     *
      * @param edge the Edge which is no longer being hovered over.
      */
     public void revertEdgeHighlight(Edge edge) {
@@ -126,6 +147,7 @@ public class TreeController extends Controller<ScrollPane> {
         List<Cell> childList = new ArrayList<>();
         parentList.add(edge.getSource());
         childList.add(edge.getTarget());
+        collectedStrains.clear();
 
         applyColorOnSelf(edge, Color.BLACK, 1.0);
         applyColorUpwards(parentList, Color.BLACK, 1.0);
@@ -134,51 +156,63 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Apply a certain color and stroke to the edge being hovered over.
+     *
      * @param e the given Edge.
      * @param c the given Color.
      * @param s the given stroke.
      */
     private void applyColorOnSelf(Edge e, Color c, double s) {
-        e.getLine().setStroke(c);
-        e.getLine().setStrokeWidth(s);
+        if (!selectedStrains.contains(e)) {
+            e.getLine().setStroke(c);
+            e.getLine().setStrokeWidth(s);
+        }
+        collectedStrains.add(e);
     }
 
     /**
      * Apply a certain color and stroke to the edges upwards from the node in the list.
+     *
      * @param l the given List of Edges.
      * @param c the given Color.
      * @param s the given stroke.
      */
-    private void applyColorUpwards(List<Cell> l, Color c, Double s) {
-        while(!l.isEmpty()) {
+    private void applyColorUpwards(List<Cell> l, Color c, double s) {
+        while (!l.isEmpty()) {
             Cell next = l.remove(0);
             l.addAll(next.getCellParents());
 
-            if(next.getCellId() != 0) {
+            if (next.getCellId() != 0) {
                 Edge e = pt.getModel().getEdgeFromChild(next);
-                e.getLine().setStroke(c);
-                e.getLine().setStrokeWidth(s);
+                if (!selectedStrains.contains(e)) {
+                    e.getLine().setStroke(c);
+                    e.getLine().setStrokeWidth(s);
+                }
+                collectedStrains.add(e);
             }
         }
     }
 
     /**
      * Apply a certain color and stroke to the edges downwards from the node in the list.
+     *
      * @param l the given List of Edges.
      * @param c the given Color.
      * @param s the given stroke.
      */
-    private void applyColorDownwards(List<Cell> l, Color c, Double s) {
-        while(!l.isEmpty()) {
+    private void applyColorDownwards(List<Cell> l, Color c, double s) {
+        while (!l.isEmpty()) {
             Cell next = l.remove(0);
             l.addAll(next.getCellChildren());
 
-            if(!(next instanceof LeafCell)) {
+            if (!(next instanceof LeafCell)) {
                 List<Edge> edges = pt.getModel().getEdgeFromParent(next);
                 edges.forEach(e -> {
-                    e.getLine().setStroke(c);
-                    e.getLine().setStrokeWidth(s);
+                    if (!selectedStrains.contains(e)) {
+                        e.getLine().setStroke(c);
+                        e.getLine().setStrokeWidth(s);
+                    }
                 });
+                collectedStrains.addAll(edges);
             }
         }
     }

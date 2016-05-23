@@ -18,17 +18,11 @@ import java.util.List;
 public class TreeMouseHandling {
     private MainController mainController;
 
+    /**
+     * Selects or unselects (a) given strain(s).
+     */
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
-        if(event.getSource() instanceof Cell) {
-            Cell node = (Cell) event.getSource();
-            Cell clicked = mainController.getTreeController().getPT()
-                    .getModel().getAddedCells().get(node.getCellId());
-        }
-        else {
-            Edge node = (Edge) event.getSource();
-//            Edge clicked = mainController.getTreeController().getPT()
-//                    .getModel().getAddedCells().get(node.get);
-        }
+            mainController.getTreeController().selectStrains();
     };
 
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
