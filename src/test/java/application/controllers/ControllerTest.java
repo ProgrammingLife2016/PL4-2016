@@ -55,7 +55,7 @@ public class ControllerTest {
                 mc = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
                 Parent parent = Mockito.mock(Parent.class);
                 mc.setRoot(parent);
-                assert  (mc.getRoot().equals(parent));
+                assert  mc.getRoot().equals(parent);
 
         }
 
@@ -68,6 +68,6 @@ public class ControllerTest {
                 Parent parent = Mockito.mock(Parent.class);
                 mc.setRoot(parent);
                 Mockito.verify(mc).setRoot(parent);
-                assert  (mc.getRoot().equals(parent));
+                assert  mc.getRoot().equals(parent);
         }
 }
