@@ -296,7 +296,7 @@ public class Node {
         StringBuilder sb = new StringBuilder();
 
         for (String s : getGenomes()) {
-            sb.append(" • ");
+            sb.append(" - ");
             sb.append(s);
             sb.append('\n');
         }

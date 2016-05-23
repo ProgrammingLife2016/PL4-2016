@@ -4,6 +4,7 @@ import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import application.fxobjects.cell.graph.BubbleCell;
 import application.fxobjects.cell.graph.IndelCell;
+import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
 import application.fxobjects.cell.graph.RectangleCell;
 import application.fxobjects.cell.graph.TriangleCell;
@@ -11,6 +12,8 @@ import application.fxobjects.cell.graph.TriangleCell;
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
 import java.util.ArrayList;
@@ -37,11 +40,19 @@ public class Model {
 
     private Tree tree;
 
+    private Rectangle2D screenSize;
+    private int maxWidth;
+    private int maxHeight;
+
     /**
      * Class constructor.
      */
     public Model() {
         graphParent = new RectangleCell(1, "");
+
+        this.maxWidth = 0;
+        this.screenSize = Screen.getPrimary().getVisualBounds();
+        this.maxHeight = (int) screenSize.getHeight();
 
         // clear model, create lists
         clear();
@@ -138,7 +149,7 @@ public class Model {
      * Method to add a Cell (Node).
      *
      * @param id   the id, which represents the sequence.
-     * @param text  The text of a cell.
+     * @param text The text of a cell.
      * @param type The type of cell.
      * @return True for testing purposes.
      */
@@ -187,7 +198,6 @@ public class Model {
 
             cellMap.put(cell.getCellId(), cell);
         }
-
         return true;
     }
 
@@ -216,7 +226,7 @@ public class Model {
      * @param targetId To.
      * @param width    The width of the edge.
      * @param type     The type of edge.
-     * @return  True for testing purposes.
+     * @return True for testing purposes.
      */
     public Boolean addEdge(int sourceId, int targetId, int width, EdgeType type) {
         Cell sourceCell = cellMap.get(sourceId);
@@ -268,5 +278,23 @@ public class Model {
         // edges
         allEdges.addAll(addedEdges);
         addedEdges.clear();
+    }
+
+    public void setLayout() {
+        this.screenSize = Screen.getPrimary().getVisualBounds();
+        GraphLayout layout = new GraphLayout(this, 20,
+                (int) (screenSize.getHeight() - 25) / 2);
+
+        System.out.println(("KUTKACHEL" + addedCells.size()));
+        layout.execute();
+        maxWidth = (int) layout.getMaxWidth();
+    }
+
+    public int getWidth() {
+        return maxWidth;
+    }
+
+    public int getHeight() {
+        return maxHeight;
     }
 }

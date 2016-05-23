@@ -51,11 +51,11 @@ public class GraphLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        List<Cell> cells = model.getAllCells();
-
+        List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
-            switch (cell.getType()) {
 
+            System.out.println(cell.getType().toString()+"");
+            switch (cell.getType()) {
                 case RECTANGLE:
                 case BUBBLE:
                 case INDEL:

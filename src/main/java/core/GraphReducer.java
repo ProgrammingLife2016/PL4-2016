@@ -2,10 +2,7 @@ package core;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -16,7 +13,7 @@ public final class GraphReducer {
     private GraphReducer() {
     }
 
-    private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<HashMap<Integer, Node>>();
+    private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
 
     /**
      * Give all nodes a list of its parents.
@@ -76,7 +73,7 @@ public final class GraphReducer {
      */
     @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     private static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
-        HashMap<Integer, Node> res = new HashMap<Integer, Node>();
+        HashMap<Integer, Node> res = new HashMap<>();
         for (int i : map.keySet()) {
             Node n = map.get(i);
             Node newNode = new Node(n.getId(), n.getSequence(), n.getzIndex());
@@ -233,7 +230,6 @@ public final class GraphReducer {
         }
         // At this point all children have the same grand child
 
-
         Node child0 = nodeMap.get(children.get(0));
         int grandChildId = child0.getLinks(nodeMap).get(0);
         Node grandChild = nodeMap.get(grandChildId);
@@ -256,5 +252,18 @@ public final class GraphReducer {
         parent.setType(NodeType.BUBBLE);
         parent.setSequence("");
         return true;
+    }
+
+    /**
+     * Adds a list of genomes to another list.
+     *
+     * @param base  Base node.
+     * @param toAdd Node of which its genome has to be added to the base node.
+     */
+    public static void addGenomes(Node base, Node toAdd) {
+        Set<String> hs = new LinkedHashSet<>(base.getGenomes());
+        hs.addAll(toAdd.getGenomes());
+
+        base.setGenomes(new ArrayList<>(hs));
     }
 }

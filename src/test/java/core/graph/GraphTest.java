@@ -29,7 +29,11 @@ public class GraphTest {
      */
     @Before
     public void setUp() {
-        g = new Graph();
+        try {
+            g = new Graph();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mockedModel = mock(Model.class);
 
         when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);

@@ -7,7 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+<<<<<<< HEAD
 import static org.junit.Assert.*;
+=======
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+>>>>>>> feature/zoomingLevels
 
 
 /**
@@ -148,7 +153,10 @@ public class GraphReducerTest {
         assertNull(nodeMap.get(4));
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/zoomingLevels
     /**
      * Test the collapsing of a triangle of nodes.
      */

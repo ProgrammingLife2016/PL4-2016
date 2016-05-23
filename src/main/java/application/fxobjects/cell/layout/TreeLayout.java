@@ -34,8 +34,8 @@ public class TreeLayout extends CellLayout {
         this.model = model;
         this.offset = offset;
 
-        drawnCells = new HashMap<Integer, Cell>();
-        undrawnCells = new HashMap<Integer, Cell>();
+        drawnCells = new HashMap<>();
+        undrawnCells = new HashMap<>();
     }
 
     /**

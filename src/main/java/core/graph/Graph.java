@@ -19,21 +19,40 @@ public class Graph {
 
     private Boolean resetModel = true;
 
-    private Model model;
+    private Model zoomIn;
+    private Model current;
+    private Model zoomOut;
 
     private List<String> genomes = new ArrayList<>();
+
+    private HashMap<Integer, Node> startMap;
+
+    private List<HashMap<Integer, Node>> levelMaps;
 
 
     /**
      * Class constructor.
      */
-    public Graph() {
-        this.model = new Model();
+    public Graph() throws IOException {
+        zoomIn = new Model();
+        current = new Model();
+        zoomOut = new Model();
+
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        try {
+            startMap = parser.readGFA(inputStream);
+            levelMaps = GraphReducer.createLevelMaps(startMap);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Read a node map from a gfa file on disk.
-     * @return  A node map read from file.
+     *
+     * @return A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
@@ -49,7 +68,7 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
      * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
@@ -57,39 +76,38 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-        inputStream.close();
 
         List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         System.out.println("levelmap size: " + levelMaps.size());
 
         //Reset the model, since we have another reference.
-        model = new Model();
-        model.setLevelMaps(levelMaps);
+        current = new Model();
+        current.setLevelMaps(levelMaps);
+
+
+
+        //generateModel(current,depth);
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
         } else if (depth < 0) {
             depth = 0;
         }
+
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-        System.out.println("Loading map: " + depth);
-
         Node root = nodeMap.get(1);
-
-        if (root.getGenomes().contains(ref)) {
-            model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
-        } else {
-            model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-        }
-
-        genomes.addAll(root.getGenomes());
 
         if (ref == null) {
             ref = root.getGenomes().get(0);
         }
+
+        if (root.getGenomes().contains(ref)) {
+            current.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        } else {
+            current.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+        }
+
+        genomes.addAll(root.getGenomes());
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
@@ -101,26 +119,27 @@ public class Graph {
                 Node to = nodeMap.get(j);
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
-
                 NodeType type = nodeMap.get(j).getType();
 
                 if (type == NodeType.BASE) {
                     if (nodeMap.get(j).getGenomes().contains(ref)) {
-                        model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                        current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                     } else {
-                        model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                        current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                     }
                 } else if (type == NodeType.BUBBLE) {
-                    model.addCell(to.getId(), to.getSequence(), CellType.BUBBLE);
+                    current.addCell(to.getId(), to.getSequence(), CellType.BUBBLE);
                 } else if (type == NodeType.INDEL) {
-                    model.addCell(to.getId(), to.getSequence(), CellType.INDEL);
+                    current.addCell(to.getId(), to.getSequence(), CellType.INDEL);
                 }
 
                 //Add link from current cell to next cell
-                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                current.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                         to.getGenomes()), EdgeType.GRAPH);
             }
         }
+
+        current.setLayout();
 
         return true;
     }
@@ -131,10 +150,10 @@ public class Graph {
 
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
-        model.attachOrphansToGraphParent(model.getAddedCells());
+        current.attachOrphansToGraphParent(current.getAddedCells());
 
         // merge added & removed cells with all cells
-        model.merge();
+        current.merge();
     }
 
     /**
@@ -157,6 +176,7 @@ public class Graph {
     /**
      * Set whether the model should be reset in the addGraphComponents method.
      * This option is only used for testing purposes to allow for mocks.
+     *
      * @param resetModel whether the model should be reset in the addGraphComponents method.
      */
     public void setresetModel(Boolean resetModel) {
@@ -169,7 +189,7 @@ public class Graph {
      * @return The model of the graph.
      */
     public Model getModel() {
-        return model;
+        return current;
     }
 
     /**
@@ -178,9 +198,9 @@ public class Graph {
      * @param model The model of the graph.
      */
     public void setModel(Model model) {
-        this.model = model;
+        this.current = model;
     }
-    
+
     /**
      * Getter method for the genomens.
      *
@@ -191,7 +211,7 @@ public class Graph {
     }
 
     /**
-     * Setter method for the genomens.
+     * Setter method for the genomes.
      *
      * @param genomes the genomes.
      */
