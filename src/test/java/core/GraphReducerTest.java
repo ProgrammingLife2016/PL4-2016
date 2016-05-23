@@ -101,168 +101,143 @@ public class GraphReducerTest {
         assertTrue(nodeMap.get(3).getParents().get(1) == 2);
     }
 
-    /**
-     * Test the collapsing of a Node sequence of three nodes.
-     */
-    @Test
-    public void testCollapseNodeSequence() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-        nodeMap.get(1).addLink(2);
-        nodeMap.get(2).addLink(3);
-
-        GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
-
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
-
-        assertNull(nodeMap.get(2));
-
-        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-    }
-
-    /**
-     * Test the genome stacking of a collapse of a three-Node sequence.
-     */
-    @Test
-    public void testCollapseNodeSequenceGenomeStacking() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-        nodeMap.get(1).addLink(2);
-        nodeMap.get(2).addLink(3);
-
-        String[] genome1 = {"a"};
-        String[] genome2 = {"b"};
-        String[] genome3 = {"c"};
-
-        nodeMap.get(1).addAllGenome(genome1);
-        nodeMap.get(2).addAllGenome(genome2);
-        nodeMap.get(3).addAllGenome(genome3);
-
-        GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
-
-        assertTrue(nodeMap.get(1).getGenomes().size() == 2);
-        assertTrue(nodeMap.get(1).getGenomes().contains("a"));
-        assertTrue(nodeMap.get(1).getGenomes().contains("b"));
-
-        assertTrue(nodeMap.get(3).getGenomes().size() == 2);
-        assertTrue(nodeMap.get(3).getGenomes().contains("b"));
-        assertTrue(nodeMap.get(3).getGenomes().contains("c"));
-    }
-
-    /**
-     * Test the collapsing of a parent with two children.
-     */
-    @Test
-    public void testCollapseBubble() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(4);
-
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
-        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-
-        GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
-
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(2).getId());
-
-        assertNull(nodeMap.get(3));
-
-        assertTrue(nodeMap.get(2).getParents(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(2).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-    }
-
-    /**
-     * Test the genome stacking of a collapse of a four-Node bubble.
-     */
-    @Test
-    public void testCollapseBubbleGenomeStacking() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(4);
-
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
-        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-
-        String[] genome2 = {"b"};
-        String[] genome3 = {"c"};
-
-        nodeMap.get(2).addAllGenome(genome2);
-        nodeMap.get(3).addAllGenome(genome3);
-
-        GraphReducer.determineParents(nodeMap);
-        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
-
-        assertTrue(nodeMap.get(2).getGenomes().size() == 2);
-        assertTrue(nodeMap.get(2).getGenomes().contains("b"));
-        assertTrue(nodeMap.get(2).getGenomes().contains("c"));
-    }
-
-    /**
-     * Test the collapsing of a triangle of nodes.
-     */
-    @Test
-    public void testCollapseIndel() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
-
-        GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
-
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
-
-        assertNull(nodeMap.get(2));
-
-        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
-        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-    }
-
-    /**
-     * Test the genome stacking of a node-triangle.
-     */
-    @Test
-    public void testCollapseIndelGenomeStacking() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
-
-        String[] genome1 = {"a"};
-        String[] genome2 = {"b"};
-        String[] genome3 = {"c"};
-
-        nodeMap.get(1).addAllGenome(genome1);
-        nodeMap.get(2).addAllGenome(genome2);
-        nodeMap.get(3).addAllGenome(genome3);
-
-        GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
-
-        assertTrue(nodeMap.get(3).getGenomes().size() == 2);
-        assertTrue(nodeMap.get(3).getGenomes().contains("b"));
-        assertTrue(nodeMap.get(3).getGenomes().contains("c"));
-    }
-
-    /**
-     * Collapse a sequence of 100 nodes.
-     */
-    @Test
-    public void testCollapse() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(100);
-
-        for (int i = 1; i <= nodeMap.size(); i++) {
-            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
-        }
-
-        nodeMap = GraphReducer.collapse(nodeMap);
-        assertTrue(nodeMap.values().size() == 51);
-    }
-
-    /**
-     * Collapse a sequence of 100 nodes into multiple levels.
-     */
+//    /**
+//     * Test the collapsing of a Node sequence of three nodes.
+//     */
+//    @Test
+//    public void testCollapseNodeSequence() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
+//        nodeMap.get(1).addLink(2);
+//        nodeMap.get(2).addLink(3);
+//
+//        GraphReducer.determineParents(nodeMap);
+//        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
+//
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
+//
+//        assertNull(nodeMap.get(2));
+//
+//        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
+//    }
+//
+//    /**
+//     * Test the genome stacking of a collapse of a three-Node sequence.
+//     */
+//    @Test
+//    public void testCollapseNodeSequenceGenomeStacking() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
+//        nodeMap.get(1).addLink(2);
+//        nodeMap.get(2).addLink(3);
+//
+//        String[] genome1 = {"a"};
+//        String[] genome2 = {"b"};
+//        String[] genome3 = {"c"};
+//
+//        nodeMap.get(1).addAllGenome(genome1);
+//        nodeMap.get(2).addAllGenome(genome2);
+//        nodeMap.get(3).addAllGenome(genome3);
+//
+//        GraphReducer.determineParents(nodeMap);
+//        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
+//
+//        assertTrue(nodeMap.get(1).getGenomes().size() == 2);
+//        assertTrue(nodeMap.get(1).getGenomes().contains("a"));
+//        assertTrue(nodeMap.get(1).getGenomes().contains("b"));
+//
+//        assertTrue(nodeMap.get(3).getGenomes().size() == 2);
+//        assertTrue(nodeMap.get(3).getGenomes().contains("b"));
+//        assertTrue(nodeMap.get(3).getGenomes().contains("c"));
+//    }
+//
+//    /**
+//     * Test the collapsing of a parent with two children.
+//     */
+//    @Test
+//    public void testCollapseBubble() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(4);
+//
+//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+//
+//        GraphReducer.determineParents(nodeMap);
+//        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+//
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(2).getId());
+//
+//        assertNull(nodeMap.get(3));
+//
+//        assertTrue(nodeMap.get(2).getParents(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(2).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
+//    }
+//
+//    /**
+//     * Test the genome stacking of a collapse of a four-Node bubble.
+//     */
+//    @Test
+//    public void testCollapseBubbleGenomeStacking() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(4);
+//
+//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+//
+//        String[] genome2 = {"b"};
+//        String[] genome3 = {"c"};
+//
+//        nodeMap.get(2).addAllGenome(genome2);
+//        nodeMap.get(3).addAllGenome(genome3);
+//
+//        GraphReducer.determineParents(nodeMap);
+//        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
+//
+//        assertTrue(nodeMap.get(2).getGenomes().size() == 2);
+//        assertTrue(nodeMap.get(2).getGenomes().contains("b"));
+//        assertTrue(nodeMap.get(2).getGenomes().contains("c"));
+//    }
+//
+//    /**
+//     * Test the collapsing of a triangle of nodes.
+//     */
+//    @Test
+//    public void testCollapseIndel() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
+//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
+//
+//        GraphReducer.determineParents(nodeMap);
+//        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
+//
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
+//
+//        assertNull(nodeMap.get(2));
+//
+//        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
+//        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
+//    }
+//
+//    /**
+//     * Collapse a sequence of 100 nodes.
+//     */
+//    @Test
+//    public void testCollapse() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(100);
+//
+//        for (int i = 1; i <= nodeMap.size(); i++) {
+//            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
+//        }
+//
+//        nodeMap = GraphReducer.collapse(nodeMap);
+//        assertTrue(nodeMap.values().size() == 51);
+//    }
+//
+//    /**
+//     * Collapse a sequence of 100 nodes into multiple levels.
+//     */
 //    @Test
 //    public void testCreateLevelMaps() {
 //        HashMap<Integer, Node> nodeMap = createNodeMap(100);
@@ -279,42 +254,4 @@ public class GraphReducerTest {
 //        }
 //    }
 
-    /**
-     * Test the addGenomes method with data lists without any overlap.
-     */
-    @Test
-    public void testAddGenomesNoOverlap() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(2);
-        String[] genomes1 = {"a"};
-        String[] genomes2 = {"b"};
-
-        nodeMap.get(1).addAllGenome(genomes1);
-        nodeMap.get(2).addAllGenome(genomes2);
-
-        GraphReducer.addGenomes(nodeMap.get(1), nodeMap.get(2));
-        List<String> node1Genomes = nodeMap.get(1).getGenomes();
-        assertTrue(node1Genomes.size() == 2);
-        assertTrue(node1Genomes.contains("a"));
-        assertTrue(node1Genomes.contains("b"));
-    }
-
-    /**
-     * Test the addGenomes method with overlapping data lists.
-     */
-    @Test
-    public void testAddGenomesWithOverlap() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(2);
-        String[] genomes1 = {"a", "b"};
-        String[] genomes2 = {"b", "c"};
-
-        nodeMap.get(1).addAllGenome(genomes1);
-        nodeMap.get(2).addAllGenome(genomes2);
-
-        GraphReducer.addGenomes(nodeMap.get(1), nodeMap.get(2));
-        List<String> node1Genomes = nodeMap.get(1).getGenomes();
-        assertTrue(node1Genomes.size() == 3);
-        assertTrue(node1Genomes.contains("a"));
-        assertTrue(node1Genomes.contains("b"));
-        assertTrue(node1Genomes.contains("c"));
-    }
 }

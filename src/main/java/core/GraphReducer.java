@@ -106,8 +106,8 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            collapseBubble(nodeMap, parent);
-            collapseIndel(nodeMap, parent);
+            //collapseBubble(nodeMap, parent);
+            //collapseIndel(nodeMap, parent);
             //collapseNodeSequence(nodeMap, parent);
         }
 
@@ -176,10 +176,18 @@ public final class GraphReducer {
             Node child2 = nodeMap.get(child2Id);
 
             if (child1ChildrenIds.contains(child2Id)) {
+                parent.setType(NodeType.INDEL);
+                parent.setLinks(child2ChildrenIds);
+
                 nodeMap.remove(child1Id);
+                nodeMap.remove(child2Id);
                 return true;
 
             } else if (child2ChildrenIds.contains(child1Id)) {
+                parent.setType(NodeType.INDEL);
+                parent.setLinks(child1ChildrenIds);
+
+                nodeMap.remove(child1Id);
                 nodeMap.remove(child2Id);
                 return true;
             }
@@ -198,8 +206,6 @@ public final class GraphReducer {
      */
     public static Boolean
     collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
-        NodeType newNodeType = NodeType.BUBBLE;
-        
         List<Integer> children = parent.getLinks(nodeMap);
         if (children.size() <= 1) {
             return false;
@@ -233,6 +239,7 @@ public final class GraphReducer {
             }
         }
 
+        parent.setType(NodeType.BUBBLE);
         return true;
     }
 }

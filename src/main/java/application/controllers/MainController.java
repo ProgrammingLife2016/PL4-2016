@@ -131,7 +131,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(Object ref) {
         Graph graph = new Graph();
-        graphController = new GraphController(graph, ref, this, currentView);
+        graphController = new GraphController(graph, ref, this, 0);
         screen = graphController.getRoot();
 
         this.getRoot().setCenter(screen);
