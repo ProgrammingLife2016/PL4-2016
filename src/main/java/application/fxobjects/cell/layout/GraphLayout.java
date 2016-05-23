@@ -67,14 +67,17 @@ public class GraphLayout extends CellLayout {
 
                 currentX += offset;
 
+                //only continue when there is more than 1 child
                 cellCount = cell.getCellChildren().size();
                 if(cellCount<2){
                     continue;
                 }
-                int yOffset = 3*offset;
-                int oddChildOffset = 0;
-                int evenChildOffset = (yOffset) / 2;
-                int modifier = -1;
+
+                int yOffset = 3*offset; //y-offset between nodes on the same x-level
+                int oddChildOffset = 0; //initial offset when there are an odd number of children
+                int evenChildOffset = (yOffset) / 2; //initial offset for when there are an even amount of children
+                int modifier = -1; //alternate between above and below for the same x-level
+
                 for (Cell child : cell.getCellChildren()){
 
 
