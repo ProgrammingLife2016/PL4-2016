@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
@@ -63,12 +62,6 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
-
-    /**
-     * On the right side of the screen, create a VBox showing:
-     * - A list with all genome strains.
-     * - A box with info on a selected node.
-     */
     private void createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -94,18 +87,24 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Create a list on the right side of the screen with all genomes.
      */
-    private void createList() {
+    public void createList() {
         list = new ListView<>();
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.prefHeightProperty().bind(listVBox.heightProperty());
         list.prefWidthProperty().bind(listVBox.widthProperty());
 
         list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
+        infoScroller.setOnKeyPressed(graphController.getZoomController()
+                .getZoomBox().getKeyHandler());
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
+                try {
+                    graphController.takeSnapshot();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -149,8 +148,17 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
+        try {
+            graphController.takeSnapshot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
 
         createInfoList("");
 
@@ -158,8 +166,8 @@ public class MainController extends Controller<BorderPane> {
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
 
-
         showListVBox();
+
     }
 
     /**
@@ -231,4 +239,7 @@ public class MainController extends Controller<BorderPane> {
     public GraphController getGraphController() {
         return graphController;
     }
+
+
+
 }

@@ -1,6 +1,5 @@
 package application.fxobjects;
 
-import application.controllers.ZoomController;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -12,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -29,14 +30,12 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
-    private ZoomController zoomController;
     private KeyHandler keyHandler;
 
     /**
      * Class constructor.
      */
-    public ZoomBox(ZoomController z) {
-        this.zoomController = z;
+    public ZoomBox() {
         this.keyHandler = new KeyHandler();
         initVariables();
         right = new StackPane();
@@ -57,6 +56,16 @@ public class ZoomBox extends ScrollPane {
         graphBoxHeight = windowHeight - 10;
         zoomBoxWidth = graphBoxWidth / 5.0;
         zoomBoxHeight = graphBoxHeight / 5.0;
+
+        double rectX = windowWidth - zoomBoxWidth - 20;
+        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
+        zoomRectBorder.setStroke(Color.LIGHTGREY);
+        zoomRectBorder.setStrokeWidth(3);
+
+        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
+        zoomRect.setFill(Color.TRANSPARENT);
+        zoomRect.setStroke(Color.BLACK);
+        zoomRect.setStrokeWidth(3);
     }
 
     /**
@@ -66,22 +75,19 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        double rectX = windowWidth - zoomBoxWidth - 20;
 
-        Image image = new Image("/new_snapshot.png");
-        ImagePattern pattern = new ImagePattern(image);
+//        String snapshot = "/snapshot.png";
+//        FileInputStream stream = null;
+//        try {
+//             stream = new FileInputStream(snapshot);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Image image = new Image(stream);
+//        ImagePattern pattern = new ImagePattern(image);
 
-
-        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
-        zoomRectBorder.setFill(pattern);
-        zoomRectBorder.setStroke(Color.LIGHTGREY);
-        zoomRectBorder.setStrokeWidth(3);
-
-        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
-        zoomRect.setFill(Color.TRANSPARENT);
-        zoomRect.setStroke(Color.BLACK);
-        zoomRect.setStrokeWidth(3);
-
+//        zoomRectBorder.setFill(pattern);
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
@@ -93,11 +99,9 @@ public class ZoomBox extends ScrollPane {
      *
      * @return The zoom box.
      */
-    public StackPane getZoomBox() {
-        return right;
-    }
+    public StackPane getZoomBox() { return right; }
 
-    public KeyHandler getKeyHandler() {return keyHandler; }
+    public KeyHandler getKeyHandler() { return keyHandler; }
 
 
     /**
@@ -200,7 +204,7 @@ public class ZoomBox extends ScrollPane {
         }
     }
     /**
-     * Handles the move funtion.
+     * Handles the move function
      */
     private class KeyHandler implements EventHandler<KeyEvent> {
 
@@ -208,6 +212,5 @@ public class ZoomBox extends ScrollPane {
         public void handle(KeyEvent event) {
             moveRectangle(event);
         }
-
     }
 }

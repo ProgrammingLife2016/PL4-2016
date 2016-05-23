@@ -2,13 +2,7 @@ package application.controllers;
 
 import application.fxobjects.ZoomBox;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -27,20 +21,22 @@ public class ZoomController extends Controller<BorderPane> {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public ZoomController() {
         super(new BorderPane());
-        zoomBox = new ZoomBox(this);
-
-        init();
     }
-
-
-    public ZoomBox getZoomBox() { return zoomBox; }
 
     /**
-     * Init method.
+     * Method to create the ZoomBox, which will be controlled
+     * by the ZoomController
+     * @return the created ZoomBox
      */
-    public void init() {
+    public ZoomBox createZoomBox() {
+        ZoomBox z = new ZoomBox();
+        zoomBox = z;
+
         this.getRoot().setBottom(zoomBox.getZoomBox());
+        return zoomBox;
     }
+
+    public ZoomBox getZoomBox() { return zoomBox; }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

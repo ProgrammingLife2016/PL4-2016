@@ -96,8 +96,6 @@ public class Graph {
         }
 
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-        System.out.println("Loading map: " + depth);
-
         Node root = nodeMap.get(1);
 
         if (ref == null) {
@@ -206,7 +204,7 @@ public class Graph {
     }
 
     /**
-     * Setter method for the genomens.
+     * Setter method for the genomes.
      *
      * @param genomes the genomes.
      */

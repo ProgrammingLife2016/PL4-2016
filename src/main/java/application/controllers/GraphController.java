@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +47,6 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -105,8 +105,15 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().setContent(root);
 
-        //takeSnapshot();
     }
+
+    /**
+     * Method to attach the keyHandler to the root of the Controller
+     */
+    public void initKeyHandler() {
+        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
+    }
+
 
     /**
      * Getter method for the genomes.
@@ -119,20 +126,18 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method take a snapshot of the current graph.
-     * ---- not used because of a null pointer ---
-     * @TODO: fix.
      *
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().snapshot(
-                snapshotParameters, new WritableImage(getGraph().getModel().getWidth() + 50, getGraph().getModel().getHeight()));
-
-        File output = new File("snapshot.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+//        SnapshotParameters snapshotParameters = new SnapshotParameters();
+//        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
+//        WritableImage snapshot = this.getRoot().getContent().snapshot(
+//                snapshotParameters, new WritableImage(getGraph().getModel().getWidth() + 50, getGraph().getModel().getHeight()));
+//
+//        File output = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
+//        System.out.println("file path: "+ output.getAbsolutePath());
+//        output.deleteOnExit();
+//        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
     }
-
-
 }

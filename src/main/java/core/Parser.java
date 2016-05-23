@@ -57,11 +57,6 @@ public class Parser {
 
                     if (!nodeMap.containsKey(id)) {
                         nodeMap.put(id, new Node(id, sequence, z));
-                        if (!(sequence.contains("A") || sequence.contains("C")
-                                || sequence.contains("T") || sequence.contains("G"))) {
-                            //System.out.println("Node: " + id + " Contains NOT(ATCG). Seq: "
-                                   // + sequence);
-                        }
                     } else {
                         nodeMap.get(id).setSequence(sequence);
                         nodeMap.get(id).setzIndex(z);
@@ -73,9 +68,6 @@ public class Parser {
                 case 'L':
                     int orig = Integer.parseInt(content[1]);
                     int dest = Integer.parseInt(content[3]);
-                    if (content[1].length() == 0 || content[3].length() == 0) {
-                        //System.out.println("NULL LINK: " + content[1] + ", " + content[3]);
-                    }
                     nodeMap.get(orig).addLink(dest);
                     break;
                 default:
