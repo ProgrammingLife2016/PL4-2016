@@ -31,7 +31,7 @@ public class GraphMouseHandling {
     };
 
     EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
-        
+
     };
 
     EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
