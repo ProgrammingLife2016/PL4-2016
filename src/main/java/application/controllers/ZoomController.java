@@ -29,7 +29,7 @@ public class ZoomController extends Controller<BorderPane> {
      * @return the created ZoomBox
      */
     public ZoomBox createZoomBox() {
-        ZoomBox z = new ZoomBox(this);
+        ZoomBox z = new ZoomBox();
         zoomBox = z;
 
         this.getRoot().setBottom(zoomBox.getZoomBox());

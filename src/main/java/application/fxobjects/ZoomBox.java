@@ -1,6 +1,5 @@
 package application.fxobjects;
 
-import application.controllers.ZoomController;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -35,9 +34,8 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Class constructor.
-     * @param z ZoomController which controls the class
      */
-    public ZoomBox(ZoomController z) {
+    public ZoomBox() {
         this.keyHandler = new KeyHandler();
         initVariables();
         right = new StackPane();
