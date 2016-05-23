@@ -5,6 +5,7 @@ import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class GraphLayout extends CellLayout {
                 if(cellCount<2){
                     continue;
                 }
-                int yOffset = 5*offset;
+                int yOffset = 3*offset;
                 int oddChildOffset = 0;
                 int evenChildOffset = (yOffset) / 2;
                 int modifier = -1;
@@ -78,7 +79,6 @@ public class GraphLayout extends CellLayout {
 
 
                     if(cellCount % 2 == 0){
-
                         child.relocate(currentX, currentY - evenChildOffset);
                         evenChildOffset = (yOffset /2) * modifier;
                         child.setRelocated(true);
@@ -88,8 +88,6 @@ public class GraphLayout extends CellLayout {
                             modifier++;
                         }
                     } else{
-                        System.out.println(child.getCellId() + ": " +cellCount +", "+ oddChildOffset+" mod: "+ modifier);
-
                         child.relocate(currentX, currentY - oddChildOffset);
                         oddChildOffset = ((yOffset) * modifier);
                         child.setRelocated(true);
@@ -99,61 +97,9 @@ public class GraphLayout extends CellLayout {
                             modifier--;
                         }
                     }
-
-
-
                 }
             }
         }
-
-
-
-
-//            switch (cell.getType()) {
-//
-//                case RECTANGLE:
-//                    currentX += offset;
-//                    if (currentX > maxWidth) {
-//                        maxWidth = currentX;
-//                    }
-//
-//                    currentY = centerY;
-//                    cell.relocate(currentX, currentY);
-//
-//                    cellCount = 1;
-//                    break;
-//                case TRIANGLE:
-//                    if (cellCount % 2 == 0) {
-//                        currentY += cellCount * offset;
-//                    } else {
-//                        currentY -= cellCount * offset;
-//                    }
-//
-//                    if (currentY == centerY) {
-//                        currentX += offset;
-//                        if (currentX > maxWidth) {
-//                            maxWidth = currentX;
-//                        }
-//                    }
-//
-//                    cellCount++;
-//                    cell.relocate(currentX, currentY);
-//                    cell.setRelocated(true);
-//
-//                    // Don't draw triangles above rectangles
-//                    if (currentY != centerY) {
-//                        currentX += offset;
-//                        if (currentX > maxWidth) {
-//                            maxWidth = currentX;
-//                        }
-//                    }
-//                    maxWidth += offset;
-//                    break;
-//                default:
-//                    break;
-//            }
-//            lastType = cell.getType();
-
     }
 
     /**
