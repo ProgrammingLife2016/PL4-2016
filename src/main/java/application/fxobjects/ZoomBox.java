@@ -68,7 +68,7 @@ public class ZoomBox extends ScrollPane {
         Group zoomBox = new Group();
         double rectX = windowWidth - zoomBoxWidth - 20;
 
-        Image image = new Image("/new_snapshot.png");
+        Image image = new Image("/snapshot.png");
         ImagePattern pattern = new ImagePattern(image);
 
 

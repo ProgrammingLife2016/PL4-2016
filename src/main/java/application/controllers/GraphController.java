@@ -105,7 +105,6 @@ public class GraphController extends Controller<ScrollPane> {
         maxWidth = (int) layout.getMaxWidth();
         this.getRoot().setContent(root);
 
-        //takeSnapshot();
     }
 
     /**
@@ -119,19 +118,13 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method take a snapshot of the current graph.
-     * ---- not used because of a null pointer ---
-     * TO DO: fix.
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-        WritableImage snapshot = this.getRoot().snapshot(
-                snapshotParameters, new WritableImage(maxWidth + 50, maxHeight));
+        WritableImage image = new WritableImage(maxWidth + 50, (int) screenSize.getHeight());
+        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
-        File output = new File("snapshot.png");
+        File output = new File("/snapshot.png");
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
     }
-
-
 }
