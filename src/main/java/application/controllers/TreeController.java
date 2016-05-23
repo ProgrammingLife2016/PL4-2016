@@ -30,22 +30,24 @@ public class TreeController extends Controller<ScrollPane> {
     private TreeMouseHandling treeMouseHandling;
     private TreeMap<String, Integer> metaData;
 
-    private static final Color LIN0 = (Color.web("000000"));
-    private static final Color LIN1 = (Color.web("ed00c3"));
-    private static final Color LIN2 = (Color.web("0000ff"));
-    private static final Color LIN3 = (Color.web("500079"));
-    private static final Color LIN4 = (Color.web("ff0000"));
-    private static final Color LIN5 = (Color.web("4e2c00"));
-    private static final Color LIN6 = (Color.web("69ca00"));
-    private static final Color LIN7 = (Color.web("ff7e00"));
-    private static final Color LIN8 = (Color.web("00ff9c"));
-    private static final Color LIN9 = (Color.web("00ff9c"));
-    private static final Color LIN10 = (Color.web("00ffff"));
+    private static final Color LIN0 = Color.web("000000");
+    private static final Color LIN1 = Color.web("ed00c3");
+    private static final Color LIN2 = Color.web("0000ff");
+    private static final Color LIN3 = Color.web("500079");
+    private static final Color LIN4 = Color.web("ff0000");
+    private static final Color LIN5 = Color.web("4e2c00");
+    private static final Color LIN6 = Color.web("69ca00");
+    private static final Color LIN7 = Color.web("ff7e00");
+    private static final Color LIN8 = Color.web("00ff9c");
+    private static final Color LIN9 = Color.web("00ff9c");
+    private static final Color LIN10 = Color.web("00ffff");
 
     /**
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
+     * @param m MainController.
+     * @param s InputStream for metaData.
      */
     public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
@@ -106,8 +108,12 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void selectStrains() {
         collectedStrains.forEach(e -> {
-            if (selectedStrains.contains(e)) selectedStrains.remove(e);
-            else selectedStrains.add(e);
+            if (selectedStrains.contains(e)) {
+                selectedStrains.remove(e);
+            }
+            else {
+                selectedStrains.add(e);
+            }
         });
     }
 
@@ -124,13 +130,15 @@ public class TreeController extends Controller<ScrollPane> {
      * @param cell the Cell being hovered over.
      */
     public void applyCellHighlight(Cell cell) {
-        if(cell instanceof LeafCell) {
+        if (cell instanceof LeafCell) {
             List<Cell> parentList = new ArrayList<>();
             parentList.add(cell);
             collectedStrains.clear();
             collectedStrains.add(cell);
 
-            applyColorUpwards(parentList, determineLinColor(metaData.get(((LeafCell) cell).getName())), 4.0);
+            applyColorUpwards(parentList,
+                    determineLinColor(metaData.get(((LeafCell) cell).getName())),
+                    4.0);
         }
     }
 
@@ -232,7 +240,9 @@ public class TreeController extends Controller<ScrollPane> {
                     e.getLine().setStroke(c);
                     e.getLine().setStrokeWidth(s);
                 });
-            } else collectedStrains.add(next);
+            } else {
+                collectedStrains.add(next);
+            }
         }
     }
 

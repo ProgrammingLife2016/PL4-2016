@@ -14,8 +14,14 @@ import java.util.TreeMap;
  * @version 1.0
  * @since 23-05-2016.
  */
-public class MetaParser {
+public final class MetaParser {
 
+    /**
+     * Contructor method for utility class.
+     */
+    protected MetaParser() {
+        throw new UnsupportedOperationException();
+    }
     /**
      * Parses needed MetaData into a Treemap.
      * <p>
@@ -25,7 +31,11 @@ public class MetaParser {
      * 8 - animal.
      * 9 - B.
      * 10 - CANETTII.
+     *
+     * @param stream InputStream of the file to parse.
+     * @return return the map with parsed values.
      */
+    @SuppressWarnings("checkstyle:linelength")
     public static TreeMap<String, Integer> parse(InputStream stream) {
         TreeMap<String, Integer> map = new TreeMap<>();
         try {
@@ -55,7 +65,6 @@ public class MetaParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return map;
     }
 }

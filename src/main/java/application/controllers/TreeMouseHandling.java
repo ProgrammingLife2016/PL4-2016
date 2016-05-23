@@ -24,7 +24,7 @@ public class TreeMouseHandling {
      * Highlights strains based on hovering over them or corresponding Cells.
      */
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
-        if(event.getSource() instanceof Cell) {
+        if (event.getSource() instanceof Cell) {
             mainController.getTreeController().applyCellHighlight((Cell) event.getSource());
         }
         else {
@@ -37,7 +37,7 @@ public class TreeMouseHandling {
      * Removes highlights from strains based on hovering over them or corresponding Cells.
      */
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
-        if(event.getSource() instanceof Cell) {
+        if (event.getSource() instanceof Cell) {
             mainController.getTreeController().revertCellHighlight((Cell) event.getSource());
         }
         else {
