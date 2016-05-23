@@ -160,7 +160,7 @@ public class MainController extends Controller<BorderPane> {
         try {
             PhylogeneticTree pt = new PhylogeneticTree();
             pt.setup();
-            treeController = new TreeController(pt, this);
+            treeController = new TreeController(pt, this, this.getClass().getResourceAsStream("/metadata.xlsx"));
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
             this.getRoot().setBottom(null);

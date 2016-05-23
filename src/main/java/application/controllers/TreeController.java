@@ -5,16 +5,19 @@ import application.fxobjects.cell.Edge;
 import application.fxobjects.cell.layout.CellLayout;
 import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
+import core.MetaParser;
 import core.graph.PhylogeneticTree;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 /**
  * Class responsible for setting up the scroll pane containing the phylogenetic tree.
@@ -25,15 +28,17 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
+    private TreeMap<String, Integer> metaData;
 
     /**
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
      */
-    public TreeController(PhylogeneticTree pt, MainController m) {
+    public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
         this.pt = pt;
+        this.metaData = MetaParser.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
