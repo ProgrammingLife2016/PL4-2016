@@ -1,13 +1,7 @@
 package application.controllers;
 
-import core.graph.Graph;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.ScrollPane;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * Created by Niek on 5/19/2016.

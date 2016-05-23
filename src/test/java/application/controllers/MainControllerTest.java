@@ -3,12 +3,6 @@ package application.controllers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import javax.security.auth.Subject;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Test for MainController.

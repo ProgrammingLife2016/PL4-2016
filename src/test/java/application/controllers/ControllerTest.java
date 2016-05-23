@@ -1,7 +1,5 @@
 package application.controllers;
 
-        import javafx.beans.property.SimpleBooleanProperty;
-        import javafx.fxml.FXMLLoader;
         import javafx.scene.Parent;
         import org.junit.After;
         import org.junit.Before;
@@ -10,9 +8,6 @@ package application.controllers;
         import org.mockito.Mock;
         import org.mockito.Mockito;
         import org.mockito.runners.MockitoJUnitRunner;
-
-        import java.io.IOException;
-        import java.io.InputStream;
         import java.util.Observer;
 
 /**
@@ -60,9 +55,9 @@ public class ControllerTest {
                 mc = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
                 Parent parent = Mockito.mock(Parent.class);
                 mc.setRoot(parent);
-                assert(mc.getRoot().equals(parent));
-        }
+                assert  (mc.getRoot().equals(parent));
 
+        }
 
         /**
          * Test whether the root is set correctly.
@@ -73,7 +68,6 @@ public class ControllerTest {
                 Parent parent = Mockito.mock(Parent.class);
                 mc.setRoot(parent);
                 Mockito.verify(mc).setRoot(parent);
-                assert(mc.getRoot().equals(parent));
+                assert  (mc.getRoot().equals(parent));
         }
-
 }
