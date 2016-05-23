@@ -88,16 +88,7 @@ public class TreeController extends Controller<ScrollPane> {
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
 
-        while(!parentList.isEmpty()) {
-            Cell next = parentList.remove(0);
-            parentList.addAll(next.getCellParents());
-
-            if (next.getCellId() != 0) {
-                Edge edge = pt.getModel().getEdgeFromChild(next);
-                edge.getLine().setStroke(Color.RED);
-                edge.getLine().setStrokeWidth(4.0);
-            }
-        }
+        applyColorUpwards(parentList, Color.RED, 4.0);
     }
 
     /**
@@ -105,19 +96,10 @@ public class TreeController extends Controller<ScrollPane> {
      * @param cell the Cell which is no longer being hovered over.
      */
     public void revertCellHighlight(Cell cell) {
-        List<Cell> childList = new ArrayList<>();
-        childList.add(cell);
+        List<Cell> parentList = new ArrayList<>();
+        parentList.add(cell);
 
-        while(!childList.isEmpty()) {
-            Cell next = childList.remove(0);
-            childList.addAll(next.getCellParents());
-
-            if(next.getCellId() != 0) {
-                Edge edge = pt.getModel().getEdgeFromChild(next);
-                edge.getLine().setStroke(Color.BLACK);
-                edge.getLine().setStrokeWidth(1.0);
-            }
-        }
+        applyColorUpwards(parentList, Color.BLACK, 1.0);
     }
 
     /**
@@ -126,23 +108,13 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void applyEdgeHighlight(Edge edge) {
         List<Cell> parentList = new ArrayList<>();
-        parentList.add(edge.getTarget());
-        edge.getLine().setStroke(Color.RED);
-        edge.getLine().setStrokeWidth(4.0);
+        List<Cell> childList = new ArrayList<>();
+        parentList.add(edge.getSource());
+        childList.add(edge.getTarget());
 
-
-        while(!parentList.isEmpty()) {
-            Cell next = parentList.remove(0);
-            parentList.addAll(next.getCellChildren());
-
-            if(!(next instanceof LeafCell)) {
-                List<Edge> edges = pt.getModel().getEdgeFromParent(next);
-                edges.forEach(e -> {
-                    e.getLine().setStroke(Color.RED);
-                    e.getLine().setStrokeWidth(4.0);
-                });
-            }
-        }
+        applyColorOnSelf(edge, Color.RED, 4.0);
+        applyColorUpwards(parentList, Color.RED, 4.0);
+        applyColorDownwards(childList, Color.RED, 4.0);
     }
 
     /**
@@ -150,20 +122,62 @@ public class TreeController extends Controller<ScrollPane> {
      * @param edge the Edge which is no longer being hovered over.
      */
     public void revertEdgeHighlight(Edge edge) {
+        List<Cell> parentList = new ArrayList<>();
         List<Cell> childList = new ArrayList<>();
+        parentList.add(edge.getSource());
         childList.add(edge.getTarget());
-        edge.getLine().setStroke(Color.BLACK);
-        edge.getLine().setStrokeWidth(1.0);
 
-        while(!childList.isEmpty()) {
-            Cell next = childList.remove(0);
-            childList.addAll(next.getCellChildren());
+        applyColorOnSelf(edge, Color.BLACK, 1.0);
+        applyColorUpwards(parentList, Color.BLACK, 1.0);
+        applyColorDownwards(childList, Color.BLACK, 1.0);
+    }
+
+    /**
+     * Apply a certain color and stroke to the edge being hovered over.
+     * @param e the given Edge.
+     * @param c the given Color.
+     * @param s the given stroke.
+     */
+    private void applyColorOnSelf(Edge e, Color c, double s) {
+        e.getLine().setStroke(c);
+        e.getLine().setStrokeWidth(s);
+    }
+
+    /**
+     * Apply a certain color and stroke to the edges upwards from the node in the list.
+     * @param l the given List of Edges.
+     * @param c the given Color.
+     * @param s the given stroke.
+     */
+    private void applyColorUpwards(List<Cell> l, Color c, Double s) {
+        while(!l.isEmpty()) {
+            Cell next = l.remove(0);
+            l.addAll(next.getCellParents());
+
+            if(next.getCellId() != 0) {
+                Edge e = pt.getModel().getEdgeFromChild(next);
+                e.getLine().setStroke(c);
+                e.getLine().setStrokeWidth(s);
+            }
+        }
+    }
+
+    /**
+     * Apply a certain color and stroke to the edges downwards from the node in the list.
+     * @param l the given List of Edges.
+     * @param c the given Color.
+     * @param s the given stroke.
+     */
+    private void applyColorDownwards(List<Cell> l, Color c, Double s) {
+        while(!l.isEmpty()) {
+            Cell next = l.remove(0);
+            l.addAll(next.getCellChildren());
 
             if(!(next instanceof LeafCell)) {
                 List<Edge> edges = pt.getModel().getEdgeFromParent(next);
                 edges.forEach(e -> {
-                    e.getLine().setStroke(Color.BLACK);
-                    e.getLine().setStrokeWidth(1.0);
+                    e.getLine().setStroke(c);
+                    e.getLine().setStrokeWidth(s);
                 });
             }
         }
