@@ -5,6 +5,7 @@ import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,51 +55,97 @@ public class GraphLayout extends CellLayout {
         List<Cell> cells = model.getAllCells();
 
         for (Cell cell : cells) {
-            switch (cell.getType()) {
+            if(!cell.isRelocated()){
+                currentX += offset;
+                if (currentX > maxWidth) {
+                    maxWidth = currentX;
+                }
+                currentY = centerY;
+                cell.relocate(currentX, currentY);
+                cell.setRelocated(true);
 
-                case RECTANGLE:
-                    currentX += offset;
-                    if (currentX > maxWidth) {
-                        maxWidth = currentX;
-                    }
+                currentX += offset;
 
-                    currentY = centerY;
-                    cell.relocate(currentX, currentY);
-
-                    cellCount = 1;
-                    break;
-                case TRIANGLE:
-                    if (cellCount % 2 == 0) {
-                        currentY += cellCount * offset;
-                    } else {
-                        currentY -= cellCount * offset;
-                    }
-
-                    if (currentY == centerY) {
-                        currentX += offset;
-                        if (currentX > maxWidth) {
-                            maxWidth = currentX;
+                cellCount = cell.getCellChildren().size();
+                int oddChildOffset = 0;
+                int evenChildOffset = offset / 2;
+                int modifier = 1;
+                for (Cell child : cell.getCellChildren()){
+                    if(cellCount % 2 == 0){
+                        child.relocate(currentX, currentY - evenChildOffset);
+                        evenChildOffset = evenChildOffset * (modifier*-1);
+                        if(modifier > 0){
+                            modifier++;
+                        }else {
+                            modifier--;
                         }
-                    }
+                        modifier *= -1;
 
-                    cellCount++;
-                    cell.relocate(currentX, currentY);
-                    cell.setRelocated(true);
-
-                    // Don't draw triangles above rectangles
-                    if (currentY != centerY) {
-                        currentX += offset;
-                        if (currentX > maxWidth) {
-                            maxWidth = currentX;
+                        child.setRelocated(true);
+                    } else{
+                        child.relocate(currentX, currentY - oddChildOffset);
+                        oddChildOffset = oddChildOffset + (offset * (modifier*-1));
+                        if(modifier > 0){
+                            modifier++;
+                        }else {
+                            modifier--;
                         }
+                        modifier *= -1;
+
+                        child.setRelocated(true);
                     }
-                    maxWidth += offset;
-                    break;
-                default:
-                    break;
+                }
             }
-            lastType = cell.getType();
         }
+
+
+
+
+//            switch (cell.getType()) {
+//
+//                case RECTANGLE:
+//                    currentX += offset;
+//                    if (currentX > maxWidth) {
+//                        maxWidth = currentX;
+//                    }
+//
+//                    currentY = centerY;
+//                    cell.relocate(currentX, currentY);
+//
+//                    cellCount = 1;
+//                    break;
+//                case TRIANGLE:
+//                    if (cellCount % 2 == 0) {
+//                        currentY += cellCount * offset;
+//                    } else {
+//                        currentY -= cellCount * offset;
+//                    }
+//
+//                    if (currentY == centerY) {
+//                        currentX += offset;
+//                        if (currentX > maxWidth) {
+//                            maxWidth = currentX;
+//                        }
+//                    }
+//
+//                    cellCount++;
+//                    cell.relocate(currentX, currentY);
+//                    cell.setRelocated(true);
+//
+//                    // Don't draw triangles above rectangles
+//                    if (currentY != centerY) {
+//                        currentX += offset;
+//                        if (currentX > maxWidth) {
+//                            maxWidth = currentX;
+//                        }
+//                    }
+//                    maxWidth += offset;
+//                    break;
+//                default:
+//                    break;
+//            }
+//            lastType = cell.getType();
+
     }
 
     /**
