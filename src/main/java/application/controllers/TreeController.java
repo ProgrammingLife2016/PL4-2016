@@ -30,6 +30,18 @@ public class TreeController extends Controller<ScrollPane> {
     private TreeMouseHandling treeMouseHandling;
     private TreeMap<String, Integer> metaData;
 
+    private static final Color LIN0 = (Color.web("000000"));
+    private static final Color LIN1 = (Color.web("ed00c3"));
+    private static final Color LIN2 = (Color.web("0000ff"));
+    private static final Color LIN3 = (Color.web("500079"));
+    private static final Color LIN4 = (Color.web("ff0000"));
+    private static final Color LIN5 = (Color.web("4e2c00"));
+    private static final Color LIN6 = (Color.web("69ca00"));
+    private static final Color LIN7 = (Color.web("ff7e00"));
+    private static final Color LIN8 = (Color.web("00ff9c"));
+    private static final Color LIN9 = (Color.web("00ff9c"));
+    private static final Color LIN10 = (Color.web("00ffff"));
+
     /**
      * Class constructor.
      *
@@ -112,12 +124,14 @@ public class TreeController extends Controller<ScrollPane> {
      * @param cell the Cell being hovered over.
      */
     public void applyCellHighlight(Cell cell) {
-        List<Cell> parentList = new ArrayList<>();
-        parentList.add(cell);
-        collectedStrains.clear();
-        collectedStrains.add(cell);
+        if(cell instanceof LeafCell) {
+            List<Cell> parentList = new ArrayList<>();
+            parentList.add(cell);
+            collectedStrains.clear();
+            collectedStrains.add(cell);
 
-        applyColorUpwards(parentList, Color.RED, 4.0);
+            applyColorUpwards(parentList, determineLinColor(metaData.get(((LeafCell) cell).getName())), 4.0);
+        }
     }
 
     /**
@@ -146,9 +160,9 @@ public class TreeController extends Controller<ScrollPane> {
         childList.add(edge.getTarget());
         collectedStrains.clear();
 
-        applyColorOnSelf(edge, Color.RED, 4.0);
-        applyColorUpwards(parentList, Color.RED, 4.0);
-        applyColorDownwards(childList, Color.RED, 4.0);
+        applyColorOnSelf(edge, Color.YELLOW, 4.0);
+        applyColorUpwards(parentList, Color.YELLOW, 4.0);
+        applyColorDownwards(childList, Color.YELLOW, 4.0);
     }
 
     /**
@@ -218,8 +232,42 @@ public class TreeController extends Controller<ScrollPane> {
                     e.getLine().setStroke(c);
                     e.getLine().setStrokeWidth(s);
                 });
-            }
-            else collectedStrains.add(next);
+            } else collectedStrains.add(next);
         }
+    }
+
+    /**
+     * Determines the color of the edges for the corresponding lineages in a highlighted situation.
+     * @param l the lineage code.
+     * @return the color.
+     */
+    private Color determineLinColor(int l) {
+        switch (l) {
+            case 0:
+                return LIN0;
+            case 1:
+                return LIN1;
+            case 2:
+                return LIN2;
+            case 3:
+                return LIN3;
+            case 4:
+                return LIN4;
+            case 5:
+                return LIN5;
+            case 6:
+                return LIN6;
+            case 7:
+                return LIN7;
+            case 8:
+                return LIN8;
+            case 9:
+                return LIN9;
+            case 10:
+                return LIN10;
+            default:
+                break;
+        }
+        return LIN0;
     }
 }

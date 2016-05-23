@@ -2,15 +2,10 @@ package application.controllers;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.tree.LeafCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class responsible for the handling of mouse events.
@@ -19,12 +14,15 @@ public class TreeMouseHandling {
     private MainController mainController;
 
     /**
-     * Selects or unselects (a) given strain(s).
+     * Selects or deselects (a) given strain(s).
      */
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
             mainController.getTreeController().selectStrains();
     };
 
+    /**
+     * Highlights strains based on hovering over them or corresponding Cells.
+     */
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         if(event.getSource() instanceof Cell) {
             mainController.getTreeController().applyCellHighlight((Cell) event.getSource());
@@ -35,6 +33,9 @@ public class TreeMouseHandling {
         }
     };
 
+    /**
+     * Removes highlights from strains based on hovering over them or corresponding Cells.
+     */
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
         if(event.getSource() instanceof Cell) {
             mainController.getTreeController().revertCellHighlight((Cell) event.getSource());
