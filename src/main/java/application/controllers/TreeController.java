@@ -237,6 +237,14 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Getter method for the selected strains.
+     * @return a list with the selected strains.
+     */
+    public List<Cell> getSelectedStrains() {
+        return selectedStrains;
+    }
+
+    /**
      * Determines the color of the edges for the corresponding lineages in a highlighted situation.
      * @param l the lineage code.
      * @return the color.
