@@ -118,36 +118,7 @@ public class GraphReducerTest {
 //        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
 //        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
 //    }
-//
-//    /**
-//     * Test the genome stacking of a collapse of a three-Node sequence.
-//     */
-//    @Test
-//    public void testCollapseNodeSequenceGenomeStacking() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-//        nodeMap.get(1).addLink(2);
-//        nodeMap.get(2).addLink(3);
-//
-//        String[] genome1 = {"a"};
-//        String[] genome2 = {"b"};
-//        String[] genome3 = {"c"};
-//
-//        nodeMap.get(1).addAllGenome(genome1);
-//        nodeMap.get(2).addAllGenome(genome2);
-//        nodeMap.get(3).addAllGenome(genome3);
-//
-//        GraphReducer.determineParents(nodeMap);
-//        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
-//
-//        assertTrue(nodeMap.get(1).getGenomes().size() == 2);
-//        assertTrue(nodeMap.get(1).getGenomes().contains("a"));
-//        assertTrue(nodeMap.get(1).getGenomes().contains("b"));
-//
-//        assertTrue(nodeMap.get(3).getGenomes().size() == 2);
-//        assertTrue(nodeMap.get(3).getGenomes().contains("b"));
-//        assertTrue(nodeMap.get(3).getGenomes().contains("c"));
-//    }
-//
+
     /**
      * Test the collapsing of a parent with two children.
      */
@@ -161,11 +132,8 @@ public class GraphReducerTest {
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
         nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5, 6)));
 
-        GraphReducer.determineParents(nodeMap);
-        assertEquals(0, nodeMap.get(1).getCollapseLevel());
-        assertEquals(NodeType.BASE, nodeMap.get(1).getType());
-
         // Collapse the bubble
+        GraphReducer.determineParents(nodeMap);
         assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
 
         assertEquals(2, nodeMap.get(1).getLinks(nodeMap).size());
@@ -179,28 +147,36 @@ public class GraphReducerTest {
         assertNull(nodeMap.get(3));
         assertNull(nodeMap.get(4));
     }
-//
-//
-//    /**
-//     * Test the collapsing of a triangle of nodes.
-//     */
-//    @Test
-//    public void testCollapseIndel() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
-//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
-//
-//        GraphReducer.determineParents(nodeMap);
-//        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
-//
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
-//
-//        assertNull(nodeMap.get(2));
-//
-//        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-//    }
+
+
+    /**
+     * Test the collapsing of a triangle of nodes.
+     */
+    @Test
+    public void testCollapseIndel() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(5);
+        nodeMap.get(1).setSequence("A");
+
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4, 5)));
+
+
+        // Collapse the indel
+        GraphReducer.determineParents(nodeMap);
+        assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
+
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 2);
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == 4);
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(1) == 5);
+
+        assertEquals(1, nodeMap.get(1).getCollapseLevel());
+        assertEquals(NodeType.INDEL, nodeMap.get(1).getType());
+        assertEquals("", nodeMap.get(1).getSequence());
+
+        assertNull(nodeMap.get(2));
+        assertNull(nodeMap.get(3));
+    }
 //
 //    /**
 //     * Collapse a sequence of 100 nodes.
