@@ -31,13 +31,11 @@ public class GraphMouseHandling {
     };
 
     EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
-        Cell cell = (Cell) event.getSource();
-        cell.getText().setVisible(true);
+        
     };
 
     EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
-        Cell cell = (Cell) event.getSource();
-        cell.getText().setVisible(false);
+
     };
 
     /**
