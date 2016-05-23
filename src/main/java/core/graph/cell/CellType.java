@@ -6,6 +6,8 @@ package core.graph.cell;
 public enum CellType {
     RECTANGLE,
     TRIANGLE,
+    BUBBLE,
+    INDEL,
     TREELEAF,
     TREEMIDDLE
 }
