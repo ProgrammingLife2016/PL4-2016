@@ -76,30 +76,22 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
-
-        //Only parse the file when we didn't do it already
-//        if(startMap==null) {
-//            Parser parser = new Parser();
-//            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-//            startMap = parser.readGFA(inputStream);
-//            levelMaps = GraphReducer.createLevelMaps(startMap);
-//            inputStream.close();
-//        }
-
-        //Reset the model, since we have another reference.
+        //Reset the model and re'add the levelMaps, since we have another reference.
         current = new Model();
         current.setLevelMaps(levelMaps);
-
-
-
-        //generateModel(current,depth);
+        //Generate the model
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
         } else if (depth < 0) {
             depth = 0;
         }
+        current = generateModel(ref, depth);
 
+        return true;
+    }
+
+    private Model generateModel(Object ref, int depth) {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         Node root = nodeMap.get(1);
 
@@ -138,8 +130,7 @@ public class Graph {
         }
 
         current.setLayout();
-
-        return true;
+        return current;
     }
 
     /**
