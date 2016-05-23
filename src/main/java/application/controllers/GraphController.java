@@ -28,9 +28,6 @@ public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
-    private Rectangle2D screenSize;
-    private int maxWidth;
-    private int maxHeight;
 
     /**
      * Constructor method for this class.
@@ -45,10 +42,7 @@ public class GraphController extends Controller<ScrollPane> {
         super(new ScrollPane());
         this.graph = g;
         this.zoomController = new ZoomController();
-        this.maxWidth = 0;
         this.graphMouseHandling = new GraphMouseHandling(m);
-        this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.maxHeight = (int) screenSize.getHeight();
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -76,10 +70,13 @@ public class GraphController extends Controller<ScrollPane> {
         return graph;
     }
 
-    public ZoomController getZoomController() { return zoomController; }
+    public ZoomController getZoomController() {
+        return zoomController;
+    }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     /**
      * Init method for this class.
@@ -102,13 +99,10 @@ public class GraphController extends Controller<ScrollPane> {
         for (Cell c : list) {
             graphMouseHandling.setMouseHandling(c);
         }
-        
+
         graph.endUpdate();
 
-        GraphLayout layout = new GraphLayout(graph.getModel(), 20,
-                (int) (screenSize.getHeight() - 25) / 2);
-        layout.execute();
-        maxWidth = (int) layout.getMaxWidth();
+
         this.getRoot().setContent(root);
 
         //takeSnapshot();
@@ -126,14 +120,15 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Method take a snapshot of the current graph.
      * ---- not used because of a null pointer ---
-     * TO DO: fix.
+     * @TODO: fix.
+     *
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
         SnapshotParameters snapshotParameters = new SnapshotParameters();
         //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().snapshot(
-                snapshotParameters, new WritableImage(maxWidth + 50, maxHeight));
+                snapshotParameters, new WritableImage(getGraph().getModel().getWidth() + 50, getGraph().getModel().getHeight()));
 
         File output = new File("snapshot.png");
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);

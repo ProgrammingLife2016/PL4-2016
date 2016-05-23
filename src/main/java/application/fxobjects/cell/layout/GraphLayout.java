@@ -53,9 +53,11 @@ public class GraphLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = model.getAllCells();
 
+        System.out.println(cells.size());
         for (Cell cell : cells) {
-            switch (cell.getType()) {
 
+            System.out.println(cell.getType().toString()+"");
+            switch (cell.getType()) {
                 case RECTANGLE:
                     currentX += offset;
                     if (currentX > maxWidth) {

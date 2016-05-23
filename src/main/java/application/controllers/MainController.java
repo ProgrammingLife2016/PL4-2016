@@ -139,7 +139,12 @@ public class MainController extends Controller<BorderPane> {
      * @param ref the reference string.
      */
     public void fillGraph(Object ref) {
-        Graph graph = new Graph();
+        Graph graph = null;
+        try {
+            graph = new Graph();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         graphController = new GraphController(graph, ref, this, currentView);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);

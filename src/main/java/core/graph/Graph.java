@@ -32,14 +32,25 @@ public class Graph {
     /**
      * Class constructor.
      */
-    public Graph() {
-        this.model = new Model();
-        
+    public Graph() throws IOException {
+        model = new Model();
+        model2 = new Model();
+
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        try {
+            startMap = parser.readGFA(inputStream);
+            levelMaps = GraphReducer.createLevelMaps(startMap);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Read a node map from a gfa file on disk.
-     * @return  A node map read from file.
+     *
+     * @return A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
@@ -55,7 +66,7 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
      * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
@@ -65,25 +76,17 @@ public class Graph {
             throws IOException {
 
         //Only parse the file when we didn't do it already
-        if(startMap==null) {
-            Parser parser = new Parser();
-            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-            startMap = parser.readGFA(inputStream);
-            levelMaps = GraphReducer.createLevelMaps(startMap);
-            inputStream.close();
-        }
+//        if(startMap==null) {
+//            Parser parser = new Parser();
+//            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+//            startMap = parser.readGFA(inputStream);
+//            levelMaps = GraphReducer.createLevelMaps(startMap);
+//            inputStream.close();
+//        }
 
         //Reset the model, since we have another reference.
         model = new Model();
         model.setLevelMaps(levelMaps);
-
-        new Thread("Background Loader") {
-            public void run() {
-                model2 = new Model();
-                model2.setLevelMaps(levelMaps);
-
-            }
-        }.start();
 
 
         if (depth > levelMaps.size() - 1) {
@@ -131,6 +134,8 @@ public class Graph {
             }
         }
 
+        model.setLayout();
+
         return true;
     }
 
@@ -166,6 +171,7 @@ public class Graph {
     /**
      * Set whether the model should be reset in the addGraphComponents method.
      * This option is only used for testing purposes to allow for mocks.
+     *
      * @param resetModel whether the model should be reset in the addGraphComponents method.
      */
     public void setresetModel(Boolean resetModel) {
@@ -189,7 +195,7 @@ public class Graph {
     public void setModel(Model model) {
         this.model = model;
     }
-    
+
     /**
      * Getter method for the genomens.
      *
