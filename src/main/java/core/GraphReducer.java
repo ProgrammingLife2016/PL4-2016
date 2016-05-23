@@ -108,7 +108,7 @@ public final class GraphReducer {
             }
             collapseBubble(nodeMap, parent);
             collapseIndel(nodeMap, parent);
-            collapseNodeSequence(nodeMap, parent);
+            //collapseNodeSequence(nodeMap, parent);
         }
 
         return nodeMap;
@@ -146,9 +146,6 @@ public final class GraphReducer {
             }
             Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
-            addGenomes(parent, child);
-            addGenomes(grandChild, child);
-
             parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
             grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
             nodeMap.remove(child.getId());
@@ -179,12 +176,10 @@ public final class GraphReducer {
             Node child2 = nodeMap.get(child2Id);
 
             if (child1ChildrenIds.contains(child2Id)) {
-                addGenomes(child2, child1);
                 nodeMap.remove(child1Id);
                 return true;
 
             } else if (child2ChildrenIds.contains(child1Id)) {
-                addGenomes(child1, child2);
                 nodeMap.remove(child2Id);
                 return true;
             }
@@ -234,24 +229,10 @@ public final class GraphReducer {
             Node child = nodeMap.get(childId);
 
             if (child != null) {
-                addGenomes(child0, child);
                 nodeMap.remove(childId);
             }
         }
 
         return true;
-    }
-
-    /**
-     * Adds a list of genomes to another list.
-     *
-     * @param base  Base node.
-     * @param toAdd Node of which its genome has to be added to the base node.
-     */
-    public static void addGenomes(Node base, Node toAdd) {
-        Set<String> hs = new LinkedHashSet<String>(base.getGenomes());
-        hs.addAll(toAdd.getGenomes());
-
-        base.setGenomes(new ArrayList<String>(hs));
     }
 }
