@@ -59,6 +59,16 @@ public class ZoomBox extends ScrollPane {
         graphBoxHeight = windowHeight - 10;
         zoomBoxWidth = graphBoxWidth / 5.0;
         zoomBoxHeight = graphBoxHeight / 5.0;
+
+        double rectX = windowWidth - zoomBoxWidth - 20;
+        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
+        zoomRectBorder.setStroke(Color.LIGHTGREY);
+        zoomRectBorder.setStrokeWidth(3);
+
+        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
+        zoomRect.setFill(Color.TRANSPARENT);
+        zoomRect.setStroke(Color.BLACK);
+        zoomRect.setStrokeWidth(3);
     }
 
     /**
@@ -68,7 +78,6 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        double rectX = windowWidth - zoomBoxWidth - 20;
 
 //        String property = "java.io.tmpdir";
 //        String tempDir = System.getProperty(property);
@@ -86,16 +95,7 @@ public class ZoomBox extends ScrollPane {
         Image image = new Image(stream);
         ImagePattern pattern = new ImagePattern(image);
 
-        zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRectBorder.setFill(pattern);
-        zoomRectBorder.setStroke(Color.LIGHTGREY);
-        zoomRectBorder.setStrokeWidth(3);
-
-        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
-        zoomRect.setFill(Color.TRANSPARENT);
-        zoomRect.setStroke(Color.BLACK);
-        zoomRect.setStrokeWidth(3);
-
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;

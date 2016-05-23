@@ -105,6 +105,14 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem());
+                try {
+                    graphController.takeSnapshot();
+                    //graphController.getZoomController().getZoomBox().initZoomBox();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
