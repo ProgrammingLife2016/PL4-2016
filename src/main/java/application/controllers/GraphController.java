@@ -52,7 +52,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        this.getRoot().setOnKeyPressed(zoomController.getKeyHandler());
+        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -79,9 +79,7 @@ public class GraphController extends Controller<ScrollPane> {
     public ZoomController getZoomController() { return zoomController; }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
+    public void initialize(URL location, ResourceBundle resources) { }
 
     /**
      * Init method for this class.

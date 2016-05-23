@@ -228,7 +228,7 @@ public final class GraphReducer {
         // than one nucleotide then abort.
         for (int i = 0; i < children.size(); i++) {
             if (nodeMap.get(children.get(i)).getSequence().length() > 1) {
-                return false;
+//                return false;
             }
         }
 
