@@ -36,6 +36,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Class constructor.
+     * @param z ZoomController which controls the class
      */
     public ZoomBox(ZoomController z) {
         this.zoomController = z;
@@ -102,11 +103,9 @@ public class ZoomBox extends ScrollPane {
      *
      * @return The zoom box.
      */
-    public StackPane getZoomBox() {
-        return right;
-    }
+    public StackPane getZoomBox() { return right; }
 
-    public KeyHandler getKeyHandler() {return keyHandler; }
+    public KeyHandler getKeyHandler() { return keyHandler; }
 
 
     /**

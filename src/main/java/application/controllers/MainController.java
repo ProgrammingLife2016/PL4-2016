@@ -100,7 +100,8 @@ public class MainController extends Controller<BorderPane> {
         list.prefWidthProperty().bind(listVBox.widthProperty());
 
         list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
+        infoScroller.setOnKeyPressed(graphController.getZoomController()
+                .getZoomBox().getKeyHandler());
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {

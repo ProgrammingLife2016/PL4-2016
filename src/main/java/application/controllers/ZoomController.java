@@ -2,13 +2,7 @@ package application.controllers;
 
 import application.fxobjects.ZoomBox;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,6 +23,11 @@ public class ZoomController extends Controller<BorderPane> {
         super(new BorderPane());
     }
 
+    /**
+     * Method to create the ZoomBox, which will be controlled
+     * by the ZoomController
+     * @return
+     */
     public ZoomBox createZoomBox() {
         ZoomBox z = new ZoomBox(this);
         zoomBox = z;

@@ -13,9 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
 import javax.imageio.ImageIO;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -108,6 +106,9 @@ public class GraphController extends Controller<ScrollPane> {
 
     }
 
+    /**
+     * Method to attach the keyHandler to the root of the Controller
+     */
     public void initKeyHandler() {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
@@ -127,7 +128,8 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-        WritableImage image = new WritableImage(maxWidth + 50, (int) screenSize.getHeight());
+        WritableImage image = new WritableImage(maxWidth + 50,
+                (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
         File output = new File("/snapshot.png");
