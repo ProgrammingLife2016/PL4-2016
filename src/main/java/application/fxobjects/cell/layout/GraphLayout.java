@@ -51,9 +51,7 @@ public class GraphLayout extends CellLayout {
      * Method to align all nodes properly.
      */
     public void execute() {
-        List<Cell> cells = model.getAllCells();
-
-        System.out.println(cells.size());
+        List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
 
             System.out.println(cell.getType().toString()+"");

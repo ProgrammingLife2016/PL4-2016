@@ -180,8 +180,6 @@ public class Model {
 
             cellMap.put(cell.getCellId(), cell);
         }
-        System.out.println("KACHEL 3.0");
-
         return true;
     }
 
@@ -265,7 +263,6 @@ public class Model {
     }
 
     public void setLayout() {
-        merge();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         GraphLayout layout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
