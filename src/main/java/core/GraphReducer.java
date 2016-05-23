@@ -97,7 +97,6 @@ public final class GraphReducer {
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
-
         determineParents(nodeMap);
 
         for (int idx = 1; idx <= map.size(); idx++) {
@@ -105,6 +104,7 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
+
             collapseBubble(nodeMap, parent);
             collapseIndel(nodeMap, parent);
             //collapseNodeSequence(nodeMap, parent);
@@ -174,15 +174,25 @@ public final class GraphReducer {
             Node child1 = nodeMap.get(child1Id);
             Node child2 = nodeMap.get(child2Id);
 
+            // Child 1 is inserted
             if (child1ChildrenIds.contains(child2Id)) {
+                parent.setLinks(child2.getLinks());
                 parent.incrementCollapseLevel();
                 parent.setType(NodeType.INDEL);
+                parent.setSequence("");
+
                 nodeMap.remove(child1Id);
+                nodeMap.remove(child2Id);
                 return true;
 
+            // Child 2 is inserted
             } else if (child2ChildrenIds.contains(child1Id)) {
+                parent.setLinks(child1.getLinks());
                 parent.incrementCollapseLevel();
                 parent.setType(NodeType.INDEL);
+                parent.setSequence("");
+
+                nodeMap.remove(child1Id);
                 nodeMap.remove(child2Id);
                 return true;
             }
