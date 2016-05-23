@@ -198,7 +198,7 @@ public class GraphReducerTest {
         assertTrue(nodeMap.get(2).getGenomes().contains("b"));
         assertTrue(nodeMap.get(2).getGenomes().contains("c"));
     }
-    
+
     /**
      * Test the collapsing of a triangle of nodes.
      */

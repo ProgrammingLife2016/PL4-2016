@@ -20,6 +20,7 @@ public class Graph {
     private Boolean resetModel = true;
 
     private Model model;
+    private Model model2;
 
     private List<String> genomes = new ArrayList<>();
 
@@ -33,6 +34,7 @@ public class Graph {
      */
     public Graph() {
         this.model = new Model();
+        
     }
 
     /**
@@ -74,6 +76,15 @@ public class Graph {
         //Reset the model, since we have another reference.
         model = new Model();
         model.setLevelMaps(levelMaps);
+
+        new Thread("Background Loader") {
+            public void run() {
+                model2 = new Model();
+                model2.setLevelMaps(levelMaps);
+
+            }
+        }.start();
+
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;

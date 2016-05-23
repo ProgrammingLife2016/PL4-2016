@@ -104,6 +104,7 @@ public class GraphController extends Controller<ScrollPane> {
         }
         
         graph.endUpdate();
+
         GraphLayout layout = new GraphLayout(graph.getModel(), 20,
                 (int) (screenSize.getHeight() - 25) / 2);
         layout.execute();
