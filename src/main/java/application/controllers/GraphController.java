@@ -1,7 +1,6 @@
 package application.controllers;
 
 import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
@@ -26,9 +25,11 @@ public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
+    AnchorPane root = new AnchorPane();
     private Rectangle2D screenSize;
     private int maxWidth;
     private int maxHeight;
+
 
     private String position;
 
@@ -44,14 +45,14 @@ public class GraphController extends Controller<ScrollPane> {
     public GraphController(Graph g, Object ref, MainController m, int depth) {
         super(new ScrollPane());
         this.graph = g;
-        this.zoomController = new ZoomController(this);
-        this.maxWidth = 0;
-        this.graphMouseHandling = new GraphMouseHandling(m);
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.maxHeight = (int) screenSize.getHeight();
+        this.zoomController = new ZoomController(this);
+        this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.position = "";
+        maxWidth = 0;
+        maxHeight = (int) screenSize.getHeight();
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -96,7 +97,12 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) throws IOException {
-        AnchorPane root = new AnchorPane();
+        int size = graph.getModel().getLevelMaps().size();
+        System.out.println(size + " IS SIZE ");
+        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
+            root.getChildren().clear();
+            System.out.println("Remove all children, received depth: " + depth);
+        }
 
         graph.addGraphComponents(ref, depth);
 
@@ -111,10 +117,8 @@ public class GraphController extends Controller<ScrollPane> {
         }
 
         graph.endUpdate();
-        GraphLayout layout = new GraphLayout(graph.getModel(), 20,
-                (int) (screenSize.getHeight() - 25) / 2);
-        layout.execute();
-        maxWidth = (int) layout.getMaxWidth();
+
+
         this.getRoot().setContent(root);
 
     }
@@ -157,5 +161,6 @@ public class GraphController extends Controller<ScrollPane> {
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
         return snapshot;
+
     }
 }

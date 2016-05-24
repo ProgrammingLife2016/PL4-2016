@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
+import java.io.IOException;
+
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
@@ -53,8 +55,10 @@ public class MenuFactory {
     }
 
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Show Graph", null, event ->
-                mainController.fillGraph(null));
+        showGenomeSequence = initMenuItem("Show Graph", null, event -> {
+            mainController.fillGraph(null);
+
+        });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null, event ->

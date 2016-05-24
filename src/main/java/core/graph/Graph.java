@@ -1,15 +1,18 @@
 package core.graph;
 
-import core.*;
+import core.GraphReducer;
+import core.Model;
+import core.Node;
+import core.Parser;
 import core.graph.cell.CellType;
-
 import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class representing a graph.
@@ -19,37 +22,57 @@ public class Graph {
 
     private Boolean resetModel = true;
 
-    private Model model;
+    private Model zoomIn;
+    private Model current;
+    private Model zoomOut;
+    private int currentInt = -1;
 
     private List<String> genomes = new ArrayList<>();
+
+    private HashMap<Integer, Node> startMap;
+
+    private List<HashMap<Integer, Node>> levelMaps;
 
 
     /**
      * Class constructor.
      */
-    public Graph() {
-        this.model = new Model();
+    public Graph() throws IOException {
+        zoomIn = new Model();
+        current = new Model();
+        zoomOut = new Model();
+
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        try {
+            startMap = parser.readGFA(inputStream);
+            levelMaps = GraphReducer.createLevelMaps(startMap);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Read a node map from a gfa file on disk.
-     * @return  A node map read from file.
+     *
+     * @return A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-        inputStream.close();
-
-        return startMap;
-    }
+//    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+//    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
+//        Parser parser = new Parser();
+//        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+//        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+//        inputStream.close();
+//
+//        return startMap;
+//    }
 
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref the reference string.
+     * @param ref   the reference string.
      * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
@@ -57,37 +80,103 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-        inputStream.close();
 
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
+        if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-        //Reset the model, since we have another reference.
-        model = new Model();
-        model.setLevelMaps(levelMaps);
+            System.out.println("Trying to draw:" + depth);
+            //Normalize.
+            if (depth > levelMaps.size() - 1) {
+                depth = levelMaps.size() - 1;
+            } else if (depth < 0) {
+                depth = 0;
+            }
 
-        if (depth > levelMaps.size() - 1) {
-            depth = levelMaps.size() - 1;
-        } else if (depth < 0) {
-            depth = 0;
+            //Reset the model and re'add the levelMaps, since we have another reference or depth.
+            if (currentInt == -1) { //First time we are here.
+                currentInt = depth;
+                current.setLevelMaps(levelMaps);
+                current = generateModel(ref, depth);
+                //LoadOneUp is only needed when we do not start on the top level.
+                loadOneUp(ref, depth);
+                loadOneDown(ref, depth);
+            } else { //Second time. All models are loaded
+                if (depth < currentInt) {
+                    System.out.println("Zoom in");
+                    zoomOut = current;
+                    current = zoomIn;
+                    loadOneDown(ref, depth);
+                    currentInt = depth;
+                } else if (depth > currentInt) {
+                    System.out.println("Zoom out");
+                    zoomIn = current;
+                    current = zoomOut;
+                    loadOneUp(ref, depth);
+                    currentInt = depth;
+                } else {
+                    System.out.println("Will not draw: " + depth + ", current depth" + currentInt);
+                }
+            }
+            System.out.println("CurrentInt: " + currentInt);
+
+            // @TODO Switch method maken.
+            // @TODO Check maken of we al kunnen switchen(Is de thread al klaar?)
         }
+        return true;
+    }
+
+    private void loadOneUp(Object ref, int depth) {
+        int finalDepth = depth;
+        new Thread("Load one up") {
+            public void run() {
+                if (finalDepth + 1 <= levelMaps.size() - 1) {
+                    zoomOut = new Model();
+                    zoomOut = generateModel(ref, finalDepth + 1);
+                    zoomOut.setLayout();
+                    System.out.println("(THREAD): Done loading: " + (finalDepth + 1));
+                } else {
+                    System.out.println("(THREAD): Not loading map: " + (finalDepth + 1));
+                }
+            }
+        }.run();
+    }
+
+    private void loadOneDown(Object ref, int depth) {
+        int finalDepth = depth;
+        new Thread("Load one down") {
+            public void run() {
+                if (finalDepth - 1 >= 0) {
+                    zoomIn = new Model();
+                    zoomIn = generateModel(ref, finalDepth - 1);
+                    zoomIn.setLayout();
+                    System.out.println("(THREAD): Done loading: " + (finalDepth - 1));
+
+                } else {
+                    System.out.println("(THREAD): Not loading map: " + (finalDepth - 1));
+                }
+            }
+        }.run();
+    }
+
+    private Model generateModel(Object ref, int depth) {
+        Model toret = new Model();
+        toret.setLevelMaps(levelMaps);
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-
         Node root = nodeMap.get(1);
-
-        if (root.getGenomes().contains(ref)) {
-            model.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
-        } else {
-            model.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-        }
-
-        genomes.addAll(root.getGenomes());
 
         if (ref == null) {
             ref = root.getGenomes().get(0);
         }
+
+        if (root.getGenomes().contains(ref)) {
+            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+        } else {
+            toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+        }
+
+
+        genomes = new ArrayList<>();
+        genomes.addAll(root.getGenomes());
+
 
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
@@ -100,18 +189,19 @@ public class Graph {
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
                 if (nodeMap.get(j).getGenomes().contains(ref)) {
-                    model.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                    toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
                 } else {
-                    model.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                    toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                 }
 
                 //Add link from current cell to next cell
-                model.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                         to.getGenomes()), EdgeType.GRAPH);
             }
         }
 
-        return true;
+        toret.setLayout();
+        return toret;
     }
 
     /**
@@ -120,10 +210,10 @@ public class Graph {
 
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
-        model.attachOrphansToGraphParent(model.getAddedCells());
+        current.attachOrphansToGraphParent(current.getAddedCells());
 
         // merge added & removed cells with all cells
-        model.merge();
+        current.merge();
     }
 
     /**
@@ -146,6 +236,7 @@ public class Graph {
     /**
      * Set whether the model should be reset in the addGraphComponents method.
      * This option is only used for testing purposes to allow for mocks.
+     *
      * @param resetModel whether the model should be reset in the addGraphComponents method.
      */
     public void setresetModel(Boolean resetModel) {
@@ -158,7 +249,7 @@ public class Graph {
      * @return The model of the graph.
      */
     public Model getModel() {
-        return model;
+        return current;
     }
 
     /**
@@ -167,9 +258,9 @@ public class Graph {
      * @param model The model of the graph.
      */
     public void setModel(Model model) {
-        this.model = model;
+        this.current = model;
     }
-    
+
     /**
      * Getter method for the genomens.
      *
@@ -180,11 +271,15 @@ public class Graph {
     }
 
     /**
-     * Setter method for the genomens.
+     * Setter method for the genomes.
      *
      * @param genomes the genomes.
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
+    }
+
+    public int getCurrentInt() {
+        return currentInt;
     }
 }

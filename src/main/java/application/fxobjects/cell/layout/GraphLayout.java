@@ -52,8 +52,7 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
-        List<Cell> cells = model.getAllCells();
-
+        List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
             if (!cell.isRelocated()) {
                 currentX += offset;

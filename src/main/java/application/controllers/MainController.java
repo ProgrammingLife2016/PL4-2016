@@ -141,8 +141,22 @@ public class MainController extends Controller<BorderPane> {
      * @param ref the reference string.
      */
     public void fillGraph(Object ref) {
-        Graph graph = new Graph();
-        graphController = new GraphController(graph, ref, this, currentView);
+        if (graphController == null) {
+            Graph graph = null;
+            try {
+                graph = new Graph();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            graphController = new GraphController(graph, ref, this, currentView);
+        } else {
+            try {
+                graphController.init(ref, currentView);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
@@ -268,7 +282,6 @@ public class MainController extends Controller<BorderPane> {
     public TreeController getTreeController() {
         return treeController;
     }
-
     /**
      * Getter method for the MenuBar.
      *
