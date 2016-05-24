@@ -39,6 +39,7 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane infoScroller;
     private int currentView = 9;
     private GraphController graphController;
+    private TreeController treeController;
     Rectangle2D screenSize;
 
     /**
@@ -172,7 +173,8 @@ public class MainController extends Controller<BorderPane> {
         try {
             PhylogeneticTree pt = new PhylogeneticTree();
             pt.setup();
-            TreeController treeController = new TreeController(pt);
+            treeController = new TreeController(pt, this,
+                    this.getClass().getResourceAsStream("/metadata.xlsx"));
             screen = treeController.getRoot();
             this.getRoot().setCenter(screen);
             this.getRoot().setBottom(null);
@@ -228,13 +230,17 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the graphController.
-     *
      * @return the graphController.
      */
     public GraphController getGraphController() {
         return graphController;
     }
 
-
-
+    /**
+     * Getter method for the treeController.
+     * @return the treeController.
+     */
+    public TreeController getTreeController() {
+        return treeController;
+    }
 }
