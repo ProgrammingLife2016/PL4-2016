@@ -257,6 +257,18 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Getter method for the selected strains.
+     * @return a list with the selected strains.
+     */
+    public List<String> getSelectedGenomes() {
+        List<String> genomes = new ArrayList<>();
+
+        selectedStrains.forEach(s -> genomes.add(((LeafCell) s).getName()));
+
+        return genomes;
+    }
+
+    /**
      * Determines the color of the edges for the corresponding lineages in a highlighted situation.
      * @param l the lineage code.
      * @return the color.
@@ -295,11 +307,15 @@ public class TreeController extends Controller<ScrollPane> {
      * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
      */
     private void modifyGraphOptions() {
-        if (selectedStrains.size() == 0) {
+        int s = selectedStrains.size();
+        if (s == 0) {
             MenuFactory.showOnlyThisStrain.setDisable(true);
             MenuFactory.showSelectedStrains.setDisable(true);
-        } else {
+        } else if(s == 1) {
             MenuFactory.showOnlyThisStrain.setDisable(false);
+            MenuFactory.showSelectedStrains.setDisable(false);
+        } else {
+            MenuFactory.showOnlyThisStrain.setDisable(true);
             MenuFactory.showSelectedStrains.setDisable(false);
         }
     }
