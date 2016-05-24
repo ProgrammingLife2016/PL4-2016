@@ -99,7 +99,7 @@ public class GraphLayout extends CellLayout {
                     }
                 } else {
                     child.relocate(currentX, currentY - oddChildOffset);
-                    oddChildOffset = ((yOffset) * modifier);
+                    oddChildOffset = yOffset * modifier;
                     child.setRelocated(true);
 
                     modifier *= -1;
