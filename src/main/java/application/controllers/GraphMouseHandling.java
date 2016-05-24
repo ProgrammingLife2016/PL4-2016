@@ -18,7 +18,8 @@ class GraphMouseHandling {
         Cell node = (Cell) event.getSource();
 
         core.Node clicked = mainController.getGraphController().getGraph()
-                .getModel().getLevelMaps().get(0).get(node.getCellId());
+                .getModel().getLevelMaps().get(mainController.getCurrentView())
+                .get(node.getCellId());
 
         String info = "";
         info += "Genome ID: " + clicked.getId() + "\n";
