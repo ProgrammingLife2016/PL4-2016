@@ -20,6 +20,8 @@ public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
+    AnchorPane root = new AnchorPane();
+
 
     /**
      * Constructor method for this class.
@@ -77,7 +79,13 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) throws IOException {
-        AnchorPane root = new AnchorPane();
+        int size = graph.getModel().getLevelMaps().size();
+        System.out.println(size+ " IS SIZE " );
+        if(depth<= size-1 && depth>=0 && depth!=graph.getCurrentInt()) {
+            root.getChildren().clear();
+            System.out.println("Remove all children");
+            root.getChildren().removeAll(graph.getModel().getAllEdges());
+        }
 
         graph.addGraphComponents(ref, depth);
 
