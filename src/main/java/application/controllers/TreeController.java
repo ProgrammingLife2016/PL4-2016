@@ -47,8 +47,8 @@ public class TreeController extends Controller<ScrollPane> {
      * Class constructor.
      *
      * @param pt A phylogenetic tree.
-     * @param m MainController.
-     * @param s InputStream for metaData.
+     * @param m  MainController.
+     * @param s  InputStream for metaData.
      */
     public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
@@ -133,14 +133,18 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void applyCellHighlight(Cell cell) {
         if (cell instanceof LeafCell) {
+            String temp = ((LeafCell) cell).getName();
+            collectedStrains.clear();
             List<Cell> parentList = new ArrayList<>();
             parentList.add(cell);
-            collectedStrains.clear();
             collectedStrains.add(cell);
 
-            applyColorUpwards(parentList,
-                    determineLinColor(metaData.get(((LeafCell) cell).getName())),
-                    4.0);
+            if (temp.contains("TKK")) {
+                applyColorUpwards(parentList, determineLinColor(metaData.get(temp)), 4.0);
+            }
+            else {
+                applyColorUpwards(parentList, Color.YELLOW, 4.0);
+            }
         }
     }
 
@@ -250,6 +254,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Getter method for the selected strains.
+     *
      * @return a list with the selected strains.
      */
     public List<Cell> getSelectedStrains() {
@@ -270,6 +275,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Determines the color of the edges for the corresponding lineages in a highlighted situation.
+     *
      * @param l the lineage code.
      * @return the color.
      */
