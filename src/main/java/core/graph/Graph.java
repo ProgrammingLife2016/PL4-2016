@@ -77,7 +77,6 @@ public class Graph {
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
 
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(startMap);
         System.out.println("levelmap size: " + levelMaps.size());
 
         //Reset the model, since we have another reference.
@@ -107,6 +106,7 @@ public class Graph {
             current.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
         }
 
+        genomes = new ArrayList<>();
         genomes.addAll(root.getGenomes());
 
         for (int i = 1; i <= nodeMap.size(); i++) {

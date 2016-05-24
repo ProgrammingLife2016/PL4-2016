@@ -148,7 +148,7 @@ public class GraphReducerTest {
         assertNull(nodeMap.get(3));
         assertNull(nodeMap.get(4));
     }
-    
+
     /**
      * Test the collapsing of a triangle of nodes.
      */

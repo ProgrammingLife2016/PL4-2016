@@ -230,6 +230,7 @@ public final class GraphReducer {
         }
         // At this point all children have the same grand child
 
+
         Node child0 = nodeMap.get(children.get(0));
         int grandChildId = child0.getLinks(nodeMap).get(0);
         Node grandChild = nodeMap.get(grandChildId);
