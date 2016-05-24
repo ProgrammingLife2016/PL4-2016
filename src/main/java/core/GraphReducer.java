@@ -235,6 +235,11 @@ public final class GraphReducer {
         int grandChildId = child0.getLinks(nodeMap).get(0);
         Node grandChild = nodeMap.get(grandChildId);
 
+        // Check whether the parent and grand child only have links between each other.
+        if (grandChild.getParents(nodeMap).size() != children.size()) {
+            return false;
+        }
+
         // Remove redundant nodes in bubble
         for (int i = 0; i < children.size(); i++) {
             int childId = children.get(i);

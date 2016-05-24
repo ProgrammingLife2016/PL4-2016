@@ -150,6 +150,31 @@ public class GraphReducerTest {
     }
 
     /**
+     * Test that bubbles in which the grandchild has more parents than the parent has children
+     * should not be collapsed.
+     */
+    @Test
+    public void testBubbleShouldNotCollapse() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(6);
+        nodeMap.get(1).setSequence("A");
+
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 6)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3, 4)));
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(5)));
+        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
+        nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(5)));
+
+        // Collapse the bubble
+        GraphReducer.determineParents(nodeMap);
+        assertFalse(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2)));
+
+        assertNotNull(nodeMap.get(3));
+        assertNotNull(nodeMap.get(4));
+        assertNotNull(nodeMap.get(5));
+        assertEquals(1, nodeMap.get(6).getLinks(nodeMap).size());
+    }
+
+    /**
      * Test the collapsing of a triangle of nodes.
      */
     @Test
