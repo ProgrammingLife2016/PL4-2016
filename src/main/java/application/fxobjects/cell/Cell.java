@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
  */
 public abstract class Cell extends Pane {
     private int cellId;
+    private boolean relocated = false;
     List<Cell> children = new ArrayList<>();
     List<Cell> parents = new ArrayList<>();
 
@@ -115,6 +116,22 @@ public abstract class Cell extends Pane {
      * @return The Cell's text.
      */
     public abstract Text getText();
+
+    /**
+     * Return whether a cell has been relocated.
+     * @return Whether a cell has been relocated.
+     */
+    public boolean isRelocated() {
+        return relocated;
+    }
+
+    /**
+     * Set the relocation status of a cell.
+     * @param relocated The relocation status of a cell.
+     */
+    public void setRelocated(boolean relocated) {
+        this.relocated = relocated;
+    }
 
     /**
      * toString method.

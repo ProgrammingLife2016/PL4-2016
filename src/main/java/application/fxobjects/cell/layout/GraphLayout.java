@@ -22,7 +22,6 @@ public class GraphLayout extends CellLayout {
     private CellType lastType;
     private int cellCount = 0;
     private int centerY;
-    private double maxDistance;
     private double maxWidth;
 
     private static final int BASE_X = 175;
@@ -42,9 +41,7 @@ public class GraphLayout extends CellLayout {
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
-        this.maxDistance = middle;
         this.maxWidth = 0;
-
     }
 
     /**
@@ -54,51 +51,65 @@ public class GraphLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
+            if (!cell.isRelocated()) {
+                currentX += offset;
+                if (currentX > maxWidth) {
+                    maxWidth = currentX;
+                }
+                currentY = centerY;
+                cell.relocate(currentX, currentY);
+                cell.setRelocated(true);
 
-            switch (cell.getType()) {
-                case RECTANGLE:
-                case BUBBLE:
-                case INDEL:
-                    currentX += offset;
-                    if (currentX > maxWidth) {
-                        maxWidth = currentX;
-                    }
+                currentX += offset;
 
-                    currentY = centerY;
-                    cell.relocate(currentX, currentY);
+                //only continue when there is more than 1 child
+                cellCount = cell.getCellChildren().size();
+                if (cellCount < 2) {
+                    continue;
+                }
 
-                    cellCount = 1;
-                    break;
-                case TRIANGLE:
-                        if (cellCount % 2 == 0) {
-                        currentY += cellCount * offset;
-                    } else {
-                        currentY -= cellCount * offset;
-                    }
-
-                    if (currentY == centerY) {
-                        currentX += offset;
-                        if (currentX > maxWidth) {
-                            maxWidth = currentX;
-                        }
-                    }
-
-                    cellCount++;
-                    cell.relocate(currentX, currentY);
-
-                    // Don't draw triangles above rectangles
-                    if (currentY != centerY) {
-                        currentX += offset;
-                        if (currentX > maxWidth) {
-                            maxWidth = currentX;
-                        }
-                    }
-                    maxWidth += offset;
-                    break;
-                default:
-                    break;
+                breadthFirstPlacing(cell);
             }
-            lastType = cell.getType();
+        }
+    }
+
+    /**
+     * A method to place a Node's children and if need be, recursively their children.
+     * @param cell - The parent node.
+     */
+    private void breadthFirstPlacing(Cell cell) {
+        int yOffset = 3 * offset; //y-offset between nodes on the same x-level
+        int oddChildOffset = 0; //initial offset when there are an odd number of children
+        int evenChildOffset = yOffset / 2; //offset for an even amount of children
+        int modifier = -1; //alternate between above and below for the same x-level
+
+        for (Cell child : cell.getCellChildren()) {
+            if (!child.isRelocated()) {
+                if (cellCount % 2 == 0) {
+                    child.relocate(currentX, currentY - evenChildOffset);
+                    evenChildOffset = (yOffset / 2) * modifier;
+                    child.setRelocated(true);
+
+                    modifier *= -1;
+                    if (modifier > 0) {
+                        modifier++;
+                    }
+                } else {
+                    child.relocate(currentX, currentY - oddChildOffset);
+                    oddChildOffset = yOffset * modifier;
+                    child.setRelocated(true);
+
+                    modifier *= -1;
+                    if (modifier < 0) {
+                        modifier--;
+                    }
+                }
+            }
+            if (child.getCellChildren().size() > 1) {
+                currentX += offset;
+                currentY = (int) child.getLayoutY();
+                breadthFirstPlacing(child);
+            }
         }
     }
 
