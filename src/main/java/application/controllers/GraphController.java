@@ -153,7 +153,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
-        try {
+//        try {
             WritableImage image = new WritableImage(maxWidth + 50,
                     (int) screenSize.getHeight());
             WritableImage snapshot = this.getRoot().getContent().snapshot(
@@ -161,15 +161,15 @@ public class GraphController extends Controller<ScrollPane> {
 
             String filePath = System.getProperty("user.home") + "/AppData/Local/Temp";
             File output = new File(filePath);
-            File temp = File.createTempFile("snapshot", ".png", output);
+//            File temp = File.createTempFile("snapshot", ".png", output);
             //ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", temp);
 
 //            position = temp.getName();
 //            temp.deleteOnExit();
             return snapshot;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 }
