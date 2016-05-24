@@ -54,7 +54,6 @@ public class GraphLayout extends CellLayout {
         List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
 
-            System.out.println(cell.getType().toString()+"");
             switch (cell.getType()) {
                 case RECTANGLE:
                 case BUBBLE:
