@@ -91,17 +91,42 @@ public class Graph {
         }
         current = generateModel(ref, depth);
 
-        //@TODO In thread zetten.
-        // @TODO Switch methode maken.
-        //@TODO check maken of we al kunnen switchen(Is de thread al klaar?)
+        // @TODO Switch method maken.
+        // @TODO Check maken of we al kunnen switchen(Is de thread al klaar?)
 
-//        new Thread("joop"){
-//            public void run() {
-//                //zoomOut = generateModel(ref, depth-1);
-//            }
-//        }.run();
-//
-//        zoomIn = generateModel(ref, depth + 1);
+        int finalDepth = depth;
+        new Thread("Load one up"){
+            public void run() {
+                if(finalDepth + 1 <= levelMaps.size()-1)
+                {
+                    zoomOut = generateModel(ref, finalDepth + 1);
+                    System.out.println("Done loading: " + (finalDepth-1 ));
+                    zoomOut.setLayout();
+                    System.out.println("Layout done.");
+                }
+                else
+                {
+                    System.out.println("Not loading map: " + (finalDepth+1));
+                }
+            }
+        }.run();
+        new Thread("Load one down"){
+            public void run() {
+                if(finalDepth - 1 > 0)
+                {
+                    zoomIn = generateModel(ref, finalDepth - 1);
+                    System.out.println("Done loading: " + (finalDepth-1 ));
+                    zoomIn.setLayout();
+                    System.out.println("Layout done.");
+                }
+                else
+                {
+                    System.out.println("Not loading map: " + (finalDepth-1));
+                }
+            }
+        }.run();
+
+        //zoomIn = generateModel(ref, depth + 1);
 
         return true;
     }
