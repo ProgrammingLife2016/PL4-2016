@@ -2,13 +2,8 @@ package core;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -99,26 +94,26 @@ public class GraphReducerTest {
         assertTrue(nodeMap.get(3).getParents().get(1) == 2);
     }
 
-//    /**
-//     * Test the collapsing of a Node sequence of three nodes.
-//     */
-//    @Test
-//    public void testCollapseNodeSequence() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(3);
-//        nodeMap.get(1).addLink(2);
-//        nodeMap.get(2).addLink(3);
-//
-//        GraphReducer.determineParents(nodeMap);
-//        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
-//
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
-//
-//        assertNull(nodeMap.get(2));
-//
-//        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
-//        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
-//    }
+    /**
+     * Test the collapsing of a Node sequence of three nodes.
+     */
+    @Test
+    public void testCollapseNodeSequence() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(3);
+        nodeMap.get(1).addLink(2);
+        nodeMap.get(2).addLink(3);
+
+        GraphReducer.determineParents(nodeMap);
+        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
+
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).size() == 1);
+        assertTrue(nodeMap.get(1).getLinks(nodeMap).get(0) == nodeMap.get(3).getId());
+
+        assertNull(nodeMap.get(2));
+
+        assertTrue(nodeMap.get(3).getParents(nodeMap).size() == 1);
+        assertTrue(nodeMap.get(3).getParents(nodeMap).get(0) == nodeMap.get(1).getId());
+    }
 
     /**
      * Test the collapsing of a parent with two children.
@@ -224,39 +219,39 @@ public class GraphReducerTest {
         assertEquals(1, nodeMap.get(5).getParents(nodeMap).size());
 
     }
-//
-//    /**
-//     * Collapse a sequence of 100 nodes.
-//     */
-//    @Test
-//    public void testCollapse() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(100);
-//
-//        for (int i = 1; i <= nodeMap.size(); i++) {
-//            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
-//        }
-//
-//        nodeMap = GraphReducer.collapse(nodeMap);
-//        assertTrue(nodeMap.values().size() == 51);
-//    }
-//
-//    /**
-//     * Collapse a sequence of 100 nodes into multiple levels.
-//     */
-//    @Test
-//    public void testCreateLevelMaps() {
-//        HashMap<Integer, Node> nodeMap = createNodeMap(100);
-//
-//        for (int i = 1; i <= nodeMap.size(); i++) {
-//            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
-//        }
-//
-//        List<HashMap<Integer, Node>> nodeMapList = GraphReducer.createLevelMaps(nodeMap);
-//        assertTrue(nodeMapList.size() > 1);
-//
-//        for (int i = 2; i < nodeMapList.size(); i++) {
-//            assertTrue(nodeMapList.get(i).size() < 51);
-//        }
-//    }
+
+    /**
+     * Collapse a sequence of 100 nodes.
+     */
+    @Test
+    public void testCollapse() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(100);
+
+        for (int i = 1; i <= nodeMap.size(); i++) {
+            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
+        }
+
+        nodeMap = GraphReducer.collapse(nodeMap);
+        assertTrue(nodeMap.values().size() == 51);
+    }
+
+    /**
+     * Collapse a sequence of 100 nodes into multiple levels.
+     */
+    @Test
+    public void testCreateLevelMaps() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(100);
+
+        for (int i = 1; i <= nodeMap.size(); i++) {
+            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
+        }
+
+        List<HashMap<Integer, Node>> nodeMapList = GraphReducer.createLevelMaps(nodeMap);
+        assertTrue(nodeMapList.size() > 1);
+
+        for (int i = 2; i < nodeMapList.size(); i++) {
+            assertTrue(nodeMapList.get(i).size() < 51);
+        }
+    }
 
 }

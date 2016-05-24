@@ -9,8 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-import java.io.IOException;
-
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */

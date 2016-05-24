@@ -141,7 +141,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method take a snapshot of the current graph.
-     *
+     * @return A snapshot taken of the graph.
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {

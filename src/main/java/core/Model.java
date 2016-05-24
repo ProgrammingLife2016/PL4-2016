@@ -43,7 +43,6 @@ public class Model {
 
     private Rectangle2D screenSize;
     private int maxWidth;
-    private int maxHeight;
 
     /**
      * Class constructor.
@@ -195,9 +194,11 @@ public class Model {
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
             cellMap.put(cell.getCellId(), cell);
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -279,6 +280,9 @@ public class Model {
         addedEdges.clear();
     }
 
+    /**
+     * Set the screen properties.
+     */
     public void setLayout() {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         GraphLayout layout = new GraphLayout(this, 20,

@@ -32,6 +32,7 @@ public class Graph {
 
     /**
      * Class constructor.
+     * @throws IOException Throw exception
      */
     public Graph() throws IOException {
         zoomIn = new Model();
