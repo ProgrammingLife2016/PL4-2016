@@ -2,83 +2,48 @@ package application.controllers;
 
 import application.fxobjects.ZoomBox;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
 @SuppressWarnings("PMD.UnusedPrivateField")
-public class ZoomController extends BorderPane {
+public class ZoomController extends Controller<BorderPane> {
 
     private ZoomBox zoomBox;
-    private ZoomHandler zoomHandler;
-    private KeyHandler keyHandler;
-    private Rectangle2D screenSize;
-
+    private GraphController graphController;
 
     /**
      * Constructor method.
+     * @param  g the GraphController currently active
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public ZoomController() {
-        zoomBox = new ZoomBox();
-        screenSize = Screen.getPrimary().getVisualBounds();
-        zoomHandler = new ZoomHandler();
-        keyHandler = new KeyHandler();
-
-        this.setOnKeyPressed(new KeyHandler());
-
-        init();
+    public ZoomController(GraphController g) {
+        super(new BorderPane());
+        this.graphController = g;
     }
 
-
     /**
-     * Getter for keyHandler.
-     *
-     * @return the keyHandler.
+     * Method to create the ZoomBox, which will be controlled
+     * by the ZoomController
+     * @return the created ZoomBox
      */
-    public KeyHandler getKeyHandler() {
-        return keyHandler;
+    public ZoomBox createZoomBox() {
+        ZoomBox z = new ZoomBox(graphController);
+        zoomBox = z;
+
+        this.getRoot().setBottom(zoomBox.getZoomBox());
+        return zoomBox;
     }
 
     public ZoomBox getZoomBox() { return zoomBox; }
 
-    /**
-     * Init method.
-     */
-    public void init() {
-        this.setBottom(zoomBox.getZoomBox());
-    }
-
-    /**
-     * Handler for the zoom function.
-     */
-    private class ZoomHandler implements EventHandler<ScrollEvent> {
-
-        @Override
-        public void handle(ScrollEvent scrollEvent) {
-
-            double delta = scrollEvent.getDeltaY();
-            zoomBox.zoom(delta);
-            scrollEvent.consume();
-        }
-    }
-
-    /**
-     * Handles the move funtion.
-     */
-    private class KeyHandler implements EventHandler<KeyEvent> {
-
-        @Override
-        public void handle(KeyEvent event) {
-            zoomBox.moveRectangle(event);
-        }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
     }
+
 }

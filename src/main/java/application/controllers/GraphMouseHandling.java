@@ -43,12 +43,7 @@ class GraphMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
-        cell.getText().setVisible(true);
-    };
 
-    private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
-        Cell cell = (Cell) event.getSource();
-        cell.getText().setVisible(false);
     };
 
     /**
@@ -69,7 +64,6 @@ class GraphMouseHandling {
     public void setMouseHandling(final Node node) {
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
-        node.setOnMouseExited(onMouseExitedEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnDragDetected(onMouseDraggedEventHandler);
     }
