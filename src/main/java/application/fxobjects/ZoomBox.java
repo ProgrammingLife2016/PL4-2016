@@ -4,15 +4,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -99,9 +95,13 @@ public class ZoomBox extends ScrollPane {
      *
      * @return The zoom box.
      */
-    public StackPane getZoomBox() { return right; }
+    public StackPane getZoomBox() {
+        return right;
+    }
 
-    public KeyHandler getKeyHandler() { return keyHandler; }
+    public KeyHandler getKeyHandler() {
+        return keyHandler;
+    }
 
 
     /**
@@ -203,6 +203,7 @@ public class ZoomBox extends ScrollPane {
                 break;
         }
     }
+
     /**
      * Handles the move function
      */

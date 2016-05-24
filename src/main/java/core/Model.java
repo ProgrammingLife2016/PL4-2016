@@ -264,18 +264,8 @@ public class Model {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         GraphLayout layout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
-
-        //System.out.println(("KUTKACHEL" + addedCells.size()));
         maxWidth = (int) layout.getMaxWidth();
         layout.execute();
 
-    }
-
-    public int getWidth() {
-        return maxWidth;
-    }
-
-    public int getHeight() {
-        return maxHeight;
     }
 }

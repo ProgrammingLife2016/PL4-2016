@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
@@ -62,6 +63,7 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
+
     private void createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -138,7 +140,7 @@ public class MainController extends Controller<BorderPane> {
      * @param ref the reference string.
      */
     public void fillGraph(Object ref) {
-        if(graphController == null) {
+        if (graphController == null) {
             Graph graph = null;
             try {
                 graph = new Graph();
@@ -146,10 +148,9 @@ public class MainController extends Controller<BorderPane> {
                 e.printStackTrace();
             }
             graphController = new GraphController(graph, ref, this, currentView);
-        }
-        else {
+        } else {
             try {
-                graphController.init(ref,currentView);
+                graphController.init(ref, currentView);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -249,7 +250,6 @@ public class MainController extends Controller<BorderPane> {
     public GraphController getGraphController() {
         return graphController;
     }
-
 
 
 }

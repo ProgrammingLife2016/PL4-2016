@@ -1,21 +1,12 @@
 package application.controllers;
 
 import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
 
-import javax.imageio.ImageIO;
-import javax.swing.filechooser.FileSystemView;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
