@@ -59,7 +59,7 @@ public final class GraphReducer {
                     + ", Map: " + i + ", Map size: " + currentMapSize);
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) <= 2) {
+            if ((previousMapSize - currentMapSize) <= 20) {
                 return levelMaps;
             }
         }

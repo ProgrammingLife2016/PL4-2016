@@ -74,16 +74,10 @@ public class Graph {
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth)
-            throws IOException {
-
-        System.out.println("levelmap size: " + levelMaps.size());
-
+    public Boolean addGraphComponents(Object ref, int depth) throws IOException {
         //Reset the model, since we have another reference.
         current = new Model();
         current.setLevelMaps(levelMaps);
-
-
 
         //generateModel(current,depth);
 
