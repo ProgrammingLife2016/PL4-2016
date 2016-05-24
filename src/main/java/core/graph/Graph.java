@@ -29,6 +29,8 @@ public class Graph {
 
     private List<String> genomes = new ArrayList<>();
 
+    private List<String> genomesToDraw = new ArrayList<>();
+
     private HashMap<Integer, Node> startMap;
 
     private List<HashMap<Integer, Node>> levelMaps;
@@ -96,6 +98,7 @@ public class Graph {
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
                 current = generateModel(ref, depth);
+                System.out.println("todraw: " + genomesToDraw.toString());
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadOneUp(ref, depth);
                 loadOneDown(ref, depth);
@@ -167,36 +170,69 @@ public class Graph {
             ref = root.getGenomes().get(0);
         }
 
-        if (root.getGenomes().contains(ref)) {
-            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
-        } else {
-            toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-        }
-
-
-        genomes = new ArrayList<>();
-        genomes.addAll(root.getGenomes());
-
-
-        for (int i = 1; i <= nodeMap.size(); i++) {
-            Node from = nodeMap.get(i);
-            if (from == null) {
-                continue;
+        if (genomesToDraw.size() > 0) {
+            System.out.println("Only drawing selected");
+            //We are now drawing only the selected items.
+            // Only draw when the intersection > 0 (Node contains genome that we
+            // want to draw.
+            if (intersection(root.getGenomes(), genomesToDraw) > 0) {
+                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
             }
 
-            for (int j : from.getLinks(nodeMap)) {
-                Node to = nodeMap.get(j);
-                to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
-                //Add next cell
-                if (nodeMap.get(j).getGenomes().contains(ref)) {
-                    toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                } else {
-                    toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+            genomes = genomesToDraw;
+            for (int i = 1; i <= nodeMap.size(); i++) {
+                Node from = nodeMap.get(i);
+                if (from == null) {
+                    continue;
                 }
 
-                //Add link from current cell to next cell
-                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                        to.getGenomes()), EdgeType.GRAPH);
+                for (int j : from.getLinks(nodeMap)) {
+                    Node to = nodeMap.get(j);
+                    //Add next cell
+                    if (intersection(to.getGenomes(), genomesToDraw) > 0) {
+                        toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                to.getGenomes()), EdgeType.GRAPH);
+                    }
+                    //Add link from current cell to next cell
+
+                }
+            }
+
+
+        } else {
+
+            if (root.getGenomes().contains(ref)) {
+                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+            } else {
+                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+            }
+
+
+            genomes = new ArrayList<>();
+            genomes.addAll(root.getGenomes());
+
+
+            for (int i = 1; i <= nodeMap.size(); i++) {
+                Node from = nodeMap.get(i);
+                if (from == null) {
+                    continue;
+                }
+
+                for (int j : from.getLinks(nodeMap)) {
+                    Node to = nodeMap.get(j);
+                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
+                    //Add next cell
+                    if (nodeMap.get(j).getGenomes().contains(ref)) {
+                        toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                    } else {
+                        toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                    }
+
+                    //Add link from current cell to next cell
+                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                            to.getGenomes()), EdgeType.GRAPH);
+                }
             }
         }
 
@@ -281,5 +317,16 @@ public class Graph {
 
     public int getCurrentInt() {
         return currentInt;
+    }
+
+    public void phyloSelection(List<String> s) {
+        genomesToDraw = s;
+        currentInt = -1;
+//        try {
+//            addGraphComponents(null,levelMaps.size()-1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
     }
 }

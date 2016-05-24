@@ -201,6 +201,24 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(List<String> s) {
         //ToDo: add function to visualize only the selected strains.
+        System.out.println("Show: " + s.toString());
+
+        graphController.getGraph().phyloSelection(s);
+        try {
+            graphController.init(null, currentView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        screen = graphController.getRoot();
+
+        this.getRoot().setCenter(screen);
+
+        try {
+            graphController.takeSnapshot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
