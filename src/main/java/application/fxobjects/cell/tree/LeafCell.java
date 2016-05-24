@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 public class LeafCell extends Cell {
     private final CellType type = CellType.TREELEAF;
     private Text text;
+    private String name;
 
     /**
      * Phylogenetic leave cell constructor.
@@ -23,6 +24,8 @@ public class LeafCell extends Cell {
      */
     public LeafCell(int id, String name) {
         super(id);
+        this.name = name;
+
         StackPane pane = new StackPane(new Label(name));
         pane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
 
@@ -51,5 +54,21 @@ public class LeafCell extends Cell {
      */
     public Text getText() {
         return text;
+    }
+
+    /**
+     * Getter method for the name of the strain.
+     * @return the name of the strain.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Setter method for the name of the strain.
+     * @param name the name of the strain.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }

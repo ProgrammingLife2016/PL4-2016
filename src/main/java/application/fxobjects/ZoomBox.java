@@ -13,8 +13,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -80,19 +79,12 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-
-        String property = "java.io.tmpdir";
-        String tempDir = System.getProperty(property);
-        tempDir += graphController.getPosition();
-
-        FileInputStream stream = null;
+        Image image = null;
         try {
-            stream = new FileInputStream(tempDir);
-        } catch (FileNotFoundException e) {
+            image = graphController.takeSnapshot();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Image image = new Image(stream);
         ImagePattern pattern = new ImagePattern(image);
 
         zoomRectBorder.setFill(pattern);
