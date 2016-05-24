@@ -81,10 +81,9 @@ public class Graph {
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
 
-        if(depth<=levelMaps.size()-1 && depth>=0)  {
+        if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-            System.out.println(depth);
-            System.out.println(currentInt);
+            System.out.println("Trying to draw:" + depth);
             //Normalize.
             if (depth > levelMaps.size() - 1) {
                 depth = levelMaps.size() - 1;
@@ -93,33 +92,31 @@ public class Graph {
             }
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
-            if(currentInt == -1) { //First time we are here.
-                System.out.print("1");
+            if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
                 current = generateModel(ref, depth);
+                //LoadOneUp is only needed when we do not start on the top level.
                 loadOneUp(ref, depth);
                 loadOneDown(ref, depth);
-            }
-            else { //Second time. All models are loaded
-                System.out.print("2");
-                if(depth < currentInt) {
-                    System.out.print("3");
+            } else { //Second time. All models are loaded
+                if (depth < currentInt) {
+                    System.out.println("Zoom in");
                     zoomOut = current;
                     current = zoomIn;
                     loadOneDown(ref, depth);
-                }
-                else if(depth>currentInt) {
-                    System.out.print("4");
+                    currentInt = depth;
+                } else if (depth > currentInt) {
+                    System.out.println("Zoom out");
                     zoomIn = current;
                     current = zoomOut;
                     loadOneUp(ref, depth);
-                }
-                else
-                {
-                    System.out.println("NOPE");
+                    currentInt = depth;
+                } else {
+                    System.out.println("Will not draw: " + depth + ", current depth" + currentInt);
                 }
             }
+            System.out.println("CurrentInt: " + currentInt);
 
             // @TODO Switch method maken.
             // @TODO Check maken of we al kunnen switchen(Is de thread al klaar?)
@@ -129,45 +126,38 @@ public class Graph {
 
     private void loadOneUp(Object ref, int depth) {
         int finalDepth = depth;
-        new Thread("Load one up"){
+        new Thread("Load one up") {
             public void run() {
-                if(finalDepth + 1 <= levelMaps.size()-1)
-                {
-
+                if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = new Model();
                     zoomOut = generateModel(ref, finalDepth + 1);
                     zoomOut.setLayout();
-                    System.out.println("(THREAD): Done loading: " + (finalDepth+1 ));
-                }
-                else
-                {
-                    System.out.println("(THREAD): Not loading map: " + (finalDepth+1));
+                    System.out.println("(THREAD): Done loading: " + (finalDepth + 1));
+                } else {
+                    System.out.println("(THREAD): Not loading map: " + (finalDepth + 1));
                 }
             }
         }.run();
     }
+
     private void loadOneDown(Object ref, int depth) {
         int finalDepth = depth;
-        new Thread("Load one down"){
+        new Thread("Load one down") {
             public void run() {
-                if(finalDepth - 1 >= 0)
-                {
+                if (finalDepth - 1 >= 0) {
                     zoomIn = new Model();
                     zoomIn = generateModel(ref, finalDepth - 1);
                     zoomIn.setLayout();
-                    System.out.println("(THREAD): Done loading: " + (finalDepth-1 ));
+                    System.out.println("(THREAD): Done loading: " + (finalDepth - 1));
 
-                }
-                else
-                {
-                    System.out.println("(THREAD): Not loading map: " + (finalDepth-1));
+                } else {
+                    System.out.println("(THREAD): Not loading map: " + (finalDepth - 1));
                 }
             }
         }.run();
     }
 
     private Model generateModel(Object ref, int depth) {
-        System.out.println("Loading: " + depth);
         Model toret = new Model();
         toret.setLevelMaps(levelMaps);
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);

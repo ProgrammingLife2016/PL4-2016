@@ -83,8 +83,7 @@ public class GraphController extends Controller<ScrollPane> {
         System.out.println(size+ " IS SIZE " );
         if(depth<= size-1 && depth>=0 && depth!=graph.getCurrentInt()) {
             root.getChildren().clear();
-            System.out.println("Remove all children");
-            root.getChildren().removeAll(graph.getModel().getAllEdges());
+            System.out.println("Remove all children, received depth: " + depth);
         }
 
         graph.addGraphComponents(ref, depth);
