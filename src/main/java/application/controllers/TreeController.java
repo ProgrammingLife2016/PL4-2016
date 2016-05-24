@@ -137,9 +137,7 @@ public class TreeController extends Controller<ScrollPane> {
                 List<Cell> parentList = new ArrayList<>();
                 parentList.add(cell);
                 collectedStrains.add(cell);
-                applyColorUpwards(parentList,
-                        determineLinColor(metaData.get(temp)),
-                        4.0);
+                applyColorUpwards(parentList, determineLinColor(metaData.get(temp)), 4.0);
             }
         }
     }
