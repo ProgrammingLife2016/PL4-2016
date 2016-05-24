@@ -1,5 +1,6 @@
 package application.fxobjects;
 
+import application.controllers.GraphController;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -31,12 +33,15 @@ public class ZoomBox extends ScrollPane {
     private double zoomBoxWidth;
     private double zoomBoxHeight;
     private KeyHandler keyHandler;
+    private GraphController graphController;
 
     /**
      * Class constructor.
+     * @param g the GraphController currently active
      */
-    public ZoomBox() {
+    public ZoomBox(GraphController g) {
         this.keyHandler = new KeyHandler();
+        this.graphController = g;
         initVariables();
         right = new StackPane();
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
@@ -76,18 +81,21 @@ public class ZoomBox extends ScrollPane {
     public Group initZoomBox() {
         Group zoomBox = new Group();
 
-//        String snapshot = "/snapshot.png";
-//        FileInputStream stream = null;
-//        try {
-//             stream = new FileInputStream(snapshot);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Image image = new Image(stream);
-//        ImagePattern pattern = new ImagePattern(image);
+        String property = "java.io.tmpdir";
+        String tempDir = System.getProperty(property);
+        tempDir += graphController.getPosition();
 
-//        zoomRectBorder.setFill(pattern);
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(tempDir);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Image image = new Image(stream);
+        ImagePattern pattern = new ImagePattern(image);
+
+        zoomRectBorder.setFill(pattern);
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
@@ -99,9 +107,17 @@ public class ZoomBox extends ScrollPane {
      *
      * @return The zoom box.
      */
-    public StackPane getZoomBox() { return right; }
+    public StackPane getZoomBox() {
+        return right;
+    }
 
-    public KeyHandler getKeyHandler() { return keyHandler; }
+    /**
+     * Getter for the KeyHandler
+     * @return the KeyHandler
+     */
+    public KeyHandler getKeyHandler() {
+        return keyHandler;
+    }
 
 
     /**
@@ -203,6 +219,7 @@ public class ZoomBox extends ScrollPane {
                 break;
         }
     }
+
     /**
      * Handles the move function
      */

@@ -21,14 +21,19 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static application.controllers.WindowFactory.screenSize;
+
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
+    private int maxWidth;
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
+
+    private String position;
 
     /**
      * Constructor method for this class.
@@ -42,11 +47,12 @@ public class GraphController extends Controller<ScrollPane> {
     public GraphController(Graph g, Object ref, MainController m, int depth) {
         super(new ScrollPane());
         this.graph = g;
-        this.zoomController = new ZoomController();
+        this.zoomController = new ZoomController(this);
+        this.maxWidth = 0;
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        this.position = "";
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -70,6 +76,10 @@ public class GraphController extends Controller<ScrollPane> {
         return graph;
     }
 
+    /**
+     * Getter method for the ZoomController
+     * @return the ZoomController
+     */
     public ZoomController getZoomController() {
         return zoomController;
     }
@@ -125,19 +135,35 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
+     * Getter method for the position of the generated
+     * snapshot
+     * @return the position of the snapshot
+     */
+    public String getPosition() {
+        return position;
+    }
+
+    /**
      * Method take a snapshot of the current graph.
      *
      * @throws IOException Throw exception on write failure.
      */
     public void takeSnapshot() throws IOException {
-//        SnapshotParameters snapshotParameters = new SnapshotParameters();
-//        //WritableImage image = new WritableImage((int)maxWidth + 50, (int) screenSize.getHeight());
-//        WritableImage snapshot = this.getRoot().getContent().snapshot(
-//                snapshotParameters, new WritableImage(getGraph().getModel().getWidth() + 50, getGraph().getModel().getHeight()));
-//
-//        File output = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
-//        System.out.println("file path: "+ output.getAbsolutePath());
-//        output.deleteOnExit();
-//        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+        try {
+            WritableImage image = new WritableImage(maxWidth + 50,
+                    (int) screenSize.getHeight());
+            WritableImage snapshot = this.getRoot().getContent().snapshot(
+                    new SnapshotParameters(), image);
+
+            String filePath = System.getProperty("user.home") + "/AppData/Local/Temp";
+            File output = new File(filePath);
+            File temp = File.createTempFile("snapshot", ".png", output);
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", temp);
+
+            position = temp.getName();
+            temp.deleteOnExit();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

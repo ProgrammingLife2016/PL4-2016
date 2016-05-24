@@ -14,13 +14,16 @@ import java.util.ResourceBundle;
 public class ZoomController extends Controller<BorderPane> {
 
     private ZoomBox zoomBox;
+    private GraphController graphController;
 
     /**
      * Constructor method.
+     * @param  g the GraphController currently active
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public ZoomController() {
+    public ZoomController(GraphController g) {
         super(new BorderPane());
+        this.graphController = g;
     }
 
     /**
@@ -29,7 +32,7 @@ public class ZoomController extends Controller<BorderPane> {
      * @return the created ZoomBox
      */
     public ZoomBox createZoomBox() {
-        ZoomBox z = new ZoomBox();
+        ZoomBox z = new ZoomBox(graphController);
         zoomBox = z;
 
         this.getRoot().setBottom(zoomBox.getZoomBox());
