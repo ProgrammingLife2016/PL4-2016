@@ -216,12 +216,13 @@ public class GraphReducerTest {
 
         // Collapse the bubble
         GraphReducer.determineParents(nodeMap);
-        assertFalse(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2)));
+        GraphReducer.collapseIndel(nodeMap, nodeMap.get(1));
 
+        assertNotNull(nodeMap.get(2));
         assertNotNull(nodeMap.get(3));
-        assertNotNull(nodeMap.get(4));
-        assertNotNull(nodeMap.get(5));
-        assertEquals(1, nodeMap.get(6).getLinks(nodeMap).size());
+        assertEquals(1, nodeMap.get(4).getParents(nodeMap).size());
+        assertEquals(1, nodeMap.get(5).getParents(nodeMap).size());
+
     }
 //
 //    /**
