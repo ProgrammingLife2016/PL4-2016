@@ -49,7 +49,6 @@ public final class GraphReducer {
     createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
 
-
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1));
             levelMaps.add(levelMap);
@@ -63,6 +62,8 @@ public final class GraphReducer {
                 return levelMaps;
             }
         }
+
+        //return levelMaps;
     }
 
     /**
@@ -102,8 +103,8 @@ public final class GraphReducer {
                 continue;
             }
 
-            //collapseBubble(nodeMap, parent);
-            //collapseIndel(nodeMap, parent);
+            collapseBubble(nodeMap, parent);
+            collapseIndel(nodeMap, parent);
             //collapseNodeSequence(nodeMap, parent);
         }
 
