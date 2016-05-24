@@ -87,23 +87,25 @@ public class GraphLayout extends CellLayout {
         int modifier = -1; //alternate between above and below for the same x-level
 
         for (Cell child : cell.getCellChildren()) {
-            if (cellCount % 2 == 0) {
-                child.relocate(currentX, currentY - evenChildOffset);
-                evenChildOffset = (yOffset / 2) * modifier;
-                child.setRelocated(true);
+            if (!child.isRelocated()) {
+                if (cellCount % 2 == 0) {
+                    child.relocate(currentX, currentY - evenChildOffset);
+                    evenChildOffset = (yOffset / 2) * modifier;
+                    child.setRelocated(true);
 
-                modifier *= -1;
-                if (modifier > 0) {
-                    modifier++;
-                }
-            } else {
-                child.relocate(currentX, currentY - oddChildOffset);
-                oddChildOffset = ((yOffset) * modifier);
-                child.setRelocated(true);
+                    modifier *= -1;
+                    if (modifier > 0) {
+                        modifier++;
+                    }
+                } else {
+                    child.relocate(currentX, currentY - oddChildOffset);
+                    oddChildOffset = ((yOffset) * modifier);
+                    child.setRelocated(true);
 
-                modifier *= -1;
-                if (modifier < 0) {
-                    modifier--;
+                    modifier *= -1;
+                    if (modifier < 0) {
+                        modifier--;
+                    }
                 }
             }
             if (child.getCellChildren().size() > 1) {
