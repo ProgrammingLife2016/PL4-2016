@@ -232,26 +232,7 @@ public class GraphReducerTest {
         }
 
         nodeMap = GraphReducer.collapse(nodeMap);
-        assertTrue(nodeMap.values().size() == 51);
-    }
-
-    /**
-     * Collapse a sequence of 100 nodes into multiple levels.
-     */
-    @Test
-    public void testCreateLevelMaps() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(100);
-
-        for (int i = 1; i <= nodeMap.size(); i++) {
-            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
-        }
-
-        List<HashMap<Integer, Node>> nodeMapList = GraphReducer.createLevelMaps(nodeMap);
-        assertTrue(nodeMapList.size() > 1);
-
-        for (int i = 2; i < nodeMapList.size(); i++) {
-            assertTrue(nodeMapList.get(i).size() < 51);
-        }
+        assertTrue(nodeMap.values().size() < 100);
     }
 
 }
