@@ -79,7 +79,6 @@ public class Graph {
         current = new Model();
         current.setLevelMaps(levelMaps);
 
-        //generateModel(current,depth);
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
@@ -102,7 +101,7 @@ public class Graph {
 
         genomes = new ArrayList<>();
         genomes.addAll(root.getGenomes());
-
+        //current.clearCellMap();
         for (int i = 1; i <= nodeMap.size(); i++) {
             Node from = nodeMap.get(i);
             if (from == null) {
@@ -122,9 +121,9 @@ public class Graph {
                         current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                     }
                 } else if (type == NodeType.BUBBLE) {
-                    current.addCell(to.getId(), to.getSequence(), CellType.BUBBLE);
+                    current.addCell(to.getId(), "", CellType.BUBBLE);
                 } else if (type == NodeType.INDEL) {
-                    current.addCell(to.getId(), to.getSequence(), CellType.INDEL);
+                    current.addCell(to.getId(), "", CellType.INDEL);
                 }
 
                 //Add link from current cell to next cell
@@ -141,7 +140,6 @@ public class Graph {
     /**
      * Method that updates the model.
      */
-
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
         current.attachOrphansToGraphParent(current.getAddedCells());

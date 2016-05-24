@@ -36,7 +36,7 @@ public class MainController extends Controller<BorderPane> {
     private VBox listVBox;
     private Text id;
     private ScrollPane infoScroller;
-    private int currentView = 0;
+    private int currentView = 1;
     private GraphController graphController;
     private TreeController treeController;
     Rectangle2D screenSize;
@@ -223,7 +223,8 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-        currentView = Math.min(graphController.getGraph().getModel().getLevelMapsSize() - 1, currentView);
+        currentView = Math.min(graphController.getGraph().getModel().getLevelMapsSize() - 1,
+                currentView);
         fillGraph(null);
     }
 

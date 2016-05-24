@@ -75,6 +75,13 @@ public class Model {
     }
 
     /**
+     * Remove all cells in the cell map.
+     */
+    public void clearCellMap() {
+        cellMap.clear();
+    }
+
+    /**
      * Remove all added cells and edges.
      */
     public void clearAddedLists() {
@@ -153,6 +160,10 @@ public class Model {
      * @return True for testing purposes.
      */
     public Boolean addCell(int id, String text, CellType type) {
+        if (id == 2) {
+            System.out.println("[Node 2] text: " + text + ", type: " + type);
+        }
+
         switch (type) {
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, text);
@@ -193,10 +204,16 @@ public class Model {
      */
     public Boolean addCell(Cell cell) {
         if (!cellMap.containsKey(cell.getCellId())) {
-            addedCells.add(cell);
+            if (true) {
 
-            cellMap.put(cell.getCellId(), cell);
+            } else {
+                return false;
+            }
         }
+
+        addedCells.add(cell);
+        cellMap.put(cell.getCellId(), cell);
+
         return true;
     }
 
