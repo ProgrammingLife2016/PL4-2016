@@ -269,6 +269,8 @@ public class TreeController extends Controller<ScrollPane> {
         List<String> genomes = new ArrayList<>();
 
         selectedStrains.forEach(s -> genomes.add(((LeafCell) s).getName()));
+        selectedStrains.clear();
+        modifyGraphOptions();
 
         return genomes;
     }
