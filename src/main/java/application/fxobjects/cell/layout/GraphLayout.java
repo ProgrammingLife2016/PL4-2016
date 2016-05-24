@@ -5,8 +5,6 @@ import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -56,7 +54,7 @@ public class GraphLayout extends CellLayout {
         List<Cell> cells = model.getAllCells();
 
         for (Cell cell : cells) {
-            if(!cell.isRelocated()){
+            if (!cell.isRelocated()) {
                 currentX += offset;
                 if (currentX > maxWidth) {
                     maxWidth = currentX;
@@ -69,34 +67,32 @@ public class GraphLayout extends CellLayout {
 
                 //only continue when there is more than 1 child
                 cellCount = cell.getCellChildren().size();
-                if(cellCount<2){
+                if (cellCount < 2) {
                     continue;
                 }
 
-                int yOffset = 3*offset; //y-offset between nodes on the same x-level
+                int yOffset = 3 * offset; //y-offset between nodes on the same x-level
                 int oddChildOffset = 0; //initial offset when there are an odd number of children
-                int evenChildOffset = (yOffset) / 2; //initial offset for when there are an even amount of children
+                int evenChildOffset = (yOffset) / 2; //offset for an even amount of children
                 int modifier = -1; //alternate between above and below for the same x-level
 
-                for (Cell child : cell.getCellChildren()){
-
-
-                    if(cellCount % 2 == 0){
+                for (Cell child : cell.getCellChildren()) {
+                    if (cellCount % 2 == 0) {
                         child.relocate(currentX, currentY - evenChildOffset);
-                        evenChildOffset = (yOffset /2) * modifier;
+                        evenChildOffset = (yOffset / 2) * modifier;
                         child.setRelocated(true);
 
                         modifier *= -1;
-                        if(modifier > 0){
+                        if (modifier > 0 ){
                             modifier++;
                         }
-                    } else{
+                    } else {
                         child.relocate(currentX, currentY - oddChildOffset);
                         oddChildOffset = ((yOffset) * modifier);
                         child.setRelocated(true);
 
                         modifier *= -1;
-                        if(modifier < 0){
+                        if (modifier < 0) {
                             modifier--;
                         }
                     }
