@@ -25,6 +25,7 @@ public class Graph {
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
+    private int currentInt = -1;
 
     private List<String> genomes = new ArrayList<>();
 
@@ -79,21 +80,44 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth)
             throws IOException {
-        //Reset the model and re'add the levelMaps, since we have another reference.
-        current = new Model();
-        current.setLevelMaps(levelMaps);
-        //Generate the model
 
+        //Normalize.
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
         } else if (depth < 0) {
             depth = 0;
         }
-        current = generateModel(ref, depth);
+
+        //Reset the model and re'add the levelMaps, since we have another reference or depth.
+        if(currentInt == -1) { //First time we are here.
+            currentInt = depth;
+            current.setLevelMaps(levelMaps);
+            current = generateModel(ref, depth);
+            //loadOneUp(ref, depth);
+            loadOneDown(ref, depth);
+        }
+        else { //Second time. All models are loaded
+            if(depth < currentInt) {
+                zoomIn = current;
+                current = zoomOut;
+                loadOneUp(ref, depth);
+            }
+            else {
+                zoomOut = current;
+                current = zoomIn;
+                loadOneDown(ref, depth);
+            }
+        }
 
         // @TODO Switch method maken.
         // @TODO Check maken of we al kunnen switchen(Is de thread al klaar?)
 
+        //zoomIn = generateModel(ref, depth + 1);
+
+        return true;
+    }
+
+    private void loadOneUp(Object ref, int depth) {
         int finalDepth = depth;
         new Thread("Load one up"){
             public void run() {
@@ -110,6 +134,9 @@ public class Graph {
                 }
             }
         }.run();
+    }
+    private void loadOneDown(Object ref, int depth) {
+        int finalDepth = depth;
         new Thread("Load one down"){
             public void run() {
                 if(finalDepth - 1 > 0)
@@ -125,10 +152,6 @@ public class Graph {
                 }
             }
         }.run();
-
-        //zoomIn = generateModel(ref, depth + 1);
-
-        return true;
     }
 
     private Model generateModel(Object ref, int depth) {
