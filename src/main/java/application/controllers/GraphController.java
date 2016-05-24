@@ -4,17 +4,15 @@ import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -79,6 +77,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Getter method for the ZoomController
+     *
      * @return the ZoomController
      */
     public ZoomController getZoomController() {
@@ -140,6 +139,7 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Getter method for the position of the generated
      * snapshot
+     *
      * @return the position of the snapshot
      */
     public String getPosition() {
@@ -151,22 +151,11 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @throws IOException Throw exception on write failure.
      */
-    public void takeSnapshot() throws IOException {
-        try {
-            WritableImage image = new WritableImage(maxWidth + 50,
-                    (int) screenSize.getHeight());
-            WritableImage snapshot = this.getRoot().getContent().snapshot(
-                    new SnapshotParameters(), image);
-
-            String filePath = System.getProperty("user.home") + "/AppData/Local/Temp";
-            File output = new File(filePath);
-            File temp = File.createTempFile("snapshot", ".png", output);
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", temp);
-
-            position = temp.getName();
-            temp.deleteOnExit();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Image takeSnapshot() throws IOException {
+        WritableImage image = new WritableImage(maxWidth + 50,
+                (int) screenSize.getHeight());
+        WritableImage snapshot = this.getRoot().getContent().snapshot(
+                new SnapshotParameters(), image);
+        return snapshot;
     }
 }
