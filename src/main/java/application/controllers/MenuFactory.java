@@ -57,9 +57,10 @@ public class MenuFactory {
                 mainController.fillGraph(null));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show selected strain highlighted in graph", null, event ->
+        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null, event ->
+                mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes()));
+        showSelectedStrains = initMenuItem("Show the selected strains in graph", null, event ->
                 mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
-        showSelectedStrains = initMenuItem("Show selected strains in graph", null, null);
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));
         MenuItem zoomIn = initMenuItem("Zoom in", null, event ->

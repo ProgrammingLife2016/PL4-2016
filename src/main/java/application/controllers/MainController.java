@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
@@ -63,6 +64,7 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
+
     private void createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -169,14 +171,22 @@ public class MainController extends Controller<BorderPane> {
     /**
      * If selections are made in the phylogenetic tree,
      * this method will visualize/highlight them specifically.
+     *
+     * @param s a List of selected strains.
+     */
+    public void soloStrainSelection(List<String> s) {
+        //ToDo: add function to visualize only the selected strains.
+        fillGraph(s.get(0));
+    }
+
+    /**
+     * If selections are made in the phylogenetic tree,
+     * this method will visualize/highlight them specifically.
+     *
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
-        if(s.size() > 1) {
-
-        } else {
-            fillGraph(s.get(0));
-        }
+        //ToDo: add function to visualize only the selected strains.
     }
 
     /**
@@ -243,6 +253,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the graphController.
+     *
      * @return the graphController.
      */
     public GraphController getGraphController() {
@@ -251,6 +262,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the treeController.
+     *
      * @return the treeController.
      */
     public TreeController getTreeController() {
@@ -259,6 +271,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the MenuBar.
+     *
      * @return the MenuBar.
      */
     public MenuBar getMenuBar() {
