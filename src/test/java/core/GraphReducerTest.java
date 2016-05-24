@@ -220,19 +220,4 @@ public class GraphReducerTest {
 
     }
 
-    /**
-     * Collapse a sequence of 100 nodes.
-     */
-    @Test
-    public void testCollapse() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(100);
-
-        for (int i = 1; i <= nodeMap.size(); i++) {
-            nodeMap.get(i).setLinks(new ArrayList<>(Arrays.asList(i + 1)));
-        }
-
-        nodeMap = GraphReducer.collapse(nodeMap);
-        assertTrue(nodeMap.values().size() < 100);
-    }
-
 }
