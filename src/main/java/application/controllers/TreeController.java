@@ -132,12 +132,15 @@ public class TreeController extends Controller<ScrollPane> {
         if (cell instanceof LeafCell) {
             String temp = ((LeafCell) cell).getName();
             collectedStrains.clear();
+            List<Cell> parentList = new ArrayList<>();
+            parentList.add(cell);
+            collectedStrains.add(cell);
 
             if (temp.contains("TKK")) {
-                List<Cell> parentList = new ArrayList<>();
-                parentList.add(cell);
-                collectedStrains.add(cell);
                 applyColorUpwards(parentList, determineLinColor(metaData.get(temp)), 4.0);
+            }
+            else {
+                applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
         }
     }
