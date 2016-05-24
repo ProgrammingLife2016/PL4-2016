@@ -71,32 +71,45 @@ public class GraphLayout extends CellLayout {
                     continue;
                 }
 
-                int yOffset = 3 * offset; //y-offset between nodes on the same x-level
-                int oddChildOffset = 0; //initial offset when there are an odd number of children
-                int evenChildOffset = (yOffset) / 2; //offset for an even amount of children
-                int modifier = -1; //alternate between above and below for the same x-level
+                breadthFirstPlacing(cell);
+            }
+        }
+    }
 
-                for (Cell child : cell.getCellChildren()) {
-                    if (cellCount % 2 == 0) {
-                        child.relocate(currentX, currentY - evenChildOffset);
-                        evenChildOffset = (yOffset / 2) * modifier;
-                        child.setRelocated(true);
+    /**
+     * A method to place a Node's children and if need be, recursively their children.
+     * @param cell - The parent node.
+     */
+    public void breadthFirstPlacing(Cell cell) {
+        int yOffset = 3 * offset; //y-offset between nodes on the same x-level
+        int oddChildOffset = 0; //initial offset when there are an odd number of children
+        int evenChildOffset = (yOffset) / 2; //offset for an even amount of children
+        int modifier = -1; //alternate between above and below for the same x-level
 
-                        modifier *= -1;
-                        if (modifier > 0 ){
-                            modifier++;
-                        }
-                    } else {
-                        child.relocate(currentX, currentY - oddChildOffset);
-                        oddChildOffset = ((yOffset) * modifier);
-                        child.setRelocated(true);
+        for (Cell child : cell.getCellChildren()) {
+            if (cellCount % 2 == 0) {
+                child.relocate(currentX, currentY - evenChildOffset);
+                evenChildOffset = (yOffset / 2) * modifier;
+                child.setRelocated(true);
 
-                        modifier *= -1;
-                        if (modifier < 0) {
-                            modifier--;
-                        }
-                    }
+                modifier *= -1;
+                if (modifier > 0) {
+                    modifier++;
                 }
+            } else {
+                child.relocate(currentX, currentY - oddChildOffset);
+                oddChildOffset = ((yOffset) * modifier);
+                child.setRelocated(true);
+
+                modifier *= -1;
+                if (modifier < 0) {
+                    modifier--;
+                }
+            }
+            if (child.getCellChildren().size() > 1) {
+                currentX += offset;
+                currentY = (int) child.getLayoutY();
+                breadthFirstPlacing(child);
             }
         }
     }
