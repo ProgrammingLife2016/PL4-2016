@@ -27,8 +27,9 @@ public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
-    private TreeMouseHandling treeMouseHandling;
+    private MainController mainController;
     private TreeMap<String, Integer> metaData;
+    private TreeMouseHandling treeMouseHandling;
 
     private static final Color LIN0 = Color.web("000000");
     private static final Color LIN1 = Color.web("ed00c3");
@@ -52,6 +53,7 @@ public class TreeController extends Controller<ScrollPane> {
     public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
         this.pt = pt;
+        this.mainController = m;
         this.metaData = MetaParser.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
@@ -110,10 +112,10 @@ public class TreeController extends Controller<ScrollPane> {
         collectedStrains.forEach(e -> {
             if (selectedStrains.contains(e)) {
                 selectedStrains.remove(e);
-            }
-            else {
+            } else {
                 selectedStrains.add(e);
             }
+            modifyGraphOptions();
         });
     }
 
@@ -287,5 +289,18 @@ public class TreeController extends Controller<ScrollPane> {
                 break;
         }
         return LIN0;
+    }
+
+    /**
+     * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
+     */
+    private void modifyGraphOptions() {
+        if (selectedStrains.size() == 0) {
+            MenuFactory.showOnlyThisStrain.setDisable(true);
+            MenuFactory.showSelectedStrains.setDisable(true);
+        } else {
+            MenuFactory.showOnlyThisStrain.setDisable(false);
+            MenuFactory.showSelectedStrains.setDisable(false);
+        }
     }
 }

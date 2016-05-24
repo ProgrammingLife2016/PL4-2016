@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -13,8 +14,8 @@ import javafx.scene.input.KeyCombination;
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class MenuFactory {
-    private static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
-            showPhylogeneticTree, showGenomeSequence;
+    public static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
+            showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
     /**
@@ -56,16 +57,24 @@ public class MenuFactory {
                 mainController.fillGraph(null));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
+        showOnlyThisStrain = initMenuItem("Show only this strain in graph", null, null);
+        showSelectedStrains = initMenuItem("Show selected strains in graph", null, null);
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));
         MenuItem zoomIn = initMenuItem("Zoom in", null, event ->
                 mainController.switchScene(-1));
-
+        MenuItem separatorOne = new SeparatorMenuItem();
+        MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event ->
                 mainController.switchScene(+100));
 
-        Menu viewMenu = initMenu("View", showGenomeSequence, showPhylogeneticTree, zoomIn,
-                zoomOut, resetView);
+        showSelectedStrains.setDisable(true);
+        showOnlyThisStrain.setDisable(true);
+
+        Menu viewMenu = initMenu("View",
+                showGenomeSequence, showPhylogeneticTree, separatorOne,
+                showSelectedStrains, showOnlyThisStrain, separatorTwo,
+                zoomIn, zoomOut, resetView);
         return viewMenu;
 
     }

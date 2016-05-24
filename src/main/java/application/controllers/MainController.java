@@ -243,4 +243,12 @@ public class MainController extends Controller<BorderPane> {
     public TreeController getTreeController() {
         return treeController;
     }
+
+    /**
+     * Getter method for the MenuBar.
+     * @return the MenuBar.
+     */
+    public MenuBar getMenuBar() {
+        return menuBar;
+    }
 }
