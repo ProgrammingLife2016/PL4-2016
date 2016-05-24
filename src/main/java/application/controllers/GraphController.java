@@ -8,6 +8,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -151,7 +152,7 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @throws IOException Throw exception on write failure.
      */
-    public void takeSnapshot() throws IOException {
+    public Image takeSnapshot() throws IOException {
         try {
             WritableImage image = new WritableImage(maxWidth + 50,
                     (int) screenSize.getHeight());
@@ -161,12 +162,14 @@ public class GraphController extends Controller<ScrollPane> {
             String filePath = System.getProperty("user.home") + "/AppData/Local/Temp";
             File output = new File(filePath);
             File temp = File.createTempFile("snapshot", ".png", output);
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", temp);
+            //ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", temp);
 
-            position = temp.getName();
-            temp.deleteOnExit();
+//            position = temp.getName();
+//            temp.deleteOnExit();
+            return snapshot;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
