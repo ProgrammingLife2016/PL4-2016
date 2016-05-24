@@ -51,8 +51,6 @@ public class Model {
         graphParent = new RectangleCell(1, "");
 
         this.maxWidth = 0;
-        this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.maxHeight = (int) screenSize.getHeight();
 
         // clear model, create lists
         clear();
@@ -285,16 +283,8 @@ public class Model {
         GraphLayout layout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
 
-        System.out.println(("KUTKACHEL" + addedCells.size()));
         layout.execute();
         maxWidth = (int) layout.getMaxWidth();
     }
 
-    public int getWidth() {
-        return maxWidth;
-    }
-
-    public int getHeight() {
-        return maxHeight;
-    }
 }

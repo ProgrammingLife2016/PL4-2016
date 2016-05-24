@@ -60,7 +60,6 @@ public class Parser {
                     } else {
                         nodeMap.get(id).setSequence(sequence);
                         nodeMap.get(id).setzIndex(z);
-                        //System.out.println("Duplicate node: " + id);
                     }
 
                     nodeMap.get(id).addAllGenome(genomes);
