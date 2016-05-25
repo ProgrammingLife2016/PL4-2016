@@ -196,18 +196,14 @@ public class NodeTest {
     }
 
     /**
-     * Test the incremenetCollapseLevel method.
+     * Test the setCollapseLevel method.
      */
     @Test
-    public void testIncrementCollapseLevel() {
-        assertEquals(0, n.getCollapseLevel());
-
-        n.incCollapseLevel(1);
-        assertEquals(n.getCollapseLevel(), 1);
-
-        n.incCollapseLevel(2);
-        assertEquals(n.getCollapseLevel(), 3);
+    public void testSetCollapseLevel() {
+        n.setCollapseLevel(42);
+        assertEquals(n.getCollapseLevel(), 42);
     }
+
     /**
      * Test the setzIndex method.
      */

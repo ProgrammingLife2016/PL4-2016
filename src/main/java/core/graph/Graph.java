@@ -111,6 +111,7 @@ public class Graph {
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);
+
                 to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                 //Add next cell
                 NodeType type = nodeMap.get(j).getType();
@@ -122,9 +123,11 @@ public class Graph {
                         current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                     }
                 } else if (type == NodeType.BUBBLE) {
-                    current.addCell(to.getId(), "", CellType.BUBBLE);
+                    current.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                            CellType.BUBBLE);
                 } else if (type == NodeType.INDEL) {
-                    current.addCell(to.getId(), "", CellType.INDEL);
+                    current.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                            CellType.INDEL);
                 }
 
                 //Add link from current cell to next cell

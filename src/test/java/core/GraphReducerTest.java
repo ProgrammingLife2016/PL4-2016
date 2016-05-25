@@ -1,8 +1,12 @@
 package core;
 
+import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.IndelCell;
 import org.junit.Test;
 
 import java.util.*;
+
+import static core.GraphReducer.createLevelMaps;
 import static org.junit.Assert.*;
 
 
@@ -173,14 +177,14 @@ public class GraphReducerTest {
      * when the bubble contains a collapsed bubble at a child of the parent in the bubble.
      */
     @Test
-    public void testBubbleCollapseCounter() {
+    public void testBubbleCollapseLevel() {
         List<NodeType> types = new ArrayList<>(Arrays.asList(NodeType.BUBBLE, NodeType.INDEL));
 
         for (NodeType type : types) {
             for (int i = 2; i <= 4; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(4);
                 nodeMap.get(2).setType(type);
-                nodeMap.get(i).incCollapseLevel(1);
+                nodeMap.get(i).setCollapseLevel(1);
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
@@ -191,6 +195,49 @@ public class GraphReducerTest {
                 assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
                 assertEquals(2, nodeMap.get(1).getCollapseLevel());
             }
+        }
+    }
+
+    /**
+     * Test whether the counter for the number of lower collapses is working correctly
+     * with chained bubbles.
+     */
+    @Test
+    public void testCollapseLevelChainedBubbles() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(7);
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+
+        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5, 6)));
+        nodeMap.get(5).setLinks(new ArrayList<>(Arrays.asList(7)));
+        nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
+
+        for (int i = 1; i <= 2; i++) {
+            GraphReducer.determineParents(nodeMap);
+            assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+            assertEquals(i, nodeMap.get(1).getCollapseLevel());
+        }
+    }
+
+    /**
+     * Test whether the counter for the number of lower collapses is working correctly
+     * with chained indels.
+     */
+    @Test
+    public void testCollapseLevelChainedIndels() {
+        HashMap<Integer, Node> nodeMap = createNodeMap(5);
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
+
+        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4, 5)));
+        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
+
+
+        for (int i = 1; i <= 2; i++) {
+            GraphReducer.determineParents(nodeMap);
+            assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
+            assertEquals(i, nodeMap.get(1).getCollapseLevel());
         }
     }
 
@@ -249,14 +296,14 @@ public class GraphReducerTest {
      * Test whether the counter for the number of lower collapses is working correctly.
      */
     @Test
-    public void testIndelCollapseCounter() {
+    public void testIndelCollapseLevel() {
         List<NodeType> types = new ArrayList<>(Arrays.asList(NodeType.BUBBLE, NodeType.INDEL));
 
         for (NodeType type : types) {
             for (int i = 2; i <= 3; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(3);
                 nodeMap.get(i).setType(type);
-                nodeMap.get(i).incCollapseLevel(1);
+                nodeMap.get(i).setCollapseLevel(1);
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
@@ -268,4 +315,53 @@ public class GraphReducerTest {
         }
     }
 
+//    /**
+//     * Test the createLevelMaps method with superposed bubbles
+//     */
+//    @Test
+//    public void testCreateLevelMapsWithSuperposedBubbles() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(7);
+//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 6)));
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3, 4)));
+//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(5)));
+//        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
+//
+//        nodeMap.get(5).setLinks(new ArrayList<>(Arrays.asList(7)));
+//        nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
+//
+//        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap);
+//
+//        assertEquals(1, levelMaps.get(1).get(2).getCollapseLevel());
+//        assertEquals(2, levelMaps.get(2).get(1).getCollapseLevel());
+//
+//        assertEquals(NodeType.BUBBLE, levelMaps.get(1).get(2).getType());
+//        assertEquals(NodeType.BUBBLE, levelMaps.get(2).get(1).getType());
+//
+//        assertEquals(4, levelMaps.get(1).values().size());
+//        assertEquals(1, levelMaps.get(2).values().size());
+//    }
+
+//    /**
+//     * Test the createLevelMaps method with superposed bubbles
+//     */
+//    @Test
+//    public void testCreateLevelMapsWithSuperposedIndels() {
+//        HashMap<Integer, Node> nodeMap = createNodeMap(5);
+//        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 5)));
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(5)));
+//
+//        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3, 4)));
+//        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+//
+//        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap);
+//
+//        assertEquals(1, levelMaps.get(1).get(2).getCollapseLevel());
+//        assertEquals(2, levelMaps.get(2).get(1).getCollapseLevel());
+//
+//        //assertEquals(NodeType.INDEL, levelMaps.get(1).get(2).getType());
+//        //assertEquals(NodeType.INDEL, levelMaps.get(2).get(1).getType());
+//
+//        assertEquals(3, levelMaps.get(1).values().size());
+//        assertEquals(1, levelMaps.get(2).values().size());
+//    }
 }
