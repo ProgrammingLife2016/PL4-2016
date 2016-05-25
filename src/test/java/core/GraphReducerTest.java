@@ -169,6 +169,35 @@ public class GraphReducerTest {
     }
 
     /**
+     * Test whether the counter for the number of lower collapses is working correctly
+     * when the bubble contains a collapsed bubble at a child of the parent in the bubble.
+     */
+    @Test
+    public void testBubbleCollapseCounter() {
+        List<NodeType> types = new ArrayList<>(Arrays.asList(NodeType.BUBBLE, NodeType.INDEL));
+
+        for (NodeType type : types) {
+            for (int i = 2; i <= 4; i++) {
+                HashMap<Integer, Node> nodeMap = createNodeMap(4);
+                nodeMap.get(2).setType(type);
+                nodeMap.get(i).incrementCollapseLevel();
+
+                nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+                nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
+                nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
+
+                assertEquals(0, nodeMap.get(1).getCollapseLevel());
+                assertEquals(1, nodeMap.get(i).getCollapseLevel());
+
+                // Collapse the bubble
+                GraphReducer.determineParents(nodeMap);
+                assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+                assertEquals(2, nodeMap.get(1).getCollapseLevel());
+            }
+        }
+    }
+
+    /**
      * Test the collapsing of a triangle of nodes.
      */
     @Test
@@ -217,7 +246,33 @@ public class GraphReducerTest {
         assertNotNull(nodeMap.get(3));
         assertEquals(1, nodeMap.get(4).getParents(nodeMap).size());
         assertEquals(1, nodeMap.get(5).getParents(nodeMap).size());
+    }
 
+
+    /**
+     * Test whether the counter for the number of lower collapses is working correctly.
+     */
+    @Test
+    public void testIndelCollapseCounter() {
+        List<NodeType> types = new ArrayList<>(Arrays.asList(NodeType.BUBBLE, NodeType.INDEL));
+
+        for (NodeType type : types) {
+            for (int i = 2; i <= 3; i++) {
+                HashMap<Integer, Node> nodeMap = createNodeMap(3);
+                nodeMap.get(i).setType(type);
+                nodeMap.get(i).incrementCollapseLevel();
+
+                nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+                nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
+
+                assertEquals(0, nodeMap.get(1).getCollapseLevel());
+                assertEquals(1, nodeMap.get(i).getCollapseLevel());
+
+                GraphReducer.determineParents(nodeMap);
+                assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));
+                assertEquals(2, nodeMap.get(1).getCollapseLevel());
+            }
+        }
     }
 
 }
