@@ -80,7 +80,7 @@ public class Node {
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
 
-        this.collapseLevel = 0;
+        this.collapseLevel = 1;
     }
 
     /**
@@ -99,6 +99,19 @@ public class Node {
      */
     public void addParent(int parent) {
         this.parents.add(parent);
+    }
+
+    /**
+     * Add a genome to the node
+     * @param node the node of which genomes should be unioned.
+     */
+    public void unionGenomes(Node node) {
+        List<String> otherGenomes = node.getGenomes();
+        for (String otherGenome : node.getGenomes()) {
+            if (!genomes.contains(otherGenome)) {
+                genomes.add(otherGenome);
+            }
+        }
     }
 
     /**

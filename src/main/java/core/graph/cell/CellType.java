@@ -7,6 +7,7 @@ public enum CellType {
     RECTANGLE,
     TRIANGLE,
     BUBBLE,
+    COLLECTION,
     INDEL,
     TREELEAF,
     TREEMIDDLE

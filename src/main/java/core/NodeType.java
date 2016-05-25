@@ -7,4 +7,5 @@ public enum NodeType {
     BASE,
     BUBBLE,
     INDEL,
+    COLLECTION
 }
