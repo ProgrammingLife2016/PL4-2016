@@ -146,10 +146,11 @@ public class MainController extends Controller<BorderPane> {
             Graph graph = null;
             try {
                 graph = new Graph();
+                graphController = new GraphController(graph, ref, this, currentView);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            graphController = new GraphController(graph, ref, this, currentView);
+
         } else {
             try {
                 graphController.init(ref, currentView);
@@ -195,6 +196,20 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0));
         System.out.println("Selected " + s.get(0 )+ "as a ref, drawing everything.");
+
+        graphController.getZoomController().createZoomBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
+
+        createInfoList("");
+
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
+
+        showListVBox();
     }
 
     /**
@@ -223,6 +238,20 @@ public class MainController extends Controller<BorderPane> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        graphController.getZoomController().createZoomBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
+
+        createInfoList("");
+
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
+
+        showListVBox();
     }
 
     /**

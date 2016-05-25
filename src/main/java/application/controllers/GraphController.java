@@ -97,6 +97,10 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) throws IOException {
+        if(ref != graph.getCurrentRef()) {
+            System.out.println("New reference, redraw");
+            root.getChildren().clear();
+        }
         int size = graph.getModel().getLevelMaps().size();
         System.out.println(size + " IS SIZE ");
         if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {

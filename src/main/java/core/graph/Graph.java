@@ -199,7 +199,7 @@ public class Graph {
                         if (nodeMap.get(j).getGenomes().contains(ref)) {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                             toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                    to.getGenomes()), EdgeType.GRAPH);
+                                    to.getGenomes()), EdgeType.GRAPH_REF);
                         } else {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                             toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
@@ -234,7 +234,7 @@ public class Graph {
                     if (nodeMap.get(j).getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                         toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                to.getGenomes()), EdgeType.GRAPH);
+                                to.getGenomes()), EdgeType.GRAPH_REF);
                     } else {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                         toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
@@ -330,11 +330,9 @@ public class Graph {
     public void phyloSelection(List<String> s) {
         genomesToDraw = s;
         currentInt = -1;
-//        try {
-//            addGraphComponents(null,levelMaps.size()-1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    }
 
+    public Object getCurrentRef() {
+        return currentRef;
     }
 }
