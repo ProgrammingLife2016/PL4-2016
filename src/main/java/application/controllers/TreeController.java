@@ -266,9 +266,6 @@ public class TreeController extends Controller<ScrollPane> {
      * Collect all edges that will be highlighted for selection
      */
     private void collectEdges(Edge edge) {
-        collectEdgesUpwards(edge.getSource());
-        collectEdgesDownwards(edge.getTarget());
-
         collectedEdges.add(edge);
         collectEdgesUpwards(edge.getSource());
         collectEdgesDownwards(edge.getTarget());
