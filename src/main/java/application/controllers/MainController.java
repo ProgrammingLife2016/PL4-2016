@@ -19,6 +19,7 @@ import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -190,7 +191,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void soloStrainSelection(List<String> s) {
         //ToDo: add function to visualize only the selected strains.
+
+        graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0));
+        System.out.println("Selected " + s.get(0 )+ "as a ref, drawing everything.");
     }
 
     /**
