@@ -289,6 +289,14 @@ public final class GraphReducer {
         if (grandChild.getParents(nodeMap).size() != children.size()) {
             return false;
         }
+
+        // Check whether the children only have one parent.
+        for (int i = 0; i < children.size(); i++) {
+            if (nodeMap.get(children.get(i)).getParents(nodeMap).size() != 1) {
+                return false;
+            }
+        }
+
         return true;
     }
 
