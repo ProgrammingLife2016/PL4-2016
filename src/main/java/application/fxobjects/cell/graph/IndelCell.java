@@ -29,8 +29,8 @@ public class IndelCell extends Cell {
         double height = 20;
 
         Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
-        view.setStroke(Color.YELLOW);
-        view.setFill(Color.YELLOW);
+        view.setStroke(Color.RED);
+        view.setFill(Color.RED);
 
         StackPane pane = new StackPane();
         pane.getChildren().addAll(view, text);

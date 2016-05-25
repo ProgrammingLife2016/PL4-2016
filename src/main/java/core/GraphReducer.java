@@ -186,13 +186,10 @@ public final class GraphReducer {
                 return false;
             }
 
-            parent.setLinks(child2.getLinks());
-            parent.setCollapseLevel(newCollapseLevel);
-            parent.setType(NodeType.INDEL);
-            parent.setSequence("");
-
-            nodeMap.remove(child1.getId());
-            nodeMap.remove(child2.getId());
+            parent.setLinks(new ArrayList<>(Arrays.asList(child1.getId())));
+            child1.setCollapseLevel(newCollapseLevel);
+            child1.setType(NodeType.INDEL);
+            child1.setSequence("");
             return true;
 
         // Child 2 is inserted
@@ -202,13 +199,11 @@ public final class GraphReducer {
             } else if (nodeMap.get(child1.getId()).getParents(nodeMap).size() != 2) {
                 return false;
             }
-            parent.setLinks(child1.getLinks());
-            parent.setCollapseLevel(newCollapseLevel);
-            parent.setType(NodeType.INDEL);
-            parent.setSequence("");
 
-            nodeMap.remove(child1.getId());
-            nodeMap.remove(child2.getId());
+            parent.setLinks(new ArrayList<>(Arrays.asList(child2.getId())));
+            child2.setCollapseLevel(newCollapseLevel);
+            child2.setType(NodeType.INDEL);
+            child2.setSequence("");
             return true;
         }
 
@@ -232,22 +227,24 @@ public final class GraphReducer {
         Node grandChild = determineGrandChild(nodeMap, parent);
         int newCollapseLevel = bubbleCollapseLevelGain(nodeMap, parent);
 
-        // Remove all nodes in the bubble except for the parent node
+        // Remove all nodes in the bubble except for the parent node and the first childnode
         for (int i = 0; i < childrenIds.size(); i++) {
             int childId = childrenIds.get(i);
             Node child = nodeMap.get(childId);
 
-            if (child != null) {
+            //Use the first child to represent the bubble
+            if (i == 0) {
+                parent.setLinks(new ArrayList<>(Arrays.asList(childId)));
+                child.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
+                child.setType(NodeType.BUBBLE);
+                child.setCollapseLevel(child.getCollapseLevel() + 1);
+                child.setSequence("");
+            }
+            else if (child != null) {
                 nodeMap.remove(childId);
             }
         }
 
-        // Set the children of the grand child to the parent
-        parent.setLinks(grandChild.getLinks());
-        nodeMap.remove(grandChild.getId());
-        parent.setCollapseLevel(newCollapseLevel);
-        parent.setType(NodeType.BUBBLE);
-        parent.setSequence("");
         return true;
     }
 
