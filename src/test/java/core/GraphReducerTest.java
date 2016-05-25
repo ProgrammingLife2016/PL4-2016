@@ -180,14 +180,11 @@ public class GraphReducerTest {
             for (int i = 2; i <= 4; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(4);
                 nodeMap.get(2).setType(type);
-                nodeMap.get(i).incrementCollapseLevel();
+                nodeMap.get(i).incCollapseLevel(1);
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
                 nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4)));
-
-                assertEquals(0, nodeMap.get(1).getCollapseLevel());
-                assertEquals(1, nodeMap.get(i).getCollapseLevel());
 
                 // Collapse the bubble
                 GraphReducer.determineParents(nodeMap);
@@ -208,7 +205,6 @@ public class GraphReducerTest {
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
         nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4, 5)));
-
 
         // Collapse the indel
         GraphReducer.determineParents(nodeMap);
@@ -260,13 +256,10 @@ public class GraphReducerTest {
             for (int i = 2; i <= 3; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(3);
                 nodeMap.get(i).setType(type);
-                nodeMap.get(i).incrementCollapseLevel();
+                nodeMap.get(i).incCollapseLevel(1);
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
-
-                assertEquals(0, nodeMap.get(1).getCollapseLevel());
-                assertEquals(1, nodeMap.get(i).getCollapseLevel());
 
                 GraphReducer.determineParents(nodeMap);
                 assertTrue(GraphReducer.collapseIndel(nodeMap, nodeMap.get(1)));

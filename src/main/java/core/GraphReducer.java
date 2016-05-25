@@ -162,43 +162,43 @@ public final class GraphReducer {
     public static Boolean
     collapseIndel(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
-        if (children.size() == 2) {
-            int child1Id = children.get(0);
-            int child2Id = children.get(1);
+        if (children.size() != 2) {
+            return false;
+        }
 
-            List<Integer> child1ChildrenIds = nodeMap.get(child1Id).getLinks(nodeMap);
-            List<Integer> child2ChildrenIds = nodeMap.get(child2Id).getLinks(nodeMap);
+        Node child1 = nodeMap.get(children.get(0));
+        Node child2 = nodeMap.get(children.get(1));
 
-            Node child1 = nodeMap.get(child1Id);
-            Node child2 = nodeMap.get(child2Id);
+        List<Integer> child1ChildrenIds = child1.getLinks(nodeMap);
+        List<Integer> child2ChildrenIds = child2.getLinks(nodeMap);
 
-            // Child 1 is inserted
-            if (child1ChildrenIds.size() == 1 && child1ChildrenIds.contains(child2Id)) {
-                parent.setLinks(child2.getLinks());
-                parent.incrementCollapseLevel();
-                parent.setType(NodeType.INDEL);
-                parent.setSequence("");
+        int collapseLevelGain = indelCollapseLevelGain(parent, child1, child2);
 
-                nodeMap.remove(child1Id);
-                nodeMap.remove(child2Id);
-                return true;
+        // Child 1 is inserted
+        if (child1ChildrenIds.size() == 1 && child1ChildrenIds.contains(child2.getId())) {
+            parent.setLinks(child2.getLinks());
+            parent.incCollapseLevel(collapseLevelGain);
+            parent.setType(NodeType.INDEL);
+            parent.setSequence("");
 
-            // Child 2 is inserted
-            } else if (child2ChildrenIds.size() == 1 && child2ChildrenIds.contains(child1Id)) {
-                parent.setLinks(child1.getLinks());
-                parent.incrementCollapseLevel();
-                parent.setType(NodeType.INDEL);
-                parent.setSequence("");
+            nodeMap.remove(child1.getId());
+            nodeMap.remove(child2.getId());
+            return true;
 
-                nodeMap.remove(child1Id);
-                nodeMap.remove(child2Id);
-                return true;
-            }
+        // Child 2 is inserted
+        } else if (child2ChildrenIds.size() == 1 && child2ChildrenIds.contains(child1.getId())) {
+            parent.setLinks(child1.getLinks());
+            parent.incCollapseLevel(collapseLevelGain);
+            parent.setType(NodeType.INDEL);
+            parent.setSequence("");
+
+            nodeMap.remove(child1.getId());
+            nodeMap.remove(child2.getId());
+            return true;
         }
 
         return false;
     }
-
 
     /**
      * Collapse a parent and its grandchild horizontally.
@@ -209,7 +209,60 @@ public final class GraphReducer {
      */
     public static Boolean
     collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+        if (!checkBubbleCollapsePreConditions(nodeMap, parent)) {
+            return false;
+        }
+
+        List<Integer> childrenIds = parent.getLinks(nodeMap);
+        Node grandChild = determineGrandChild(nodeMap, parent);
+        int collapseLevelGain = bubbleCollapseLevelGain(nodeMap, parent);
+
+        // Remove all nodes in the bubble except for the parent node
+        for (int i = 0; i < childrenIds.size(); i++) {
+            int childId = childrenIds.get(i);
+            Node child = nodeMap.get(childId);
+
+            if (child != null) {
+                nodeMap.remove(childId);
+            }
+        }
+
+        // Set the children of the grand child to the parent
+        parent.setLinks(grandChild.getLinks());
+        nodeMap.remove(grandChild.getId());
+
+        parent.incCollapseLevel(collapseLevelGain);
+        parent.setType(NodeType.BUBBLE);
+        parent.setSequence("");
+        return true;
+    }
+
+    /**
+     * Determine the grand child of a parent node.
+     *
+     * @param nodeMap A HashMap containing all nodes in the graph.
+     * @param parent  A given parent node to be collapsed with a number of its children.
+     * @return The grand child of a parent node.
+     */
+    private static Node determineGrandChild(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
+
+        Node child0 = nodeMap.get(children.get(0));
+        int grandChildId = child0.getLinks(nodeMap).get(0);
+        return nodeMap.get(grandChildId);
+    }
+
+    /**
+     * Check whether a bubble has the right shape to be collapsed.
+     *
+     * @param nodeMap A HashMap containing all nodes in the graph.
+     * @param parent  A given parent node to be collapsed with a number of its children.
+     * @return Whether a bubble has the right shape to be collapsed.
+     */
+    private static Boolean
+    checkBubbleCollapsePreConditions(HashMap<Integer, Node> nodeMap, Node parent) {
+        List<Integer> children = parent.getLinks(nodeMap);
+
         if (children.size() <= 1) {
             return false;
         }
@@ -221,7 +274,7 @@ public final class GraphReducer {
             }
         }
 
-        // Check whether all grand children are the same
+        // Check whether the grandchild is only connected to the parent
         for (int i = 0; i < children.size() - 1; i++) {
             Integer grandChild1 = nodeMap.get(children.get(i)).getLinks(nodeMap).get(0);
             Integer grandChild2 = nodeMap.get(children.get(i + 1)).getLinks(nodeMap).get(0);
@@ -229,48 +282,66 @@ public final class GraphReducer {
                 return false;
             }
         }
-        // At this point all children have the same grand child
 
-
-        Node child0 = nodeMap.get(children.get(0));
-        int grandChildId = child0.getLinks(nodeMap).get(0);
-        Node grandChild = nodeMap.get(grandChildId);
+        Node grandChild = determineGrandChild(nodeMap, parent);
 
         // Check whether the parent and grand child only have links between each other.
         if (grandChild.getParents(nodeMap).size() != children.size()) {
             return false;
         }
-
-        // Remove redundant nodes in bubble
-        for (int i = 0; i < children.size(); i++) {
-            int childId = children.get(i);
-            Node child = nodeMap.get(childId);
-
-            if (child != null) {
-                nodeMap.remove(childId);
-            }
-        }
-
-        // Set the children of the grand child to the parent
-        parent.setLinks(grandChild.getLinks());
-        nodeMap.remove(grandChildId);
-
-        parent.incrementCollapseLevel();
-        parent.setType(NodeType.BUBBLE);
-        parent.setSequence("");
         return true;
     }
 
     /**
-     * Adds a list of genomes to another list.
+     * Determine the Indel collapse level increase.
      *
-     * @param base  Base node.
-     * @param toAdd Node of which its genome has to be added to the base node.
+     * @param parent The parent node.
+     * @param child1 Child 1 of the parent.
+     * @param child2 Child 2 of the parent.
+     * @return The Indel collapse level increase.
      */
-    public static void addGenomes(Node base, Node toAdd) {
-        Set<String> hs = new LinkedHashSet<>(base.getGenomes());
-        hs.addAll(toAdd.getGenomes());
+    private static int indelCollapseLevelGain(Node parent, Node child1, Node child2) {
+        List<Node> nodesInIndel = new ArrayList<>();
+        nodesInIndel.add(parent);
+        nodesInIndel.add(child1);
+        nodesInIndel.add(child2);
 
-        base.setGenomes(new ArrayList<>(hs));
+        return collapseLevelGain(nodesInIndel);
+    }
+
+    /**
+     * Determine the bubble collapse level increase.
+     *
+     * @param nodeMap A HashMap containing all nodes in the graph.
+     * @param parent  A given parent node to be collapsed with a number of its children.
+     * @return The bubble collapse level increase.
+     */
+    private static int bubbleCollapseLevelGain(HashMap<Integer, Node> nodeMap, Node parent) {
+        List<Node> nodesInBubble = new ArrayList<>();
+        nodesInBubble.add(parent);
+        nodesInBubble.add(determineGrandChild(nodeMap, parent));
+
+        for (int childId : parent.getLinks(nodeMap)) {
+            nodesInBubble.add(nodeMap.get(childId));
+        }
+
+        return collapseLevelGain(nodesInBubble);
+    }
+
+    /**
+     * Determine the collapse level increase of a list of nodes.
+     *
+     * @param nodes List of nodes.
+     * @return The collapse level increase.
+     */
+    private static int collapseLevelGain(List<Node> nodes) {
+        int res = 0;
+        for (Node n : nodes) {
+            if (res < n.getCollapseLevel()) {
+                res = n.getCollapseLevel();
+            }
+        }
+
+        return res + 1;
     }
 }

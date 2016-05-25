@@ -227,9 +227,10 @@ public class Node {
 
     /**
      * Increment the collapse level.
+     * @param i The number to be added to the collapse level.
      */
-    public void incrementCollapseLevel() {
-        this.collapseLevel++;
+    public void incCollapseLevel(int i) {
+        this.collapseLevel += i;
     }
 
     /**
