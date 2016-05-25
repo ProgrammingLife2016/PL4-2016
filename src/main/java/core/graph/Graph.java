@@ -231,7 +231,7 @@ public class Graph {
                     Node to = nodeMap.get(j);
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                     //Add next cell
-                    if (nodeMap.get(j).getGenomes().contains(ref)) {
+                    if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                         toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                                 to.getGenomes()), EdgeType.GRAPH_REF);
