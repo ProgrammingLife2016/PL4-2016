@@ -110,7 +110,7 @@ public final class GraphReducer {
 
             collapseBubble(nodeMap, parent);
             collapseIndel(nodeMap, parent);
-            //collapseNodeSequence(nodeMap, parent);
+            collapseNodeSequence(nodeMap, parent);
         }
 
         return nodeMap;
@@ -124,7 +124,7 @@ public final class GraphReducer {
      * @return Whether the horizontal collapse action has succeeded.
      */
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
-        Boolean res = false;
+
         // Links must be present from parent --> child
         if (parent == null) {
             return false;
@@ -135,25 +135,35 @@ public final class GraphReducer {
             return false;
         }
 
-        for (int idx = 0; idx < childrenIds.size(); idx++) {
-            Node child = nodeMap.get(childrenIds.get(idx));
+        //Retrieve the single child of the node.
+        Node child = nodeMap.get(childrenIds.get(0));
 
-            // A child may only have one parent and grandchild
-            if (child.getLinks(nodeMap).size() != 1) {
-                return false;
-            }
-            if (child.getParents(nodeMap).size() != 1) {
-                return false;
-            }
-            Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
-
-            parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
-            grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
-            nodeMap.remove(child.getId());
-            res = true;
+        // The child may only have one parent and grandchild.
+        if (child.getLinks(nodeMap).size() != 1) {
+            return false;
         }
 
-        return res;
+        // Add up both collapse levels and add it to the parent
+        int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
+        parent.setType(NodeType.BUBBLE);
+        parent.setCollapseLevel(totalCollapseLevel + 1);
+
+        // Retrieve the single grandchild of the node.
+        Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
+
+        // Add edge from node to grandchild.
+        parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
+
+        //Set node as new parent of the grandchild.
+        grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
+
+        //Remove the child node that is collapsed.
+        nodeMap.remove(child.getId());
+
+        //Set parent as a bubble node.
+
+
+        return true;
     }
 
     /**
