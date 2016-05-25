@@ -180,6 +180,12 @@ public final class GraphReducer {
 
         // Child 1 is inserted
         if (child1ChildrenIds.size() == 1 && child1ChildrenIds.contains(child2.getId())) {
+            if (nodeMap.get(child1.getId()).getParents(nodeMap).size() != 1) {
+                return false;
+            } else if (nodeMap.get(child2.getId()).getParents(nodeMap).size() != 2) {
+                return false;
+            }
+
             parent.setLinks(child2.getLinks());
             parent.setCollapseLevel(newCollapseLevel);
             parent.setType(NodeType.INDEL);
@@ -191,6 +197,11 @@ public final class GraphReducer {
 
         // Child 2 is inserted
         } else if (child2ChildrenIds.size() == 1 && child2ChildrenIds.contains(child1.getId())) {
+            if (nodeMap.get(child2.getId()).getParents(nodeMap).size() != 1) {
+                return false;
+            } else if (nodeMap.get(child1.getId()).getParents(nodeMap).size() != 2) {
+                return false;
+            }
             parent.setLinks(child1.getLinks());
             parent.setCollapseLevel(newCollapseLevel);
             parent.setType(NodeType.INDEL);
