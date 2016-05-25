@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -104,13 +106,10 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
-                try {
-                    graphController.takeSnapshot();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
+
+
     }
 
     /**
@@ -162,15 +161,15 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
-        try {
-            graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Image i = graphController.takeSnapshot();
+//        Image i = graphController.getImage();
         graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
+        ZoomBox zoombox = graphController.getZoomController().getZoomBox();
+//        zoombox.setFill(i);
+
+        this.getRoot().setBottom(zoombox.getZoomBox());
+
 
         graphController.initKeyHandler();
 
@@ -181,7 +180,6 @@ public class MainController extends Controller<BorderPane> {
         list.setItems(FXCollections.observableArrayList(genomes));
 
         showListVBox();
-
     }
 
     /**
@@ -223,6 +221,7 @@ public class MainController extends Controller<BorderPane> {
         System.out.println("Show: " + s.toString());
 
         graphController.getGraph().phyloSelection(s);
+
         try {
             graphController.init(null, currentView, new ArrayList<>());
         } catch (IOException e) {
@@ -233,11 +232,11 @@ public class MainController extends Controller<BorderPane> {
 
         this.getRoot().setCenter(screen);
 
-        try {
-            graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            graphController.takeSnapshot();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();

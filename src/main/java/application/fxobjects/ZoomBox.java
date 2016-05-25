@@ -12,7 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
-import java.io.IOException;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Created by Daphne van Tetering on 28-4-2016.
@@ -78,15 +80,15 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        Image image = null;
-        try {
-            image = graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ImagePattern pattern = new ImagePattern(image);
-
-        zoomRectBorder.setFill(pattern);
+//        Image image = null;
+//        try {
+//            image = graphController.takeSnapshot();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        ImagePattern pattern = new ImagePattern(image);
+//
+//        zoomRectBorder.setFill(pattern);
 //        String snapshot = "/snapshot.png";
 //        FileInputStream stream = null;
 //        try {
@@ -99,11 +101,30 @@ public class ZoomBox extends ScrollPane {
 //        ImagePattern pattern = new ImagePattern(image);
 
 //        zoomRectBorder.setFill(pattern);
-        zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
+        System.out.println("load snapshot");
+        String snapshot = "/snapshot.png";
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(snapshot);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Image image = new Image(stream);
+        ImagePattern pattern = new ImagePattern(image);
+
+        zoomRectBorder.setFill(pattern);
+        zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
+        
         return zoomBox;
 
     }
+
+//    public void setFill(Image i) {
+//        ImagePattern imagePattern = new ImagePattern(i);
+//        zoomRectBorder.setFill(imagePattern);
+//    }
 
     /**
      * Return the zoom box.

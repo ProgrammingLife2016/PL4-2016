@@ -261,6 +261,10 @@ public class Model {
         addedEdges.clear();
     }
 
+     public int getMaxWidth() {
+         return  maxWidth;
+     }
+
     /**
      * Get the incoming edge from a given child.
      * @param c the child node.

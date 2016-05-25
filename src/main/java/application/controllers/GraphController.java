@@ -3,6 +3,7 @@ package application.controllers;
 import application.fxobjects.cell.Cell;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
@@ -12,6 +13,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -29,6 +32,7 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private int maxWidth;
     private int maxHeight;
+    private Image snapshot;
 
 
     private String position;
@@ -51,6 +55,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.position = "";
+        this.snapshot = null;
         maxWidth = 0;
         maxHeight = (int) screenSize.getHeight();
 
@@ -125,6 +130,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().setContent(root);
 
+        this.snapshot = takeSnapshot();
     }
 
     /**
@@ -134,6 +140,9 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
 
+    public Image getImage() {
+        return snapshot;
+    }
 
     /**
      * Getter method for the genomes.
@@ -145,26 +154,23 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Getter method for the position of the generated
-     * snapshot
-     *
-     * @return the position of the snapshot
-     */
-    public String getPosition() {
-        return position;
-    }
-
-    /**
      * Method take a snapshot of the current graph.
      *
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
-        WritableImage image = new WritableImage(maxWidth + 50,
-                (int) screenSize.getHeight());
+        System.out.println("SNAP");
+        System.out.println(graph.getModel().getMaxWidth());
+        WritableImage image = new WritableImage(1920, (int) screenSize.getHeight());
+
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
-        return snapshot;
 
+        System.out.println("screen width: " + screenSize.getWidth());
+        System.out.println("screen height: " + screenSize.getHeight());
+        File output = new File("snapshot.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+
+        return snapshot;
     }
 }
