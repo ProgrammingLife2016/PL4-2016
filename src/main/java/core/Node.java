@@ -227,10 +227,10 @@ public class Node {
 
     /**
      * Increment the collapse level.
-     * @param i The number to be added to the collapse level.
+     * @param collapseLevel The number to be added to the collapse level.
      */
-    public void incCollapseLevel(int i) {
-        this.collapseLevel += i;
+    public void setCollapseLevel(int collapseLevel) {
+        this.collapseLevel = collapseLevel;
     }
 
     /**
@@ -311,4 +311,5 @@ public class Node {
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }
+
 }

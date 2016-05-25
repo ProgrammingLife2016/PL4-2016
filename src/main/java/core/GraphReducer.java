@@ -54,11 +54,14 @@ public final class GraphReducer {
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMaps.get(i).size();
-            System.out.println("Previous Map: " + (i - 1) + ", Map size: " + previousMapSize
-                    + ", Map: " + i + ", Map size: " + currentMapSize);
+
+            System.out.println(
+                    "[Previous Map] Index: " + (i - 1) + ", Map size: " + previousMapSize
+                    + " - [Current Map]: Index " + i + ", Map size: " + currentMapSize);
+
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) <= 20) {
+            if ((previousMapSize - currentMapSize) <= 2) {
                 return levelMaps;
             }
         }
@@ -77,10 +80,12 @@ public final class GraphReducer {
         HashMap<Integer, Node> res = new HashMap<>();
         for (int i : map.keySet()) {
             Node n = map.get(i);
-            Node newNode = new Node(n.getId(), n.getSequence(), n.getzIndex());
+            Node newNode = new Node(n.getId(), n.getType(), n.getSequence(), n.getzIndex());
             newNode.setLinks(n.getLinks());
             newNode.setParents(n.getParents());
             newNode.setGenomes(n.getGenomes());
+            newNode.setCollapseLevel(n.getCollapseLevel());
+
             res.put(i, newNode);
         }
 
@@ -110,7 +115,6 @@ public final class GraphReducer {
 
         return nodeMap;
     }
-
 
     /**
      * Collapse a parent and its grandchild horizontally.
@@ -172,12 +176,12 @@ public final class GraphReducer {
         List<Integer> child1ChildrenIds = child1.getLinks(nodeMap);
         List<Integer> child2ChildrenIds = child2.getLinks(nodeMap);
 
-        int collapseLevelGain = indelCollapseLevelGain(parent, child1, child2);
+        int newCollapseLevel = indelCollapseLevelGain(parent, child1, child2);
 
         // Child 1 is inserted
         if (child1ChildrenIds.size() == 1 && child1ChildrenIds.contains(child2.getId())) {
             parent.setLinks(child2.getLinks());
-            parent.incCollapseLevel(collapseLevelGain);
+            parent.setCollapseLevel(newCollapseLevel);
             parent.setType(NodeType.INDEL);
             parent.setSequence("");
 
@@ -188,7 +192,7 @@ public final class GraphReducer {
         // Child 2 is inserted
         } else if (child2ChildrenIds.size() == 1 && child2ChildrenIds.contains(child1.getId())) {
             parent.setLinks(child1.getLinks());
-            parent.incCollapseLevel(collapseLevelGain);
+            parent.setCollapseLevel(newCollapseLevel);
             parent.setType(NodeType.INDEL);
             parent.setSequence("");
 
@@ -215,7 +219,7 @@ public final class GraphReducer {
 
         List<Integer> childrenIds = parent.getLinks(nodeMap);
         Node grandChild = determineGrandChild(nodeMap, parent);
-        int collapseLevelGain = bubbleCollapseLevelGain(nodeMap, parent);
+        int newCollapseLevel = bubbleCollapseLevelGain(nodeMap, parent);
 
         // Remove all nodes in the bubble except for the parent node
         for (int i = 0; i < childrenIds.size(); i++) {
@@ -230,8 +234,7 @@ public final class GraphReducer {
         // Set the children of the grand child to the parent
         parent.setLinks(grandChild.getLinks());
         nodeMap.remove(grandChild.getId());
-
-        parent.incCollapseLevel(collapseLevelGain);
+        parent.setCollapseLevel(newCollapseLevel);
         parent.setType(NodeType.BUBBLE);
         parent.setSequence("");
         return true;
@@ -306,7 +309,7 @@ public final class GraphReducer {
         nodesInIndel.add(child1);
         nodesInIndel.add(child2);
 
-        return collapseLevelGain(nodesInIndel);
+        return newCollapseLevel(nodesInIndel);
     }
 
     /**
@@ -325,16 +328,16 @@ public final class GraphReducer {
             nodesInBubble.add(nodeMap.get(childId));
         }
 
-        return collapseLevelGain(nodesInBubble);
+        return newCollapseLevel(nodesInBubble);
     }
 
     /**
-     * Determine the collapse level increase of a list of nodes.
+     * Determine the new collapse level of a list of nodes.
      *
      * @param nodes List of nodes.
-     * @return The collapse level increase.
+     * @return The new collapse level.
      */
-    private static int collapseLevelGain(List<Node> nodes) {
+    private static int newCollapseLevel(List<Node> nodes) {
         int res = 0;
         for (Node n : nodes) {
             if (res < n.getCollapseLevel()) {
