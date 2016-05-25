@@ -42,7 +42,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref, MainController m, int depth) {
+    public GraphController(Graph g, Object ref, MainController m, int depth, List<String> selectedGenomes) {
         super(new ScrollPane());
         this.graph = g;
         this.screenSize = Screen.getPrimary().getVisualBounds();
@@ -61,7 +61,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init(ref, depth);
+            init(ref, depth, selectedGenomes);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,19 +96,19 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref, int depth) throws IOException {
+    public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
         if(ref != graph.getCurrentRef()) {
-            System.out.println("New reference, redraw");
+            System.out.println("New reference, Removed children, depth: " + depth);
             root.getChildren().clear();
         }
         int size = graph.getModel().getLevelMaps().size();
-        System.out.println(size + " IS SIZE ");
+
         if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
             root.getChildren().clear();
             System.out.println("Remove all children, received depth: " + depth);
         }
 
-        graph.addGraphComponents(ref, depth);
+        graph.addGraphComponents(ref, depth, selectedGenomes );
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());

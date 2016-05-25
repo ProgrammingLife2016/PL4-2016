@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -56,7 +57,7 @@ public class MenuFactory {
 
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
-            mainController.fillGraph(null);
+            mainController.fillGraph(null, new ArrayList<>());
 
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->

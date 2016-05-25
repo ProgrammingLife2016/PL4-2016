@@ -28,12 +28,24 @@ public class Graph {
     private int currentInt = -1;
     private Object currentRef = null;
 
+    /**
+     * All the genomes that are in this graph.
+     */
     private List<String> genomes = new ArrayList<>();
 
-    private List<String> genomesToDraw = new ArrayList<>();
+    /**
+     * The genomes we want to draw.
+     */
+    private List<String> currentGenomes = new ArrayList<>();
 
+    /**
+     * Startmap.
+     */
     private HashMap<Integer, Node> startMap;
 
+    /**
+     * All the (collapsed) maps.
+     */
     private List<HashMap<Integer, Node>> levelMaps;
 
 
@@ -45,12 +57,9 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         try {
-            startMap = parser.readGFA(inputStream);
+            startMap = getNodeMapFromFile();
             levelMaps = GraphReducer.createLevelMaps(startMap);
-            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,15 +71,15 @@ public class Graph {
      * @return A node map read from file.
      * @throws IOException Throw exception on read GFA read failure.
      */
-//    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-//    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
-//        Parser parser = new Parser();
-//        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-//        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-//        inputStream.close();
-//
-//        return startMap;
-//    }
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
+    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
+        Parser parser = new Parser();
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
+        inputStream.close();
+
+        return startMap;
+    }
 
     /**
      * Add the nodes and edges of the graph to the model.
@@ -81,111 +90,109 @@ public class Graph {
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth)
+    public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
-
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-            System.out.println("Trying to draw:" + depth);
-            //Normalize.
-//            if (depth > levelMaps.size() - 1) {
-//                depth = levelMaps.size() - 1;
-//            } else if (depth < 0) {
-//                depth = 0;
-//            }
+            System.out.println("Trying to draw: " + depth + " Ref: " + ref + " Selected Genomes: " + selectedGenomes.toString());
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
-                current = generateModel(ref, depth);
-                System.out.println("todraw: " + genomesToDraw.toString());
+                current = generateModel(ref, depth, selectedGenomes);
+
                 //LoadOneUp is only needed when we do not start on the top level.
-                loadOneUp(ref, depth);
-                loadOneDown(ref, depth);
+                loadOneUp(depth, selectedGenomes);
+                loadOneDown(depth, selectedGenomes);
             } else { //Second time. All models are loaded
                 if (depth < currentInt) {
                     System.out.println("Zoom in");
                     zoomOut = current;
                     current = zoomIn;
-                    loadOneDown(ref, depth);
+                    loadOneDown(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (depth > currentInt) {
                     System.out.println("Zoom out");
                     zoomIn = current;
                     current = zoomOut;
-                    loadOneUp(ref, depth);
+                    loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (ref != currentRef){
-                    System.out.println("Found a new ref");
-                    current = generateModel(ref, depth);
-                    System.out.println("todraw: " + genomesToDraw.toString());
+                    currentRef = ref;
+                    System.out.println("Found a new ref: "+ ref);
+                    current = generateModel(ref, depth, selectedGenomes);
+
                     //LoadOneUp is only needed when we do not start on the top level.
-                    loadOneUp(ref, depth);
-                    loadOneDown(ref, depth);
+                    loadOneUp(depth, selectedGenomes);
+                    loadOneDown(depth, selectedGenomes);
                 }
             }
-            System.out.println("CurrentInt: " + currentInt);
-
-            // @TODO Switch method maken.
-            // @TODO Check maken of we al kunnen switchen(Is de thread al klaar?)
         }
+        currentInt = depth;
         return true;
     }
 
-    private void loadOneUp(Object ref, int depth) {
+    private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
             public void run() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = new Model();
-                    zoomOut = generateModel(ref, finalDepth + 1);
+                    zoomOut = generateModel(currentRef, finalDepth + 1, selectedGenomes);
                     zoomOut.setLayout();
-                    System.out.println("(THREAD): Done loading: " + (finalDepth + 1));
+                    System.out.println("    (THREAD): Done loading: " + (finalDepth + 1));
                 } else {
-                    System.out.println("(THREAD): Not loading map: " + (finalDepth + 1));
+                    System.out.println("    (THREAD): Not loading map: " + (finalDepth + 1));
                 }
             }
         }.run();
     }
 
-    private void loadOneDown(Object ref, int depth) {
+    private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
             public void run() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = new Model();
-                    zoomIn = generateModel(ref, finalDepth - 1);
+                    zoomIn = generateModel(currentRef, finalDepth - 1, selectedGenomes);
                     zoomIn.setLayout();
-                    System.out.println("(THREAD): Done loading: " + (finalDepth - 1));
+                    System.out.println("    (THREAD): Done loading: " + (finalDepth - 1));
 
                 } else {
-                    System.out.println("(THREAD): Not loading map: " + (finalDepth - 1));
+                    System.out.println("    (THREAD): Not loading map: " + (finalDepth - 1));
                 }
             }
         }.run();
     }
 
-    private Model generateModel(Object ref, int depth) {
+    private Model generateModel(Object ref, int depth, List<String> selectedGenomes) {
+        //Create a new Model to return
         Model toret = new Model();
+        //Apply the levelMaps
         toret.setLevelMaps(levelMaps);
+        //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+        //Root Node
         Node root = nodeMap.get(1);
 
+        //If the ref is null, we can automatically select one.
         if (ref == null) {
-            ref = root.getGenomes().get(0);
+            //ref = root.getGenomes().get(0);
         }
 
-        if (genomesToDraw.size() > 0) {
+        if (currentGenomes.size() > 0) { //Draw selected references
             System.out.println("Only drawing selected");
             //We are now drawing only the selected items.
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
-            if (intersection(root.getGenomes(), genomesToDraw) > 0) {
+            if (intersection(root.getGenomes(), currentGenomes) > 0) {
                 toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
             }
 
-            genomes = genomesToDraw;
+            // In this case we know that the genomes in the graph are only this ones.
+            genomes = currentGenomes;
+
             for (int i = 1; i <= nodeMap.size(); i++) {
                 Node from = nodeMap.get(i);
                 if (from == null) {
@@ -194,8 +201,8 @@ public class Graph {
 
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
-                    //Add next cell
-                    if (intersection(to.getGenomes(), genomesToDraw) > 0) {
+                    //Add next cell, Only add when it contains the reference.
+                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
                         if (nodeMap.get(j).getGenomes().contains(ref)) {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                             toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
@@ -210,14 +217,11 @@ public class Graph {
             }
 
 
-        } else {
+        } else { // Draw all nodes.
 
-            if (root.getGenomes().contains(ref)) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-            } else {
-                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-            }
+            toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
 
+            //Create a new genome list.
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
 
@@ -328,8 +332,9 @@ public class Graph {
     }
 
     public void phyloSelection(List<String> s) {
-        genomesToDraw = s;
+        currentGenomes = s;
         currentInt = -1;
+        currentRef = null;
     }
 
     public Object getCurrentRef() {

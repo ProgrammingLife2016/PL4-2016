@@ -103,7 +103,7 @@ public class MainController extends Controller<BorderPane> {
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                fillGraph(list.getSelectionModel().getSelectedItem());
+                fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
                 try {
                     graphController.takeSnapshot();
                 } catch (IOException e) {
@@ -141,19 +141,19 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param ref the reference string.
      */
-    public void fillGraph(Object ref) {
+    public void fillGraph(Object ref, List<String> selectedGenomes) {
         if (graphController == null) {
             Graph graph = null;
             try {
                 graph = new Graph();
-                graphController = new GraphController(graph, ref, this, currentView);
+                graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         } else {
             try {
-                graphController.init(ref, currentView);
+                graphController.init(ref, currentView, selectedGenomes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -194,7 +194,7 @@ public class MainController extends Controller<BorderPane> {
         //ToDo: add function to visualize only the selected strains.
 
         graphController.getGraph().setGenomes(new ArrayList<>());
-        fillGraph(s.get(0));
+        fillGraph(s.get(0), new ArrayList<>());
         System.out.println("Selected " + s.get(0 )+ "as a ref, drawing everything.");
 
         graphController.getZoomController().createZoomBox();
@@ -224,7 +224,7 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.getGraph().phyloSelection(s);
         try {
-            graphController.init(null, currentView);
+            graphController.init(null, currentView, new ArrayList<>());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -291,7 +291,7 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.max(0, currentView);
 
         currentView = Math.min(9, currentView);
-        fillGraph(null);
+        fillGraph(null, new ArrayList<>());
 
     }
 
