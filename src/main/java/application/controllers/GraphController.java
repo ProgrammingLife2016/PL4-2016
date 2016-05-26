@@ -172,6 +172,8 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
+        maxWidth = ((int) graph.getModel().getGraphLayout().getMaxWidth()) + 50;
+
         WritableImage image = new WritableImage(maxWidth,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
