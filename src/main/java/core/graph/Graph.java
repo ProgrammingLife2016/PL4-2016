@@ -195,6 +195,8 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
+        //max width for Edges
+        int maxEdgeWidth = 10;
 
         //If the ref is null, we can automatically select one.
 //        if (ref == null) {
@@ -225,11 +227,11 @@ public class Graph {
                     if (intersection(to.getGenomes(), currentGenomes) > 0) {
                         if (nodeMap.get(j).getGenomes().contains(ref)) {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
                             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                         } else {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
                             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         }
                     }
@@ -258,11 +260,11 @@ public class Graph {
                     //Add next cell
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
                         toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                     } else {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
                         toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     }
                 }
