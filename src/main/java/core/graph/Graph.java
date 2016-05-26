@@ -190,57 +190,50 @@ public class Graph {
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
             if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
             }
-                // In this case we know that the genomes in the graph are only this ones.
-                genomes = currentGenomes;
+            // In this case we know that the genomes in the graph are only this ones.
+            genomes = currentGenomes;
 
-                //current.clearCellMap();
-                for (int i = 1; i < nodeIds; i++) {
-                    Node from = nodeMap.get(i);
-                    if (from == null) {
-                        continue;
-                    }
-                    if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                        for (int j : from.getLinks(nodeMap)) {
-                            Node to = nodeMap.get(j);
-                            if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                                //Add next cell
-                                NodeType type = nodeMap.get(j).getType();
+            //current.clearCellMap();
+            for (int i = 1; i < nodeIds; i++) {
+                Node from = nodeMap.get(i);
+                if (from == null) {
+                    continue;
+                }
+                if (intersection(from.getGenomes(), currentGenomes) > 0) {
+                    for (int j : from.getLinks(nodeMap)) {
+                        Node to = nodeMap.get(j);
+                        if (intersection(to.getGenomes(), currentGenomes) > 0) {
+                            //Add next cell
+                            NodeType type = nodeMap.get(j).getType();
 
-                                if (type == NodeType.BASE) {
-                                    if (nodeMap.get(j).getGenomes().contains(ref)) {
-                                        toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                                    } else {
-                                        toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                                    }
-                                } else if (type == NodeType.BUBBLE) {
-                                    toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                            CellType.BUBBLE);
-                                } else if (type == NodeType.INDEL) {
-                                    toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                            CellType.INDEL);
-                                    toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-                                }
+                            if (type == NodeType.BASE) {
+                                toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
 
-                                if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                                    //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                            to.getGenomes()), EdgeType.GRAPH_REF);
-                                } else {
-                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                            to.getGenomes()), EdgeType.GRAPH);
-                                    //current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                                }
+                            } else if (type == NodeType.BUBBLE) {
+                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                        CellType.BUBBLE);
+                            } else if (type == NodeType.INDEL) {
+                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                        CellType.INDEL);
+                                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+                            }
+
+                            if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
+                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                        to.getGenomes()), EdgeType.GRAPH_REF);
+                            } else {
+                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                        to.getGenomes()), EdgeType.GRAPH);
                             }
                         }
                     }
                 }
             }
-
-         else { // Draw all nodes.
+        } else { // Draw all nodes.
             //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
 
@@ -266,7 +259,6 @@ public class Graph {
                     } else if (type == NodeType.INDEL) {
                         toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
                                 CellType.INDEL);
-                        toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
                     }
 
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
@@ -284,94 +276,94 @@ public class Graph {
 
         toret.setLayout();
         return toret;
-}
+    }
 
 
-/**
- * Method that updates the model.
- */
-public void endUpdate(){
+    /**
+     * Method that updates the model.
+     */
+    public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
         current.attachOrphansToGraphParent(current.getAddedCells());
 
         // merge added & removed cells with all cells
         current.merge();
-        }
+    }
 
-/**
- * Method that returns the amount of element that exist in both lists.
- *
- * @param l1 The first list.
- * @param l2 The second list.
- * @return Number of element that exist in both lists.
- */
-public int intersection(List<String>l1,List<String>l2){
-        int i=0;
-        for(String s:l1){
-        if(l2.contains(s)){
-        i++;
-        }
+    /**
+     * Method that returns the amount of element that exist in both lists.
+     *
+     * @param l1 The first list.
+     * @param l2 The second list.
+     * @return Number of element that exist in both lists.
+     */
+    public int intersection(List<String> l1, List<String> l2) {
+        int i = 0;
+        for (String s : l1) {
+            if (l2.contains(s)) {
+                i++;
+            }
         }
         return i;
-        }
+    }
 
-/**
- * Set whether the model should be reset in the addGraphComponents method.
- * This option is only used for testing purposes to allow for mocks.
- *
- * @param resetModel whether the model should be reset in the addGraphComponents method.
- */
-public void setresetModel(Boolean resetModel){
-        this.resetModel=resetModel;
-        }
+    /**
+     * Set whether the model should be reset in the addGraphComponents method.
+     * This option is only used for testing purposes to allow for mocks.
+     *
+     * @param resetModel whether the model should be reset in the addGraphComponents method.
+     */
+    public void setresetModel(Boolean resetModel) {
+        this.resetModel = resetModel;
+    }
 
-/**
- * Get the model of the Graph.
- *
- * @return The model of the graph.
- */
-public Model getModel(){
+    /**
+     * Get the model of the Graph.
+     *
+     * @return The model of the graph.
+     */
+    public Model getModel() {
         return current;
-        }
+    }
 
-/**
- * Set the model of the Graph.
- *
- * @param model The model of the graph.
- */
-public void setModel(Model model){
-        this.current=model;
-        }
+    /**
+     * Set the model of the Graph.
+     *
+     * @param model The model of the graph.
+     */
+    public void setModel(Model model) {
+        this.current = model;
+    }
 
-/**
- * Getter method for the genomens.
- *
- * @return the genomes.
- */
-public List<String>getGenomes(){
+    /**
+     * Getter method for the genomens.
+     *
+     * @return the genomes.
+     */
+    public List<String> getGenomes() {
         return genomes;
-        }
+    }
 
-/**
- * Setter method for the genomes.
- *
- * @param genomes the genomes.
- */
-public void setGenomes(List<String>genomes){
-        this.genomes=genomes;
-        }
+    /**
+     * Setter method for the genomes.
+     *
+     * @param genomes the genomes.
+     */
+    public void setGenomes(List<String> genomes) {
+        this.genomes = genomes;
+    }
 
-public int getCurrentInt(){
+    public int getCurrentInt() {
         return currentInt;
-        }
+    }
 
-public void phyloSelection(List<String>s){
-        currentGenomes=s;
-        currentInt=-1;
-        currentRef=null;
-        }
+    public void phyloSelection(List<String> s) {
+        currentGenomes = s;
+        currentInt = -1;
+        currentRef = null;
+    }
 
-public Object getCurrentRef(){
+    public Object getCurrentRef() {
         return currentRef;
-        }
-        }
+    }
+}
