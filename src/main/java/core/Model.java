@@ -294,6 +294,7 @@ public class Model {
 
     /**
      * Get the incoming edge from a given child.
+     *
      * @param c the child node.
      * @return the incoming edge.
      */
@@ -304,6 +305,7 @@ public class Model {
 
     /**
      * Get the outgoing edge from a given Parent.
+     *
      * @param p the parent node.
      * @return the incoming edge.
      */

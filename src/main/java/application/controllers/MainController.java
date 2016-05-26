@@ -16,8 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -70,6 +72,7 @@ public class MainController extends Controller<BorderPane> {
         screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
+
     private void createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -107,7 +110,7 @@ public class MainController extends Controller<BorderPane> {
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                fillGraph(list.getSelectionModel().getSelectedItem());
+                fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
                 try {
                     graphController.takeSnapshot();
                 } catch (IOException e) {
@@ -145,7 +148,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param ref the reference string.
      */
-    public void fillGraph(Object ref) {
+    public void fillGraph(Object ref, List<String> selectedGenomes) {
         if (graphController == null) {
             Graph graph = null;
             try {
@@ -154,18 +157,18 @@ public class MainController extends Controller<BorderPane> {
                 e.printStackTrace();
                 System.exit(0);
             }
-            graphController = new GraphController(graph, ref, this, currentView);
+            graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
         } else {
             try {
-                graphController.init(ref, currentView);
+                graphController.init(ref, currentView, selectedGenomes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        System.out.println("Current level: " + currentView);
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
+
         try {
             graphController.takeSnapshot();
         } catch (IOException e) {
@@ -186,6 +189,74 @@ public class MainController extends Controller<BorderPane> {
 
         showListVBox();
 
+    }
+
+    /**
+     * If selections are made in the phylogenetic tree,
+     * this method will visualize/highlight them specifically.
+     *
+     * @param s a List of selected strains.
+     */
+    public void soloStrainSelection(List<String> s) {
+        //ToDo: add function to visualize only the selected strains.
+
+        graphController.getGraph().setGenomes(new ArrayList<>());
+        fillGraph(s.get(0), new ArrayList<>());
+        System.out.println("Selected " + s.get(0) + "as a ref, drawing everything.");
+
+        graphController.getZoomController().createZoomBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
+
+        createInfoList("");
+
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
+
+        showListVBox();
+    }
+
+    /**
+     * If selections are made in the phylogenetic tree,
+     * this method will visualize/highlight them specifically.
+     *
+     * @param s a List of selected strains.
+     */
+    public void strainSelection(List<String> s) {
+        //ToDo: add function to visualize only the selected strains.
+        System.out.println("Show: " + s.toString());
+
+        graphController.getGraph().phyloSelection(s);
+        try {
+            graphController.init(null, currentView, new ArrayList<>());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        screen = graphController.getRoot();
+
+        this.getRoot().setCenter(screen);
+        try {
+            graphController.takeSnapshot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        graphController.getZoomController().createZoomBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
+
+        graphController.initKeyHandler();
+
+        createInfoList("");
+
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
+
+        showListVBox();
     }
 
     /**
@@ -223,9 +294,8 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-        currentView = Math.min(graphController.getGraph().getModel().getLevelMapsSize() - 1,
-                currentView);
-        fillGraph(null);
+        currentView = Math.min(9, currentView);
+        fillGraph(graphController.getGraph().getCurrentRef(), new ArrayList<>());
     }
 
     /**
@@ -251,6 +321,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the graphController.
+     *
      * @return the graphController.
      */
     public GraphController getGraphController() {
@@ -259,9 +330,19 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the treeController.
+     *
      * @return the treeController.
      */
     public TreeController getTreeController() {
         return treeController;
+    }
+
+    /**
+     * Getter method for the MenuBar.
+     *
+     * @return the MenuBar.
+     */
+    public MenuBar getMenuBar() {
+        return menuBar;
     }
 }

@@ -3,13 +3,14 @@ package application.controllers;
 import application.fxobjects.cell.Cell;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.stage.Screen;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -22,10 +23,14 @@ import static application.controllers.WindowFactory.screenSize;
  */
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
-    private int maxWidth;
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
+    AnchorPane root = new AnchorPane();
+    private Rectangle2D screenSize;
+    private int maxWidth;
+    private int maxHeight;
+
 
     private String position;
 
@@ -38,15 +43,18 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref, MainController m, int depth) {
+    public GraphController(Graph g, Object ref, MainController m, int depth, List<String> selectedGenomes) {
         super(new ScrollPane());
         this.graph = g;
-        this.zoomController = new ZoomController(this);
         this.maxWidth = 0;
+        this.screenSize = Screen.getPrimary().getVisualBounds();
+        this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.position = "";
+        maxWidth = 0;
+        maxHeight = (int) screenSize.getHeight();
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
@@ -55,7 +63,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
 
         try {
-            init(ref, depth);
+            init(ref, depth, selectedGenomes);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,10 +98,19 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref, int depth) throws IOException {
-        AnchorPane root = new AnchorPane();
+    public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
+        if(ref != graph.getCurrentRef()) {
+            System.out.println("New reference, Removed children, depth: " + depth);
+            root.getChildren().clear();
+        }
+        int size = graph.getModel().getLevelMaps().size();
 
-        graph.addGraphComponents(ref, depth);
+        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
+            root.getChildren().clear();
+            System.out.println("Remove all children, received depth: " + depth);
+        }
+
+        graph.addGraphComponents(ref, depth, selectedGenomes );
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());

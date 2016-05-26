@@ -2,7 +2,11 @@ package application.fxobjects.cell;
 
 import core.graph.cell.EdgeType;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+
+import static core.graph.cell.EdgeType.GRAPH_REF;
+import static core.graph.cell.EdgeType.TREE;
 
 /**
  * A class that represent an Edge between 2 nodes.
@@ -31,7 +35,12 @@ public class Edge extends Group {
 
         width /= 1;
 
-        if (type == EdgeType.GRAPH) {
+        if (type == TREE) {
+            line.startXProperty().bind(source.layoutXProperty());
+            line.startYProperty().bind(source.layoutYProperty());
+            line.endXProperty().bind(target.layoutXProperty());
+            line.endYProperty().bind(target.layoutYProperty());
+        } else {
             line.setStrokeWidth(Math.max(width, 1));
             line.startXProperty().bind(source.layoutXProperty().add(
                     source.getBoundsInParent().getWidth() / 2.0));
@@ -42,13 +51,11 @@ public class Edge extends Group {
                     target.getBoundsInParent().getWidth() / 2.0));
             line.endYProperty().bind(target.layoutYProperty().add(
                     target.getBoundsInParent().getHeight() / 2.0));
-
-        } else if (type == EdgeType.TREE) {
-            line.startXProperty().bind(source.layoutXProperty());
-            line.startYProperty().bind(source.layoutYProperty());
-            line.endXProperty().bind(target.layoutXProperty());
-            line.endYProperty().bind(target.layoutYProperty());
+            if (type == GRAPH_REF) {
+                line.setStroke(Color.YELLOW);
+            }
         }
+
 
         getChildren().add(line);
     }
