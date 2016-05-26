@@ -146,30 +146,15 @@ public final class GraphReducer {
         //Retrieve the single child of the node.
         Node child = nodeMap.get(childrenIds.get(0));
 
-        if (parent.getId() == 842) {
-            System.out.println("childId of 842: " + child.getId());
-        }
+
 
         // The child may only have one parent and child
         if (child.getLinks(nodeMap).size() != 1) {
             return false;
         }
 
-        if (parent.getId() == 842) {
-            System.out.println("childId of 842: " + child.getId());
-        }
-
         if (child.getParents(nodeMap).size() != 1) {
-            if (parent.getId() == 842) {
-                System.out.println(child.getParents().get(0));
-                System.out.println(child.getParents().get(1));
-
-            }
             return false;
-        }
-
-        if (parent.getId() == 842) {
-            System.out.println("childId of 842: " + child.getId());
         }
 
         // Add up both collapse levels and add it to the parent
@@ -183,6 +168,7 @@ public final class GraphReducer {
 
         // Add edge from node to grandchild.
         parent.addLink(grandChild.getId());
+        parent.removeLink(child.getId());
 
         //remove edge from child to grandchild.
         child.removeLink(grandChild.getId());
@@ -214,12 +200,21 @@ public final class GraphReducer {
             Node child = nodeMap.get(children.get(i));
             //Find children that have one child and one parent
             if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
-                System.out.println("if reached, id:" + child.getId());
+                if (parent.getId() == 463) {
+                    System.out.println("childId of 463: " + child.getId());
+                    System.out.println("all children of parent:" + children.toString());
+                    System.out.println("child parents " + child.getParents().toString());
+                    System.out.println(child.getId() + " child children " + child.getLinks().toString());
+                }
                 int grandChildId = child.getLinks().get(0);
                 //Check whether the node has another child as its own child.
                 if (children.contains(grandChildId)) {
+                    Node grandChild = nodeMap.get(grandChildId);
                     //Remove link from parent to the grandChild.
                     parent.removeLink(grandChildId);
+
+                    //Change parent of the grandchild to the child node
+                    grandChild.removeParent(parent.getId());
                     //Make the inserted node an Indel node.
                     child.setType(NodeType.INDEL);
                     child.setSequence("");

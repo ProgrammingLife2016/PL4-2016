@@ -176,7 +176,8 @@ public class GraphController extends Controller<ScrollPane> {
         System.out.println(graph.getModel().getGraphLayout().getMaxWidth());
         maxWidth = ((int) graph.getModel().getGraphLayout().getMaxWidth()) + 50;
 
-        WritableImage image = new WritableImage(maxWidth,
+
+        WritableImage image = new WritableImage(2500,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
