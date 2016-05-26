@@ -103,7 +103,7 @@ public class Graph {
         genomes = new ArrayList<>();
         genomes.addAll(root.getGenomes());
         //current.clearCellMap();
-        for (int i = 1; i <= nodeMap.size(); i++) {
+        for (int i : nodeMap.keySet()) {
             Node from = nodeMap.get(i);
             if (from == null) {
                 continue;

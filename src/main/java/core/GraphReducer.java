@@ -102,7 +102,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx <= map.size(); idx++) {
+        for (int idx : map.keySet()) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;

@@ -172,6 +172,15 @@ public class GraphReducerTest {
         assertEquals(1, nodeMap.get(6).getLinks(nodeMap).size());
     }
 
+    /**
+     *
+     */
+     @Test
+     public void testCollapseComplexBubble() {
+             HashMap<Integer, Node> nodeMap = createNodeMap(5);
+             nodeMap.get(2).setType(NodeType.BUBBLE);
+          //  nodeMap.get()
+      }
 //    /**
 //     * Test whether the counter for the number of lower collapses is working correctly
 //     * when the bubble contains a collapsed bubble at a child of the parent in the bubble.
