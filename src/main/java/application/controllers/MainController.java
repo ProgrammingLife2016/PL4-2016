@@ -50,6 +50,7 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
 
         loadFXMLfile("/fxml/main.fxml");
+        fillGraph(null, new ArrayList<>());
     }
 
 
@@ -161,6 +162,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             graph = graphController.getGraph();
         }
+        graph.phyloSelection(selectedGenomes);
         graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
 
         screen = graphController.getRoot();
@@ -234,6 +236,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             graph = graphController.getGraph();
         }
+        graph.phyloSelection(s);
         graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
         screen = graphController.getRoot();
@@ -253,7 +256,7 @@ public class MainController extends Controller<BorderPane> {
 
         createInfoList("");
 
-        List<String> genomes = graphController.getGenomes();
+        List<String> genomes = graphController.getGraph().getGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
 
