@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 /**
  * Created by Niek on 5/25/2016.
  */
-public class CollectionCell extends Cell{
+public class CollectionCell extends Cell {
 
     private final CellType type = CellType.COLLECTION;
     private Text text;

@@ -1,7 +1,6 @@
 package core.graph;
 
 import core.Model;
-import core.Node;
 import core.graph.cell.CellType;
 import org.junit.Before;
 import org.junit.Test;

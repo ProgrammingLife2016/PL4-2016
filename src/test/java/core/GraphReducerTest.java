@@ -1,12 +1,8 @@
 package core;
 
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.IndelCell;
-import org.junit.Test;
-
 import java.util.*;
 
-import static core.GraphReducer.createLevelMaps;
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 

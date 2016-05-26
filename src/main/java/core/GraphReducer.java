@@ -58,10 +58,6 @@ public final class GraphReducer {
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMaps.get(i).size();
 
-            System.out.println(
-                    "[Previous Map] Index: " + (i - 1) + ", Map size: " + previousMapSize
-                    + " - [Current Map]: Index " + i + ", Map size: " + currentMapSize);
-
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= minDelta) {
@@ -69,7 +65,6 @@ public final class GraphReducer {
             }
         }
 
-        //return levelMaps;
     }
 
     /**
@@ -84,9 +79,9 @@ public final class GraphReducer {
         for (int i : map.keySet()) {
             Node n = map.get(i);
             Node newNode = new Node(n.getId(), n.getType(), n.getSequence(), n.getzIndex());
-            newNode.setLinks(new ArrayList<Integer>(n.getLinks()));
-            newNode.setParents(new ArrayList<Integer>(n.getParents()));
-            newNode.setGenomes(new ArrayList<String>(n.getGenomes()));
+            newNode.setLinks(new ArrayList<>(n.getLinks()));
+            newNode.setParents(new ArrayList<>(n.getParents()));
+            newNode.setGenomes(new ArrayList<>(n.getGenomes()));
             newNode.setCollapseLevel(n.getCollapseLevel());
 
             res.put(i, newNode);
