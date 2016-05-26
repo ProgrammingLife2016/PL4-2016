@@ -78,7 +78,7 @@ public final class GraphReducer {
      * @return A copied node map.
      */
     @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
-    private static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
+    public static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
         HashMap<Integer, Node> res = new HashMap<>();
         for (int i : map.keySet()) {
             Node n = map.get(i);
@@ -111,7 +111,7 @@ public final class GraphReducer {
             }
 
 
-            collapseBubble(nodeMap, parent);
+            complexBubbleCollapse(nodeMap, parent);
             collapseIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 collapseNodeSequence(nodeMap, parent);

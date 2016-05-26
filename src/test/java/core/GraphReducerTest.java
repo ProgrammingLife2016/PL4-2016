@@ -219,7 +219,7 @@ public class GraphReducerTest {
         nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
 
         GraphReducer.setStartMapSize(nodeMap.size());
-        nodeMap = GraphReducer.collapse(nodeMap, 1);
+        nodeMap = GraphReducer.collapse(nodeMap, 0);
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
         assertEquals(2, nodeMap.get(2).getCollapseLevel());
         assertEquals(1, nodeMap.get(4).getCollapseLevel());
@@ -231,7 +231,7 @@ public class GraphReducerTest {
         assertEquals(3, nodeMap.get(4).getCollapseLevel());
         assertEquals(1, nodeMap.get(7).getCollapseLevel());
 
-        nodeMap = GraphReducer.collapse(nodeMap, 1);
+        nodeMap = GraphReducer.collapse(nodeMap, 2);
         assertEquals(6, nodeMap.get(1).getCollapseLevel());
         assertEquals(1, nodeMap.get(7).getCollapseLevel());
     }
@@ -243,14 +243,18 @@ public class GraphReducerTest {
     @Test
     public void testCollapseLevelChainedIndels() {
         HashMap<Integer, Node> nodeMap = createNodeMap(5);
+
         nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
         nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3)));
 
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4, 5)));
         nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
 
+        HashMap<Integer, Node> firstNodeMap = GraphReducer.copyNodeMap(nodeMap);
+
         GraphReducer.setStartMapSize(nodeMap.size());
-        nodeMap = GraphReducer.collapse(nodeMap, 1);
+        nodeMap = GraphReducer.collapse(nodeMap, 0);
+
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
         assertEquals(2, nodeMap.get(2).getCollapseLevel());
         assertEquals(1, nodeMap.get(3).getCollapseLevel());
@@ -261,12 +265,8 @@ public class GraphReducerTest {
         assertEquals(3, nodeMap.get(1).getCollapseLevel());
         assertEquals(3, nodeMap.get(3).getCollapseLevel());
         assertEquals(1, nodeMap.get(5).getCollapseLevel());
-
-        nodeMap = GraphReducer.collapse(nodeMap, 1);
-        assertEquals(6, nodeMap.get(1).getCollapseLevel());
-        assertEquals(1, nodeMap.get(5).getCollapseLevel());
     }
-
+    
     /**
      * Test the collapsing of a triangle of nodes.
      */
