@@ -13,8 +13,6 @@ import javafx.scene.input.MouseEvent;
  */
 class GraphMouseHandling {
     private MainController mainController;
-    private double nodePositionX;
-    private double nodePositionY;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
@@ -33,14 +31,11 @@ class GraphMouseHandling {
     
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
-        
-        nodePositionX = node.getLayoutX();
-        nodePositionY = node.getLayoutY();
 
-        double offsetX = event.getX();
-        double offsetY = event.getY();
+        double offsetX = event.getX() + node.getLayoutX();
+        double offsetY = event.getY() + node.getLayoutY();
 
-        node.relocate(nodePositionX + offsetX, nodePositionY + offsetY);
+        node.relocate(offsetX, offsetY);
     };
 
 
