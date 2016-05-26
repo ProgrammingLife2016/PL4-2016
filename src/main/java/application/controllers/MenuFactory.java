@@ -9,13 +9,14 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import java.io.IOException;
+
 import java.util.ArrayList;
+
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class MenuFactory {
-    public static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
+    protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
@@ -60,17 +61,21 @@ public class MenuFactory {
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null, event ->
-                mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes()));
+        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph",
+                null, event ->
+                mainController.soloStrainSelection(mainController.getTreeController().
+                        getSelectedGenomes()));
         showSelectedStrains = initMenuItem("Show the selected strains in graph", null, event ->
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
+                mainController.strainSelection(mainController.getTreeController().
+                        getSelectedGenomes()));
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));
         MenuItem zoomIn = initMenuItem("Zoom in", null, event ->
                 mainController.switchScene(-1));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
-        resetView = initMenuItem("Reset", null, event -> mainController.fillGraph(null, new ArrayList<>()));
+        resetView = initMenuItem("Reset", null, event ->
+                mainController.fillGraph(null, new ArrayList<>()));
 
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);

@@ -64,7 +64,6 @@ public class Graph {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("poeop::: " + levelMaps.size());
     }
 
     /**
@@ -88,17 +87,15 @@ public class Graph {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param selectedGenomes the genomes to display
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
-        System.out.println("Current int before changes: " + currentInt);
 
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
-
-            System.out.println("Trying to draw: " + depth + ". Ref: " + ref + ". Selected Genomes: " + selectedGenomes.toString());
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
@@ -111,22 +108,17 @@ public class Graph {
                 loadOneDown(depth, selectedGenomes);
             } else { //Second time. All models are loaded
                 if (depth < currentInt) {
-                    System.out.println("Zoom in");
                     zoomOut = current;
-                    System.out.println("Current: " + zoomOut.getAllCells().toString());
                     current = zoomIn;
                     loadOneDown(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (depth > currentInt) {
-                    System.out.println("Zoom out");
                     zoomIn = current;
                     current = zoomOut;
-                    System.out.println("Current: " + current.getAllCells().toString());
                     loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    System.out.println("Found a new ref: " + ref);
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
@@ -137,39 +129,51 @@ public class Graph {
         }
 
         currentInt = depth;
-        System.out.println("Current int after changes: " + currentInt + "\n");
         return true;
     }
 
+    /**
+     * Method to Zoom out
+     *
+     * @param depth           Depth to be loaded
+     * @param selectedGenomes Genomes to display
+     */
     private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
             public void run() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = generateModel(currentRef, finalDepth + 1);
-                    System.out.println("    (THREAD): Done loading: " + (finalDepth + 1));
-                } else {
-                    System.out.println("    (THREAD): Not loading map: " + (finalDepth + 1));
                 }
             }
         }.run();
     }
 
+    /**
+     * Method to Zoom in
+     *
+     * @param depth           Depth to be loaded
+     * @param selectedGenomes Genomes to display
+     */
     private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
             public void run() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = generateModel(currentRef, finalDepth - 1);
-                    System.out.println("    (THREAD): Done loading: " + (finalDepth - 1));
 
-                } else {
-                    System.out.println("    (THREAD): Not loading map: " + (finalDepth - 1));
                 }
             }
         }.run();
     }
 
+    /**
+     * Method to generate a new model
+     *
+     * @param ref   reference object
+     * @param depth the depth of the model
+     * @return the new model
+     */
     private Model generateModel(Object ref, int depth) {
         //Create a new Model to return
         Model toret = new Model();
@@ -179,11 +183,6 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
-
-        //If the ref is null, we can automatically select one.
-        if (ref == null) {
-            //ref = root.getGenomes().get(0);
-        }
 
         if (currentGenomes.size() > 0) { //Draw selected references
             System.out.println("Only drawing selected");
@@ -210,13 +209,16 @@ public class Graph {
                             NodeType type = nodeMap.get(j).getType();
 
                             if (type == NodeType.BASE) {
-                                toret.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                                toret.addCell(to.getId(), to.getSequence(),
+                                        CellType.RECTANGLE);
 
                             } else if (type == NodeType.BUBBLE) {
-                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                toret.addCell(to.getId(),
+                                        Integer.toString(to.getCollapseLevel()),
                                         CellType.BUBBLE);
                             } else if (type == NodeType.INDEL) {
-                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                toret.addCell(to.getId(),
+                                        Integer.toString(to.getCollapseLevel()),
                                         CellType.INDEL);
                             } else if (type == NodeType.COLLECTION) {
                                 toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
@@ -224,10 +226,12 @@ public class Graph {
                             }
 
                             if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
                                         to.getGenomes()), EdgeType.GRAPH_REF);
                             } else {
-                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
                                         to.getGenomes()), EdgeType.GRAPH);
                             }
                         }
@@ -249,7 +253,8 @@ public class Graph {
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
 
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
+                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                            forEach(genomes::add);
                     //Add next cell
                     NodeType type = nodeMap.get(j).getType();
 
@@ -341,7 +346,7 @@ public class Graph {
     }
 
     /**
-     * Getter method for the genomens.
+     * Getter method for the genomes.
      *
      * @return the genomes.
      */
@@ -358,21 +363,37 @@ public class Graph {
         this.genomes = genomes;
     }
 
+    /**
+     * Get the current level
+     * @return the current level
+     */
     public int getCurrentInt() {
         return currentInt;
     }
 
+    /**
+     * Indicate which strains are selected in the phylogenetic tree
+     * @param s the selected strains
+     */
     public void phyloSelection(List<String> s) {
         currentGenomes = s;
         currentInt = -1;
         currentRef = null;
     }
 
+    /**
+     * Get the current highlighted strain
+     * @return the current highlighted strain
+     */
     public Object getCurrentRef() {
         return currentRef;
     }
 
-    public List<HashMap<Integer,Node>> getLevelMaps() {
+    /**
+     * Get the levelMaps
+     * @return the levelMaps
+     */
+    public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }
 }

@@ -75,6 +75,7 @@ public class GraphLayout extends CellLayout {
 
     /**
      * A method to place a Node's children and if need be, recursively their children.
+     *
      * @param cell - The parent node.
      */
     private void breadthFirstPlacing(Cell cell) {
@@ -203,5 +204,11 @@ public class GraphLayout extends CellLayout {
         this.cellCount = cellCount;
     }
 
-    public double getMaxWidth() { return maxWidth; }
+    /**
+     * Get the max width
+     * @return the max width
+     */
+    public double getMaxWidth() {
+        return maxWidth;
+    }
 }

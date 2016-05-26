@@ -43,7 +43,6 @@ public class Model {
     private GraphLayout graphLayout;
 
     private Rectangle2D screenSize;
-    private int maxWidth;
 
     /**
      * Class constructor.
@@ -51,8 +50,6 @@ public class Model {
     public Model() {
         graphParent = new RectangleCell(1, "");
         graphLayout = new GraphLayout(null, 0, 0);
-
-        this.maxWidth = 0;
 
         // clear model, create lists
         clear();
@@ -83,6 +80,11 @@ public class Model {
         addedEdges.clear();
     }
 
+    /**
+     * Method to get the layout of the graph.
+     *
+     * @return the layout
+     */
     public GraphLayout getGraphLayout() {
         return graphLayout;
     }
@@ -98,6 +100,7 @@ public class Model {
 
     /**
      * Retrieves the size of the levelMaps list.
+     *
      * @return the size of the levelMaps list.
      */
     public int getLevelMapsSize() {
@@ -296,7 +299,6 @@ public class Model {
                 (int) (screenSize.getHeight() - 25) / 2);
 
         graphLayout.execute();
-        maxWidth = (int) graphLayout.getMaxWidth();
     }
 
     /**
