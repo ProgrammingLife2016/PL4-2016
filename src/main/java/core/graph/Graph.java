@@ -43,7 +43,7 @@ public class Graph {
         InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         try {
             startMap = parser.readGFA(inputStream);
-            levelMaps = GraphReducer.createLevelMaps(startMap);
+            levelMaps = GraphReducer.createLevelMaps(startMap, 50);
             inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
