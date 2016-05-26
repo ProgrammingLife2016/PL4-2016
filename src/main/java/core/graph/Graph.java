@@ -226,12 +226,10 @@ public class Graph {
                         if (nodeMap.get(j).getGenomes().contains(ref)) {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                             int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                            System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
                             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                         } else {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                             int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                            System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
                             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         }
                     }
@@ -261,13 +259,10 @@ public class Graph {
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                         int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                        System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
                         toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                     } else {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                         int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                        System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
-
                         toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     }
                 }
