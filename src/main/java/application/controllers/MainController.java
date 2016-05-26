@@ -154,6 +154,7 @@ public class MainController extends Controller<BorderPane> {
         if (graphController == null) {
             try {
                 graph = new Graph();
+                currentView = graph.getLevelMaps().size()-1;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(0);

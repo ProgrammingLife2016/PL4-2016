@@ -64,6 +64,7 @@ public class Graph {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("poeop::: " + levelMaps.size());
     }
 
     /**
@@ -363,5 +364,9 @@ public class Graph {
 
     public Object getCurrentRef() {
         return currentRef;
+    }
+
+    public List<HashMap<Integer,Node>> getLevelMaps() {
+        return levelMaps;
     }
 }
