@@ -5,9 +5,9 @@ package application.fxobjects.cell.layout;
  */
 public abstract class CellLayout {
 
-	/**
-	 * Abstract lay-out setting method.
-	 */
+    /**
+     * Abstract lay-out setting method.
+     */
     public abstract void execute();
 
 }

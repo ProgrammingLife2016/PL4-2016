@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by Daphne van Tetering on 4-5-2016.
  */
 public class MenuFactory {
-    public static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
+    protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
@@ -61,7 +61,8 @@ public class MenuFactory {
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null, event ->
+        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph",
+                null, event ->
                 mainController.soloStrainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
         showSelectedStrains = initMenuItem("Show the selected strains in graph", null, event ->

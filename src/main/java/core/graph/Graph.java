@@ -87,6 +87,7 @@ public class Graph {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param selectedGenomes the genomes to display
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
@@ -183,11 +184,6 @@ public class Graph {
         //Root Node
         Node root = nodeMap.get(1);
 
-        //If the ref is null, we can automatically select one.
-        if (ref == null) {
-            //ref = root.getGenomes().get(0);
-        }
-
         if (currentGenomes.size() > 0) { //Draw selected references
             System.out.println("Only drawing selected");
             //We are now drawing only the selected items.
@@ -230,10 +226,12 @@ public class Graph {
                             }
 
                             if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
                                         to.getGenomes()), EdgeType.GRAPH_REF);
                             } else {
-                                toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
                                         to.getGenomes()), EdgeType.GRAPH);
                             }
                         }
@@ -255,7 +253,8 @@ public class Graph {
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
 
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
+                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                            forEach(genomes::add);
                     //Add next cell
                     NodeType type = nodeMap.get(j).getType();
 
@@ -364,20 +363,36 @@ public class Graph {
         this.genomes = genomes;
     }
 
+    /**
+     * Get the current level
+     * @return the current level
+     */
     public int getCurrentInt() {
         return currentInt;
     }
 
+    /**
+     * Indicate which strains are selected in the phylogenetic tree
+     * @param s the selected strains
+     */
     public void phyloSelection(List<String> s) {
         currentGenomes = s;
         currentInt = -1;
         currentRef = null;
     }
 
+    /**
+     * Get the current highlighted strain
+     * @return the current highlighted strain
+     */
     public Object getCurrentRef() {
         return currentRef;
     }
 
+    /**
+     * Get the levelMaps
+     * @return the levelMaps
+     */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }

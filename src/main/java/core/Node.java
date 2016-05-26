@@ -92,6 +92,10 @@ public class Node {
         this.links.add(link);
     }
 
+    /***
+     * Remove a link between two nodes
+     * @param link the link to be removed
+     */
     public void removeLink(int link) {
         this.links.remove(Integer.valueOf(link));
     }
@@ -130,6 +134,7 @@ public class Node {
 
     /**
      * Method to remove parent
+     *
      * @param parentId parent to be removed
      */
     public void removeParent(Integer parentId) {
@@ -138,6 +143,7 @@ public class Node {
 
     /**
      * Method to add parent
+     *
      * @param parentId parent to be added
      */
     public void addParent(Integer parentId) {
@@ -366,8 +372,9 @@ public class Node {
 
     /**
      * Check whether two nodes are equal
+     *
      * @param otherNode the node to compare
-     * @return
+     * @return whether the nodes are equal or not
      */
     public boolean equals(Node otherNode) {
         return otherNode.getId() == id;

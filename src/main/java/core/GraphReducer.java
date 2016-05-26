@@ -52,7 +52,7 @@ public final class GraphReducer {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 
-        for (int i = 1;; i++) {
+        for (int i = 1; ; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
@@ -69,7 +69,8 @@ public final class GraphReducer {
 
     /**
      * Copy all values of a given node map.
-     *ff
+     * ff
+     *
      * @param map A node map to be copied.
      * @return A copied node map.
      */
@@ -94,13 +95,14 @@ public final class GraphReducer {
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
      * @param map A HashMap containing all nodes in the graph.
+     * @param zoomLevel The current zoomLevel
      * @return A collapsed map.
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map, int zoomLevel) {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx <  startMapSize; idx++) {
+        for (int idx = 1; idx < startMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -135,7 +137,6 @@ public final class GraphReducer {
         if (childrenIds.size() != 1) {
             return false;
         }
-
 
 
         //Retrieve the single child of the node.
@@ -193,10 +194,15 @@ public final class GraphReducer {
         nodeMap.remove(child.getId());
 
 
-
         return true;
     }
 
+    /**
+     * Collapse a complex insertion or deletion
+     * @param nodeMap the NodeMap were currently at
+     * @param parent the parent of the inDel to collapse
+     * @return
+     */
     public static Boolean
     collapseComplexIndel(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
@@ -209,7 +215,6 @@ public final class GraphReducer {
             Node child = nodeMap.get(children.get(i));
             //Find children that have one child and one parent
             if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
-                System.out.println("if reached, id:" + child.getId());
                 int grandChildId = child.getLinks().get(0);
                 //Check whether the node has another child as its own child.
                 if (children.contains(grandChildId)) {
@@ -219,7 +224,7 @@ public final class GraphReducer {
                     child.setType(NodeType.INDEL);
                     child.setSequence("");
                     child.unionGenomes(nodeMap.get(grandChildId));
-                    child.setCollapseLevel(child.getCollapseLevel()+1);
+                    child.setCollapseLevel(child.getCollapseLevel() + 1);
                     return true;
                 }
             }
@@ -271,7 +276,7 @@ public final class GraphReducer {
 
             return true;
 
-        // Child 2 is inserted
+            // Child 2 is inserted
         } else if (child2ChildrenIds.size() == 1 && child2ChildrenIds.contains(child1.getId())) {
             if (nodeMap.get(child2.getId()).getParents(nodeMap).size() != 1) {
                 return false;
@@ -292,6 +297,12 @@ public final class GraphReducer {
         return false;
     }
 
+    /**
+     * Collapse a complex bubble
+     * @param nodeMap the nodeMap were currently at
+     * @param parent the parent of the to collapse bubble
+     * @return
+     */
     public static Boolean complexBubbleCollapse(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
         List<Node> bubbleChildren = new ArrayList<>();
@@ -302,7 +313,8 @@ public final class GraphReducer {
         // Add all children that have one child and one parent to the list of potential bubble nodes.
         for (int i = 0; i < children.size(); i++) {
             Node child = nodeMap.get(children.get(i));
-            if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
+            if (child.getLinks(nodeMap).size() == 1 &&
+                    child.getParents(nodeMap).size() == 1) {
                 bubbleChildren.add(child);
             }
         }
@@ -311,7 +323,7 @@ public final class GraphReducer {
             Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
             List<Node> bubble = new ArrayList<Node>();
             bubble.add(child);
-            for (Node otherChild : bubbleChildren ) {
+            for (Node otherChild : bubbleChildren) {
                 if (!otherChild.equals(child) && otherChild != null) {
                     if (grandChild.equals(nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
                         bubble.add(otherChild);
@@ -500,6 +512,7 @@ public final class GraphReducer {
 
     /**
      * Set the start map size.
+     *
      * @param startMapSize The start map sie.
      */
     public static void setStartMapSize(int startMapSize) {
@@ -508,6 +521,7 @@ public final class GraphReducer {
 
     /**
      * Get the level maps.
+     *
      * @return The level maps.
      */
     public static List<HashMap<Integer, Node>> getLevelMaps() {
@@ -516,6 +530,7 @@ public final class GraphReducer {
 
     /**
      * Set the level maps.
+     *
      * @param levelMaps The level maps.
      */
     public static void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {

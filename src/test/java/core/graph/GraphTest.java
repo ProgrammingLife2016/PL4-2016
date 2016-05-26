@@ -61,7 +61,7 @@ public class GraphTest {
     @Test
     public void testGetNodeMapFromFile() {
 //        try {
-            //HashMap<Integer, Node> nodeMap = g.getNodeMapFromFile();
+        //HashMap<Integer, Node> nodeMap = g.getNodeMapFromFile();
 //            assertNotEquals(0, nodeMap.size());
 //        } catch (IOException e) {
 //            e.printStackTrace();

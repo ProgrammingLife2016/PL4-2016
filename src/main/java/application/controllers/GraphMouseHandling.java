@@ -29,7 +29,7 @@ class GraphMouseHandling {
 
         mainController.modifyNodeInfo(info);
     };
-    
+
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
         Node node = (Node) event.getSource();
 

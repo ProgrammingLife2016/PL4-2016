@@ -22,6 +22,7 @@ public final class MetaParser {
     protected MetaParser() {
         throw new UnsupportedOperationException();
     }
+
     /**
      * Parses needed MetaData into a Treemap.
      * <p>
@@ -46,14 +47,11 @@ public final class MetaParser {
                 if (row.getCell(0) != null && row.getCell(0).getStringCellValue().contains("TKK")) {
                     if (row.getCell(23).getStringCellValue().equals("unknown")) {
                         map.put(row.getCell(0).getStringCellValue(), 0);
-                    }
-                    else if (row.getCell(23).getStringCellValue().equals("LIN animal")) {
+                    } else if (row.getCell(23).getStringCellValue().equals("LIN animal")) {
                         map.put(row.getCell(0).getStringCellValue(), 8);
-                    }
-                    else if (row.getCell(23).getStringCellValue().equals("LIN B")) {
+                    } else if (row.getCell(23).getStringCellValue().equals("LIN B")) {
                         map.put(row.getCell(0).getStringCellValue(), 9);
-                    }
-                    else if (row.getCell(23).getStringCellValue().equals("LIN CANETTII")) {
+                    } else if (row.getCell(23).getStringCellValue().equals("LIN CANETTII")) {
                         map.put(row.getCell(0).getStringCellValue(), 10);
                     } else {
                         map.put(row.getCell(0).getStringCellValue(),

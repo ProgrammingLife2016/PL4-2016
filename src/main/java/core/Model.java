@@ -82,6 +82,7 @@ public class Model {
 
     /**
      * Method to get the layout of the graph.
+     *
      * @return the layout
      */
     public GraphLayout getGraphLayout() {
@@ -99,6 +100,7 @@ public class Model {
 
     /**
      * Retrieves the size of the levelMaps list.
+     *
      * @return the size of the levelMaps list.
      */
     public int getLevelMapsSize() {

@@ -17,7 +17,8 @@ public class CollectionCell extends Cell {
 
     /**
      * Bubble cell constructor.
-     * @param id The ID of a cell.
+     *
+     * @param id            The ID of a cell.
      * @param collapseLevel The collapse level of a cell.
      */
     public CollectionCell(int id, String collapseLevel) {
@@ -35,6 +36,7 @@ public class CollectionCell extends Cell {
 
     /**
      * Return the type of the Cell.
+     *
      * @return the type of the Cell.
      */
     public CellType getType() {
@@ -43,6 +45,7 @@ public class CollectionCell extends Cell {
 
     /**
      * Return the Cell's text.
+     *
      * @return the Cell's text.
      */
     public Text getText() {

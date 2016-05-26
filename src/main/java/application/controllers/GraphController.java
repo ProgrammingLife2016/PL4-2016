@@ -37,11 +37,11 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param g     the graph.
-     * @param ref   the reference string.
-     * @param m     the mainController.
-     * @param depth the depth to draw.
-     * @param selectedGenomes  the genomes to display.
+     * @param g               the graph.
+     * @param ref             the reference string.
+     * @param m               the mainController.
+     * @param depth           the depth to draw.
+     * @param selectedGenomes the genomes to display.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(Graph g, Object ref, MainController m, int depth,
@@ -96,8 +96,8 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref   the reference string.
-     * @param depth the depth to draw.
+     * @param ref             the reference string.
+     * @param depth           the depth to draw.
      * @param selectedGenomes the genomes to be selected.
      * @throws IOException Throw exception on read GFA read failure.
      */
@@ -120,8 +120,7 @@ public class GraphController extends Controller<ScrollPane> {
         if (graph.getModel().getAllCells().size() > 0) {
             root.getChildren().addAll(graph.getModel().getAllEdges());
             root.getChildren().addAll(graph.getModel().getAllCells());
-        }
-        else {
+        } else {
             root.getChildren().addAll(graph.getModel().getAddedEdges());
             root.getChildren().addAll(graph.getModel().getAddedCells());
         }
@@ -168,6 +167,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method take a snapshot of the current graph.
+     *
      * @return A snapshot taken of the graph.
      * @throws IOException Throw exception on write failure.
      */
