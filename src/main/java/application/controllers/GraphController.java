@@ -3,7 +3,6 @@ package application.controllers;
 import application.fxobjects.cell.Cell;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
@@ -12,9 +11,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
-
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -44,9 +40,11 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param m     the mainController.
      * @param depth the depth to draw.
+     * @param selectedGenomes genomes to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref, MainController m, int depth, List<String> selectedGenomes) {
+    public GraphController(Graph g, Object ref, MainController m, int depth,
+                           List<String> selectedGenomes) {
         super(new ScrollPane());
         this.graph = g;
         this.screenSize = Screen.getPrimary().getVisualBounds();
@@ -99,10 +97,11 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param selectedGenomes the genomes to draw.
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
-        if(ref != graph.getCurrentRef()) {
+        if (ref != graph.getCurrentRef()) {
             System.out.println("New reference, Removed children, depth: " + depth);
             root.getChildren().clear();
         }
@@ -113,7 +112,7 @@ public class GraphController extends Controller<ScrollPane> {
             System.out.println("Remove all children, received depth: " + depth);
         }
 
-        graph.addGraphComponents(ref, depth, selectedGenomes );
+        graph.addGraphComponents(ref, depth, selectedGenomes);
 
         // add components to graph pane
         root.getChildren().addAll(graph.getModel().getAddedEdges());
@@ -129,8 +128,6 @@ public class GraphController extends Controller<ScrollPane> {
 
 
         this.getRoot().setContent(root);
-
-        //this.snapshot = takeSnapshot();
     }
 
     /**
@@ -138,10 +135,6 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void initKeyHandler() {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
-    }
-
-    public Image getImage() {
-        return snapshot;
     }
 
     /**
@@ -156,20 +149,14 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Method take a snapshot of the current graph.
      *
+     * @return the taken snapshot
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
-//        System.out.println("SNAP");
-//        System.out.println(graph.getModel().getMaxWidth());
         WritableImage image = new WritableImage(1920, (int) screenSize.getHeight());
 
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
-
-//        System.out.println("screen width: " + screenSize.getWidth());
-//        System.out.println("screen height: " + screenSize.getHeight());
-//        File output = new File("snapshot.png");
-//        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
 
         return snapshot;
     }
