@@ -217,7 +217,6 @@ public class Graph {
                             } else if (type == NodeType.INDEL) {
                                 toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
                                         CellType.INDEL);
-                                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
                             }
 
                             if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
@@ -268,7 +267,6 @@ public class Graph {
                     } else {
                         toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
                                 to.getGenomes()), EdgeType.GRAPH);
-                        //current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                     }
                 }
             }
