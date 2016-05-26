@@ -44,10 +44,11 @@ public final class GraphReducer {
      * Perform collapsing on multiple level of nodes.
      *
      * @param startMap An uncollapsed node map.
+     * @param minDelta The minimum reduction necessary to continue the reducing.
      * @return A list of node maps with a decreasing amount of nodes.
      */
     public static List<HashMap<Integer, Node>>
-    createLevelMaps(HashMap<Integer, Node> startMap) {
+    createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 
@@ -63,7 +64,7 @@ public final class GraphReducer {
 
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) <= 0) {
+            if ((previousMapSize - currentMapSize) <= minDelta) {
                 return levelMaps;
             }
         }

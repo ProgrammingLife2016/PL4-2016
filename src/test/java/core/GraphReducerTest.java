@@ -356,7 +356,7 @@ public class GraphReducerTest {
         nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
 
         GraphReducer.setLevelMaps(new ArrayList<>());
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap);
+        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap, 0);
 
         assertNull(levelMaps.get(1).get(4));
         assertNull(levelMaps.get(2).get(3));
