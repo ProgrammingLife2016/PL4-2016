@@ -135,7 +135,7 @@ public class Graph {
         }
 
         currentInt = depth;
-        System.out.println("Current int after changes: " + currentInt);
+        System.out.println("Current int after changes: " + currentInt + "\n");
         return true;
     }
 

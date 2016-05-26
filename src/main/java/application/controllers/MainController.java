@@ -291,7 +291,7 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.max(0, currentView);
 
         currentView = Math.min(9, currentView);
-        fillGraph(null, new ArrayList<>());
+        fillGraph(graphController.getGraph().getCurrentRef(), new ArrayList<>());
 
     }
 
