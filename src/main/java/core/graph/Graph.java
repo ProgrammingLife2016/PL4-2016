@@ -75,7 +75,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
         Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+        InputStream inputStream = getClass().getResourceAsStream("/TB328.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
         inputStream.close();
 
@@ -225,12 +225,14 @@ public class Graph {
                     if (intersection(to.getGenomes(), currentGenomes) > 0) {
                         if (nodeMap.get(j).getGenomes().contains(ref)) {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                    to.getGenomes()), EdgeType.GRAPH_REF);
+                            int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                            System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
+                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                         } else {
                             toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                    to.getGenomes()), EdgeType.GRAPH);
+                            int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                            System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
+                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         }
                     }
                 }
@@ -258,12 +260,15 @@ public class Graph {
                     //Add next cell
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                to.getGenomes()), EdgeType.GRAPH_REF);
+                        int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                        System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
+                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                     } else {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                to.getGenomes()), EdgeType.GRAPH);
+                        int width = (int) Math.round(10 * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
+                        System.out.println(width + "=  10 * " + intersection(from.getGenomes(),to.getGenomes()) + " / " + genomes.size() + " afgerond");
+
+                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     }
                 }
             }
