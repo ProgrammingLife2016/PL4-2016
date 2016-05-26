@@ -39,6 +39,7 @@ public class Model {
     private List<HashMap<Integer, Node>> levelMaps;
 
     private Tree tree;
+    private GraphLayout graphLayout;
 
     private Rectangle2D screenSize;
     private int maxWidth;
@@ -48,6 +49,7 @@ public class Model {
      */
     public Model() {
         graphParent = new RectangleCell(1, "");
+        graphLayout = new GraphLayout(null, 0, 0);
 
         this.maxWidth = 0;
 
@@ -78,6 +80,10 @@ public class Model {
     public void clearAddedLists() {
         addedCells.clear();
         addedEdges.clear();
+    }
+
+    public GraphLayout getGraphLayout() {
+        return graphLayout;
     }
 
     /**
@@ -196,6 +202,7 @@ public class Model {
         return false;
     }
 
+
     /**
      * Return a list of level maps.
      *
@@ -280,11 +287,11 @@ public class Model {
      */
     public void setLayout() {
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        GraphLayout layout = new GraphLayout(this, 20,
+        this.graphLayout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
 
-        layout.execute();
-        maxWidth = (int) layout.getMaxWidth();
+        graphLayout.execute();
+        maxWidth = (int) graphLayout.getMaxWidth();
     }
 
     /**
