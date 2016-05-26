@@ -55,6 +55,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter method for the current view level.
+     *
      * @return the current view level.
      */
     public int getCurrentView() {
@@ -149,22 +150,18 @@ public class MainController extends Controller<BorderPane> {
      * @param ref the reference string.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
+        Graph graph = null;
         if (graphController == null) {
-            Graph graph = null;
             try {
                 graph = new Graph();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(0);
             }
-            graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
         } else {
-            try {
-                graphController.init(ref, currentView, selectedGenomes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            graph = graphController.getGraph();
         }
+        graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
