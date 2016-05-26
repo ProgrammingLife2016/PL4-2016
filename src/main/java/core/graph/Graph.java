@@ -80,6 +80,8 @@ public class Graph {
         current = new Model();
         current.setLevelMaps(levelMaps);
 
+        int nodeIds = levelMaps.get(0).size();
+
 
         if (depth > levelMaps.size() - 1) {
             depth = levelMaps.size() - 1;
@@ -103,7 +105,7 @@ public class Graph {
         genomes = new ArrayList<>();
         genomes.addAll(root.getGenomes());
         //current.clearCellMap();
-        for (int i : nodeMap.keySet()) {
+        for (int i = 1; i <  nodeIds; i++) {
             Node from = nodeMap.get(i);
             if (from == null) {
                 continue;

@@ -14,6 +14,7 @@ public final class GraphReducer {
     }
 
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
+    private static int nodeIds = 0;
 
     /**
      * Give all nodes a list of its parents.
@@ -48,6 +49,7 @@ public final class GraphReducer {
     public static List<HashMap<Integer, Node>>
     createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
+        nodeIds = startMap.size();
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
@@ -102,7 +104,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx : map.keySet()) {
+        for (int idx = 1; idx <  nodeIds; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
