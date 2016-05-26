@@ -130,7 +130,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().setContent(root);
 
-        this.snapshot = takeSnapshot();
+        //this.snapshot = takeSnapshot();
     }
 
     /**
@@ -159,17 +159,17 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
-        System.out.println("SNAP");
-        System.out.println(graph.getModel().getMaxWidth());
+//        System.out.println("SNAP");
+//        System.out.println(graph.getModel().getMaxWidth());
         WritableImage image = new WritableImage(1920, (int) screenSize.getHeight());
 
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
 
-        System.out.println("screen width: " + screenSize.getWidth());
-        System.out.println("screen height: " + screenSize.getHeight());
-        File output = new File("snapshot.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+//        System.out.println("screen width: " + screenSize.getWidth());
+//        System.out.println("screen height: " + screenSize.getHeight());
+//        File output = new File("snapshot.png");
+//        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
 
         return snapshot;
     }
