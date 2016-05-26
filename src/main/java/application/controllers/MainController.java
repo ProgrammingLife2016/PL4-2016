@@ -1,18 +1,15 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.*;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
@@ -136,6 +133,36 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
+     * Create a legend info panel that shows the meaning of different types of cells.
+     * @return A legend panel.
+     */
+    private Pane createLegend() {
+        Label label = new Label("Legend");
+        label.setFont(new Font("Arial", 20));
+
+        final VBox col1 = new VBox();
+        col1.getChildren().add(new RectangleCell(0, ""));
+        col1.getChildren().add(new BubbleCell(0, "N"));
+        col1.getChildren().add(new IndelCell(0, "N"));
+        col1.getChildren().add(new CollectionCell(0, "N"));
+
+        final VBox col2 = new VBox();
+        col2.getChildren().add(new Text("  -  Basic Node"));
+        col2.getChildren().add(new Text("  -  Bubble Node"));
+        col2.getChildren().add(new Text("  -  Indel Node"));
+        col2.getChildren().add(new Text("  -  Collection Node"));
+
+        final VBox col3 = new VBox();
+        col3.getChildren().add(new Text(""));
+        col3.getChildren().add(new Text("  -  Contains N other nodes"));
+        col3.getChildren().add(new Text("  -  Contains N other nodes"));
+        col3.getChildren().add(new Text("  -  Contains N (horizontally collapsed) nodes"));
+
+        return new StackPane(new HBox(col1, col2, col3));
+    }
+
+
+    /**
      * Modify the information of the Node.
      *
      * @param id desired info.
@@ -173,8 +200,11 @@ public class MainController extends Controller<BorderPane> {
         }
 
         graphController.getZoomController().createZoomBox();
+
+        HBox bottomHBox = new HBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
+        bottomHBox.getChildren().addAll(zoombox, createLegend());
+        this.getRoot().setBottom(bottomHBox);
 
         graphController.initKeyHandler();
 
@@ -202,8 +232,11 @@ public class MainController extends Controller<BorderPane> {
         System.out.println("Selected " + s.get(0) + "as a ref, drawing everything.");
 
         graphController.getZoomController().createZoomBox();
+
+        HBox bottomHBox = new HBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
+        bottomHBox.getChildren().addAll(zoombox, createLegend());
+        this.getRoot().setBottom(bottomHBox);
 
         graphController.initKeyHandler();
 
@@ -246,8 +279,11 @@ public class MainController extends Controller<BorderPane> {
         }
 
         graphController.getZoomController().createZoomBox();
+
+        HBox bottomHBox = new HBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
+        bottomHBox.getChildren().addAll(zoombox, createLegend());
+        this.getRoot().setBottom(bottomHBox);
 
         graphController.initKeyHandler();
 
