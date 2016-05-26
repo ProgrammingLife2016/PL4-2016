@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -62,10 +61,13 @@ public class MenuFactory {
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null, event ->
-                mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes()));
+        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph", null,
+                event ->
+                mainController.soloStrainSelection(mainController.getTreeController()
+                        .getSelectedGenomes()));
         showSelectedStrains = initMenuItem("Show the selected strains in graph", null, event ->
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
+                mainController.strainSelection(mainController.getTreeController()
+                        .getSelectedGenomes()));
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
                 mainController.switchScene(+1));
         MenuItem zoomIn = initMenuItem("Zoom in", null, event ->

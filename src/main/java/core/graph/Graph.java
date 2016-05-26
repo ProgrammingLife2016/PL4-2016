@@ -51,6 +51,7 @@ public class Graph {
 
     /**
      * Class constructor.
+     * @throws IOException
      */
     public Graph() throws IOException {
         zoomIn = new Model();
@@ -86,6 +87,7 @@ public class Graph {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param selectedGenomes the genomes to be shown
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
@@ -94,7 +96,8 @@ public class Graph {
             throws IOException {
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-            System.out.println("Trying to draw: " + depth + " Ref: " + ref + " Selected Genomes: " + selectedGenomes.toString());
+            System.out.println("Trying to draw: " + depth + " Ref: " + ref + " Selected Genomes: " +
+                    selectedGenomes.toString());
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
@@ -118,9 +121,9 @@ public class Graph {
                     current = zoomOut;
                     loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
-                } else if (ref != currentRef){
+                } else if (ref != currentRef) {
                     currentRef = ref;
-                    System.out.println("Found a new ref: "+ ref);
+                    System.out.println("Found a new ref: " + ref);
                     current = generateModel(ref, depth, selectedGenomes);
 
                     //LoadOneUp is only needed when we do not start on the top level.
@@ -133,6 +136,11 @@ public class Graph {
         return true;
     }
 
+    /**
+     * Method to visualize zooming out
+     * @param depth the current depth
+     * @param selectedGenomes the genomes to be displayed
+     */
     private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
@@ -149,6 +157,11 @@ public class Graph {
         }.run();
     }
 
+    /**
+     * Method to visualize zooming in
+     * @param depth the current depth
+     * @param selectedGenomes the genomes to be displayed
+     */
     private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
@@ -166,6 +179,13 @@ public class Graph {
         }.run();
     }
 
+    /**
+     * Generate a new model
+     * @param ref the reference object
+     * @param depth the current depth
+     * @param selectedGenomes the genomes to be displayed
+     * @return the new model
+     */
     private Model generateModel(Object ref, int depth, List<String> selectedGenomes) {
         //Create a new Model to return
         Model toret = new Model();
@@ -177,9 +197,9 @@ public class Graph {
         Node root = nodeMap.get(1);
 
         //If the ref is null, we can automatically select one.
-        if (ref == null) {
-            //ref = root.getGenomes().get(0);
-        }
+//        if (ref == null) {
+//            //ref = root.getGenomes().get(0);
+//        }
 
         if (currentGenomes.size() > 0) { //Draw selected references
             System.out.println("Only drawing selected");
@@ -233,7 +253,8 @@ public class Graph {
 
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
+                    to.getGenomes().stream().filter(s -> !genomes.contains(s))
+                            .forEach(genomes::add);
                     //Add next cell
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
@@ -310,7 +331,7 @@ public class Graph {
     }
 
     /**
-     * Getter method for the genomens.
+     * Getter method for the genomes.
      *
      * @return the genomes.
      */
@@ -327,16 +348,29 @@ public class Graph {
         this.genomes = genomes;
     }
 
+    /**
+     *
+     * Get the current depth
+     * @return the current depth
+     */
     public int getCurrentInt() {
         return currentInt;
     }
 
+    /**
+     * Select the right path in the phylogenetic tree
+     * @param s the genomes to select
+     */
     public void phyloSelection(List<String> s) {
         currentGenomes = s;
         currentInt = -1;
         currentRef = null;
     }
 
+    /**
+     * Get current reference strain
+     * @return the current reference strain
+     */
     public Object getCurrentRef() {
         return currentRef;
     }
