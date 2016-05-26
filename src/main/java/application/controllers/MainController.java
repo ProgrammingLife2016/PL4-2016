@@ -6,6 +6,7 @@ import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -203,13 +204,7 @@ public class MainController extends Controller<BorderPane> {
             e.printStackTrace();
         }
 
-        graphController.getZoomController().createZoomBox();
-
-        HBox bottomHBox = new HBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        bottomHBox.getChildren().addAll(zoombox, createLegend());
-        this.getRoot().setBottom(bottomHBox);
-
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -232,13 +227,7 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
 
-        graphController.getZoomController().createZoomBox();
-
-        HBox bottomHBox = new HBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        bottomHBox.getChildren().addAll(zoombox, createLegend());
-        this.getRoot().setBottom(bottomHBox);
-
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -280,13 +269,8 @@ public class MainController extends Controller<BorderPane> {
             e.printStackTrace();
         }
 
-        graphController.getZoomController().createZoomBox();
 
-        HBox bottomHBox = new HBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        bottomHBox.getChildren().addAll(zoombox, createLegend());
-        this.getRoot().setBottom(bottomHBox);
-
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -296,6 +280,22 @@ public class MainController extends Controller<BorderPane> {
         list.setItems(FXCollections.observableArrayList(genomes));
 
         showListVBox();
+    }
+
+    /**
+     * Create the HBox containing the zoom box and legend.
+     */
+    private void createZoomBoxAndLegend() {
+        graphController.getZoomController().createZoomBox();
+
+        HBox hbox = new HBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        StackPane legend = new StackPane(createLegend());
+        legend.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setAlignment(Pos.CENTER);
+
+        hbox.getChildren().addAll(zoombox, legend);
+        this.getRoot().setBottom(hbox);
     }
 
     /**
