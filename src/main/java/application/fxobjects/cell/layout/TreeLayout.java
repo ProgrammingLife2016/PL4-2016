@@ -80,8 +80,8 @@ public class TreeLayout extends CellLayout {
     /**
      * Convert a TreeNode to its corresponding Cell.
      *
-     * @param treeNode  A TreeNode to get its Cell from.
-     * @return  The Cell matching the given TreeNode.
+     * @param treeNode A TreeNode to get its Cell from.
+     * @return The Cell matching the given TreeNode.
      */
     private Cell treeNodeToCell(TreeNode treeNode) {
         int id = treeNode.getKey();
@@ -97,14 +97,22 @@ public class TreeLayout extends CellLayout {
         for (Cell parentCell : internalUndrawnCells.values()) {
             TreeNode parentNode = model.getTree().getNodeByKey(parentCell.getCellId());
 
-            if (parentNode == null) { continue; }
-            if (parentNode.numberChildren() != 2) { continue; }
+            if (parentNode == null) {
+                continue;
+            }
+            if (parentNode.numberChildren() != 2) {
+                continue;
+            }
 
             Cell childCell1 = treeNodeToCell(parentNode.getChild(0));
             Cell childCell2 = treeNodeToCell(parentNode.getChild(1));
 
-            if (!drawnCells.containsValue(childCell1)) { continue; }
-            if (!drawnCells.containsValue(childCell2)) { continue; }
+            if (!drawnCells.containsValue(childCell1)) {
+                continue;
+            }
+            if (!drawnCells.containsValue(childCell2)) {
+                continue;
+            }
 
             processParent(parentCell, childCell1, childCell2);
         }
@@ -113,9 +121,9 @@ public class TreeLayout extends CellLayout {
     /**
      * Relocate the parent and add the edges from the parent to the two leaves.
      *
-     * @param parent    A given parent cell.
-     * @param child1    Child cell 1 of the parent.
-     * @param child2    Child cell 2 of the parent.
+     * @param parent A given parent cell.
+     * @param child1 Child cell 1 of the parent.
+     * @param child2 Child cell 2 of the parent.
      */
     private void processParent(Cell parent, Cell child1, Cell child2) {
         int parentX = (int) Math.min(child1.getLayoutX(), child2.getLayoutX()) - offset;
@@ -130,9 +138,9 @@ public class TreeLayout extends CellLayout {
      * Draw perpendicular lines between a parent node and its children by inserting
      * two invisible helper middle cells.
      *
-     * @param parent    A given parent cell.
-     * @param child1    Child cell 1 of the parent.
-     * @param child2    Child cell 2 of the parent.
+     * @param parent A given parent cell.
+     * @param child1 Child cell 1 of the parent.
+     * @param child2 Child cell 2 of the parent.
      */
     private void drawPerpendicularEdges(Cell parent, Cell child1, Cell child2) {
         Cell upperCorner = new MiddleCell(model.getAddedCells().size());
@@ -153,9 +161,9 @@ public class TreeLayout extends CellLayout {
     /**
      * Relocate a cell and mark it as 'drawn'.
      *
-     * @param cell  The cell to relocate.
-     * @param x The new X coordinate of the cell.
-     * @param y The new Y coordinate of the cell.
+     * @param cell The cell to relocate.
+     * @param x    The new X coordinate of the cell.
+     * @param y    The new Y coordinate of the cell.
      */
     private void relocateCell(Cell cell, int x, int y) {
         cell.relocate(x, y);

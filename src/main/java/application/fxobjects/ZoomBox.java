@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 
 /**
@@ -35,6 +36,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Class constructor.
+     *
      * @param g the GraphController currently active
      */
     public ZoomBox(GraphController g) {
@@ -88,18 +90,6 @@ public class ZoomBox extends ScrollPane {
 
         zoomRectBorder.setFill(pattern);
 
-//        String snapshot = "/snapshot.png";
-//        FileInputStream stream = null;
-//        try {
-//             stream = new FileInputStream(snapshot);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Image image = new Image(stream);
-//        ImagePattern pattern = new ImagePattern(image);
-
-//        zoomRectBorder.setFill(pattern);
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
@@ -117,6 +107,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Getter for the KeyHandler
+     *
      * @return the KeyHandler
      */
     public KeyHandler getKeyHandler() {

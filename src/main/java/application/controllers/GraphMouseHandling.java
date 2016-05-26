@@ -29,12 +29,12 @@ class GraphMouseHandling {
 
         mainController.modifyNodeInfo(info);
     };
-    
+
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
         Node node = (Node) event.getSource();
 
-        double offsetX = event.getSceneX();
-        double offsetY = event.getSceneY();
+        double offsetX = event.getX() + node.getLayoutX();
+        double offsetY = event.getY() + node.getLayoutY();
 
         event.getSceneX();
         node.relocate(offsetX, offsetY);

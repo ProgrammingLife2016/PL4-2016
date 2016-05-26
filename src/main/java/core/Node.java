@@ -1,5 +1,7 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.List;
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
+@SuppressFBWarnings("HE_EQUALS_USE_HASHCODE")
 public class Node {
 
     /**
@@ -66,10 +70,10 @@ public class Node {
     /**
      * Node constructor.
      *
-     * @param id  - Node identifier.
+     * @param id   - Node identifier.
      * @param type - The type of node.
-     * @param seq - Actual nucleic acid sequence contents of the node.
-     * @param z   - The 'depth' of the node in the genome.
+     * @param seq  - Actual nucleic acid sequence contents of the node.
+     * @param z    - The 'depth' of the node in the genome.
      */
     public Node(int id, NodeType type, String seq, int z) {
         this.id = id;
@@ -92,6 +96,14 @@ public class Node {
         this.links.add(link);
     }
 
+    /***
+     * Remove a link between two nodes
+     * @param link the link to be removed
+     */
+    public void removeLink(int link) {
+        this.links.remove(Integer.valueOf(link));
+    }
+
     /**
      * Add a parent node's Id which links this node.
      *
@@ -103,6 +115,7 @@ public class Node {
 
     /**
      * Add a genome to the node
+     *
      * @param node the node of which genomes should be unioned.
      */
     public void unionGenomes(Node node) {
@@ -123,10 +136,20 @@ public class Node {
     }
 
 
+    /**
+     * Method to remove parent
+     *
+     * @param parentId parent to be removed
+     */
     public void removeParent(Integer parentId) {
         parents.remove(parentId);
     }
 
+    /**
+     * Method to add parent
+     *
+     * @param parentId parent to be added
+     */
     public void addParent(Integer parentId) {
         parents.add(parentId);
     }
@@ -192,6 +215,7 @@ public class Node {
 
     /**
      * Get the node id.
+     *
      * @return The node id.
      */
     public int getId() {
@@ -200,6 +224,7 @@ public class Node {
 
     /**
      * Set the node id.
+     *
      * @param id The node id.
      */
     public void setId(int id) {
@@ -208,6 +233,7 @@ public class Node {
 
     /**
      * Get the node type.
+     *
      * @return The node type.
      */
     public NodeType getType() {
@@ -216,6 +242,7 @@ public class Node {
 
     /**
      * Set the node type.
+     *
      * @param type The node type.
      */
     public void setType(NodeType type) {
@@ -224,6 +251,7 @@ public class Node {
 
     /**
      * Get the nucleotide sequence.
+     *
      * @return The nucleotide sequence.
      */
     public String getSequence() {
@@ -232,6 +260,7 @@ public class Node {
 
     /**
      * Set the nucleotide sequence.
+     *
      * @param sequence The nucleotide sequence.
      */
     public void setSequence(String sequence) {
@@ -240,6 +269,7 @@ public class Node {
 
     /**
      * Get the collapse level.
+     *
      * @return The collapse level.
      */
     public int getCollapseLevel() {
@@ -248,6 +278,7 @@ public class Node {
 
     /**
      * Increment the collapse level.
+     *
      * @param collapseLevel The number to be added to the collapse level.
      */
     public void setCollapseLevel(int collapseLevel) {
@@ -256,7 +287,8 @@ public class Node {
 
     /**
      * Get the zIndex.
-      * @return The zIndex.
+     *
+     * @return The zIndex.
      */
     public int getzIndex() {
         return zIndex;
@@ -264,6 +296,7 @@ public class Node {
 
     /**
      * Set the zIndex.
+     *
      * @param zIndex The zIndex.
      */
     public void setzIndex(int zIndex) {
@@ -272,6 +305,7 @@ public class Node {
 
     /**
      * Get the node's children.
+     *
      * @return The node's children.
      */
     public List<Integer> getLinks() {
@@ -280,6 +314,7 @@ public class Node {
 
     /**
      * Set the node's children.
+     *
      * @param links The node's children.
      */
     public void setLinks(List<Integer> links) {
@@ -288,6 +323,7 @@ public class Node {
 
     /**
      * Get the node's parents.
+     *
      * @return The node's parents.
      */
     public List<Integer> getParents() {
@@ -296,6 +332,7 @@ public class Node {
 
     /**
      * Set the node's parents.
+     *
      * @param parents The node's parents.
      */
     public void setParents(List<Integer> parents) {
@@ -304,6 +341,7 @@ public class Node {
 
     /**
      * Returns the genomes as a list.
+     *
      * @return the genomes.
      */
     public List<String> getGenomes() {
@@ -312,6 +350,7 @@ public class Node {
 
     /**
      * Returns the genomes as a string.
+     *
      * @return the String.
      */
     public String getGenomesAsString() {
@@ -327,17 +366,24 @@ public class Node {
 
     /**
      * Sets the genomes through the node.
+     *
      * @param genomes The genomes through the node.
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }
 
-    public boolean equals(Node otherNode) {
-        if (otherNode.getId() == id) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
-        } else {
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
+        return id == ((Node) o).id;
+
     }
+
 }

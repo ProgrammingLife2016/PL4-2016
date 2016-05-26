@@ -35,7 +35,7 @@ public class MainController extends Controller<BorderPane> {
     private VBox listVBox;
     private Text id;
     private ScrollPane infoScroller;
-    private int currentView = 0;
+    private int currentView;
     private GraphController graphController;
     private TreeController treeController;
     Rectangle2D screenSize;
@@ -47,6 +47,7 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
 
         loadFXMLfile("/fxml/main.fxml");
+        fillGraph(null, new ArrayList<>());
     }
 
 
@@ -174,13 +175,15 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to fill the graph.
      *
-     * @param ref the reference string.
+     * @param ref             the reference string.
+     * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
         Graph graph = null;
         if (graphController == null) {
             try {
                 graph = new Graph();
+                currentView = graph.getLevelMaps().size() - 1;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(0);
@@ -188,6 +191,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             graph = graphController.getGraph();
         }
+        graph.phyloSelection(selectedGenomes);
         graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
 
         screen = graphController.getRoot();
@@ -225,11 +229,8 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        //ToDo: add function to visualize only the selected strains.
-
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
-        System.out.println("Selected " + s.get(0) + "as a ref, drawing everything.");
 
         graphController.getZoomController().createZoomBox();
 
@@ -267,6 +268,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             graph = graphController.getGraph();
         }
+        graph.phyloSelection(s);
         graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
         screen = graphController.getRoot();
@@ -289,7 +291,7 @@ public class MainController extends Controller<BorderPane> {
 
         createInfoList("");
 
-        List<String> genomes = graphController.getGenomes();
+        List<String> genomes = graphController.getGraph().getGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
 
@@ -331,7 +333,7 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-        currentView = Math.min(9, currentView);
+        currentView = Math.min(13, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(), new ArrayList<>());
     }
 

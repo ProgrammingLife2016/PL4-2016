@@ -28,7 +28,6 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Edge> collectedEdges;
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
-    private MainController mainController;
     private TreeMap<String, Integer> metaData;
     private TreeMouseHandling treeMouseHandling;
 
@@ -54,7 +53,6 @@ public class TreeController extends Controller<ScrollPane> {
     public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
         this.pt = pt;
-        this.mainController = m;
         this.metaData = MetaParser.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
@@ -322,10 +320,9 @@ public class TreeController extends Controller<ScrollPane> {
         for (int i = 0; i < 10; i++) {
             int tempCount = 0;
             for (Cell c : collectedStrains) {
-                if (metaData.containsKey(((LeafCell) c).getName())) {
-                    if (metaData.get(((LeafCell) c).getName()) == i) {
-                        tempCount++;
-                    }
+                if (metaData.containsKey(((LeafCell) c).getName())
+                        && metaData.get(((LeafCell) c).getName()) == i) {
+                    tempCount++;
                 }
             }
             if (tempCount > count) {

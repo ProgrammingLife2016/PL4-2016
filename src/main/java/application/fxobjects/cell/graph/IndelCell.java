@@ -4,7 +4,6 @@ import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
@@ -17,7 +16,8 @@ public class IndelCell extends Cell {
 
     /**
      * Indel cell constructor.
-     * @param id The ID of a cell.
+     *
+     * @param id            The ID of a cell.
      * @param collapseLevel The collapse level of a cell.
      */
     public IndelCell(int id, String collapseLevel) {
@@ -39,6 +39,7 @@ public class IndelCell extends Cell {
 
     /**
      * Return the type of the Cell.
+     *
      * @return the type of the Cell.
      */
     public CellType getType() {
@@ -47,6 +48,7 @@ public class IndelCell extends Cell {
 
     /**
      * Return the Cell's text.
+     *
      * @return the Cell's text.
      */
     public Text getText() {

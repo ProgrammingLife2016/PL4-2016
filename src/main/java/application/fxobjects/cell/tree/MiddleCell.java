@@ -18,6 +18,7 @@ public class MiddleCell extends Cell {
 
     /**
      * Middle cell constructor.
+     *
      * @param id The ID of the cell.
      */
     public MiddleCell(int id) {
@@ -34,6 +35,7 @@ public class MiddleCell extends Cell {
 
     /**
      * Return the type of the Cell.
+     *
      * @return the type of the Cell.
      */
     public CellType getType() {
@@ -42,6 +44,7 @@ public class MiddleCell extends Cell {
 
     /**
      * Return the Cell's text.
+     *
      * @return the Cell's text.
      */
     public Text getText() {

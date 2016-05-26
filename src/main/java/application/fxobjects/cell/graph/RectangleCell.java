@@ -16,7 +16,8 @@ public class RectangleCell extends Cell {
 
     /**
      * Rectangle cell constructor.
-     * @param id The ID of a cell.
+     *
+     * @param id  The ID of a cell.
      * @param seq The genome sequence of a cell.
      */
     public RectangleCell(int id, String seq) {
@@ -37,6 +38,7 @@ public class RectangleCell extends Cell {
 
     /**
      * Return the type of the Cell.
+     *
      * @return the type of the Cell.
      */
     public CellType getType() {
@@ -45,6 +47,7 @@ public class RectangleCell extends Cell {
 
     /**
      * Return the Cell's text.
+     *
      * @return the Cell's text.
      */
     public Text getText() {
