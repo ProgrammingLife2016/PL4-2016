@@ -205,7 +205,6 @@ public class Graph {
                         for (int j : from.getLinks(nodeMap)) {
                             Node to = nodeMap.get(j);
                             if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                                to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                                 //Add next cell
                                 NodeType type = nodeMap.get(j).getType();
 
