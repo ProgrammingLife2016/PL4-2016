@@ -38,7 +38,7 @@ public class MainController extends Controller<BorderPane> {
     private VBox listVBox;
     private Text id;
     private ScrollPane infoScroller;
-    private int currentView = 9;
+    private int currentView;
     private GraphController graphController;
     private TreeController treeController;
     Rectangle2D screenSize;
