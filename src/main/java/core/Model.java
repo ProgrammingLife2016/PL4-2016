@@ -3,6 +3,7 @@ package core;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.CollectionCell;
 import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
@@ -163,6 +164,10 @@ public class Model {
             case INDEL:
                 IndelCell indelCell = new IndelCell(id, text);
                 addCell(indelCell);
+                break;
+            case COLLECTION:
+                CollectionCell collectionCell = new CollectionCell(id, text);
+                addCell(collectionCell);
                 break;
             case TREELEAF:
                 LeafCell leafCell = new LeafCell(id, text);

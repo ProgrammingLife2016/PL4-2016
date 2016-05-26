@@ -135,31 +135,57 @@ public final class GraphReducer {
         }
 
         List<Integer> childrenIds = parent.getLinks(nodeMap);
+
+        //Parent may only have one child.
         if (childrenIds.size() != 1) {
             return false;
         }
 
+
+
         //Retrieve the single child of the node.
         Node child = nodeMap.get(childrenIds.get(0));
 
-        // The child may only have one parent and grandchild.
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
+        }
+
+        // The child may only have one parent and child
         if (child.getLinks(nodeMap).size() != 1) {
             return false;
         }
+
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
+        }
+
         if (child.getParents(nodeMap).size() != 1) {
+            if (parent.getId() == 842) {
+                System.out.println(child.getParents().get(0));
+                System.out.println(child.getParents().get(1));
+
+            }
             return false;
+        }
+
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
         }
 
         // Add up both collapse levels and add it to the parent
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
         parent.setType(NodeType.COLLECTION);
+        parent.setSequence("");
         parent.setCollapseLevel(totalCollapseLevel);
 
         // Retrieve the single grandchild of the node.
         Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
         // Add edge from node to grandchild.
-        parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
+        parent.addLink(grandChild.getId());
+
+        //remove edge from child to grandchild.
+        child.removeLink(grandChild.getId());
 
         //add node as new parent of the grandchild and remove the child as parent.
         grandChild.addParent(parent.getId());
