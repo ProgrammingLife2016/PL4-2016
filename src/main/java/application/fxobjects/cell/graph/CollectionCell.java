@@ -25,8 +25,8 @@ public class CollectionCell extends Cell {
         text = new Text(collapseLevel);
 
         Circle view = new Circle(10);
-        view.setStroke(Color.GREEN);
-        view.setFill(Color.GREEN);
+        view.setStroke(Color.LIGHTGREEN);
+        view.setFill(Color.LIGHTGREEN);
 
         StackPane pane = new StackPane();
         pane.getChildren().addAll(view, text);

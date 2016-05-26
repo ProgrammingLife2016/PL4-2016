@@ -92,6 +92,10 @@ public class Node {
         this.links.add(link);
     }
 
+    public void removeLink(int link) {
+        this.links.remove(Integer.valueOf(link));
+    }
+
     /**
      * Add a parent node's Id which links this node.
      *

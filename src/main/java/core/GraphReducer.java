@@ -107,7 +107,7 @@ public final class GraphReducer {
             }
 
             complexBubbleCollapse(nodeMap, parent);
-            collapseIndel(nodeMap, parent);
+            collapseComplexIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 collapseNodeSequence(nodeMap, parent);
             }
@@ -130,31 +130,57 @@ public final class GraphReducer {
         }
 
         List<Integer> childrenIds = parent.getLinks(nodeMap);
+
+        //Parent may only have one child.
         if (childrenIds.size() != 1) {
             return false;
         }
 
+
+
         //Retrieve the single child of the node.
         Node child = nodeMap.get(childrenIds.get(0));
 
-        // The child may only have one parent and grandchild.
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
+        }
+
+        // The child may only have one parent and child
         if (child.getLinks(nodeMap).size() != 1) {
             return false;
         }
+
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
+        }
+
         if (child.getParents(nodeMap).size() != 1) {
+            if (parent.getId() == 842) {
+                System.out.println(child.getParents().get(0));
+                System.out.println(child.getParents().get(1));
+
+            }
             return false;
+        }
+
+        if (parent.getId() == 842) {
+            System.out.println("childId of 842: " + child.getId());
         }
 
         // Add up both collapse levels and add it to the parent
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
-        parent.setType(NodeType.BUBBLE);
+        parent.setType(NodeType.COLLECTION);
+        parent.setSequence("");
         parent.setCollapseLevel(totalCollapseLevel);
 
         // Retrieve the single grandchild of the node.
         Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
 
         // Add edge from node to grandchild.
-        parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
+        parent.addLink(grandChild.getId());
+
+        //remove edge from child to grandchild.
+        child.removeLink(grandChild.getId());
 
         //add node as new parent of the grandchild and remove the child as parent.
         grandChild.addParent(parent.getId());
@@ -170,6 +196,37 @@ public final class GraphReducer {
 
         return true;
     }
+
+    public static Boolean
+    collapseComplexIndel(HashMap<Integer, Node> nodeMap, Node parent) {
+        List<Integer> children = parent.getLinks(nodeMap);
+
+        if (children.size() < 2) {
+            return false;
+        }
+        // Loop through all children of the parent.
+        for (int i = 0; i < children.size(); i++) {
+            Node child = nodeMap.get(children.get(i));
+            //Find children that have one child and one parent
+            if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
+                System.out.println("if reached, id:" + child.getId());
+                int grandChildId = child.getLinks().get(0);
+                //Check whether the node has another child as its own child.
+                if (children.contains(grandChildId)) {
+                    //Remove link from parent to the grandChild.
+                    parent.removeLink(grandChildId);
+                    //Make the inserted node an Indel node.
+                    child.setType(NodeType.INDEL);
+                    child.setSequence("");
+                    child.unionGenomes(nodeMap.get(grandChildId));
+                    child.setCollapseLevel(child.getCollapseLevel()+1);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Collapse a child1, if child2 is a grandchild of child1.
@@ -201,7 +258,7 @@ public final class GraphReducer {
                 return false;
             }
 
-            //Add outgoing edgee of the inserted child to the parent.
+            //Add outgoing edge of the inserted child to the parent.
             parent.setLinks(new ArrayList<>(Arrays.asList(child1.getId())));
 
             //Add all genomes in the inDel to the child node.

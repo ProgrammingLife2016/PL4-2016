@@ -224,6 +224,9 @@ public class Graph {
                                 toret.addCell(to.getId(),
                                         Integer.toString(to.getCollapseLevel()),
                                         CellType.INDEL);
+                            } else if (type == NodeType.COLLECTION) {
+                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                        CellType.COLLECTION);
                             }
 
                             if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
@@ -265,6 +268,9 @@ public class Graph {
                     } else if (type == NodeType.INDEL) {
                         toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
                                 CellType.INDEL);
+                    } else if (type == NodeType.COLLECTION) {
+                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                CellType.COLLECTION);
                     }
 
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
