@@ -100,7 +100,7 @@ public class Graph {
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
-                current = generateModel(ref, depth, selectedGenomes);
+                current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadOneUp(depth, selectedGenomes);
@@ -118,10 +118,10 @@ public class Graph {
                     current = zoomOut;
                     loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
-                } else if (ref != currentRef){
+                } else if (ref != currentRef) {
                     currentRef = ref;
                     System.out.println("Found a new ref: "+ ref);
-                    current = generateModel(ref, depth, selectedGenomes);
+                    current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
                     loadOneUp(depth, selectedGenomes);
@@ -139,7 +139,7 @@ public class Graph {
             public void run() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = new Model();
-                    zoomOut = generateModel(currentRef, finalDepth + 1, selectedGenomes);
+                    zoomOut = generateModel(currentRef, finalDepth + 1);
                     zoomOut.setLayout();
                     System.out.println("    (THREAD): Done loading: " + (finalDepth + 1));
                 } else {
@@ -155,7 +155,7 @@ public class Graph {
             public void run() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = new Model();
-                    zoomIn = generateModel(currentRef, finalDepth - 1, selectedGenomes);
+                    zoomIn = generateModel(currentRef, finalDepth - 1);
                     zoomIn.setLayout();
                     System.out.println("    (THREAD): Done loading: " + (finalDepth - 1));
 
@@ -166,7 +166,7 @@ public class Graph {
         }.run();
     }
 
-    private Model generateModel(Object ref, int depth, List<String> selectedGenomes) {
+    private Model generateModel(Object ref, int depth) {
         //Create a new Model to return
         Model toret = new Model();
         //Apply the levelMaps

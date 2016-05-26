@@ -72,8 +72,13 @@ public class MenuFactory {
                 mainController.switchScene(-1));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
-        resetView = initMenuItem("Reset", null, event ->
-                mainController.switchScene(+100));
+        resetView = initMenuItem("Reset", null, event -> {
+            try {
+                mainController.getGraphController().init(null,mainController.getGraphController().getGraph().getModel().getLevelMaps().size()-1, new ArrayList<>());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);
