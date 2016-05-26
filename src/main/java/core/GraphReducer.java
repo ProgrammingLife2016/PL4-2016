@@ -14,7 +14,7 @@ public final class GraphReducer {
     }
 
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
-    private static int nodeIds = 0;
+    private static int startMapSize = 0;
 
     /**
      * Give all nodes a list of its parents.
@@ -49,7 +49,7 @@ public final class GraphReducer {
     public static List<HashMap<Integer, Node>>
     createLevelMaps(HashMap<Integer, Node> startMap) {
         levelMaps.add(startMap);
-        nodeIds = startMap.size();
+        startMapSize = startMap.size();
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
@@ -63,7 +63,7 @@ public final class GraphReducer {
 
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
-            if ((previousMapSize - currentMapSize) <= 2) {
+            if ((previousMapSize - currentMapSize) <= 0) {
                 return levelMaps;
             }
         }
@@ -104,7 +104,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx <  nodeIds; idx++) {
+        for (int idx = 1; idx <  startMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -207,7 +207,7 @@ public final class GraphReducer {
                 return false;
             }
 
-            //Add outgoing egde of the inserted child to the parent.
+            //Add outgoing edgee of the inserted child to the parent.
             parent.setLinks(new ArrayList<>(Arrays.asList(child1.getId())));
 
             //Add all genomes in the inDel to the child node.
@@ -442,5 +442,38 @@ public final class GraphReducer {
         }
 
         return res + 1;
+    }
+
+    /**
+     * Get the start map size.
+     *
+     * @return The start map size.
+     */
+    public static int getStartMapSize() {
+        return startMapSize;
+    }
+
+    /**
+     * Set the start map size.
+     * @param startMapSize The start map sie.
+     */
+    public static void setStartMapSize(int startMapSize) {
+        GraphReducer.startMapSize = startMapSize;
+    }
+
+    /**
+     * Get the level maps.
+     * @return The level maps.
+     */
+    public static List<HashMap<Integer, Node>> getLevelMaps() {
+        return levelMaps;
+    }
+
+    /**
+     * Set the level maps.
+     * @param levelMaps The level maps.
+     */
+    public static void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
+        GraphReducer.levelMaps = levelMaps;
     }
 }
