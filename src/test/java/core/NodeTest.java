@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +67,44 @@ public class NodeTest {
         assertEquals(n1.getParents().size(), 2);
         assertEquals(n1.getParents().get(0), (Integer) 21);
         assertEquals(n1.getParents().get(1), (Integer) 42);
+    }
+
+    /**
+     * Test the unionGenomes method with genome sets that overlap.
+     */
+    @Test
+    public void testUnionGenomesWithOverlap() {
+        Node n1 = new Node(1, "", 1);
+        Node n2 = new Node(2, "", 2);
+
+        n1.setGenomes(new ArrayList<>(Arrays.asList("1", "2", "3")));
+        n2.setGenomes(new ArrayList<>(Arrays.asList("3", "4")));
+        n1.unionGenomes(n2);
+
+        assertEquals(4, n1.getGenomes().size());
+        assertEquals(2, n2.getGenomes().size());
+
+        assertEquals(new ArrayList<>(Arrays.asList("1", "2", "3", "4")), n1.getGenomes());
+        assertEquals(new ArrayList<>(Arrays.asList("3", "4")), n2.getGenomes());
+    }
+
+    /**
+     * Test the unionGenomes method with genome sets that do not overlap.
+     */
+    @Test
+    public void testUnionGenomesWithoutOverlap() {
+        Node n1 = new Node(1, "", 1);
+        Node n2 = new Node(2, "", 2);
+
+        n1.setGenomes(new ArrayList<>(Arrays.asList("1", "2")));
+        n2.setGenomes(new ArrayList<>(Arrays.asList("3", "4")));
+        n1.unionGenomes(n2);
+
+        assertEquals(4, n1.getGenomes().size());
+        assertEquals(2, n2.getGenomes().size());
+
+        assertEquals(new ArrayList<>(Arrays.asList("1", "2", "3", "4")), n1.getGenomes());
+        assertEquals(new ArrayList<>(Arrays.asList("3", "4")), n2.getGenomes());
     }
 
     /**
