@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -108,6 +109,7 @@ public class MainController extends Controller<BorderPane> {
             }
         });
 
+
     }
 
     /**
@@ -137,15 +139,13 @@ public class MainController extends Controller<BorderPane> {
      * Method to fill the graph.
      *
      * @param ref the reference string.
-     * @param selectedGenomes the genomes to be shown
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
         if (graphController == null) {
-            Graph graph;
+            Graph graph = null;
             try {
                 graph = new Graph();
-                graphController = new GraphController(graph, ref, this, currentView,
-                        selectedGenomes);
+                graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -161,10 +161,15 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Image i = graphController.takeSnapshot();
+//        Image i = graphController.getImage();
         graphController.getZoomController().createZoomBox();
         ZoomBox zoombox = graphController.getZoomController().getZoomBox();
+//        zoombox.setFill(i);
 
         this.getRoot().setBottom(zoombox.getZoomBox());
+
 
         graphController.initKeyHandler();
 
@@ -188,7 +193,7 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
-        System.out.println("Selected " + s.get(0) + "as a ref, drawing everything.");
+        System.out.println("Selected " + s.get(0 )+ "as a ref, drawing everything.");
 
         graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
@@ -226,6 +231,12 @@ public class MainController extends Controller<BorderPane> {
         screen = graphController.getRoot();
 
         this.getRoot().setCenter(screen);
+
+//        try {
+//            graphController.takeSnapshot();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
