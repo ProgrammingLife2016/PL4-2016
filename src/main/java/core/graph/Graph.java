@@ -223,6 +223,16 @@ public class Graph {
                                             CellType.INDEL);
                                     toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
                                 }
+
+                                if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
+                                    //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                            to.getGenomes()), EdgeType.GRAPH_REF);
+                                } else {
+                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                            to.getGenomes()), EdgeType.GRAPH);
+                                    //current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
+                                }
                             }
                         }
                     }
