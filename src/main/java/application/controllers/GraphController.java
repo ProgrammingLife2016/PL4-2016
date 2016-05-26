@@ -113,8 +113,15 @@ public class GraphController extends Controller<ScrollPane> {
         graph.addGraphComponents(ref, depth, selectedGenomes );
 
         // add components to graph pane
-        root.getChildren().addAll(graph.getModel().getAddedEdges());
-        root.getChildren().addAll(graph.getModel().getAddedCells());
+
+        if(graph.getModel().getAllCells().size() > 0) {
+            root.getChildren().addAll(graph.getModel().getAllEdges());
+            root.getChildren().addAll(graph.getModel().getAllCells());
+        }
+        else {
+            root.getChildren().addAll(graph.getModel().getAddedEdges());
+            root.getChildren().addAll(graph.getModel().getAddedCells());
+        }
 
         List<Cell> list = graph.getModel().getAddedCells();
 

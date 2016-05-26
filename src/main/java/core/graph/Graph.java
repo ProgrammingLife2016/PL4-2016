@@ -205,7 +205,6 @@ public class Graph {
                         for (int j : from.getLinks(nodeMap)) {
                             Node to = nodeMap.get(j);
                             if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                                to.getGenomes().stream().filter(s -> !genomes.contains(s)).forEach(genomes::add);
                                 //Add next cell
                                 NodeType type = nodeMap.get(j).getType();
 
@@ -222,6 +221,16 @@ public class Graph {
                                     toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
                                             CellType.INDEL);
                                     toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+                                }
+
+                                if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
+                                    //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                            to.getGenomes()), EdgeType.GRAPH_REF);
+                                } else {
+                                    toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                            to.getGenomes()), EdgeType.GRAPH);
+                                    //current.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
                                 }
                             }
                         }

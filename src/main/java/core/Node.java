@@ -110,7 +110,6 @@ public class Node {
      * @param node the node of which genomes should be unioned.
      */
     public void unionGenomes(Node node) {
-        List<String> otherGenomes = node.getGenomes();
         for (String otherGenome : node.getGenomes()) {
             if (!genomes.contains(otherGenome)) {
                 genomes.add(otherGenome);

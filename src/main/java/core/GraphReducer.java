@@ -84,9 +84,9 @@ public final class GraphReducer {
         for (int i : map.keySet()) {
             Node n = map.get(i);
             Node newNode = new Node(n.getId(), n.getType(), n.getSequence(), n.getzIndex());
-            newNode.setLinks(n.getLinks());
-            newNode.setParents(n.getParents());
-            newNode.setGenomes(n.getGenomes());
+            newNode.setLinks(new ArrayList<Integer>(n.getLinks()));
+            newNode.setParents(new ArrayList<Integer>(n.getParents()));
+            newNode.setGenomes(new ArrayList<String>(n.getGenomes()));
             newNode.setCollapseLevel(n.getCollapseLevel());
 
             res.put(i, newNode);
@@ -111,7 +111,6 @@ public final class GraphReducer {
                 continue;
             }
 
-
             complexBubbleCollapse(nodeMap, parent);
             collapseComplexIndel(nodeMap, parent);
             if (zoomLevel > 0) {
@@ -130,7 +129,6 @@ public final class GraphReducer {
      * @return Whether the horizontal collapse action has succeeded.
      */
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
-
         // Links must be present from parent --> child
         if (parent == null) {
             return false;
@@ -244,7 +242,6 @@ public final class GraphReducer {
 
             //Add all genomes in the inDel to the child node.
             child1.unionGenomes(child2);
-
             child1.setCollapseLevel(newCollapseLevel);
 
             //Set child node as an Indel node.
@@ -265,7 +262,6 @@ public final class GraphReducer {
 
             //Add all genomes in the inDel to the child node.
             child2.unionGenomes(child1);
-
             child2.setCollapseLevel(newCollapseLevel);
             child2.setType(NodeType.INDEL);
             child2.setSequence("");
@@ -276,7 +272,6 @@ public final class GraphReducer {
     }
 
     public static Boolean complexBubbleCollapse(HashMap<Integer, Node> nodeMap, Node parent) {
-
         List<Integer> children = parent.getLinks(nodeMap);
         List<Node> bubbleChildren = new ArrayList<>();
         if (children.size() <= 1) {
@@ -290,7 +285,6 @@ public final class GraphReducer {
                 bubbleChildren.add(child);
             }
         }
-
 
         for (Node child : bubbleChildren) {
             Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
@@ -306,8 +300,6 @@ public final class GraphReducer {
             if (bubble.size() > 1) {
                 for (Node bubbleChild : bubble) {
                     if (!bubbleChild.equals(child) && bubbleChild != null) {
-                        if (parent.getId() == 2) {
-                        }
                         child.unionGenomes(bubbleChild);
                         nodeMap.remove(bubbleChild.getId());
                     }
