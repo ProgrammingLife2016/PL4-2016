@@ -87,19 +87,7 @@ public class ZoomBox extends ScrollPane {
         ImagePattern pattern = new ImagePattern(image);
 
         zoomRectBorder.setFill(pattern);
-
-//        String snapshot = "/snapshot.png";
-//        FileInputStream stream = null;
-//        try {
-//             stream = new FileInputStream(snapshot);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Image image = new Image(stream);
-//        ImagePattern pattern = new ImagePattern(image);
-
-//        zoomRectBorder.setFill(pattern);
+        
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
