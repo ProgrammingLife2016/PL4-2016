@@ -123,6 +123,15 @@ public class Node {
         this.genomes.addAll(Arrays.asList(s));
     }
 
+
+    public void removeParent(Integer parentId) {
+        parents.remove(parentId);
+    }
+
+    public void addParent(Integer parentId) {
+        parents.add(parentId);
+    }
+
     /**
      * Gets all live parents by comparing the link list with all existing nodes.
      *
@@ -325,4 +334,11 @@ public class Node {
         this.genomes = genomes;
     }
 
+    public boolean equals(Node otherNode) {
+        if (otherNode.getId() == id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

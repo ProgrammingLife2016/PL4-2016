@@ -110,6 +110,13 @@ public class Graph {
             if (from == null) {
                 continue;
             }
+            if (i == 1492) {
+                for (int link : from.getLinks(nodeMap)) {
+                    System.out.println("links: " + nodeMap.get(link).getId());
+                }
+                System.out.println("parents: "+ from.getParents().get(0));
+
+            }
 
             for (int j : from.getLinks(nodeMap)) {
                 Node to = nodeMap.get(j);

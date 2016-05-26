@@ -110,11 +110,12 @@ public final class GraphReducer {
                 continue;
             }
 
+
+            collapseBubble(nodeMap, parent);
+            collapseIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 collapseNodeSequence(nodeMap, parent);
             }
-            collapseBubble(nodeMap, parent);
-            collapseIndel(nodeMap, parent);
         }
 
         return nodeMap;
@@ -161,11 +162,17 @@ public final class GraphReducer {
         // Add edge from node to grandchild.
         parent.setLinks(new ArrayList<>(Arrays.asList(grandChild.getId())));
 
-        //Set node as new parent of the grandchild.
-        grandChild.setParents(new ArrayList<>(Arrays.asList(parent.getId())));
+        //add node as new parent of the grandchild and remove the child as parent.
+        grandChild.addParent(parent.getId());
+        grandChild.removeParent(child.getId());
+
+        //Add genomes of the child to the parent.
+        parent.unionGenomes(child);
 
         //Remove the child node that is collapsed.
         nodeMap.remove(child.getId());
+
+
 
         return true;
     }
@@ -233,6 +240,52 @@ public final class GraphReducer {
             return true;
         }
 
+        return false;
+    }
+
+    public static Boolean complexBubbleCollapse(HashMap<Integer, Node> nodeMap, Node parent) {
+
+        List<Integer> children = parent.getLinks(nodeMap);
+        List<Node> bubbleChildren = new ArrayList<>();
+        if (children.size() <= 1) {
+            return false;
+        }
+
+        // Add all children that have one child and one parent to the list of potential bubble nodes.
+        for (int i = 0; i < children.size(); i++) {
+            Node child = nodeMap.get(children.get(i));
+            if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
+                bubbleChildren.add(child);
+            }
+        }
+
+
+        for (Node child : bubbleChildren) {
+            Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
+            List<Node> bubble = new ArrayList<Node>();
+            bubble.add(child);
+            for (Node otherChild : bubbleChildren ) {
+                if (!otherChild.equals(child) && otherChild != null) {
+                    if (grandChild.equals(nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
+                        bubble.add(otherChild);
+                    }
+                }
+            }
+            if (bubble.size() > 1) {
+                for (Node bubbleChild : bubble) {
+                    if (!bubbleChild.equals(child) && bubbleChild != null) {
+                        if (parent.getId() == 2) {
+                        }
+                        child.unionGenomes(bubbleChild);
+                        nodeMap.remove(bubbleChild.getId());
+                    }
+                }
+                child.setType(NodeType.BUBBLE);
+                child.setCollapseLevel(bubble.size());
+                child.setSequence("");
+                return true;
+            }
+        }
         return false;
     }
 
