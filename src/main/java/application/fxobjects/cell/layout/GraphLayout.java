@@ -52,8 +52,7 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
-        List<Cell> cells = model.getAllCells();
-
+        List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
             if (!cell.isRelocated()) {
                 currentX += offset;
@@ -111,6 +110,9 @@ public class GraphLayout extends CellLayout {
             }
             if (child.getCellChildren().size() > 1) {
                 currentX += offset;
+                if (currentX > maxWidth) {
+                    maxWidth = currentX;
+                }
                 currentY = (int) child.getLayoutY();
                 breadthFirstPlacing(child);
             }

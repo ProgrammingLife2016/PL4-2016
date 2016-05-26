@@ -5,5 +5,6 @@ package core.graph.cell;
  */
 public enum EdgeType {
     GRAPH,
+    GRAPH_REF,
     TREE
 }

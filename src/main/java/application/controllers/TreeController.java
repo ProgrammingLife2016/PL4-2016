@@ -25,10 +25,12 @@ import java.util.TreeMap;
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
+    private List<Edge> collectedEdges;
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
-    private TreeMouseHandling treeMouseHandling;
+    private MainController mainController;
     private TreeMap<String, Integer> metaData;
+    private TreeMouseHandling treeMouseHandling;
 
     private static final Color LIN0 = Color.web("000000");
     private static final Color LIN1 = Color.web("ed00c3");
@@ -52,6 +54,7 @@ public class TreeController extends Controller<ScrollPane> {
     public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
         super(new ScrollPane());
         this.pt = pt;
+        this.mainController = m;
         this.metaData = MetaParser.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
@@ -113,6 +116,7 @@ public class TreeController extends Controller<ScrollPane> {
             } else {
                 selectedStrains.add(e);
             }
+            modifyGraphOptions();
         });
     }
 
@@ -138,8 +142,7 @@ public class TreeController extends Controller<ScrollPane> {
 
             if (temp.contains("TKK")) {
                 applyColorUpwards(parentList, determineLinColor(metaData.get(temp)), 4.0);
-            }
-            else {
+            } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
         }
@@ -165,15 +168,11 @@ public class TreeController extends Controller<ScrollPane> {
      * @param edge the Edge being hovered over.
      */
     public void applyEdgeHighlight(Edge edge) {
-        List<Cell> parentList = new ArrayList<>();
-        List<Cell> childList = new ArrayList<>();
-        parentList.add(edge.getSource());
-        childList.add(edge.getTarget());
+        collectedEdges = new ArrayList<>();
         collectedStrains.clear();
+        collectEdges(edge);
 
-        applyColorOnSelf(edge, Color.YELLOW, 4.0);
-        applyColorUpwards(parentList, Color.YELLOW, 4.0);
-        applyColorDownwards(childList, Color.YELLOW, 4.0);
+        applyColorOnEdges(collectedEdges, determineLinColor(getCommonLineage()), 4.0);
     }
 
     /**
@@ -250,12 +249,116 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Apply a certain color and stroke to the edges in the list.
+     *
+     * @param l the given List of Edges.
+     * @param c the given Color.
+     * @param s the given stroke.
+     */
+    private void applyColorOnEdges(List<Edge> l, Color c, double s) {
+        l.forEach(e -> {
+            e.getLine().setStroke(c);
+            e.getLine().setStrokeWidth(s);
+        });
+    }
+
+    /**
+     * Collect all edges that will be highlighted for selection
+     */
+    private void collectEdges(Edge edge) {
+        collectedEdges.add(edge);
+        collectEdgesUpwards(edge.getSource());
+        collectEdgesDownwards(edge.getTarget());
+    }
+
+    /**
+     * Collect all selection covered edges from a Cell.
+     *
+     * @param c a Cell.
+     */
+    private void collectEdgesUpwards(Cell c) {
+        List<Cell> parentList = new ArrayList<>();
+        parentList.add(c);
+
+        while (!parentList.isEmpty()) {
+            Cell next = parentList.remove(0);
+            parentList.addAll(next.getCellParents());
+
+            if (next.getCellId() != 0) {
+                collectedEdges.add(pt.getModel().getEdgeFromChild(next));
+            }
+        }
+    }
+
+    /**
+     * Collect all selection covered edges from a Cell.
+     *
+     * @param c a Cell.
+     */
+    private void collectEdgesDownwards(Cell c) {
+        List<Cell> childList = new ArrayList<>();
+        childList.add(c);
+
+        while (!childList.isEmpty()) {
+            Cell next = childList.remove(0);
+            childList.addAll(next.getCellChildren());
+
+            if (!(next instanceof LeafCell)) {
+                collectedEdges.addAll(pt.getModel().getEdgeFromParent(next));
+            } else {
+                collectedStrains.add(next);
+            }
+        }
+    }
+
+    /**
+     * Get the most common lineage of the collected strains.
+     *
+     * @return the common lineage identifier.
+     */
+    private int getCommonLineage() {
+        int common = 0;
+        int count = 0;
+        for (int i = 0; i < 10; i++) {
+            int tempCount = 0;
+            for (Cell c : collectedStrains) {
+                if (metaData.containsKey(((LeafCell) c).getName())) {
+                    if (metaData.get(((LeafCell) c).getName()) == i) {
+                        tempCount++;
+                    }
+                }
+            }
+            if (tempCount > count) {
+                count = tempCount;
+                common = i;
+            }
+        }
+
+        return common;
+    }
+
+    /**
      * Getter method for the selected strains.
      *
      * @return a list with the selected strains.
      */
     public List<Cell> getSelectedStrains() {
         return selectedStrains;
+    }
+
+    /**
+     * Getter method for the selected strains.
+     *
+     * @return a list with the selected strains.
+     */
+    public List<String> getSelectedGenomes() {
+        List<String> genomes = new ArrayList<>();
+
+        selectedStrains.forEach(s -> genomes.add(((LeafCell) s).getName()));
+        selectedStrains.clear();
+        modifyGraphOptions();
+
+        return genomes;
     }
 
     /**
@@ -292,5 +395,22 @@ public class TreeController extends Controller<ScrollPane> {
                 break;
         }
         return LIN0;
+    }
+
+    /**
+     * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
+     */
+    private void modifyGraphOptions() {
+        int s = selectedStrains.size();
+        if (s == 0) {
+            MenuFactory.showOnlyThisStrain.setDisable(true);
+            MenuFactory.showSelectedStrains.setDisable(true);
+        } else if (s == 1) {
+            MenuFactory.showOnlyThisStrain.setDisable(false);
+            MenuFactory.showSelectedStrains.setDisable(false);
+        } else {
+            MenuFactory.showOnlyThisStrain.setDisable(true);
+            MenuFactory.showSelectedStrains.setDisable(false);
+        }
     }
 }

@@ -44,6 +44,7 @@ class GraphMouseHandling {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
 
+
     };
 
     /**
