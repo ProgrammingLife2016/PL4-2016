@@ -152,7 +152,7 @@ public final class GraphReducer {
 
         // Add up both collapse levels and add it to the parent
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
-        parent.setType(NodeType.BUBBLE);
+        parent.setType(NodeType.COLLECTION);
         parent.setCollapseLevel(totalCollapseLevel);
 
         // Retrieve the single grandchild of the node.
