@@ -92,9 +92,11 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
+        System.out.println("Current int before changes: " + currentInt);
+
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-            System.out.println("Trying to draw: " + depth + " Ref: " + ref + " Selected Genomes: " + selectedGenomes.toString());
+            System.out.println("Trying to draw: " + depth + ". Ref: " + ref + ". Selected Genomes: " + selectedGenomes.toString());
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
@@ -109,6 +111,7 @@ public class Graph {
                 if (depth < currentInt) {
                     System.out.println("Zoom in");
                     zoomOut = current;
+                    System.out.println("Current: " + zoomOut.getAllCells().toString());
                     current = zoomIn;
                     loadOneDown(depth, selectedGenomes);
                     currentInt = depth;
@@ -116,11 +119,12 @@ public class Graph {
                     System.out.println("Zoom out");
                     zoomIn = current;
                     current = zoomOut;
+                    System.out.println("Current: " + current.getAllCells().toString());
                     loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    System.out.println("Found a new ref: "+ ref);
+                    System.out.println("Found a new ref: " + ref);
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
@@ -129,7 +133,9 @@ public class Graph {
                 }
             }
         }
+
         currentInt = depth;
+        System.out.println("Current int after changes: " + currentInt);
         return true;
     }
 
@@ -138,9 +144,7 @@ public class Graph {
         new Thread("Load one up") {
             public void run() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
-                    zoomOut = new Model();
                     zoomOut = generateModel(currentRef, finalDepth + 1);
-                    zoomOut.setLayout();
                     System.out.println("    (THREAD): Done loading: " + (finalDepth + 1));
                 } else {
                     System.out.println("    (THREAD): Not loading map: " + (finalDepth + 1));
@@ -154,9 +158,7 @@ public class Graph {
         new Thread("Load one down") {
             public void run() {
                 if (finalDepth - 1 >= 0) {
-                    zoomIn = new Model();
                     zoomIn = generateModel(currentRef, finalDepth - 1);
-                    zoomIn.setLayout();
                     System.out.println("    (THREAD): Done loading: " + (finalDepth - 1));
 
                 } else {

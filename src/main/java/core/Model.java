@@ -263,6 +263,7 @@ public class Model {
 
     /**
      * Get the incoming edge from a given child.
+     *
      * @param c the child node.
      * @return the incoming edge.
      */
@@ -273,6 +274,7 @@ public class Model {
 
     /**
      * Get the outgoing edge from a given Parent.
+     *
      * @param p the parent node.
      * @return the incoming edge.
      */
@@ -285,7 +287,7 @@ public class Model {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         GraphLayout layout = new GraphLayout(this, 20,
                 (int) (screenSize.getHeight() - 25) / 2);
-        maxWidth = (int) layout.getMaxWidth();
+            maxWidth = (int) layout.getMaxWidth();
         layout.execute();
     }
 }
