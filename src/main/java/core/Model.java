@@ -7,7 +7,6 @@ import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
 import application.fxobjects.cell.graph.RectangleCell;
-import application.fxobjects.cell.graph.TriangleCell;
 
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
@@ -156,10 +155,6 @@ public class Model {
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, text);
                 addCell(rectangleCell);
-                break;
-            case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id, text);
-                addCell(circleCell);
                 break;
             case BUBBLE:
                 BubbleCell bubbleCell = new BubbleCell(id, text);
