@@ -246,8 +246,6 @@ public class GraphReducerTest {
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(4, 5)));
         nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
 
-        HashMap<Integer, Node> firstNodeMap = GraphReducer.copyNodeMap(nodeMap);
-
         GraphReducer.setStartMapSize(nodeMap.size());
         nodeMap = GraphReducer.collapse(nodeMap, 0);
 

@@ -1,5 +1,6 @@
 package application.controllers;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
+@SuppressFBWarnings("MS_PKGPROTECT")
 public class MenuFactory {
     protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;

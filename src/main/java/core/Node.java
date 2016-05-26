@@ -1,5 +1,7 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.List;
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
+@SuppressFBWarnings("HE_EQUALS_USE_HASHCODE")
 public class Node {
 
     /**
@@ -369,15 +373,17 @@ public class Node {
         this.genomes = genomes;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-    /**
-     * Check whether two nodes are equal
-     *
-     * @param otherNode the node to compare
-     * @return whether the nodes are equal or not
-     */
-    public boolean equals(Node otherNode) {
-        return otherNode.getId() == id;
+        return id == ((Node) o).id;
 
     }
+
 }

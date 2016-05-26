@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
+        "PMD.UnusedLocalVariable"})
 public class Graph {
 
     private Boolean resetModel = true;
@@ -141,12 +142,12 @@ public class Graph {
     private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
-            public void run() {
+            public void start() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = generateModel(currentRef, finalDepth + 1);
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
@@ -158,13 +159,13 @@ public class Graph {
     private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
-            public void run() {
+            public void start() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = generateModel(currentRef, finalDepth - 1);
 
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
