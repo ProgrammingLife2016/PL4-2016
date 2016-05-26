@@ -75,7 +75,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
         Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB328.gfa");
+        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
         HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
         inputStream.close();
 
