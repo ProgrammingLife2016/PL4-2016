@@ -223,18 +223,22 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
-        //ToDo: add function to visualize only the selected strains.
-        System.out.println("Show: " + s.toString());
-
-        graphController.getGraph().phyloSelection(s);
-        try {
-            graphController.init(null, currentView, new ArrayList<>());
-        } catch (IOException e) {
-            e.printStackTrace();
+        Graph graph = null;
+        if (graphController == null) {
+            try {
+                graph = new Graph();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        } else {
+            graph = graphController.getGraph();
         }
-        screen = graphController.getRoot();
+        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
+        screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
+
         try {
             graphController.takeSnapshot();
         } catch (IOException e) {
