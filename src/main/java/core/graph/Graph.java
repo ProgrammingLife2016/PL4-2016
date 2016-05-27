@@ -190,7 +190,6 @@ public class Graph {
         int maxEdgeWidth = 10;
 
         if (currentGenomes.size() > 0) { //Draw selected references
-            System.out.println("Only drawing selected");
             //We are now drawing only the selected items.
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
