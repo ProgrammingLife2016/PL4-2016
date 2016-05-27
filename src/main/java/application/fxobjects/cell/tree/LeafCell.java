@@ -19,7 +19,8 @@ public class LeafCell extends Cell {
 
     /**
      * Phylogenetic leave cell constructor.
-     * @param id The ID of the cell.
+     *
+     * @param id   The ID of the cell.
      * @param name The name of the genome.
      */
     public LeafCell(int id, String name) {
@@ -34,6 +35,7 @@ public class LeafCell extends Cell {
 
     /**
      * Set the name of a sample.
+     *
      * @param text The name of a sample.
      */
     public void setText(Text text) {
@@ -42,6 +44,7 @@ public class LeafCell extends Cell {
 
     /**
      * Return the type of the Cell.
+     *
      * @return the type of the Cell.
      */
     public CellType getType() {
@@ -50,6 +53,7 @@ public class LeafCell extends Cell {
 
     /**
      * Return the Cell's text.
+     *
      * @return the Cell's text.
      */
     public Text getText() {
@@ -58,6 +62,7 @@ public class LeafCell extends Cell {
 
     /**
      * Getter method for the name of the strain.
+     *
      * @return the name of the strain.
      */
     public String getName() {
@@ -66,6 +71,7 @@ public class LeafCell extends Cell {
 
     /**
      * Setter method for the name of the strain.
+     *
      * @param name the name of the strain.
      */
     public void setName(String name) {

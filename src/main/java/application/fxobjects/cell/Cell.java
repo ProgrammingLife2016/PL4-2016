@@ -119,6 +119,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Return whether a cell has been relocated.
+     *
      * @return Whether a cell has been relocated.
      */
     public boolean isRelocated() {
@@ -127,6 +128,7 @@ public abstract class Cell extends Pane {
 
     /**
      * Set the relocation status of a cell.
+     *
      * @param relocated The relocation status of a cell.
      */
     public void setRelocated(boolean relocated) {

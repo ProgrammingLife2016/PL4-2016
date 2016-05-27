@@ -1,9 +1,6 @@
 package core.graph;
 
-import core.GraphReducer;
-import core.Model;
-import core.Node;
-import core.Parser;
+import core.*;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -17,7 +14,8 @@ import java.util.List;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
+        "PMD.UnusedLocalVariable"})
 public class Graph {
 
     private Boolean resetModel = true;
@@ -27,6 +25,7 @@ public class Graph {
     private Model zoomOut;
     private int currentInt = -1;
     private Object currentRef = null;
+    private int nodeIds;
 
     /**
      * All the genomes that are in this graph.
@@ -51,7 +50,8 @@ public class Graph {
 
     /**
      * Class constructor.
-     * @throws IOException
+     *
+     * @throws IOException Throw exception
      */
     public Graph() throws IOException {
         zoomIn = new Model();
@@ -60,7 +60,8 @@ public class Graph {
 
         try {
             startMap = getNodeMapFromFile();
-            levelMaps = GraphReducer.createLevelMaps(startMap);
+            nodeIds = startMap.size();
+            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,44 +88,39 @@ public class Graph {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
-     * @param selectedGenomes the genomes to be shown
+     * @param selectedGenomes the genomes to display
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
-        if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
-            System.out.println("Trying to draw: " + depth + " Ref: " + ref + " Selected Genomes: " +
-                    selectedGenomes.toString());
+        if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
-                current = generateModel(ref, depth, selectedGenomes);
+                current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadOneUp(depth, selectedGenomes);
                 loadOneDown(depth, selectedGenomes);
             } else { //Second time. All models are loaded
                 if (depth < currentInt) {
-                    System.out.println("Zoom in");
                     zoomOut = current;
                     current = zoomIn;
                     loadOneDown(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (depth > currentInt) {
-                    System.out.println("Zoom out");
                     zoomIn = current;
                     current = zoomOut;
                     loadOneUp(depth, selectedGenomes);
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    System.out.println("Found a new ref: " + ref);
-                    current = generateModel(ref, depth, selectedGenomes);
+                    current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
                     loadOneUp(depth, selectedGenomes);
@@ -132,61 +128,54 @@ public class Graph {
                 }
             }
         }
+
         currentInt = depth;
         return true;
     }
 
     /**
-     * Method to visualize zooming out
-     * @param depth the current depth
-     * @param selectedGenomes the genomes to be displayed
+     * Method to Zoom out
+     *
+     * @param depth           Depth to be loaded
+     * @param selectedGenomes Genomes to display
      */
     private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
-            public void run() {
+            public void start() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
-                    zoomOut = new Model();
-                    zoomOut = generateModel(currentRef, finalDepth + 1, selectedGenomes);
-                    zoomOut.setLayout();
-                    System.out.println("    (THREAD): Done loading: " + (finalDepth + 1));
-                } else {
-                    System.out.println("    (THREAD): Not loading map: " + (finalDepth + 1));
+                    zoomOut = generateModel(currentRef, finalDepth + 1);
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
-     * Method to visualize zooming in
-     * @param depth the current depth
-     * @param selectedGenomes the genomes to be displayed
+     * Method to Zoom in
+     *
+     * @param depth           Depth to be loaded
+     * @param selectedGenomes Genomes to display
      */
     private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
-            public void run() {
+            public void start() {
                 if (finalDepth - 1 >= 0) {
-                    zoomIn = new Model();
-                    zoomIn = generateModel(currentRef, finalDepth - 1, selectedGenomes);
-                    zoomIn.setLayout();
-                    System.out.println("    (THREAD): Done loading: " + (finalDepth - 1));
+                    zoomIn = generateModel(currentRef, finalDepth - 1);
 
-                } else {
-                    System.out.println("    (THREAD): Not loading map: " + (finalDepth - 1));
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
-     * Generate a new model
-     * @param ref the reference object
-     * @param depth the current depth
-     * @param selectedGenomes the genomes to be displayed
+     * Method to generate a new model
+     *
+     * @param ref   reference object
+     * @param depth the depth of the model
      * @return the new model
      */
-    private Model generateModel(Object ref, int depth, List<String> selectedGenomes) {
+    private Model generateModel(Object ref, int depth) {
         //Create a new Model to return
         Model toret = new Model();
         //Apply the levelMaps
@@ -195,13 +184,6 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
-        //max width for Edges
-        int maxEdgeWidth = 10;
-
-        //If the ref is null, we can automatically select one.
-//        if (ref == null) {
-//            //ref = root.getGenomes().get(0);
-//        }
 
         if (currentGenomes.size() > 0) { //Draw selected references
             System.out.println("Only drawing selected");
@@ -209,45 +191,61 @@ public class Graph {
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
             if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
+                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
             }
-
             // In this case we know that the genomes in the graph are only this ones.
             genomes = currentGenomes;
 
-            for (int i = 1; i <= nodeMap.size(); i++) {
+            //current.clearCellMap();
+            for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
                 if (from == null) {
                     continue;
                 }
+                if (intersection(from.getGenomes(), currentGenomes) > 0) {
+                    for (int j : from.getLinks(nodeMap)) {
+                        Node to = nodeMap.get(j);
+                        if (intersection(to.getGenomes(), currentGenomes) > 0) {
+                            //Add next cell
+                            NodeType type = nodeMap.get(j).getType();
 
-                for (int j : from.getLinks(nodeMap)) {
-                    Node to = nodeMap.get(j);
-                    //Add next cell, Only add when it contains the reference.
-                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                        if (nodeMap.get(j).getGenomes().contains(ref)) {
-                            toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
-                        } else {
-                            toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                            if (type == NodeType.BASE) {
+                                toret.addCell(to.getId(), to.getSequence(),
+                                        CellType.RECTANGLE);
+
+                            } else if (type == NodeType.BUBBLE) {
+                                toret.addCell(to.getId(),
+                                        Integer.toString(to.getCollapseLevel()),
+                                        CellType.BUBBLE);
+                            } else if (type == NodeType.INDEL) {
+                                toret.addCell(to.getId(),
+                                        Integer.toString(to.getCollapseLevel()),
+                                        CellType.INDEL);
+                            } else if (type == NodeType.COLLECTION) {
+                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                        CellType.COLLECTION);
+                            }
+
+                            if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
+                                        to.getGenomes()), EdgeType.GRAPH_REF);
+                            } else {
+                                toret.addEdge(from.getId(), to.getId(),
+                                        intersection(from.getGenomes(),
+                                        to.getGenomes()), EdgeType.GRAPH);
+                            }
                         }
                     }
                 }
             }
-
-
         } else { // Draw all nodes.
-
-            toret.addCell(root.getId(), root.getSequence(), CellType.TRIANGLE);
-
             //Create a new genome list.
+            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
 
-            for (int i = 1; i <= nodeMap.size(); i++) {
+            for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
                 if (from == null) {
                     continue;
@@ -255,17 +253,33 @@ public class Graph {
 
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s))
-                            .forEach(genomes::add);
+
+                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                            forEach(genomes::add);
                     //Add next cell
+                    NodeType type = nodeMap.get(j).getType();
+
+                    if (type == NodeType.BASE) {
+                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                CellType.RECTANGLE);
+                    } else if (type == NodeType.BUBBLE) {
+                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                CellType.BUBBLE);
+                    } else if (type == NodeType.INDEL) {
+                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                CellType.INDEL);
+                    } else if (type == NodeType.COLLECTION) {
+                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                                CellType.COLLECTION);
+                    }
+
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                        toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+                        //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
+                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                to.getGenomes()), EdgeType.GRAPH_REF);
                     } else {
-                        toret.addCell(to.getId(), to.getSequence(), CellType.TRIANGLE);
-                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) genomes.size()) + 1;
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
+                                to.getGenomes()), EdgeType.GRAPH);
                     }
                 }
             }
@@ -275,10 +289,10 @@ public class Graph {
         return toret;
     }
 
+
     /**
      * Method that updates the model.
      */
-
     public void endUpdate() {
         // every cell must have a parent, if it doesn't, then the graphParent is the parent.
         current.attachOrphansToGraphParent(current.getAddedCells());
@@ -351,17 +365,16 @@ public class Graph {
     }
 
     /**
-     *
-     * Get the current depth
-     * @return the current depth
+     * Get the current level
+     * @return the current level
      */
     public int getCurrentInt() {
         return currentInt;
     }
 
     /**
-     * Select the right path in the phylogenetic tree
-     * @param s the genomes to select
+     * Indicate which strains are selected in the phylogenetic tree
+     * @param s the selected strains
      */
     public void phyloSelection(List<String> s) {
         currentGenomes = s;
@@ -370,10 +383,18 @@ public class Graph {
     }
 
     /**
-     * Get current reference strain
-     * @return the current reference strain
+     * Get the current highlighted strain
+     * @return the current highlighted strain
      */
     public Object getCurrentRef() {
         return currentRef;
+    }
+
+    /**
+     * Get the levelMaps
+     * @return the levelMaps
+     */
+    public List<HashMap<Integer, Node>> getLevelMaps() {
+        return levelMaps;
     }
 }

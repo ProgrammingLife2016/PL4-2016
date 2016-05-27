@@ -36,6 +36,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Class constructor.
+     *
      * @param g the GraphController currently active
      */
     public ZoomBox(GraphController g) {
@@ -79,17 +80,18 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        Image image;
+        Image image = null;
         try {
             image = graphController.takeSnapshot();
-            ImagePattern pattern = new ImagePattern(image);
-            zoomRectBorder.setFill(pattern);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ImagePattern pattern = new ImagePattern(image);
+
+        zoomRectBorder.setFill(pattern);
 
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
-        
+
         return zoomBox;
 
     }
@@ -105,6 +107,7 @@ public class ZoomBox extends ScrollPane {
 
     /**
      * Getter for the KeyHandler
+     *
      * @return the KeyHandler
      */
     public KeyHandler getKeyHandler() {

@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.ZoomBox;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -34,13 +33,12 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane screen;
     @FXML
     private MenuBar menuBar;
-
     private ListView list;
     private TextFlow infoList;
     private VBox listVBox;
     private Text id;
     private ScrollPane infoScroller;
-    private int currentView = 9;
+    private int currentView;
     private GraphController graphController;
     private TreeController treeController;
     Rectangle2D screenSize;
@@ -52,8 +50,18 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
 
         loadFXMLfile("/fxml/main.fxml");
+        fillGraph(null, new ArrayList<>());
     }
 
+
+    /**
+     * Getter method for the current view level.
+     *
+     * @return the current view level.
+     */
+    public int getCurrentView() {
+        return currentView;
+    }
 
     /**
      * Initialize method for the controller.
@@ -105,9 +113,13 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
+                try {
+                    graphController.takeSnapshot();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
     }
 
     /**
@@ -136,35 +148,37 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to fill the graph.
      *
-     * @param ref the reference string.
-     * @param selectedGenomes the genomes to be shown
+     * @param ref             the reference string.
+     * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
+        Graph graph = null;
         if (graphController == null) {
-            Graph graph;
             try {
                 graph = new Graph();
-                graphController = new GraphController(graph, ref, this, currentView,
-                        selectedGenomes);
+                currentView = graph.getLevelMaps().size() - 1;
             } catch (IOException e) {
                 e.printStackTrace();
+                System.exit(0);
             }
-
         } else {
-            try {
-                graphController.init(ref, currentView, selectedGenomes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            graph = graphController.getGraph();
         }
+        graph.phyloSelection(selectedGenomes);
+        graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
-        graphController.getZoomController().createZoomBox();
-        ZoomBox zoombox = graphController.getZoomController().getZoomBox();
+        try {
+            graphController.takeSnapshot();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        this.getRoot().setBottom(zoombox.getZoomBox());
+        graphController.getZoomController().createZoomBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        this.getRoot().setBottom(zoombox);
 
         graphController.initKeyHandler();
 
@@ -175,6 +189,7 @@ public class MainController extends Controller<BorderPane> {
         list.setItems(FXCollections.observableArrayList(genomes));
 
         showListVBox();
+
     }
 
     /**
@@ -184,11 +199,8 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        //ToDo: add function to visualize only the selected strains.
-
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
-        System.out.println("Selected " + s.get(0) + "as a ref, drawing everything.");
 
         graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
@@ -212,20 +224,28 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
-        //ToDo: add function to visualize only the selected strains.
-        System.out.println("Show: " + s.toString());
+        Graph graph = null;
+        if (graphController == null) {
+            try {
+                graph = new Graph();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
+        } else {
+            graph = graphController.getGraph();
+        }
+        graph.phyloSelection(s);
+        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
-        graphController.getGraph().phyloSelection(s);
+        screen = graphController.getRoot();
+        this.getRoot().setCenter(screen);
 
         try {
-            graphController.init(null, currentView, new ArrayList<>());
+            graphController.takeSnapshot();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        screen = graphController.getRoot();
-
-        this.getRoot().setCenter(screen);
 
         graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
@@ -235,7 +255,7 @@ public class MainController extends Controller<BorderPane> {
 
         createInfoList("");
 
-        List<String> genomes = graphController.getGenomes();
+        List<String> genomes = graphController.getGraph().getGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
 
@@ -277,10 +297,8 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-
-        currentView = Math.min(9, currentView);
-        fillGraph(null, new ArrayList<>());
-
+        currentView = Math.min(13, currentView);
+        fillGraph(graphController.getGraph().getCurrentRef(), new ArrayList<>());
     }
 
     /**
@@ -321,6 +339,7 @@ public class MainController extends Controller<BorderPane> {
     public TreeController getTreeController() {
         return treeController;
     }
+
     /**
      * Getter method for the MenuBar.
      *

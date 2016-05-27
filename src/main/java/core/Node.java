@@ -1,5 +1,7 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.List;
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
+@SuppressFBWarnings("HE_EQUALS_USE_HASHCODE")
 public class Node {
 
     /**
@@ -17,9 +21,19 @@ public class Node {
     private int id;
 
     /**
+     * The type of node.
+     */
+    private NodeType type;
+
+    /**
      * Actual nucleic acid sequence of the node.
      */
     private String sequence;
+
+    /**
+     * The number of underlying collapses.
+     */
+    private int collapseLevel;
 
     /**
      * 'Depth' of the node in the genome.
@@ -49,12 +63,28 @@ public class Node {
      * @param z   - The 'depth' of the node in the genome.
      */
     public Node(int id, String seq, int z) {
+        this(id, NodeType.BASE, seq, z);
+    }
+
+
+    /**
+     * Node constructor.
+     *
+     * @param id   - Node identifier.
+     * @param type - The type of node.
+     * @param seq  - Actual nucleic acid sequence contents of the node.
+     * @param z    - The 'depth' of the node in the genome.
+     */
+    public Node(int id, NodeType type, String seq, int z) {
         this.id = id;
+        this.type = type;
         this.sequence = seq;
         this.zIndex = z;
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
+
+        this.collapseLevel = 1;
     }
 
     /**
@@ -64,6 +94,14 @@ public class Node {
      */
     public void addLink(int link) {
         this.links.add(link);
+    }
+
+    /***
+     * Remove a link between two nodes
+     * @param link the link to be removed
+     */
+    public void removeLink(int link) {
+        this.links.remove(Integer.valueOf(link));
     }
 
     /**
@@ -76,12 +114,44 @@ public class Node {
     }
 
     /**
+     * Add a genome to the node
+     *
+     * @param node the node of which genomes should be unioned.
+     */
+    public void unionGenomes(Node node) {
+        for (String otherGenome : node.getGenomes()) {
+            if (!genomes.contains(otherGenome)) {
+                genomes.add(otherGenome);
+            }
+        }
+    }
+
+    /**
      * Add a genome to the node.
      *
      * @param s - The other node to which this one is linked.
      */
     public void addAllGenome(String[] s) {
         this.genomes.addAll(Arrays.asList(s));
+    }
+
+
+    /**
+     * Method to remove parent
+     *
+     * @param parentId parent to be removed
+     */
+    public void removeParent(Integer parentId) {
+        parents.remove(parentId);
+    }
+
+    /**
+     * Method to add parent
+     *
+     * @param parentId parent to be added
+     */
+    public void addParent(Integer parentId) {
+        parents.add(parentId);
     }
 
     /**
@@ -145,6 +215,7 @@ public class Node {
 
     /**
      * Get the node id.
+     *
      * @return The node id.
      */
     public int getId() {
@@ -153,6 +224,7 @@ public class Node {
 
     /**
      * Set the node id.
+     *
      * @param id The node id.
      */
     public void setId(int id) {
@@ -160,7 +232,26 @@ public class Node {
     }
 
     /**
+     * Get the node type.
+     *
+     * @return The node type.
+     */
+    public NodeType getType() {
+        return type;
+    }
+
+    /**
+     * Set the node type.
+     *
+     * @param type The node type.
+     */
+    public void setType(NodeType type) {
+        this.type = type;
+    }
+
+    /**
      * Get the nucleotide sequence.
+     *
      * @return The nucleotide sequence.
      */
     public String getSequence() {
@@ -169,6 +260,7 @@ public class Node {
 
     /**
      * Set the nucleotide sequence.
+     *
      * @param sequence The nucleotide sequence.
      */
     public void setSequence(String sequence) {
@@ -176,8 +268,27 @@ public class Node {
     }
 
     /**
+     * Get the collapse level.
+     *
+     * @return The collapse level.
+     */
+    public int getCollapseLevel() {
+        return collapseLevel;
+    }
+
+    /**
+     * Increment the collapse level.
+     *
+     * @param collapseLevel The number to be added to the collapse level.
+     */
+    public void setCollapseLevel(int collapseLevel) {
+        this.collapseLevel = collapseLevel;
+    }
+
+    /**
      * Get the zIndex.
-      * @return The zIndex.
+     *
+     * @return The zIndex.
      */
     public int getzIndex() {
         return zIndex;
@@ -185,6 +296,7 @@ public class Node {
 
     /**
      * Set the zIndex.
+     *
      * @param zIndex The zIndex.
      */
     public void setzIndex(int zIndex) {
@@ -193,6 +305,7 @@ public class Node {
 
     /**
      * Get the node's children.
+     *
      * @return The node's children.
      */
     public List<Integer> getLinks() {
@@ -201,6 +314,7 @@ public class Node {
 
     /**
      * Set the node's children.
+     *
      * @param links The node's children.
      */
     public void setLinks(List<Integer> links) {
@@ -209,6 +323,7 @@ public class Node {
 
     /**
      * Get the node's parents.
+     *
      * @return The node's parents.
      */
     public List<Integer> getParents() {
@@ -217,6 +332,7 @@ public class Node {
 
     /**
      * Set the node's parents.
+     *
      * @param parents The node's parents.
      */
     public void setParents(List<Integer> parents) {
@@ -225,6 +341,7 @@ public class Node {
 
     /**
      * Returns the genomes as a list.
+     *
      * @return the genomes.
      */
     public List<String> getGenomes() {
@@ -233,6 +350,7 @@ public class Node {
 
     /**
      * Returns the genomes as a string.
+     *
      * @return the String.
      */
     public String getGenomesAsString() {
@@ -248,9 +366,24 @@ public class Node {
 
     /**
      * Sets the genomes through the node.
+     *
      * @param genomes The genomes through the node.
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        return id == ((Node) o).id;
+
+    }
+
 }

@@ -22,7 +22,6 @@ public class GraphLayout extends CellLayout {
     private CellType lastType;
     private int cellCount = 0;
     private int centerY;
-    private double maxDistance;
     private double maxWidth;
 
     private static final int BASE_X = 175;
@@ -42,9 +41,7 @@ public class GraphLayout extends CellLayout {
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
-        this.maxDistance = middle;
         this.maxWidth = 0;
-
     }
 
     /**
@@ -78,12 +75,13 @@ public class GraphLayout extends CellLayout {
 
     /**
      * A method to place a Node's children and if need be, recursively their children.
+     *
      * @param cell - The parent node.
      */
-    public void breadthFirstPlacing(Cell cell) {
+    private void breadthFirstPlacing(Cell cell) {
         int yOffset = 3 * offset; //y-offset between nodes on the same x-level
         int oddChildOffset = 0; //initial offset when there are an odd number of children
-        int evenChildOffset = (yOffset) / 2; //offset for an even amount of children
+        int evenChildOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
 
         for (Cell child : cell.getCellChildren()) {
@@ -110,9 +108,6 @@ public class GraphLayout extends CellLayout {
             }
             if (child.getCellChildren().size() > 1) {
                 currentX += offset;
-                if (currentX > maxWidth) {
-                    maxWidth = currentX;
-                }
                 currentY = (int) child.getLayoutY();
                 breadthFirstPlacing(child);
             }
@@ -209,5 +204,11 @@ public class GraphLayout extends CellLayout {
         this.cellCount = cellCount;
     }
 
-    public double getMaxWidth() { return maxWidth; }
+    /**
+     * Get the max width
+     * @return the max width
+     */
+    public double getMaxWidth() {
+        return maxWidth;
+    }
 }

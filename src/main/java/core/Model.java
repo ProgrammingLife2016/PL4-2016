@@ -2,10 +2,12 @@ package core;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.CollectionCell;
+import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
 import application.fxobjects.cell.graph.RectangleCell;
-import application.fxobjects.cell.graph.TriangleCell;
 
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
@@ -38,17 +40,16 @@ public class Model {
     private List<HashMap<Integer, Node>> levelMaps;
 
     private Tree tree;
+    private GraphLayout graphLayout;
 
     private Rectangle2D screenSize;
-    private int maxWidth;
 
     /**
      * Class constructor.
      */
     public Model() {
         graphParent = new RectangleCell(1, "");
-
-        this.maxWidth = 0;
+        graphLayout = new GraphLayout(null, 0, 0);
 
         // clear model, create lists
         clear();
@@ -80,12 +81,30 @@ public class Model {
     }
 
     /**
+     * Method to get the layout of the graph.
+     *
+     * @return the layout
+     */
+    public GraphLayout getGraphLayout() {
+        return graphLayout;
+    }
+
+    /**
      * Get the phylogenetic tree.
      *
      * @return The phylogenetic tree.
      */
     public Tree getTree() {
         return tree;
+    }
+
+    /**
+     * Retrieves the size of the levelMaps list.
+     *
+     * @return the size of the levelMaps list.
+     */
+    public int getLevelMapsSize() {
+        return levelMaps.size();
     }
 
     /**
@@ -147,9 +166,17 @@ public class Model {
                 RectangleCell rectangleCell = new RectangleCell(id, text);
                 addCell(rectangleCell);
                 break;
-            case TRIANGLE:
-                TriangleCell circleCell = new TriangleCell(id, text);
-                addCell(circleCell);
+            case BUBBLE:
+                BubbleCell bubbleCell = new BubbleCell(id, text);
+                addCell(bubbleCell);
+                break;
+            case INDEL:
+                IndelCell indelCell = new IndelCell(id, text);
+                addCell(indelCell);
+                break;
+            case COLLECTION:
+                CollectionCell collectionCell = new CollectionCell(id, text);
+                addCell(collectionCell);
                 break;
             case TREELEAF:
                 LeafCell leafCell = new LeafCell(id, text);
@@ -175,11 +202,14 @@ public class Model {
     public Boolean addCell(Cell cell) {
         if (!cellMap.containsKey(cell.getCellId())) {
             addedCells.add(cell);
-
             cellMap.put(cell.getCellId(), cell);
+
+            return true;
         }
-        return true;
+
+        return false;
     }
+
 
     /**
      * Return a list of level maps.
@@ -261,15 +291,19 @@ public class Model {
     }
 
     /**
-     * Get the maxWidth of the layout
-     * @return the maxWidth
+     * Set the screen properties.
      */
-     public int getMaxWidth() {
-         return  maxWidth;
-     }
+    public void setLayout() {
+        this.screenSize = Screen.getPrimary().getVisualBounds();
+        this.graphLayout = new GraphLayout(this, 20,
+                (int) (screenSize.getHeight() - 25) / 2);
+
+        graphLayout.execute();
+    }
 
     /**
      * Get the incoming edge from a given child.
+     *
      * @param c the child node.
      * @return the incoming edge.
      */
@@ -280,22 +314,12 @@ public class Model {
 
     /**
      * Get the outgoing edge from a given Parent.
+     *
      * @param p the parent node.
      * @return the incoming edge.
      */
     public List<Edge> getEdgeFromParent(Cell p) {
         return addedEdges.stream().filter(e ->
                 e.getSource().equals(p)).collect(Collectors.toList());
-    }
-
-    /**
-     * Set the layout of the model
-     */
-    public void setLayout() {
-        this.screenSize = Screen.getPrimary().getVisualBounds();
-        GraphLayout layout = new GraphLayout(this, 20,
-                (int) (screenSize.getHeight() - 25) / 2);
-        maxWidth = (int) layout.getMaxWidth();
-        layout.execute();
     }
 }

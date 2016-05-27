@@ -11,10 +11,12 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -28,7 +30,6 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private int maxWidth;
     private int maxHeight;
-    private Image snapshot;
 
 
     private String position;
@@ -36,24 +37,24 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param g     the graph.
-     * @param ref   the reference string.
-     * @param m     the mainController.
-     * @param depth the depth to draw.
-     * @param selectedGenomes genomes to draw.
+     * @param g               the graph.
+     * @param ref             the reference string.
+     * @param m               the mainController.
+     * @param depth           the depth to draw.
+     * @param selectedGenomes the genomes to display.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(Graph g, Object ref, MainController m, int depth,
                            List<String> selectedGenomes) {
         super(new ScrollPane());
         this.graph = g;
+        this.maxWidth = 0;
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.position = "";
-        this.snapshot = null;
         maxWidth = 0;
         maxHeight = (int) screenSize.getHeight();
 
@@ -95,9 +96,9 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref   the reference string.
-     * @param depth the depth to draw.
-     * @param selectedGenomes the genomes to draw.
+     * @param ref             the reference string.
+     * @param depth           the depth to draw.
+     * @param selectedGenomes the genomes to be selected.
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
@@ -115,8 +116,14 @@ public class GraphController extends Controller<ScrollPane> {
         graph.addGraphComponents(ref, depth, selectedGenomes);
 
         // add components to graph pane
-        root.getChildren().addAll(graph.getModel().getAddedEdges());
-        root.getChildren().addAll(graph.getModel().getAddedCells());
+
+        if (graph.getModel().getAllCells().size() > 0) {
+            root.getChildren().addAll(graph.getModel().getAllEdges());
+            root.getChildren().addAll(graph.getModel().getAllCells());
+        } else {
+            root.getChildren().addAll(graph.getModel().getAddedEdges());
+            root.getChildren().addAll(graph.getModel().getAddedCells());
+        }
 
         List<Cell> list = graph.getModel().getAddedCells();
 
@@ -128,6 +135,7 @@ public class GraphController extends Controller<ScrollPane> {
 
 
         this.getRoot().setContent(root);
+
     }
 
     /**
@@ -136,6 +144,7 @@ public class GraphController extends Controller<ScrollPane> {
     public void initKeyHandler() {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
+
 
     /**
      * Getter method for the genomes.
@@ -147,14 +156,27 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
+     * Getter method for the position of the generated
+     * snapshot
+     *
+     * @return the position of the snapshot
+     */
+    public String getPosition() {
+        return position;
+    }
+
+    /**
      * Method take a snapshot of the current graph.
      *
-     * @return the taken snapshot
+     * @return A snapshot taken of the graph.
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() throws IOException {
-        WritableImage image = new WritableImage(1920, (int) screenSize.getHeight());
+        maxWidth = ((int) graph.getModel().getGraphLayout().getMaxWidth()) + 50;
 
+
+        WritableImage image = new WritableImage(2500,
+                (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
 

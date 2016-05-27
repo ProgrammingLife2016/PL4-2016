@@ -18,7 +18,8 @@ class GraphMouseHandling {
         Cell node = (Cell) event.getSource();
 
         core.Node clicked = mainController.getGraphController().getGraph()
-                .getModel().getLevelMaps().get(0).get(node.getCellId());
+                .getModel().getLevelMaps().get(mainController.getCurrentView())
+                .get(node.getCellId());
 
         String info = "";
         info += "Genome ID: " + clicked.getId() + "\n";
@@ -28,13 +29,14 @@ class GraphMouseHandling {
 
         mainController.modifyNodeInfo(info);
     };
-    
+
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        Cell node = (Cell) event.getSource();
+        Node node = (Node) event.getSource();
 
         double offsetX = event.getX() + node.getLayoutX();
         double offsetY = event.getY() + node.getLayoutY();
 
+        event.getSceneX();
         node.relocate(offsetX, offsetY);
     };
 
@@ -42,6 +44,8 @@ class GraphMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
+
+
     };
 
     /**
