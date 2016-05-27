@@ -197,6 +197,13 @@ public final class GraphReducer {
         if (children.size() < 2) {
             return false;
         }
+        if (parent.getId() == 2783) {
+
+            System.out.println("PARENT, children of 2783: " + children.toString());
+            for (int child : children) {
+                System.out.println("children of " + child +": " + nodeMap.get(child).getLinks().toString());
+            }
+        }
         // Loop through all children of the parent.
         for (int i = 0; i < children.size(); i++) {
             Node child = nodeMap.get(children.get(i));
@@ -211,6 +218,7 @@ public final class GraphReducer {
 
                     //Change parent of the grandchild to the child node
                     grandChild.removeParent(parent.getId());
+
                     //Make the inserted node an Indel node.
                     child.setType(NodeType.INDEL);
                     child.setSequence("");
@@ -324,6 +332,7 @@ public final class GraphReducer {
                 for (Node bubbleChild : bubble) {
                     if (!bubbleChild.equals(child)) {
                         child.unionGenomes(bubbleChild);
+                        parent.removeLink(bubbleChild.getId());
                         nodeMap.remove(bubbleChild.getId());
                     }
                 }
