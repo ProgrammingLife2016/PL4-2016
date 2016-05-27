@@ -103,14 +103,12 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
         if (ref != graph.getCurrentRef()) {
-            System.out.println("New reference, Removed children, depth: " + depth);
             root.getChildren().clear();
         }
         int size = graph.getModel().getLevelMaps().size();
 
         if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
             root.getChildren().clear();
-            System.out.println("Remove all children, received depth: " + depth);
         }
 
         graph.addGraphComponents(ref, depth, selectedGenomes);
