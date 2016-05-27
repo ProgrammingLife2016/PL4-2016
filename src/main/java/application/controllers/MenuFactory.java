@@ -63,11 +63,11 @@ public class MenuFactory {
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show the selected strain highlighted in graph",
+        showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
                 null, event ->
                 mainController.soloStrainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
-        showSelectedStrains = initMenuItem("Show the selected strains in graph", null, event ->
+        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
                 mainController.strainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
         MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
