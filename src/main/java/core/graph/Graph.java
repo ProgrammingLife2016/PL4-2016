@@ -95,12 +95,15 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
+
+        currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
+                //currentRef = ref;
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
