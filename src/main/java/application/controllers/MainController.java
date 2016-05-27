@@ -135,6 +135,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Create a legend info panel that shows the meaning of different types of cells.
+     *
      * @return A legend panel.
      */
     private Pane createLegend() {
@@ -329,7 +330,7 @@ public class MainController extends Controller<BorderPane> {
     public void switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
-        currentView = Math.min(13, currentView);
+        currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getGenomes());
     }
