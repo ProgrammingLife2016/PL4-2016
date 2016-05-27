@@ -197,13 +197,6 @@ public final class GraphReducer {
         if (children.size() < 2) {
             return false;
         }
-        if (parent.getId() == 2783) {
-
-            System.out.println("PARENT, children of 2783: " + children.toString());
-            for (int child : children) {
-                System.out.println("children of " + child +": " + nodeMap.get(child).getLinks().toString());
-            }
-        }
         // Loop through all children of the parent.
         for (int i = 0; i < children.size(); i++) {
             Node child = nodeMap.get(children.get(i));
