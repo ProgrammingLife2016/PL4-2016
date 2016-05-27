@@ -1,18 +1,15 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.*;
 import core.graph.Graph;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
@@ -137,6 +134,33 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
+     * Create a legend info panel that shows the meaning of different types of cells.
+     * @return A legend panel.
+     */
+    private Pane createLegend() {
+        final VBox col1 = new VBox();
+        col1.getChildren().add(new RectangleCell(0, ""));
+        col1.getChildren().add(new BubbleCell(0, "N"));
+        col1.getChildren().add(new IndelCell(0, "N"));
+        col1.getChildren().add(new CollectionCell(0, "N"));
+
+        final VBox col2 = new VBox();
+        col2.getChildren().add(new Text("  -  Basic Node"));
+        col2.getChildren().add(new Text("  -  Bubble Node"));
+        col2.getChildren().add(new Text("  -  Indel Node"));
+        col2.getChildren().add(new Text("  -  Collection Node"));
+
+        final VBox col3 = new VBox();
+        col3.getChildren().add(new Text(""));
+        col3.getChildren().add(new Text("  -  Contains N other nodes"));
+        col3.getChildren().add(new Text("  -  Contains N other nodes"));
+        col3.getChildren().add(new Text("  -  Contains N (horizontally collapsed) nodes"));
+
+        return new StackPane(new HBox(col1, col2, col3));
+    }
+
+
+    /**
      * Modify the information of the Node.
      *
      * @param id desired info.
@@ -176,10 +200,7 @@ public class MainController extends Controller<BorderPane> {
             e.printStackTrace();
         }
 
-        graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
-
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -202,10 +223,7 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
 
-        graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
-
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -247,10 +265,8 @@ public class MainController extends Controller<BorderPane> {
             e.printStackTrace();
         }
 
-        graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        this.getRoot().setBottom(zoombox);
 
+        createZoomBoxAndLegend();
         graphController.initKeyHandler();
 
         createInfoList("");
@@ -260,6 +276,22 @@ public class MainController extends Controller<BorderPane> {
         list.setItems(FXCollections.observableArrayList(genomes));
 
         showListVBox();
+    }
+
+    /**
+     * Create the HBox containing the zoom box and legend.
+     */
+    private void createZoomBoxAndLegend() {
+        graphController.getZoomController().createZoomBox();
+
+        HBox hbox = new HBox();
+        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
+        StackPane legend = new StackPane(createLegend());
+        legend.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setAlignment(Pos.CENTER);
+
+        hbox.getChildren().addAll(zoombox, legend);
+        this.getRoot().setBottom(hbox);
     }
 
     /**
