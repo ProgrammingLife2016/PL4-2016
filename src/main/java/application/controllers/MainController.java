@@ -139,9 +139,6 @@ public class MainController extends Controller<BorderPane> {
      * @return A legend panel.
      */
     private Pane createLegend() {
-        Label label = new Label("Legend");
-        label.setFont(new Font("Arial", 20));
-
         final VBox col1 = new VBox();
         col1.getChildren().add(new RectangleCell(0, ""));
         col1.getChildren().add(new BubbleCell(0, "N"));
