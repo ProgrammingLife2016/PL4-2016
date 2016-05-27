@@ -211,6 +211,7 @@ public final class GraphReducer {
 
                     //Change parent of the grandchild to the child node
                     grandChild.removeParent(parent.getId());
+
                     //Make the inserted node an Indel node.
                     child.setType(NodeType.INDEL);
                     child.setSequence("");
@@ -324,6 +325,7 @@ public final class GraphReducer {
                 for (Node bubbleChild : bubble) {
                     if (!bubbleChild.equals(child)) {
                         child.unionGenomes(bubbleChild);
+                        parent.removeLink(bubbleChild.getId());
                         nodeMap.remove(bubbleChild.getId());
                     }
                 }
