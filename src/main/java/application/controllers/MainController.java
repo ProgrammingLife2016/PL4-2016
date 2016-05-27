@@ -298,7 +298,7 @@ public class MainController extends Controller<BorderPane> {
         currentView += delta;
         currentView = Math.max(0, currentView);
         currentView = Math.min(13, currentView);
-        fillGraph(graphController.getGraph().getCurrentRef(), new ArrayList<>());
+        fillGraph(graphController.getGraph().getCurrentRef(), graphController.getGraph().getGenomes());
     }
 
     /**

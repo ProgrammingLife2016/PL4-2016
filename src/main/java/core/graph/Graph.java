@@ -95,7 +95,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
-
+        System.out.println("add graph components: " + selectedGenomes.toString());
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
@@ -378,6 +378,7 @@ public class Graph {
      */
     public void phyloSelection(List<String> s) {
         currentGenomes = s;
+        System.out.println(s.toString());
         currentInt = -1;
         currentRef = null;
     }
