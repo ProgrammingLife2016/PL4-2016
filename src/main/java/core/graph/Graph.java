@@ -89,12 +89,11 @@ public class Graph {
      *
      * @param ref             the reference string.
      * @param depth           the depth to draw.
-     * @param selectedGenomes the genomes to display
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes) {
+    public Boolean addGraphComponents(Object ref, int depth) {
 
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
@@ -107,26 +106,26 @@ public class Graph {
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
-                loadOneUp(depth, selectedGenomes);
-                loadOneDown(depth, selectedGenomes);
+                loadOneUp(depth);
+                loadOneDown(depth);
             } else { //Second time. All models are loaded
                 if (depth < currentInt) {
                     zoomOut = current;
                     current = zoomIn;
-                    loadOneDown(depth, selectedGenomes);
+                    loadOneDown(depth);
                     currentInt = depth;
                 } else if (depth > currentInt) {
                     zoomIn = current;
                     current = zoomOut;
-                    loadOneUp(depth, selectedGenomes);
+                    loadOneUp(depth);
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
-                    loadOneUp(depth, selectedGenomes);
-                    loadOneDown(depth, selectedGenomes);
+                    loadOneUp(depth);
+                    loadOneDown(depth);
                 }
             }
         }
@@ -139,9 +138,8 @@ public class Graph {
      * Method to Zoom out
      *
      * @param depth           Depth to be loaded
-     * @param selectedGenomes Genomes to display
      */
-    private void loadOneUp(int depth, List<String> selectedGenomes) {
+    private void loadOneUp(int depth) {
         int finalDepth = depth;
         new Thread("Load one up") {
             public void start() {
@@ -156,9 +154,8 @@ public class Graph {
      * Method to Zoom in
      *
      * @param depth           Depth to be loaded
-     * @param selectedGenomes Genomes to display
      */
-    private void loadOneDown(int depth, List<String> selectedGenomes) {
+    private void loadOneDown(int depth) {
         int finalDepth = depth;
         new Thread("Load one down") {
             public void start() {

@@ -203,7 +203,18 @@ public class MainController extends Controller<BorderPane> {
         /**
          * Apply the new Selected Genomes.
          */
+        //@ToDO Should this be done here?
+        // Nope it shouldnt, this redraws the graph every update.
         graphController.getGraph().phyloSelection(selectedGenomes);
+        //@ToDo And this?
+        graphController.getGraph().setGenomes(selectedGenomes);
+        //@ToDo And this??
+        //graphController.getGraph().setRefernce(selectedGenomes);
+
+
+        //@ToDo: Implement a new method that loads the graph correctly.
+        // Maybe this is it.
+        graphController.init(ref, graphController.getGraph().getLevelMaps().size()-1);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);

@@ -57,7 +57,7 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        init(ref, depth, selectedGenomes);
+        init(ref, depth);
     }
 
     /**
@@ -87,10 +87,9 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param ref             the reference string.
      * @param depth           the depth to draw.
-     * @param selectedGenomes the genomes to be selected.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref, int depth, List<String> selectedGenomes) {
+    public void init(Object ref, int depth) {
         if (ref != graph.getCurrentRef()) {
             root.getChildren().clear();
         }
@@ -100,7 +99,7 @@ public class GraphController extends Controller<ScrollPane> {
             root.getChildren().clear();
         }
 
-        graph.addGraphComponents(ref, depth, selectedGenomes);
+        graph.addGraphComponents(ref, depth);
 
         // add components to graph pane
         if (graph.getModel().getAllCells().size() > 0) {
