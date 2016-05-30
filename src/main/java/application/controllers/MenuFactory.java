@@ -76,8 +76,13 @@ public class MenuFactory {
                 mainController.switchScene(-1));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
-        resetView = initMenuItem("Reset", null, event ->
-                mainController.fillGraph(null, new ArrayList<>()));
+        resetView = initMenuItem("Reset", null, event -> {
+            //@ToDo this funtion doesnt work.
+                    mainController.fillGraph(null, new ArrayList<>());
+                    mainController.getGraphController().getGraph().setCurrentGenomes(new ArrayList<>());
+                    mainController.getGraphController().getGraph().reset();
+        });
+
 
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);

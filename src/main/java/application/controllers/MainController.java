@@ -4,7 +4,6 @@ import application.fxobjects.cell.graph.BubbleCell;
 import application.fxobjects.cell.graph.CollectionCell;
 import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.graph.RectangleCell;
-import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -136,7 +135,9 @@ public class MainController extends Controller<BorderPane> {
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
+                //@ToDo I think this is not a good way to do this.
+                graphController.getGraph().reset();
+                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
                 graphController.takeSnapshot();
             }
         });
@@ -235,19 +236,18 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        graphController.getGraph().setGenomes(new ArrayList<>());
         fillGraph(s.get(0), new ArrayList<>());
 
-        createZoomBoxAndLegend();
-        graphController.initKeyHandler();
-
-        createInfoList("");
-
-        List<String> genomes = graphController.getGenomes();
-        genomes.sort(Comparator.naturalOrder());
-        list.setItems(FXCollections.observableArrayList(genomes));
-
-        showListVBox();
+//        createZoomBoxAndLegend();
+//        graphController.initKeyHandler();
+//
+//        createInfoList("");
+//
+//        List<String> genomes = graphController.getGenomes();
+//        genomes.sort(Comparator.naturalOrder());
+//        list.setItems(FXCollections.observableArrayList(genomes));
+//
+//        showListVBox();
     }
 
     /**
@@ -261,33 +261,23 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().reset();
         fillGraph(null,s);
 
-
-//        Graph graph = null;
-//        if (graphController == null) {
-//            graph = new Graph();
-//        } else {
-//            graph = graphController.getGraph();
-//        }
-//        graph.phyloSelection(s);
-//        //@TODO No new GraphController should be made.
-////        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
-
-        screen = graphController.getRoot();
-        this.getRoot().setCenter(screen);
-
-        graphController.takeSnapshot();
-
-
-        createZoomBoxAndLegend();
-        graphController.initKeyHandler();
-
-        createInfoList("");
-
-        List<String> genomes = graphController.getGraph().getGenomes();
-        genomes.sort(Comparator.naturalOrder());
-        list.setItems(FXCollections.observableArrayList(genomes));
-
-        showListVBox();
+        //@ToDo GUI Stuff should be in a method and only be called once.
+//        screen = graphController.getRoot();
+//        this.getRoot().setCenter(screen);
+//
+//        graphController.takeSnapshot();
+//
+//
+//        createZoomBoxAndLegend();
+//        graphController.initKeyHandler();
+//
+//        createInfoList("");
+//
+//        List<String> genomes = graphController.getGraph().getGenomes();
+//        genomes.sort(Comparator.naturalOrder());
+//        list.setItems(FXCollections.observableArrayList(genomes));
+//
+//        showListVBox();
     }
 
     /**
