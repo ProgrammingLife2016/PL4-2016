@@ -164,22 +164,5 @@ public class Annotation {
     public String getDisplayNameAttr() {
         return displayNameAttr;
     }
-
-    @Override
-    public String toString() {
-        return "Annotation{" +
-                "seqid='" + seqid + '\'' +
-                ", source='" + source + '\'' +
-                ", type='" + type + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                ", score=" + score +
-                ", strand='" + strand + '\'' +
-                ", phase='" + phase + '\'' +
-                ", callhounClassAttr='" + callhounClassAttr + '\'' +
-                ", idAttr=" + idAttr +
-                ", nameAttr='" + nameAttr + '\'' +
-                ", displayNameAttr='" + displayNameAttr + '\'' +
-                '}';
-    }
+    
 }
