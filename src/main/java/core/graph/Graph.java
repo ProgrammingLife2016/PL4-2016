@@ -93,7 +93,8 @@ public class Graph {
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth) {
-
+        System.out.println("currentInt: " + currentInt  );
+        System.out.println(currentGenomes.toString());
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
@@ -340,6 +341,15 @@ public class Graph {
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
+    }
+
+    /**
+     * Setter method for the genomes.
+     *
+     * @param genomes the genomes.
+     */
+    public void setCurrentGenomes(List<String> genomes) {
+        this.currentGenomes = genomes;
     }
 
     /**

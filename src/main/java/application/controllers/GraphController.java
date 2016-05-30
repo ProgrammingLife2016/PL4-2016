@@ -90,7 +90,7 @@ public class GraphController extends Controller<ScrollPane> {
         if ((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
 
-            System.out.println("Update!");
+            System.out.println("Update: " + depth);
             graph.addGraphComponents(ref, depth);
 
             // add components to graph pane

@@ -203,10 +203,8 @@ public class MainController extends Controller<BorderPane> {
         /**
          * Apply the new Selected Genomes.
          */
-        graphController.getGraph().setGenomes(selectedGenomes);
+        graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
-        //@ToDo: Implement a new method that loads the graph correctly.
-        // Maybe this is it.
         graphController.init(ref, currentView);
 
         screen = graphController.getRoot();
