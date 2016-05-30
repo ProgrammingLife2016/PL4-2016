@@ -304,16 +304,6 @@ public class Graph {
     }
 
     /**
-     * Set whether the model should be reset in the addGraphComponents method.
-     * This option is only used for testing purposes to allow for mocks.
-     *
-     * @param resetModel whether the model should be reset in the addGraphComponents method.
-     */
-    public void setresetModel(Boolean resetModel) {
-        this.resetModel = resetModel;
-    }
-
-    /**
      * Get the model of the Graph.
      *
      * @return The model of the graph.
