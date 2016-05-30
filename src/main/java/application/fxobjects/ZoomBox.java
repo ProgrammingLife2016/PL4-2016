@@ -81,11 +81,7 @@ public class ZoomBox extends ScrollPane {
     public Group initZoomBox() {
         Group zoomBox = new Group();
         Image image = null;
-        try {
-            image = graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = graphController.takeSnapshot();
         ImagePattern pattern = new ImagePattern(image);
 
         zoomRectBorder.setFill(pattern);

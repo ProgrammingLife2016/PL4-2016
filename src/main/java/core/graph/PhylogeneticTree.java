@@ -22,6 +22,7 @@ public class PhylogeneticTree {
      */
     public PhylogeneticTree() {
         this.model = new Model();
+        this.setup();
     }
 
     /**
@@ -49,7 +50,7 @@ public class PhylogeneticTree {
      * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public Tree getTreeFromFile() throws IOException {
+    public Tree getTreeFromFile() {
         InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         TreeParser tp = new TreeParser(r);
@@ -62,7 +63,7 @@ public class PhylogeneticTree {
      *
      * @throws IOException Throw exception on read failure.
      */
-    public void setup() throws IOException {
+    public void setup() {
         Tree tree = getTreeFromFile();
         model.setTree(tree);
 

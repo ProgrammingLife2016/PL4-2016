@@ -28,11 +28,7 @@ public class GraphTest {
      */
     @Before
     public void setUp() {
-        try {
-            g = new Graph();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        g = new Graph();
         mockedModel = mock(Model.class);
 
         when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);

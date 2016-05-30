@@ -37,17 +37,17 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param g               the graph.
      * @param ref             the reference string.
      * @param m               the mainController.
      * @param depth           the depth to draw.
      * @param selectedGenomes the genomes to display.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Graph g, Object ref, MainController m, int depth,
+    public GraphController(Object ref, MainController m, int depth,
                            List<String> selectedGenomes) {
         super(new ScrollPane());
-        this.graph = g;
+
+        this.graph = new Graph();
         this.maxWidth = 0;
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
@@ -169,7 +169,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @return A snapshot taken of the graph.
      * @throws IOException Throw exception on write failure.
      */
-    public Image takeSnapshot() throws IOException {
+    public Image takeSnapshot() {
         maxWidth = ((int) graph.getModel().getGraphLayout().getMaxWidth()) + 50;
 
 

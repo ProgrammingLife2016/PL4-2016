@@ -26,6 +26,15 @@ import java.util.ResourceBundle;
  */
 public class MainController extends Controller<BorderPane> {
 
+    /**
+     * The Controllers used in this Class.
+     */
+    private GraphController graphController;
+    private TreeController treeController;
+
+    /**
+     * FXML Objects.
+     */
     @FXML
     private ScrollPane screen;
     @FXML
@@ -36,8 +45,6 @@ public class MainController extends Controller<BorderPane> {
     private Text id;
     private ScrollPane infoScroller;
     private int currentView;
-    private GraphController graphController;
-    private TreeController treeController;
     Rectangle2D screenSize;
 
     /**
@@ -45,21 +52,26 @@ public class MainController extends Controller<BorderPane> {
      */
     public MainController() {
         super(new BorderPane());
-
         loadFXMLfile("/fxml/main.fxml");
 
+        /**
+         * Create a new GraphController.
+         */
+        graphController = new GraphController(null, this, currentView, new ArrayList<>());
+        //@ToDo This shouldnt be here.
+        currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-        Graph graph = null;
-        try {
-            graph = new Graph();
-            currentView = graph.getLevelMaps().size() - 1;
-            graphController = new GraphController(graph, null, this, currentView, new ArrayList<>());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        /**
+         * Fll the graph.
+         */
         fillGraph(null, new ArrayList<>());
 
-
+        /**
+         * Create a new TreeController.
+         */
+        treeController = new TreeController(this,
+                this.getClass().getResourceAsStream("/metadata.xlsx"));
     }
 
 
@@ -122,11 +134,7 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
-                try {
-                    graphController.takeSnapshot();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                graphController.takeSnapshot();
             }
         });
     }
@@ -189,27 +197,15 @@ public class MainController extends Controller<BorderPane> {
      * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
-        // graph = null;
-//        if (graphController == null) {
-//            try {
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                System.exit(0);
-//            }
-//        } else {
-        Graph graph = graphController.getGraph();
-//        }
-        graph.phyloSelection(selectedGenomes);
+        /**
+         * Apply the new Selected Genomes.
+         */
+        graphController.getGraph().phyloSelection(selectedGenomes);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
-        try {
-            graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        graphController.takeSnapshot();
 
         createZoomBoxAndLegend();
         graphController.initKeyHandler();
@@ -255,26 +251,18 @@ public class MainController extends Controller<BorderPane> {
     public void strainSelection(List<String> s) {
         Graph graph = null;
         if (graphController == null) {
-            try {
-                graph = new Graph();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(0);
-            }
+            graph = new Graph();
         } else {
             graph = graphController.getGraph();
         }
         graph.phyloSelection(s);
-        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
+        //@TODO No new GraphController should be made.
+//        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
 
-        try {
-            graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        graphController.takeSnapshot();
 
 
         createZoomBoxAndLegend();
@@ -309,17 +297,9 @@ public class MainController extends Controller<BorderPane> {
      * Method to fill the phylogenetic tree.
      */
     public void fillTree() {
-        try {
-            PhylogeneticTree pt = new PhylogeneticTree();
-            pt.setup();
-            treeController = new TreeController(pt, this,
-                    this.getClass().getResourceAsStream("/metadata.xlsx"));
-            screen = treeController.getRoot();
-            this.getRoot().setCenter(screen);
-            this.getRoot().setBottom(null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        screen = treeController.getRoot();
+        this.getRoot().setCenter(screen);
+        this.getRoot().setBottom(null);
         hideListVBox();
     }
 

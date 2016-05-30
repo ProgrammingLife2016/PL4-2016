@@ -50,10 +50,8 @@ public class Graph {
 
     /**
      * Class constructor.
-     *
-     * @throws IOException Throw exception
      */
-    public Graph() throws IOException {
+    public Graph() {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();

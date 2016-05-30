@@ -52,12 +52,8 @@ public class PhylogeneticTreeTest {
      */
     @Test
     public void testGetTreeFromFile() {
-        try {
-            net.sourceforge.olduvai.treejuxtaposer.drawer.Tree tree = pt.getTreeFromFile();
-            assertNotEquals(0, tree.getLeafCount());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        net.sourceforge.olduvai.treejuxtaposer.drawer.Tree tree = pt.getTreeFromFile();
+        assertNotEquals(0, tree.getLeafCount());
     }
 
     /**
@@ -66,11 +62,7 @@ public class PhylogeneticTreeTest {
     @Test
     public void testSetup() {
         pt.setModel(mockedModel);
-        try {
-            pt.setup();
-            verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pt.setup();
+        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
     }
 }
