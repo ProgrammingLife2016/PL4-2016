@@ -115,7 +115,7 @@ public class GraphController extends Controller<ScrollPane> {
             root.getChildren().addAll(graph.getModel().getAddedCells());
         }
 
-        initKeyHandler();
+        //initKeyHandler();
         initMouseHandler();
 
         graph.endUpdate();

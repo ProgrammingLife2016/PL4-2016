@@ -1,20 +1,24 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.*;
+import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.CollectionCell;
+import application.fxobjects.cell.graph.IndelCell;
+import application.fxobjects.cell.graph.RectangleCell;
 import core.graph.Graph;
-import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -210,7 +214,7 @@ public class MainController extends Controller<BorderPane> {
         createZoomBoxAndLegend();
 
         //TODO: Please do not remove line below
-        //graphController.initKeyHandler();
+        graphController.initKeyHandler();
 
         createInfoList("");
 
