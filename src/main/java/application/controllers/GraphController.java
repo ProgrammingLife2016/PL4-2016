@@ -28,11 +28,6 @@ public class GraphController extends Controller<ScrollPane> {
     private GraphMouseHandling graphMouseHandling;
     AnchorPane root = new AnchorPane();
     private Rectangle2D screenSize;
-    private int maxWidth;
-    private int maxHeight;
-
-
-    private String position;
 
     /**
      * Constructor method for this class.
@@ -46,18 +41,15 @@ public class GraphController extends Controller<ScrollPane> {
     public GraphController(Object ref, MainController m, int depth,
                            List<String> selectedGenomes) {
         super(new ScrollPane());
-
         this.graph = new Graph();
-        this.maxWidth = 0;
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
+
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        this.position = "";
-        maxWidth = 0;
-        maxHeight = (int) screenSize.getHeight();
 
+        //TODO: Remove event filter, for enabling zooming in and out
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
                 event.consume();
@@ -154,25 +146,12 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Getter method for the position of the generated
-     * snapshot
-     *
-     * @return the position of the snapshot
-     */
-    public String getPosition() {
-        return position;
-    }
-
-    /**
      * Method take a snapshot of the current graph.
      *
      * @return A snapshot taken of the graph.
      * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() {
-        maxWidth = ((int) graph.getModel().getGraphLayout().getMaxWidth()) + 50;
-
-
         WritableImage image = new WritableImage(2500,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
