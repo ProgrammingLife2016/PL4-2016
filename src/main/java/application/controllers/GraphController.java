@@ -83,7 +83,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref             the reference string.
      * @param depth           the depth to draw.
      */
-    public void init(Object ref, int depth) {
+    public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
 
         System.out.println("Update: " + graph.getCurrentInt());

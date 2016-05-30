@@ -42,13 +42,13 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane screen;
     @FXML
     private MenuBar menuBar;
-    private ListView list;
-    private TextFlow infoList;
+
+    private HBox legend;
     private VBox listVBox;
-    private Text id;
+    private ListView list;
     private ScrollPane infoScroller;
     private int currentView;
-    Rectangle2D screenSize;
+    private ListFactory listFactory;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -94,104 +94,24 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-        screenSize = Screen.getPrimary().getVisualBounds();
         createMenu();
     }
 
-    private void createInfoList(String info) {
-        listVBox = new VBox();
-        infoScroller = new ScrollPane();
+    private void initGUI() {
+        createZoomBoxAndLegend();
+        createList();
+        this.getRoot().setCenter(graphController.getRoot());
+        graphController.takeSnapshot();
+        graphController.initKeyHandler();
 
-        listVBox.setPrefWidth(248.0);
-        listVBox.setMaxWidth(248.0);
-
-        infoScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        infoScroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        infoScroller.prefHeightProperty().bind(listVBox.heightProperty());
-        infoScroller.prefWidth(screenSize.getWidth() / 5);
-
-        if (info.isEmpty()) {
-            createList();
-        }
-
-        createNodeInfo();
-
-        infoScroller.setContent(infoList);
-        listVBox.getChildren().addAll(list, infoScroller);
+        setListItems();
+        this.getRoot().setRight(listVBox);
     }
 
-    /**
-     * Create a list on the right side of the screen with all genomes.
-     */
-    public void createList() {
-        list = new ListView<>();
-        list.setPlaceholder(new Label("No Genomes Loaded."));
-        list.prefHeightProperty().bind(listVBox.heightProperty());
-        list.prefWidthProperty().bind(listVBox.widthProperty());
-
-        list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController.getZoomController()
-                .getZoomBox().getKeyHandler());
-
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                //@ToDo I think this is not a good way to do this.
-                graphController.getGraph().reset();
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
-            }
-        });
-    }
-
-    /**
-     * Create an info panel to show the information on a node.
-     */
-    private void createNodeInfo() {
-        infoList = new TextFlow();
-        infoList.prefHeightProperty().bind(infoScroller.heightProperty());
-        infoList.prefWidthProperty().bind(infoScroller.widthProperty());
-
-        id = new Text();
-        id.setText("Select Node to view info");
-
-        infoList.getChildren().addAll(id);
-    }
-
-    /**
-     * Create a legend info panel that shows the meaning of different types of cells.
-     *
-     * @return A legend panel.
-     */
-    private Pane createLegend() {
-        final VBox col1 = new VBox();
-        col1.getChildren().add(new RectangleCell(0, ""));
-        col1.getChildren().add(new BubbleCell(0, "N"));
-        col1.getChildren().add(new IndelCell(0, "N"));
-        col1.getChildren().add(new CollectionCell(0, "N"));
-
-        final VBox col2 = new VBox();
-        col2.getChildren().add(new Text("  -  Basic Node"));
-        col2.getChildren().add(new Text("  -  Bubble Node"));
-        col2.getChildren().add(new Text("  -  Indel Node"));
-        col2.getChildren().add(new Text("  -  Collection Node"));
-
-        final VBox col3 = new VBox();
-        col3.getChildren().add(new Text(""));
-        col3.getChildren().add(new Text("  -  Contains N other nodes"));
-        col3.getChildren().add(new Text("  -  Contains N other nodes"));
-        col3.getChildren().add(new Text("  -  Contains N (horizontally collapsed) nodes"));
-
-        return new StackPane(new HBox(col1, col2, col3));
-    }
-
-
-    /**
-     * Modify the information of the Node.
-     *
-     * @param id desired info.
-     */
-    public void modifyNodeInfo(String id) {
-        this.id.setText(id);
+    private void setListItems() {
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
     }
 
     /**
@@ -206,26 +126,9 @@ public class MainController extends Controller<BorderPane> {
          */
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
-        graphController.init(ref, currentView);
+        graphController.update(ref, currentView);
 
-        screen = graphController.getRoot();
-        this.getRoot().setCenter(screen);
-
-        graphController.takeSnapshot();
-
-
-        createZoomBoxAndLegend();
-
-        //TODO: Please do not remove line below
-        graphController.initKeyHandler();
-
-        createInfoList("");
-
-        List<String> genomes = graphController.getGenomes();
-        genomes.sort(Comparator.naturalOrder());
-        list.setItems(FXCollections.observableArrayList(genomes));
-
-        showListVBox();
+        initGUI();
 
     }
 
@@ -237,17 +140,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void soloStrainSelection(List<String> s) {
         fillGraph(s.get(0), new ArrayList<>());
-
-//        createZoomBoxAndLegend();
-//        graphController.initKeyHandler();
-//
-//        createInfoList("");
-//
-//        List<String> genomes = graphController.getGenomes();
-//        genomes.sort(Comparator.naturalOrder());
-//        list.setItems(FXCollections.observableArrayList(genomes));
-//
-//        showListVBox();
+        initGUI();
     }
 
     /**
@@ -257,43 +150,33 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
-        System.out.println(s.toString());
-        graphController.getGraph().reset();
-        fillGraph(null,s);
+        fillGraph(null, s);
 
-        //@ToDo GUI Stuff should be in a method and only be called once.
-//        screen = graphController.getRoot();
-//        this.getRoot().setCenter(screen);
-//
-//        graphController.takeSnapshot();
-//
-//
-//        createZoomBoxAndLegend();
-//        graphController.initKeyHandler();
-//
-//        createInfoList("");
-//
-//        List<String> genomes = graphController.getGraph().getGenomes();
-//        genomes.sort(Comparator.naturalOrder());
-//        list.setItems(FXCollections.observableArrayList(genomes));
-//
-//        showListVBox();
+        initGUI();
+        setListItems();
     }
 
     /**
      * Create the HBox containing the zoom box and legend.
      */
     private void createZoomBoxAndLegend() {
-        graphController.getZoomController().createZoomBox();
-
         HBox hbox = new HBox();
+
+        graphController.getZoomController().createZoomBox();
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        StackPane legend = new StackPane(createLegend());
+        graphController.initKeyHandler();
+
+        createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
         hbox.setAlignment(Pos.CENTER);
 
         hbox.getChildren().addAll(zoombox, legend);
         this.getRoot().setBottom(hbox);
+    }
+
+    private void createLegend() {
+        LegendFactory legendFactory = new LegendFactory(this);
+        legend = legendFactory.createLegend();
     }
 
     /**
@@ -309,10 +192,29 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the menu bar.
      */
-    public void createMenu() {
+    private void createMenu() {
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
         this.getRoot().setTop(menuBar);
+    }
+
+    private void createList() {
+        listFactory = new ListFactory(this);
+        listVBox = listFactory.createInfoList("");
+        infoScroller = listFactory.getInfoScroller();
+        list = listFactory.getList();
+
+        list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
+        infoScroller.setOnKeyPressed(graphController.getZoomController()
+                .getZoomBox().getKeyHandler());
+
+        list.setOnMouseClicked(event -> {
+            if (!(list.getSelectionModel().getSelectedItem() == null)) {
+                fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
+            }
+        });
+
+        this.getRoot().setRight(listVBox);
     }
 
     /**
@@ -326,20 +228,6 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getGenomes());
-    }
-
-    /**
-     * Switches the scene to the phylogenetic tree view.
-     */
-    public void switchTreeScene() {
-        fillTree();
-    }
-
-    /**
-     * Show the info panel.
-     */
-    private void showListVBox() {
-        this.getRoot().setRight(listVBox);
     }
 
     /**
@@ -367,12 +255,7 @@ public class MainController extends Controller<BorderPane> {
         return treeController;
     }
 
-    /**
-     * Getter method for the MenuBar.
-     *
-     * @return the MenuBar.
-     */
-    public MenuBar getMenuBar() {
-        return menuBar;
+    public ListFactory getListFactory() {
+        return listFactory;
     }
 }
