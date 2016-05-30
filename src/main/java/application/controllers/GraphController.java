@@ -32,14 +32,11 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param ref             the reference string.
      * @param m               the mainController.
-     * @param depth           the depth to draw.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Object ref, MainController m, int depth) {
+    public GraphController(MainController m) {
         super(new ScrollPane());
-
         this.graph = new Graph();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
@@ -56,7 +53,6 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        init(ref, depth);
     }
 
     /**
@@ -89,7 +85,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) {
-        int size = graph.getModel().getLevelMaps().size();
+        int size = graph.getLevelMaps().size();
 
         //We received a different reference, so we need to redraw.
         if ((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
@@ -110,6 +106,8 @@ public class GraphController extends Controller<ScrollPane> {
             initMouseHandler();
 
             graph.endUpdate();
+
+
         }
 
 //        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
@@ -117,8 +115,9 @@ public class GraphController extends Controller<ScrollPane> {
 //        }
 
 
-        this.getRoot().setContent(root);
 
+
+        this.getRoot().setContent(root);
     }
 
     /**
