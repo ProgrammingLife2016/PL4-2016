@@ -26,7 +26,7 @@ public class AnnotationParserTest {
     @Test
     public void testReadGFF() throws FileNotFoundException {
         List<Annotation> annotations = new ArrayList<Annotation>();
-        InputStream is = new FileInputStream("src\\main\\resources\\TestFile.gff");
+        InputStream is = getClass().getResourceAsStream("/TestFile.gff");
 
         try {
             annotations = AnnotationParser.readGFF(is);

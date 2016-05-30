@@ -151,6 +151,7 @@
                     <include>**/*.nwk</include>
                     <include>**/*.xlsx</include>
                     <include>**/*.gfa</include>
+                    <include>**/*.gff</include>
                 </includes>
             </resource>
         </resources>
