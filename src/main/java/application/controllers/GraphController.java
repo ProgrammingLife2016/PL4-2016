@@ -35,12 +35,11 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref             the reference string.
      * @param m               the mainController.
      * @param depth           the depth to draw.
-     * @param selectedGenomes the genomes to display.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    public GraphController(Object ref, MainController m, int depth,
-                           List<String> selectedGenomes) {
+    public GraphController(Object ref, MainController m, int depth) {
         super(new ScrollPane());
+
         this.graph = new Graph();
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
@@ -90,30 +89,34 @@ public class GraphController extends Controller<ScrollPane> {
      * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) {
-        if (ref != graph.getCurrentRef()) {
-            root.getChildren().clear();
-        }
         int size = graph.getModel().getLevelMaps().size();
 
-        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
+        //We received a different reference, so we need to redraw.
+        if ((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
+
+            graph.addGraphComponents(ref, depth);
+
+            // add components to graph pane
+            if (graph.getModel().getAllCells().size() > 0) {
+                root.getChildren().addAll(graph.getModel().getAllEdges());
+                root.getChildren().addAll(graph.getModel().getAllCells());
+            } else {
+                root.getChildren().addAll(graph.getModel().getAddedEdges());
+                root.getChildren().addAll(graph.getModel().getAddedCells());
+            }
+
+
+            initMouseHandler();
+
+            graph.endUpdate();
         }
 
-        graph.addGraphComponents(ref, depth);
+//        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
+//            root.getChildren().clear();
+//        }
 
-        // add components to graph pane
-        if (graph.getModel().getAllCells().size() > 0) {
-            root.getChildren().addAll(graph.getModel().getAllEdges());
-            root.getChildren().addAll(graph.getModel().getAllCells());
-        } else {
-            root.getChildren().addAll(graph.getModel().getAddedEdges());
-            root.getChildren().addAll(graph.getModel().getAddedCells());
-        }
 
-        
-        initMouseHandler();
-
-        graph.endUpdate();
         this.getRoot().setContent(root);
 
     }

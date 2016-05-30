@@ -59,7 +59,6 @@ public class Graph {
         startMap = getNodeMapFromFile();
         nodeIds = startMap.size();
         levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-
     }
 
     /**

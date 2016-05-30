@@ -61,7 +61,7 @@ public class MainController extends Controller<BorderPane> {
         /**
          * Create a new GraphController.
          */
-        graphController = new GraphController(null, this, currentView, new ArrayList<>());
+        graphController = new GraphController(null, this, currentView);
         //@ToDo This shouldnt be here.
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
