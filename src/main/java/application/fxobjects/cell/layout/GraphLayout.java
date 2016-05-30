@@ -24,7 +24,7 @@ public class GraphLayout extends CellLayout {
     private int centerY;
     private double maxWidth;
 
-    private static final int BASE_X = 175;
+    private static final int BASE_X = 100;
 
     /**
      * Class constructor.
@@ -67,7 +67,14 @@ public class GraphLayout extends CellLayout {
                 if (cellCount < 2) {
                     continue;
                 }
-
+                for (Cell c : cell.getCellChildren()) {
+                    for (Cell c2 : c.getCellParents()){
+                        if (cell.getCellChildren().contains(c2)){
+                            insertionPlacing(cell, c2);
+                            continue;
+                        }
+                    }
+                }
                 breadthFirstPlacing(cell);
             }
         }
@@ -79,7 +86,7 @@ public class GraphLayout extends CellLayout {
      * @param cell - The parent node.
      */
     private void breadthFirstPlacing(Cell cell) {
-        int yOffset = 3 * offset; //y-offset between nodes on the same x-level
+        int yOffset = 2 * offset; //y-offset between nodes on the same x-level
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
@@ -112,6 +119,22 @@ public class GraphLayout extends CellLayout {
                 breadthFirstPlacing(child);
             }
         }
+    }
+
+    /**
+     * A method to place a Node's children and if need be, recursively their children.
+     *
+     * @param cell - The parent node.
+     */
+    private void insertionPlacing(Cell cell, Cell parentSibling) {
+        System.out.println("PS: " + parentSibling.getCellId() + " cell: "+cell.getCellId());
+        cell.relocate(currentX, currentY);
+        cell.setRelocated(true);
+        currentX += offset;
+        parentSibling.relocate(currentX, currentY - (offset * 2));
+        parentSibling.setRelocated(true);
+        currentX += offset;
+        breadthFirstPlacing(cell);
     }
 
     /**

@@ -295,8 +295,8 @@ public class Model {
      */
     public void setLayout() {
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.graphLayout = new GraphLayout(this, 20,
-                (int) (screenSize.getHeight() - 25) / 2);
+        this.graphLayout = new GraphLayout(this, 35,
+                (int) (screenSize.getHeight() - 150) / 2);
 
         graphLayout.execute();
     }
