@@ -21,6 +21,10 @@ public class ListFactory {
     private ScrollPane infoScroller;
     private Rectangle2D screenSize;
 
+    /**
+     * Contstructur - Create a new ListFactory
+     * @param m the current MainController
+     */
     public ListFactory(MainController m) {
         this.mainController = m;
         this.screenSize = Screen.getPrimary().getVisualBounds();
@@ -31,7 +35,7 @@ public class ListFactory {
      * Method to create the GUI aspects of the InfoList
      *
      * @param info the info to be shown
-     * @return
+     * @return the create InfoList
      */
     public VBox createInfoList(String info) {
         listVBox = new VBox();

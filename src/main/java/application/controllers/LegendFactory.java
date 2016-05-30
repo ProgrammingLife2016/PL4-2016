@@ -15,6 +15,10 @@ import javafx.scene.text.Text;
 public class LegendFactory {
     private MainController mainController;
 
+    /**
+     * Constructor - Create a new LegendFactory
+     * @param m The current MainController
+     */
     public LegendFactory(MainController m) {
         this.mainController = m;
     }

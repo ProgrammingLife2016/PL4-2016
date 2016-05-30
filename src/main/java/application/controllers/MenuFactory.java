@@ -44,9 +44,7 @@ public class MenuFactory {
 
         bar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
         return bar;
-
     }
-
 
     private Menu initHelpMenu() {
         shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
@@ -84,7 +82,6 @@ public class MenuFactory {
                     mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size()-1);
                     mainController.fillGraph(null, new ArrayList<>());
         });
-
 
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);

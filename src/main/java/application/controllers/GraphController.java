@@ -12,7 +12,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -87,7 +86,8 @@ public class GraphController extends Controller<ScrollPane> {
         int size = graph.getLevelMaps().size();
 
         //We received a different reference, so we need to redraw.
-        if (((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt()))) {
+        if (((depth <= size - 1 && depth >= 0) &&
+                (ref != graph.getCurrentRef() || depth != graph.getCurrentInt()))) {
             root.getChildren().clear();
 
             graph.addGraphComponents(ref, depth);
@@ -117,6 +117,9 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
 
+    /**
+     * Method to attach the mouseHandler to each cell in the graph
+     */
     public void initMouseHandler() {
         List<Cell> list = graph.getModel().getAddedCells();
 
@@ -138,7 +141,6 @@ public class GraphController extends Controller<ScrollPane> {
      * Method take a snapshot of the current graph.
      *
      * @return A snapshot taken of the graph.
-     * @throws IOException Throw exception on write failure.
      */
     public Image takeSnapshot() {
         WritableImage image = new WritableImage(2500,

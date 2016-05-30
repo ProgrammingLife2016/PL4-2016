@@ -18,8 +18,6 @@ import java.util.List;
         "PMD.UnusedLocalVariable"})
 public class Graph {
 
-    private Boolean resetModel = true;
-
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
@@ -205,7 +203,6 @@ public class Graph {
                             //Add next cell
 
                             addCell(nodeMap, toret, j, ref, to, from);
-
                         }
                     }
                 }
@@ -230,13 +227,22 @@ public class Graph {
                     addCell(nodeMap, toret, j, ref, to, from);
                 }
             }
-
         }
         toret.setLayout();
         return toret;
     }
 
-    public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j, Object ref, Node to, Node from) {
+    /**
+     * Method to add a new Cell to the graph
+     * @param nodeMap the current NodeMap we are reading from
+     * @param toret the Model the Cell is added to
+     * @param j the number of the Cell
+     * @param ref the current Reference strain
+     * @param to cell we are going to
+     * @param from cell we are coming from
+     */
+    public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
+                        Object ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
         NodeType type = nodeMap.get(j).getType();
@@ -259,10 +265,12 @@ public class Graph {
         }
 
         if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes())
+                    / (double) Math.max(genomes.size(), 10)) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
         } else {
-            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes())
+                    / (double) Math.max(genomes.size(), 10)) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -377,6 +385,9 @@ public class Graph {
         return levelMaps;
     }
 
+    /**
+     * Method to reset the current view
+     */
     public void reset() {
         this.currentInt = -1;
     }

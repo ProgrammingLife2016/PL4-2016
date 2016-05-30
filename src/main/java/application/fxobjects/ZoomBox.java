@@ -13,8 +13,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
-import java.io.IOException;
-
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
