@@ -203,18 +203,11 @@ public class MainController extends Controller<BorderPane> {
         /**
          * Apply the new Selected Genomes.
          */
-        //@ToDO Should this be done here?
-        // Nope it shouldnt, this redraws the graph every update.
-        graphController.getGraph().phyloSelection(selectedGenomes);
-        //@ToDo And this?
         graphController.getGraph().setGenomes(selectedGenomes);
-        //@ToDo And this??
-        //graphController.getGraph().setRefernce(selectedGenomes);
-
 
         //@ToDo: Implement a new method that loads the graph correctly.
         // Maybe this is it.
-        graphController.init(ref, graphController.getGraph().getLevelMaps().size() - 1);
+        graphController.init(ref, currentView);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
@@ -266,15 +259,20 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
-        Graph graph = null;
-        if (graphController == null) {
-            graph = new Graph();
-        } else {
-            graph = graphController.getGraph();
-        }
-        graph.phyloSelection(s);
-        //@TODO No new GraphController should be made.
-//        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
+        System.out.println(s.toString());
+        graphController.getGraph().reset();
+        fillGraph(null,s);
+
+
+//        Graph graph = null;
+//        if (graphController == null) {
+//            graph = new Graph();
+//        } else {
+//            graph = graphController.getGraph();
+//        }
+//        graph.phyloSelection(s);
+//        //@TODO No new GraphController should be made.
+////        graphController = new GraphController(graph, graph.getCurrentRef(), this, currentView, s);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);

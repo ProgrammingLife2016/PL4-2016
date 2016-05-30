@@ -82,7 +82,6 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param ref             the reference string.
      * @param depth           the depth to draw.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     public void init(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
@@ -91,6 +90,7 @@ public class GraphController extends Controller<ScrollPane> {
         if ((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
 
+            System.out.println("Update!");
             graph.addGraphComponents(ref, depth);
 
             // add components to graph pane
@@ -102,21 +102,12 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
-
             initMouseHandler();
-
             graph.endUpdate();
-
-
         }
-
-//        if (depth <= size - 1 && depth >= 0 && depth != graph.getCurrentInt()) {
-//            root.getChildren().clear();
-//        }
-
-
-
-
+        /**
+         * Set Graph as center.
+         */
         this.getRoot().setContent(root);
     }
 

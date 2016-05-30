@@ -379,4 +379,9 @@ public class Graph {
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }
+
+    public void reset() {
+        this.currentInt = -1;
+        System.out.println("Reset the model.");
+    }
 }
