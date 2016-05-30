@@ -360,17 +360,6 @@ public class Graph {
     }
 
     /**
-     * Indicate which strains are selected in the phylogenetic tree
-     *
-     * @param s the selected strains
-     */
-    public void phyloSelection(List<String> s) {
-        currentGenomes = s;
-        currentInt = -1;
-        currentRef = null;
-    }
-
-    /**
      * Get the current highlighted strain
      *
      * @return the current highlighted strain

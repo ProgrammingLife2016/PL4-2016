@@ -80,12 +80,9 @@ public class MenuFactory {
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
-            //@ToDo this funtion doesnt work.
-
                     mainController.getGraphController().getGraph().reset();
                     mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size()-1);
                     mainController.fillGraph(null, new ArrayList<>());
-//                    mainController.getGraphController().getGraph().setCurrentGenomes(new ArrayList<>());
         });
 
 
