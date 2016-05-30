@@ -47,7 +47,19 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
 
         loadFXMLfile("/fxml/main.fxml");
+
+
+        Graph graph = null;
+        try {
+            graph = new Graph();
+            currentView = graph.getLevelMaps().size() - 1;
+            graphController = new GraphController(graph, null, this, currentView, new ArrayList<>());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         fillGraph(null, new ArrayList<>());
+
+
     }
 
 
@@ -177,20 +189,18 @@ public class MainController extends Controller<BorderPane> {
      * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
-        Graph graph = null;
-        if (graphController == null) {
-            try {
-                graph = new Graph();
-                currentView = graph.getLevelMaps().size() - 1;
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(0);
-            }
-        } else {
-            graph = graphController.getGraph();
-        }
+        // graph = null;
+//        if (graphController == null) {
+//            try {
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                System.exit(0);
+//            }
+//        } else {
+        Graph graph = graphController.getGraph();
+//        }
         graph.phyloSelection(selectedGenomes);
-        graphController = new GraphController(graph, ref, this, currentView, selectedGenomes);
 
         screen = graphController.getRoot();
         this.getRoot().setCenter(screen);
