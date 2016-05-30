@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedLocalVariable"})
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
+        "PMD.UnusedLocalVariable"})
 public class Graph {
 
     private Boolean resetModel = true;
@@ -95,12 +96,14 @@ public class Graph {
     public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
             throws IOException {
 
+        currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
+                //currentRef = ref;
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
@@ -141,12 +144,12 @@ public class Graph {
     private void loadOneUp(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one up") {
-            public void run() {
+            public void start() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
                     zoomOut = generateModel(currentRef, finalDepth + 1);
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
@@ -158,13 +161,13 @@ public class Graph {
     private void loadOneDown(int depth, List<String> selectedGenomes) {
         int finalDepth = depth;
         new Thread("Load one down") {
-            public void run() {
+            public void start() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = generateModel(currentRef, finalDepth - 1);
 
                 }
             }
-        }.run();
+        }.start();
     }
 
     /**
@@ -183,9 +186,10 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
+        //max width for Edges
+        int maxEdgeWidth = 10;
 
         if (currentGenomes.size() > 0) { //Draw selected references
-            System.out.println("Only drawing selected");
             //We are now drawing only the selected items.
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
@@ -226,13 +230,11 @@ public class Graph {
                             }
 
                             if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                                toret.addEdge(from.getId(), to.getId(),
-                                        intersection(from.getGenomes(),
-                                        to.getGenomes()), EdgeType.GRAPH_REF);
+                                int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+                                toret.addEdge(from.getId(), to.getId(),width, EdgeType.GRAPH_REF);
                             } else {
-                                toret.addEdge(from.getId(), to.getId(),
-                                        intersection(from.getGenomes(),
-                                        to.getGenomes()), EdgeType.GRAPH);
+                                int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+                                toret.addEdge(from.getId(), to.getId(),width, EdgeType.GRAPH);
                             }
                         }
                     }
@@ -274,11 +276,11 @@ public class Graph {
 
                     if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
                         //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                to.getGenomes()), EdgeType.GRAPH_REF);
+                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
                     } else {
-                        toret.addEdge(from.getId(), to.getId(), intersection(from.getGenomes(),
-                                to.getGenomes()), EdgeType.GRAPH);
+                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     }
                 }
             }

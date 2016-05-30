@@ -320,10 +320,9 @@ public class TreeController extends Controller<ScrollPane> {
         for (int i = 0; i < 10; i++) {
             int tempCount = 0;
             for (Cell c : collectedStrains) {
-                if (metaData.containsKey(((LeafCell) c).getName())) {
-                    if (metaData.get(((LeafCell) c).getName()) == i) {
-                        tempCount++;
-                    }
+                if (metaData.containsKey(((LeafCell) c).getName())
+                        && metaData.get(((LeafCell) c).getName()) == i) {
+                    tempCount++;
                 }
             }
             if (tempCount > count) {
