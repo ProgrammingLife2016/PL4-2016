@@ -257,4 +257,8 @@ public class MainController extends Controller<BorderPane> {
     public ListFactory getListFactory() {
         return listFactory;
     }
+
+    public void setCurrentView(int currentView) {
+        this.currentView = currentView;
+    }
 }
