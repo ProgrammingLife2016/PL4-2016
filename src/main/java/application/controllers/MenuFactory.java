@@ -64,9 +64,12 @@ public class MenuFactory {
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
-                null, event ->
-                mainController.soloStrainSelection(mainController.getTreeController().
-                        getSelectedGenomes()));
+                null, event -> {
+                    mainController.getGraphController().getGraph().reset();
+                    mainController.soloStrainSelection(mainController.getTreeController().
+                            getSelectedGenomes());
+                });
+
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
                 mainController.strainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
