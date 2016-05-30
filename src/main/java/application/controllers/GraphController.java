@@ -86,8 +86,6 @@ public class GraphController extends Controller<ScrollPane> {
     public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
 
-        System.out.println("Update: " + graph.getCurrentInt());
-
         //We received a different reference, so we need to redraw.
         if (((depth <= size - 1 && depth >= 0) && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt()))) {
             root.getChildren().clear();

@@ -27,6 +27,11 @@ public class ListFactory {
     }
 
 
+    /**
+     * Method to create the GUI aspects of the InfoList
+     * @param info the info to be shown
+     * @return
+     */
     public VBox createInfoList(String info) {
         listVBox = new VBox();
         infoScroller = new ScrollPane();
@@ -67,7 +72,6 @@ public class ListFactory {
      * Create an info panel to show the information on a node.
      */
     private void createNodeInfo() {
-        System.out.println("create node info");
         infoList = new TextFlow();
         infoList.prefHeightProperty().bind(infoScroller.heightProperty());
         infoList.prefWidthProperty().bind(infoScroller.widthProperty());
@@ -87,10 +91,18 @@ public class ListFactory {
         this.id.setText(id);
     }
 
+    /**
+     * Getter method for the list
+     * @return the list
+     */
     public ListView getList() {
         return list;
     }
 
+    /**
+     * Getter method for the InfoScroller
+     * @return the InfoScroller
+     */
     public ScrollPane getInfoScroller() {
         return infoScroller;
     }

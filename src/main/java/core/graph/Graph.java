@@ -93,8 +93,6 @@ public class Graph {
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth) {
-        System.out.println("currentInt: " + currentInt  );
-        System.out.println(currentGenomes.toString());
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
@@ -392,6 +390,5 @@ public class Graph {
 
     public void reset() {
         this.currentInt = -1;
-        System.out.println("Reset the model.");
     }
 }

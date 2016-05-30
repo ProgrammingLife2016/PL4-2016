@@ -1,23 +1,13 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
-import application.fxobjects.cell.graph.RectangleCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.stage.Screen;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -57,25 +47,18 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
 
-        /**
-         * Create a new GraphController.
-         */
+        // Create the new GraphController
         graphController = new GraphController(this);
         //@ToDo This shouldnt be here.
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-        /**
-         * Fll the graph.
-         */
+        // Fill the graph
         fillGraph(null, new ArrayList<>());
 
-        /**
-         * Create a new TreeController.
-         */
+        // Create the TreeController
         treeController = new TreeController(this,
                 this.getClass().getResourceAsStream("/metadata.xlsx"));
     }
-
 
     /**
      * Getter method for the current view level.
@@ -97,6 +80,9 @@ public class MainController extends Controller<BorderPane> {
         createMenu();
     }
 
+    /**
+     * Method to add items to the GUI
+     */
     private void initGUI() {
         createZoomBoxAndLegend();
         createList();
@@ -108,12 +94,6 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setRight(listVBox);
     }
 
-    private void setListItems() {
-        List<String> genomes = graphController.getGenomes();
-        genomes.sort(Comparator.naturalOrder());
-        list.setItems(FXCollections.observableArrayList(genomes));
-    }
-
     /**
      * Method to fill the graph.
      *
@@ -121,15 +101,12 @@ public class MainController extends Controller<BorderPane> {
      * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(Object ref, List<String> selectedGenomes) {
-        /**
-         * Apply the new Selected Genomes.
-         */
+        // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
         graphController.update(ref, currentView);
 
         initGUI();
-
     }
 
     /**
@@ -150,6 +127,7 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void strainSelection(List<String> s) {
+        graphController.getGraph().reset();
         fillGraph(null, s);
 
         initGUI();
@@ -174,19 +152,12 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setBottom(hbox);
     }
 
+    /**
+     * Method to create the Legend
+     */
     private void createLegend() {
         LegendFactory legendFactory = new LegendFactory(this);
         legend = legendFactory.createLegend();
-    }
-
-    /**
-     * Method to fill the phylogenetic tree.
-     */
-    public void fillTree() {
-        screen = treeController.getRoot();
-        this.getRoot().setCenter(screen);
-        this.getRoot().setBottom(null);
-        hideListVBox();
     }
 
     /**
@@ -198,6 +169,9 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setTop(menuBar);
     }
 
+    /**
+     * Method to create the Info-list
+     */
     private void createList() {
         listFactory = new ListFactory(this);
         listVBox = listFactory.createInfoList("");
@@ -210,7 +184,9 @@ public class MainController extends Controller<BorderPane> {
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                fillGraph(list.getSelectionModel().getSelectedItem(), new ArrayList<>());
+                graphController.getGraph().reset();
+                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+                graphController.takeSnapshot();
             }
         });
 
@@ -231,10 +207,29 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
+     * Method to fill the phylogenetic tree.
+     */
+    public void fillTree() {
+        screen = treeController.getRoot();
+        this.getRoot().setCenter(screen);
+        this.getRoot().setBottom(null);
+        hideListVBox();
+    }
+
+    /**
      * Hide the info panel.
      */
     private void hideListVBox() {
         this.getRoot().getChildren().remove(listVBox);
+    }
+
+    /**
+     * Method to add items to the Info-List
+     */
+    private void setListItems() {
+        List<String> genomes = graphController.getGenomes();
+        genomes.sort(Comparator.naturalOrder());
+        list.setItems(FXCollections.observableArrayList(genomes));
     }
 
     /**
@@ -255,6 +250,10 @@ public class MainController extends Controller<BorderPane> {
         return treeController;
     }
 
+    /**
+     * Getter method for the ListFactory
+     * @return the ListFactory
+     */
     public ListFactory getListFactory() {
         return listFactory;
     }
