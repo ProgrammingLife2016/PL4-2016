@@ -56,13 +56,10 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        try {
-            startMap = getNodeMapFromFile();
-            nodeIds = startMap.size();
-            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        startMap = getNodeMapFromFile();
+        nodeIds = startMap.size();
+        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+
     }
 
     /**
@@ -72,11 +69,17 @@ public class Graph {
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile() throws IOException {
-        Parser parser = new Parser();
-        InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-        HashMap<Integer, Node> startMap = parser.readGFA(inputStream);
-        inputStream.close();
+    public HashMap<Integer, Node> getNodeMapFromFile() {
+        try {
+            Parser parser = new Parser();
+            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+            startMap = parser.readGFA(inputStream);
+
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         return startMap;
     }
@@ -91,8 +94,7 @@ public class Graph {
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes)
-            throws IOException {
+    public Boolean addGraphComponents(Object ref, int depth, List<String> selectedGenomes) {
 
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {

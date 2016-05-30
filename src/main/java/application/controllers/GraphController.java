@@ -57,11 +57,7 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        try {
-            init(ref, depth, selectedGenomes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        init(ref, depth, selectedGenomes);
     }
 
     /**
@@ -94,7 +90,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param selectedGenomes the genomes to be selected.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    public void init(Object ref, int depth, List<String> selectedGenomes) throws IOException {
+    public void init(Object ref, int depth, List<String> selectedGenomes) {
         if (ref != graph.getCurrentRef()) {
             root.getChildren().clear();
         }
@@ -115,7 +111,7 @@ public class GraphController extends Controller<ScrollPane> {
             root.getChildren().addAll(graph.getModel().getAddedCells());
         }
 
-        //initKeyHandler();
+        
         initMouseHandler();
 
         graph.endUpdate();
@@ -129,7 +125,6 @@ public class GraphController extends Controller<ScrollPane> {
     public void initKeyHandler() {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
-
 
     public void initMouseHandler() {
         List<Cell> list = graph.getModel().getAddedCells();
