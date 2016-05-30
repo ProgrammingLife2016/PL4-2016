@@ -84,8 +84,8 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref   the reference string.
-     * @param depth the depth to draw.
+     * @param ref             the reference string.
+     * @param depth           the depth to draw.
      * @param selectedGenomes the genomes to display
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
@@ -184,8 +184,6 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
-        //max width for Edges
-        int maxEdgeWidth = 10;
 
         if (currentGenomes.size() > 0) { //Draw selected references
             //We are now drawing only the selected items.
@@ -208,32 +206,9 @@ public class Graph {
                         Node to = nodeMap.get(j);
                         if (intersection(to.getGenomes(), currentGenomes) > 0) {
                             //Add next cell
-                            NodeType type = nodeMap.get(j).getType();
 
-                            if (type == NodeType.BASE) {
-                                toret.addCell(to.getId(), to.getSequence(),
-                                        CellType.RECTANGLE);
+                            addCell(nodeMap, toret, j, ref, to, from);
 
-                            } else if (type == NodeType.BUBBLE) {
-                                toret.addCell(to.getId(),
-                                        Integer.toString(to.getCollapseLevel()),
-                                        CellType.BUBBLE);
-                            } else if (type == NodeType.INDEL) {
-                                toret.addCell(to.getId(),
-                                        Integer.toString(to.getCollapseLevel()),
-                                        CellType.INDEL);
-                            } else if (type == NodeType.COLLECTION) {
-                                toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                        CellType.COLLECTION);
-                            }
-
-                            if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                                int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
-                                toret.addEdge(from.getId(), to.getId(),width, EdgeType.GRAPH_REF);
-                            } else {
-                                int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
-                                toret.addEdge(from.getId(), to.getId(),width, EdgeType.GRAPH);
-                            }
                         }
                     }
                 }
@@ -252,42 +227,48 @@ public class Graph {
 
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
-
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).
                             forEach(genomes::add);
                     //Add next cell
-                    NodeType type = nodeMap.get(j).getType();
-
-                    if (type == NodeType.BASE) {
-                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                CellType.RECTANGLE);
-                    } else if (type == NodeType.BUBBLE) {
-                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                CellType.BUBBLE);
-                    } else if (type == NodeType.INDEL) {
-                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                CellType.INDEL);
-                    } else if (type == NodeType.COLLECTION) {
-                        toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
-                                CellType.COLLECTION);
-                    }
-
-                    if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-                        //current.addCell(to.getId(), to.getSequence(), CellType.RECTANGLE);
-                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
-                    } else {
-                        int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(),to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
-                    }
+                    addCell(nodeMap, toret, j, ref, to, from);
                 }
             }
-        }
 
+        }
         toret.setLayout();
         return toret;
     }
 
+    public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j, Object ref, Node to, Node from) {
+        //Add next cell
+        int maxEdgeWidth = 10;
+        NodeType type = nodeMap.get(j).getType();
+
+        if (type == NodeType.BASE) {
+            toret.addCell(to.getId(), to.getSequence(),
+                    CellType.RECTANGLE);
+
+        } else if (type == NodeType.BUBBLE) {
+            toret.addCell(to.getId(),
+                    Integer.toString(to.getCollapseLevel()),
+                    CellType.BUBBLE);
+        } else if (type == NodeType.INDEL) {
+            toret.addCell(to.getId(),
+                    Integer.toString(to.getCollapseLevel()),
+                    CellType.INDEL);
+        } else if (type == NodeType.COLLECTION) {
+            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+                    CellType.COLLECTION);
+        }
+
+        if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
+            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+        } else {
+            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes()) / (double) Math.max(genomes.size(), 10)) + 1;
+            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+        }
+    }
 
     /**
      * Method that updates the model.
@@ -365,6 +346,7 @@ public class Graph {
 
     /**
      * Get the current level
+     *
      * @return the current level
      */
     public int getCurrentInt() {
@@ -373,6 +355,7 @@ public class Graph {
 
     /**
      * Indicate which strains are selected in the phylogenetic tree
+     *
      * @param s the selected strains
      */
     public void phyloSelection(List<String> s) {
@@ -383,6 +366,7 @@ public class Graph {
 
     /**
      * Get the current highlighted strain
+     *
      * @return the current highlighted strain
      */
     public Object getCurrentRef() {
@@ -391,6 +375,7 @@ public class Graph {
 
     /**
      * Get the levelMaps
+     *
      * @return the levelMaps
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {

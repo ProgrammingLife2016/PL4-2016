@@ -60,8 +60,7 @@ public class MainController extends Controller<BorderPane> {
         graphController = new GraphController(null, this, currentView, new ArrayList<>());
         //@ToDo This shouldnt be here.
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-
-
+        
         /**
          * Fll the graph.
          */
@@ -207,8 +206,11 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.takeSnapshot();
 
+
         createZoomBoxAndLegend();
-        graphController.initKeyHandler();
+
+        //TODO: Please do not remove line below
+        //graphController.initKeyHandler();
 
         createInfoList("");
 

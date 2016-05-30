@@ -165,6 +165,7 @@ public class Model {
             case RECTANGLE:
                 RectangleCell rectangleCell = new RectangleCell(id, text);
                 addCell(rectangleCell);
+
                 break;
             case BUBBLE:
                 BubbleCell bubbleCell = new BubbleCell(id, text);

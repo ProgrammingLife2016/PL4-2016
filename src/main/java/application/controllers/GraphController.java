@@ -26,7 +26,7 @@ public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
-    AnchorPane root = new AnchorPane();
+    private AnchorPane root;
     private Rectangle2D screenSize;
 
     /**
@@ -45,6 +45,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.screenSize = Screen.getPrimary().getVisualBounds();
         this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
+        this.root = new AnchorPane();
 
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -106,7 +107,6 @@ public class GraphController extends Controller<ScrollPane> {
         graph.addGraphComponents(ref, depth, selectedGenomes);
 
         // add components to graph pane
-
         if (graph.getModel().getAllCells().size() > 0) {
             root.getChildren().addAll(graph.getModel().getAllEdges());
             root.getChildren().addAll(graph.getModel().getAllCells());
@@ -115,15 +115,10 @@ public class GraphController extends Controller<ScrollPane> {
             root.getChildren().addAll(graph.getModel().getAddedCells());
         }
 
-        List<Cell> list = graph.getModel().getAddedCells();
-
-        for (Cell c : list) {
-            graphMouseHandling.setMouseHandling(c);
-        }
+        initKeyHandler();
+        initMouseHandler();
 
         graph.endUpdate();
-
-
         this.getRoot().setContent(root);
 
     }
@@ -135,6 +130,14 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
     }
 
+
+    public void initMouseHandler() {
+        List<Cell> list = graph.getModel().getAddedCells();
+
+        for (Cell c : list) {
+            graphMouseHandling.setMouseHandling(c);
+        }
+    }
 
     /**
      * Getter method for the genomes.
