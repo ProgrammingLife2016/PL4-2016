@@ -12,7 +12,6 @@ import javafx.scene.text.Text;
  */
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
-    private Text text;
 
     /**
      * Bubble cell constructor.
@@ -21,14 +20,23 @@ public class BubbleCell extends Cell {
      * @param collapseLevel The collapse level of a cell.
      */
     public BubbleCell(int id, String collapseLevel) {
+        this(id, new StackPane(), new Text(collapseLevel));
+    }
+
+    /**
+     * Bubble cell constructor.
+     *
+     * @param id            The ID of a cell.
+     * @param pane          A given stack pane.
+     * @param text          A given text element.
+     */
+    public BubbleCell(int id, StackPane pane, Text text) {
         super(id);
-        text = new Text(collapseLevel);
 
         Circle view = new Circle(10);
         view.setStroke(Color.YELLOW);
         view.setFill(Color.YELLOW);
 
-        StackPane pane = new StackPane();
         pane.getChildren().addAll(view, text);
         setView(pane);
     }
@@ -42,12 +50,4 @@ public class BubbleCell extends Cell {
         return type;
     }
 
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
-    }
 }

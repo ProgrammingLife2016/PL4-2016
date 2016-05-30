@@ -1,4 +1,4 @@
-package application.fxobjects.cell.graph;
+package application.fxobjects.cell;
 
 import application.fxobjects.cell.layout.GraphLayout;
 import core.graph.Graph;

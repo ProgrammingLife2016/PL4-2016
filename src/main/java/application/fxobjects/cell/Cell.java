@@ -6,7 +6,6 @@ import java.util.List;
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -109,13 +108,6 @@ public abstract class Cell extends Pane {
      * @return The type of the Cell.
      */
     public abstract CellType getType();
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return The Cell's text.
-     */
-    public abstract Text getText();
 
     /**
      * Return whether a cell has been relocated.

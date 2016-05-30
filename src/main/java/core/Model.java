@@ -48,7 +48,7 @@ public class Model {
      * Class constructor.
      */
     public Model() {
-        graphParent = new RectangleCell(1, "");
+        graphParent = new RectangleCell(1);
         graphLayout = new GraphLayout(null, 0, 0);
 
         // clear model, create lists
@@ -163,7 +163,7 @@ public class Model {
     public Boolean addCell(int id, String text, CellType type) {
         switch (type) {
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, text);
+                RectangleCell rectangleCell = new RectangleCell(id);
                 addCell(rectangleCell);
                 break;
             case BUBBLE:

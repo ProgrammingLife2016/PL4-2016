@@ -140,7 +140,7 @@ public class MainController extends Controller<BorderPane> {
      */
     private Pane createLegend() {
         final VBox col1 = new VBox();
-        col1.getChildren().add(new RectangleCell(0, ""));
+        col1.getChildren().add(new RectangleCell(0));
         col1.getChildren().add(new BubbleCell(0, "N"));
         col1.getChildren().add(new IndelCell(0, "N"));
         col1.getChildren().add(new CollectionCell(0, "N"));
