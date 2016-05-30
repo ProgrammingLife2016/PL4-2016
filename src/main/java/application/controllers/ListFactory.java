@@ -29,6 +29,7 @@ public class ListFactory {
 
     /**
      * Method to create the GUI aspects of the InfoList
+     *
      * @param info the info to be shown
      * @return
      */
@@ -93,6 +94,7 @@ public class ListFactory {
 
     /**
      * Getter method for the list
+     *
      * @return the list
      */
     public ListView getList() {
@@ -101,6 +103,7 @@ public class ListFactory {
 
     /**
      * Getter method for the InfoScroller
+     *
      * @return the InfoScroller
      */
     public ScrollPane getInfoScroller() {
