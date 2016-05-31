@@ -47,17 +47,17 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Class constructor.
      *
-     * @param pt A phylogenetic tree.
      * @param m  MainController.
      * @param s  InputStream for metaData.
      */
-    public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
+    public TreeController(MainController m, InputStream s) {
         super(new ScrollPane());
-        this.pt = pt;
+        this.pt = new PhylogeneticTree();
         this.metaData = MetaData.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
+
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 

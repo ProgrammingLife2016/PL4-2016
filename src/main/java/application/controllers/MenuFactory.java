@@ -44,9 +44,7 @@ public class MenuFactory {
 
         bar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
         return bar;
-
     }
-
 
     private Menu initHelpMenu() {
         shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
@@ -64,9 +62,12 @@ public class MenuFactory {
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
-                null, event ->
-                mainController.soloStrainSelection(mainController.getTreeController().
-                        getSelectedGenomes()));
+                null, event -> {
+                    mainController.getGraphController().getGraph().reset();
+                    mainController.soloStrainSelection(mainController.getTreeController().
+                            getSelectedGenomes());
+                });
+
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
                 mainController.strainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
@@ -76,8 +77,12 @@ public class MenuFactory {
                 mainController.switchScene(-1));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
-        resetView = initMenuItem("Reset", null, event ->
-                mainController.fillGraph(null, new ArrayList<>()));
+        resetView = initMenuItem("Reset", null, event -> {
+            mainController.getGraphController().getGraph().reset();
+            mainController.setCurrentView(mainController.getGraphController()
+                    .getGraph().getLevelMaps().size() - 1);
+            mainController.fillGraph(null, new ArrayList<>());
+        });
 
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);

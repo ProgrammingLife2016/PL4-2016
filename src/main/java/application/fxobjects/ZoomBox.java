@@ -13,8 +13,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
-import java.io.IOException;
-
 /**
  * Created by Daphne van Tetering on 28-4-2016.
  */
@@ -81,11 +79,7 @@ public class ZoomBox extends ScrollPane {
     public Group initZoomBox() {
         Group zoomBox = new Group();
         Image image = null;
-        try {
-            image = graphController.takeSnapshot();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = graphController.takeSnapshot();
         ImagePattern pattern = new ImagePattern(image);
 
         zoomRectBorder.setFill(pattern);
