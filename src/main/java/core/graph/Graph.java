@@ -265,11 +265,13 @@ public class Graph {
         }
 
         if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes())
+            int width = (int) Math.round(maxEdgeWidth
+                    * (double) intersection(from.getGenomes(), to.getGenomes())
                     / (double) Math.max(genomes.size(), 10)) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
         } else {
-            int width = (int) Math.round(maxEdgeWidth * (double) intersection(from.getGenomes(), to.getGenomes())
+            int width = (int) Math.round(maxEdgeWidth
+                    * (double) intersection(from.getGenomes(), to.getGenomes())
                     / (double) Math.max(genomes.size(), 10)) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }

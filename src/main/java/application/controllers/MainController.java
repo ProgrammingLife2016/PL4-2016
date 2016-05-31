@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -251,13 +252,19 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Getter method for the ListFactory
-     * @return the ListFactory
+     * Getter method for the ListFactory.
+     *
+     * @return the ListFactory.
      */
     public ListFactory getListFactory() {
         return listFactory;
     }
 
+    /**
+     * Method to set the currentView.
+     *
+     * @param currentView the current View.
+     */
     public void setCurrentView(int currentView) {
         this.currentView = currentView;
     }
