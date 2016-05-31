@@ -13,6 +13,9 @@ import static org.junit.Assert.*;
 public class GenomeTest {
     Genome g;
 
+    /**
+     * Set up a new Genome instance.
+     */
     @Before
     public void setUp() {
         g = new Genome();
