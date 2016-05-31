@@ -104,9 +104,7 @@ public class GraphController extends Controller<ScrollPane> {
             initMouseHandler();
             graph.endUpdate();
         }
-        /**
-         * Set Graph as center.
-         */
+        //Set Graph as center.
         this.getRoot().setContent(root);
     }
 
