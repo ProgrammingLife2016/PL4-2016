@@ -157,7 +157,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to create the Legend
      */
     private void createLegend() {
-        LegendFactory legendFactory = new LegendFactory(this);
+        LegendFactory legendFactory = new LegendFactory();
         legend = legendFactory.createLegend();
     }
 
@@ -174,7 +174,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to create the Info-list
      */
     private void createList() {
-        listFactory = new ListFactory(this);
+        listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
         infoScroller = listFactory.getInfoScroller();
         list = listFactory.getList();

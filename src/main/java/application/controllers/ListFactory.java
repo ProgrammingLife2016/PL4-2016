@@ -13,7 +13,6 @@ import javafx.stage.Screen;
  * Created by Daphne van Tetering on 30-5-2016.
  */
 public class ListFactory {
-    private MainController mainController;
     private ListView list;
     private TextFlow infoList;
     private VBox listVBox;
@@ -22,11 +21,9 @@ public class ListFactory {
     private Rectangle2D screenSize;
 
     /**
-     * Contstructur - Create a new ListFactory
-     * @param m the current MainController
+     * Constructor - Create a new ListFactory
      */
-    public ListFactory(MainController m) {
-        this.mainController = m;
+    public ListFactory() {
         this.screenSize = Screen.getPrimary().getVisualBounds();
     }
 
