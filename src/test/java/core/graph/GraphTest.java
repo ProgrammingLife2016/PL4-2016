@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -28,11 +27,7 @@ public class GraphTest {
      */
     @Before
     public void setUp() {
-        try {
-            g = new Graph();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        g = new Graph();
         mockedModel = mock(Model.class);
 
         when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
