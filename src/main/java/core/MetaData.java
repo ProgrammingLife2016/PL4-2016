@@ -77,10 +77,10 @@ public final class MetaData {
                                 gen.setEthionamide(row.getCell(14).getStringCellValue());
                                 break;
                             case 16:
-                                gen.setIsoniazid(row.getCell(16).getStringCellValue());
+                                gen.setIsoniazid(row.getCell(15).getStringCellValue());
                                 break;
                             case 17:
-                                gen.setKanamycin(row.getCell(17).getStringCellValue());
+                                gen.setKanamycin(row.getCell(16).getStringCellValue());
                                 break;
                             case 18:
                                 gen.setPyrazinamide(row.getCell(18).getStringCellValue());

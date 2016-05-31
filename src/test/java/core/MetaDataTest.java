@@ -26,13 +26,13 @@ public class MetaDataTest {
         assertEquals(1, tm.size());
         Genome g = tm.get("TKKa");
 
-        assertEquals("b", g.getAge());
+        assertEquals(1, g.getAge());
         assertEquals("c", g.getSex());
-        assertEquals("d", g.isHiv());
+        assertEquals(true, g.isHiv());
         assertEquals("e", g.getCohort());
         assertEquals("g", g.getStudyDistrict());
         assertEquals("h", g.getSpecimenType());
-        assertEquals("i", g.getSmearStatus());
+        assertEquals("j", g.getSmearStatus());
         assertEquals("k", g.getIsolation());
         assertEquals("l", g.getPhenoDST());
         assertEquals("m", g.getCapreomycin());
@@ -46,9 +46,8 @@ public class MetaDataTest {
         assertEquals("v", g.getStreptomycin());
         assertEquals("w", g.getSpoligotype());
         assertEquals("y", g.getGenoDST());
-        assertEquals("x", g.getLineage());
+        assertEquals(4, g.getLineage());
         assertEquals("aa", g.getTf());
-
     }
 
     /**
