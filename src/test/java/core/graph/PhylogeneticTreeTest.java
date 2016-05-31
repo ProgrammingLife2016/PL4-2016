@@ -26,7 +26,6 @@ public class PhylogeneticTreeTest {
     public void setUp() {
         model = mock(Model.class);
         pt = new PhylogeneticTree(model);
-        Tree tree = pt.getTreeFromFile();
 
         when(model.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
     }
