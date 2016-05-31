@@ -22,9 +22,19 @@ public class PhylogeneticTree {
      */
     public PhylogeneticTree() {
         this.model = new Model();
-        this.setup();
+        Tree tree = getTreeFromFile();
+
+        this.setup(tree);
     }
 
+    /**
+     * Class constructor for testing purposes.
+     *
+     * @param model A given model.
+     */
+    public PhylogeneticTree(Model model) {
+        this.model = model;
+    }
     /**
      * Get the model of the PhylogeneticTree.
      *
@@ -61,10 +71,10 @@ public class PhylogeneticTree {
     /**
      * Add TreeNodes to the model.
      *
+     * @param tree A Newick Tree read from disk.
      * @throws IOException Throw exception on read failure.
      */
-    public void setup() {
-        Tree tree = getTreeFromFile();
+    public void setup(Tree tree) {
         model.setTree(tree);
 
         for (TreeNode node : tree.nodes) {
