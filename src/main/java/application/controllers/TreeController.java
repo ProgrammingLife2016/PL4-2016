@@ -140,7 +140,8 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.add(cell);
 
             if (temp.contains("TKK")) {
-                applyColorUpwards(parentList, determineLinColor(metaData.get(temp).getLineage()), 4.0);
+                applyColorUpwards(parentList,
+                        determineLinColor(metaData.get(temp).getLineage()), 4.0);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
