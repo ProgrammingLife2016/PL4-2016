@@ -99,7 +99,7 @@ public class Graph {
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
                 //currentRef = ref;
-                current = generateModel(ref, depth, new Model());
+                current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadOneUp(depth);
@@ -117,7 +117,7 @@ public class Graph {
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    current = generateModel(ref, depth, new Model());
+                    current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
                     loadOneUp(depth);
@@ -140,7 +140,7 @@ public class Graph {
         new Thread("Load one up") {
             public void start() {
                 if (finalDepth + 1 <= levelMaps.size() - 1) {
-                    zoomOut = generateModel(currentRef, finalDepth + 1, new Model());
+                    zoomOut = generateModel(currentRef, finalDepth + 1);
                 }
             }
         }.start();
@@ -156,11 +156,22 @@ public class Graph {
         new Thread("Load one down") {
             public void start() {
                 if (finalDepth - 1 >= 0) {
-                    zoomIn = generateModel(currentRef, finalDepth - 1, new Model());
+                    zoomIn = generateModel(currentRef, finalDepth - 1);
 
                 }
             }
         }.start();
+    }
+
+    /**
+     * Method to generate a new model
+     *
+     * @param ref   reference object
+     * @param depth the depth of the model
+     * @return the new model
+     */
+    public Model generateModel(Object ref, int depth) {
+        return generateModel(ref, depth, new Model());
     }
 
     /**
