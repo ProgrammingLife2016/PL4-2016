@@ -1,15 +1,17 @@
-package application.fxobjects.cell.graph;
+package application.fxobjects.cell;
 
+import application.fxobjects.cell.graph.RectangleCell;
 import application.fxobjects.cell.layout.GraphLayout;
+import core.Model;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 /**
  * Test class for GraphLayout.java.
@@ -98,6 +100,43 @@ public class GraphLayoutTest {
         graphLayout.setCellCount(42);
 
         assertEquals(42, graphLayout.getCellCount());
+    }
+
+    /**
+     * Tests whether the execute method actually relocates a cell.
+     */
+    @Test
+    public void testExecute() {
+        Cell celll = spy(new RectangleCell(1));
+
+        Model model = spy(new Model());
+        model.addCell(celll);
+
+        graphLayout = new GraphLayout(model, 20, 500);
+
+        assertFalse(celll.isRelocated());
+        graphLayout.execute();
+        assertTrue(celll.isRelocated());
+    }
+
+    /**
+     * Tests whether the breathFirstPlacing method actually relocates a cell.
+     */
+    @Test
+    public void testBreadthFirstPlacing() {
+        Cell celll = spy(new RectangleCell(1));
+        Cell cell2 = spy(new RectangleCell(2));
+
+        celll.addCellChild(cell2);
+
+        Model model = spy(new Model());
+        model.addCell(celll);
+
+        graphLayout = new GraphLayout(model, 20, 500);
+
+        assertFalse(cell2.isRelocated());
+        graphLayout.breadthFirstPlacing(celll);
+        assertTrue(cell2.isRelocated());
     }
 
 }

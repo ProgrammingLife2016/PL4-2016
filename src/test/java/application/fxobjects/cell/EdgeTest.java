@@ -1,7 +1,6 @@
-package application.fxobjects.cell.graph;
+package application.fxobjects.cell;
 
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.RectangleCell;
 import core.graph.cell.EdgeType;
 import javafx.scene.shape.Line;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class EdgeTest {
      */
     @Before
     public void setUp() throws Exception {
-        edge = new Edge(new RectangleCell(0, ""), new RectangleCell(1, ""), 10, EdgeType.GRAPH);
+        edge = new Edge(new RectangleCell(0), new RectangleCell(1), 10, EdgeType.GRAPH);
     }
 
     /**
