@@ -27,7 +27,7 @@ class GraphMouseHandling {
                 + clicked.getGenomesAsString() + "\n";
         info += "Seq: \n" + clicked.getSequence() + "\n";
 
-        mainController.modifyNodeInfo(info);
+        mainController.getListFactory().modifyNodeInfo(info);
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {

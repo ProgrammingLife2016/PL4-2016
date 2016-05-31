@@ -5,7 +5,8 @@ import application.fxobjects.cell.Edge;
 import application.fxobjects.cell.layout.CellLayout;
 import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
-import core.MetaParser;
+import core.MetaData;
+import core.genome.Genome;
 import core.graph.PhylogeneticTree;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
@@ -28,7 +29,7 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Edge> collectedEdges;
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
-    private TreeMap<String, Integer> metaData;
+    private TreeMap<String, Genome> metaData;
     private TreeMouseHandling treeMouseHandling;
 
     private static final Color LIN0 = Color.web("000000");
@@ -46,17 +47,17 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Class constructor.
      *
-     * @param pt A phylogenetic tree.
      * @param m  MainController.
      * @param s  InputStream for metaData.
      */
-    public TreeController(PhylogeneticTree pt, MainController m, InputStream s) {
+    public TreeController(MainController m, InputStream s) {
         super(new ScrollPane());
-        this.pt = pt;
-        this.metaData = MetaParser.parse(s);
+        this.pt = new PhylogeneticTree();
+        this.metaData = MetaData.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
+
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -139,7 +140,8 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.add(cell);
 
             if (temp.contains("TKK")) {
-                applyColorUpwards(parentList, determineLinColor(metaData.get(temp)), 4.0);
+                applyColorUpwards(parentList,
+                        determineLinColor(metaData.get(temp).getLineage()), 4.0);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
@@ -321,7 +323,7 @@ public class TreeController extends Controller<ScrollPane> {
             int tempCount = 0;
             for (Cell c : collectedStrains) {
                 if (metaData.containsKey(((LeafCell) c).getName())
-                        && metaData.get(((LeafCell) c).getName()) == i) {
+                        && metaData.get(((LeafCell) c).getName()).getLineage() == i) {
                     tempCount++;
                 }
             }
