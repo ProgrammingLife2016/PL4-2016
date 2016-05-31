@@ -18,15 +18,15 @@ public class CollectionCellTest {
     CollectionCell c;
 
     /**
- * Set up the cell for testing.
- */
-@Before
-public void setUp() {
-    StackPane pane = spy(new StackPane());
-    Text text = spy(new Text());
+     * Set up the cell for testing.
+     */
+    @Before
+    public void setUp() {
+        StackPane pane = spy(new StackPane());
+        Text text = spy(new Text());
 
-    c = new CollectionCell(1, pane, text);
-}
+        c = new CollectionCell(1, pane, text);
+    }
 
     /**
      * Tests the getType method.
