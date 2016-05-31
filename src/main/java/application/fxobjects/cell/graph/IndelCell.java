@@ -12,7 +12,6 @@ import javafx.scene.text.Text;
  */
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
-    private Text text;
 
     /**
      * Indel cell constructor.
@@ -21,9 +20,18 @@ public class IndelCell extends Cell {
      * @param collapseLevel The collapse level of a cell.
      */
     public IndelCell(int id, String collapseLevel) {
-        super(id);
+        this(id, new StackPane(), new Text(collapseLevel));
+    }
 
-        text = new Text(collapseLevel);
+    /**
+     * Indel cell constructor.
+     *
+     * @param id            The ID of a cell.
+     * @param pane          A given stack pane.
+     * @param text          A given text element.
+     */
+    public IndelCell(int id, StackPane pane, Text text) {
+        super(id);
 
         double width = 20;
         double height = 20;
@@ -32,7 +40,6 @@ public class IndelCell extends Cell {
         view.setStroke(Color.RED);
         view.setFill(Color.RED);
 
-        StackPane pane = new StackPane();
         pane.getChildren().addAll(view, text);
         setView(pane);
     }
@@ -46,12 +53,4 @@ public class IndelCell extends Cell {
         return type;
     }
 
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
-    }
 }

@@ -7,15 +7,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 /**
  * Class representing a Phylogenetic leave node.
  */
 public class LeafCell extends Cell {
     private final CellType type = CellType.TREELEAF;
-    private Text text;
     private String name;
+
 
     /**
      * Phylogenetic leave cell constructor.
@@ -24,22 +23,22 @@ public class LeafCell extends Cell {
      * @param name The name of the genome.
      */
     public LeafCell(int id, String name) {
-        super(id);
-        this.name = name;
-
-        StackPane pane = new StackPane(new Label(name));
-        pane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
-
-        setView(pane);
+        this(id, name, new StackPane(new Label(name)));
     }
 
     /**
-     * Set the name of a sample.
+     * Phylogenetic leave cell constructor.
      *
-     * @param text The name of a sample.
+     * @param id   The ID of the cell.
+     * @param name The name of the genome.
+     * @param pane A given stack pane.
      */
-    public void setText(Text text) {
-        this.text = text;
+    public LeafCell(int id, String name, StackPane pane) {
+        super(id);
+        this.name = name;
+
+        pane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
+        setView(pane);
     }
 
     /**
@@ -49,15 +48,6 @@ public class LeafCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**
