@@ -78,7 +78,7 @@ public class GraphLayout extends CellLayout {
      *
      * @param cell - The parent node.
      */
-    private void breadthFirstPlacing(Cell cell) {
+    public void breadthFirstPlacing(Cell cell) {
         int yOffset = 3 * offset; //y-offset between nodes on the same x-level
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
