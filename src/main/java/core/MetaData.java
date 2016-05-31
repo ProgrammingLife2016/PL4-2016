@@ -18,9 +18,8 @@ public final class MetaData {
 
     /**
      * Contructor method for utility class.
-     * @param stream the Inputstream for the file to parse.
      */
-    protected MetaData(InputStream stream) {
+    protected MetaData() {
         throw new UnsupportedOperationException();
     }
 
