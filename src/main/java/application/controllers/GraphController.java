@@ -52,13 +52,13 @@ public class GraphController extends Controller<ScrollPane> {
 
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
-                    if(graphMouseHandling.getPrevClick() != null) {
+                    if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
                     }
                     event.consume();
                 } else if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
-                    if(graphMouseHandling.getPrevClick() != null) {
+                    if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
                     }
                     event.consume();
@@ -67,8 +67,24 @@ public class GraphController extends Controller<ScrollPane> {
         });
     }
 
-    private void focus(Object prevClick, double prevInt) {
+    private void focus(Cell prevClick, double prevInt) {
         //@ToDo scroll the prevClick node to X: prevInt
+        System.out.println("Setting node: " + prevClick + "to X-Location: " + prevInt);
+
+        prevClick.resetFocus();
+        for (Cell c : graph.getModel().getAllCells()) {
+            if(c.getCellId() == prevClick.getCellId()) {
+                prevClick = c;
+            }
+        }
+        prevClick.focus();
+
+        double h = getRoot().getContent().getBoundsInLocal().getHeight();
+        double y = (prevClick.getBoundsInParent().getMaxY() +
+                prevClick.getBoundsInParent().getMinY()) / 2.0;
+        double v = getRoot().getViewportBounds().getHeight();
+        getRoot().setHvalue(getRoot().getVmax() * ((y - 0.5 * v) / (h - v)));
+//        getRoot().setVvalue(500);
     }
 
     /**
@@ -91,7 +107,8 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Init method.
-     * @param location unused.
+     *
+     * @param location  unused.
      * @param resources unused.
      */
     @Override
