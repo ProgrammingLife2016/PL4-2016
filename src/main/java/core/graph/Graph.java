@@ -63,7 +63,6 @@ public class Graph {
      * Read a node map from a gfa file on disk.
      *
      * @return A node map read from file.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() {
@@ -87,7 +86,6 @@ public class Graph {
      * @param ref             the reference string.
      * @param depth           the depth to draw.
      * @return Boolean used for testing purposes.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth) {
