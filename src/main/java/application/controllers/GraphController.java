@@ -27,6 +27,7 @@ public class GraphController extends Controller<ScrollPane> {
     private GraphMouseHandling graphMouseHandling;
     private AnchorPane root;
     private Rectangle2D screenSize;
+    private MainController mainController;
 
     /**
      * Constructor method for this class.
@@ -41,17 +42,23 @@ public class GraphController extends Controller<ScrollPane> {
         this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.root = new AnchorPane();
+        this.mainController = m;
 
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        //TODO: Remove event filter, for enabling zooming in and out
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
-                event.consume();
+                if (event.getDeltaY() < 0) {
+                    mainController.switchScene(+1);
+                    event.consume();
+
+                } else if (event.getDeltaY() > 0) {
+                    mainController.switchScene(-1);
+                    event.consume();
+                }
             }
         });
-
     }
 
     /**
