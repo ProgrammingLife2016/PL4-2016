@@ -142,7 +142,7 @@ public class TreeController extends Controller<ScrollPane> {
             if (temp.contains("TKK")) {
                 applyColorUpwards(parentList,
                         determineLinColor(metaData.get(temp).getLineage()), 4.0);
-            } else if(temp.contains("G")) {
+            } else if (temp.contains("G")) {
                 applyColorUpwards(parentList, determineLinColor(4), 4.0);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
