@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
+    private Rectangle view;
+    private boolean selected;
 
     /**
      * Rectangle cell constructor.
@@ -30,9 +32,11 @@ public class RectangleCell extends Cell {
         super(id);
 
         pane.setMaxHeight(10);
-        Rectangle view = new Rectangle(10, 10);
-        view.setStroke(Color.DODGERBLUE);
-        view.setFill(Color.DODGERBLUE);
+        this.selected = false;
+        this.view = new Rectangle(10, 10);
+        this.view.setStroke(Color.DODGERBLUE);
+        this.view.setStrokeWidth(1);
+        this.view.setFill(Color.DODGERBLUE);
 
         pane.getChildren().addAll(view);
         setView(pane);
@@ -47,4 +51,15 @@ public class RectangleCell extends Cell {
         return type;
     }
 
+    public void focus() {
+        this.selected = true;
+        this.view.setStroke(Color.PURPLE);
+        this.view.setStrokeWidth(4);
+    }
+
+    public void resetFocus() {
+        this.selected = false;
+        this.view.setStroke(Color.DODGERBLUE);
+        this.view.setStrokeWidth(1);
+    }
 }

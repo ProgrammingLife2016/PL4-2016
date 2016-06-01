@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
  */
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
+    private Circle view;
+    private boolean selected;
 
     /**
      * Bubble cell constructor.
@@ -33,9 +35,11 @@ public class BubbleCell extends Cell {
     public BubbleCell(int id, StackPane pane, Text text) {
         super(id);
 
-        Circle view = new Circle(10);
-        view.setStroke(Color.YELLOW);
-        view.setFill(Color.YELLOW);
+        this.selected = false;
+        this.view = new Circle(10);
+        this.view.setStroke(Color.YELLOW);
+        this.view.setStrokeWidth(1);
+        this.view.setFill(Color.YELLOW);
 
         pane.getChildren().addAll(view, text);
         setView(pane);
@@ -48,6 +52,18 @@ public class BubbleCell extends Cell {
      */
     public CellType getType() {
         return type;
+    }
+
+    public void focus() {
+        this.selected = true;
+        this.view.setStroke(Color.PURPLE);
+        this.view.setStrokeWidth(4);
+    }
+
+    public void resetFocus() {
+        this.selected = false;
+        this.view.setStroke(Color.YELLOW);
+        this.view.setStrokeWidth(1);
     }
 
 }

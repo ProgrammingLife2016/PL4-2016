@@ -6,6 +6,7 @@ import java.util.List;
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -78,7 +79,6 @@ public abstract class Cell extends Pane {
      * @param view A given view node.
      */
     public void setView(Node view) {
-
         this.view = view;
         getChildren().add(view);
 
@@ -136,9 +136,9 @@ public abstract class Cell extends Pane {
         return cellId + "";
     }
 
-    public void focus() {
-        System.out.println("focus");
-        this.getStylesheets().add("/css/cell.css");
-        this.getStyleClass().add("focus");
-    }
+
+    public void focus() { }
+
+    public void resetFocus() { }
+
 }

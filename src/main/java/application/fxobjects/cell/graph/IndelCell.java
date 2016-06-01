@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
  */
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
+    private Polygon view;
+    private boolean selected;
 
     /**
      * Indel cell constructor.
@@ -36,9 +38,11 @@ public class IndelCell extends Cell {
         double width = 20;
         double height = 20;
 
-        Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
-        view.setStroke(Color.RED);
-        view.setFill(Color.RED);
+        this.selected = false;
+        this.view = new Polygon(width / 2, 0, width, height, 0, height);
+        this.view.setStroke(Color.RED);
+        this.view.setStrokeWidth(1);
+        this.view.setFill(Color.RED);
 
         pane.getChildren().addAll(view, text);
         setView(pane);
@@ -53,4 +57,15 @@ public class IndelCell extends Cell {
         return type;
     }
 
+    public void focus() {
+        this.selected = true;
+        this.view.setStroke(Color.PURPLE);
+        this.view.setStrokeWidth(4);
+    }
+
+    public void resetFocus() {
+        this.selected = false;
+        this.view.setStroke(Color.RED);
+        this.view.setStrokeWidth(1);
+    }
 }
