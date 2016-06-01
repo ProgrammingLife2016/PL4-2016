@@ -68,23 +68,19 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     private void focus(Cell prevClick, double prevInt) {
-        //@ToDo scroll the prevClick node to X: prevInt
-        System.out.println("Setting node: " + prevClick + "to X-Location: " + prevInt);
-
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
-            if(c.getCellId() == prevClick.getCellId()) {
+            if (c.getCellId() == prevClick.getCellId()) {
                 prevClick = c;
+                break;
+            }
+            if (c.getCellId() > prevClick.getCellId()) {
+                prevClick = c;
+                break;
             }
         }
         prevClick.focus();
-
-        double h = getRoot().getContent().getBoundsInLocal().getHeight();
-        double y = (prevClick.getBoundsInParent().getMaxY() +
-                prevClick.getBoundsInParent().getMinY()) / 2.0;
-        double v = getRoot().getViewportBounds().getHeight();
-        getRoot().setHvalue(getRoot().getVmax() * ((y - 0.5 * v) / (h - v)));
-//        getRoot().setVvalue(500);
+        getRoot().setHvalue((prevClick.getLayoutX() - 300) / graph.getMaxWidth());
     }
 
     /**

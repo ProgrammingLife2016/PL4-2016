@@ -323,4 +323,8 @@ public class Model {
         return addedEdges.stream().filter(e ->
                 e.getSource().equals(p)).collect(Collectors.toList());
     }
+
+    public double getMaxWidth() {
+        return graphLayout.getMaxWidth();
+    }
 }
