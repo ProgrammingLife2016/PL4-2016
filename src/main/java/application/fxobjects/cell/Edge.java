@@ -1,9 +1,16 @@
 package application.fxobjects.cell;
 
 import core.graph.cell.EdgeType;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.WritableDoubleValue;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
 
 import static core.graph.cell.EdgeType.GRAPH_REF;
 import static core.graph.cell.EdgeType.TREE;
@@ -53,11 +60,47 @@ public class Edge extends Group {
                     target.getBoundsInParent().getHeight() / 2.0));
             if (type == GRAPH_REF) {
                 line.setStroke(Color.YELLOW);
+                addArrow(line, Color.YELLOW);
+            } else {
+                addArrow(line, Color.BLACK);
             }
         }
 
 
         getChildren().add(line);
+    }
+
+    /**
+     * Add an arrowhead to the edges.
+     * @param l - the line the arrowhead shoul be added to.
+     */
+    private void addArrow(Line l, Color c) {
+        double startx = l.startXProperty().doubleValue();
+        double starty = l.startYProperty().doubleValue();
+        double endx = l.endXProperty().doubleValue();
+        double endy = l.endYProperty().doubleValue();
+
+        Polyline arrow = new Polyline();
+        arrow.getPoints().addAll(
+                0.0, 0.0,
+                -5.0, 10.0,
+                0.0, 0.0,
+                5.0, 10.0);
+
+        double angle = (Math.atan2(endy - starty, endx - startx) * 180 / Math.PI) - 90;
+        ObservableDoubleValue dodo = new SimpleDoubleProperty(angle);
+        arrow.rotateProperty().bind(dodo);
+
+
+
+//        arrow.layoutXProperty().bind(new SimpleDoubleProperty(Math.abs(line.endXProperty().get() - line.startXProperty().get() / 2)));
+//        arrow.layoutYProperty().bind(line.layoutYProperty().add(Math.abs(line.endYProperty().get() - line.startYProperty().get() / 2)));
+        arrow.layoutXProperty().bind(line.endXProperty());
+        arrow.layoutYProperty().bind(line.endYProperty());
+        arrow.setStroke(c);
+        getChildren().add(arrow);
+
+
     }
 
     /**

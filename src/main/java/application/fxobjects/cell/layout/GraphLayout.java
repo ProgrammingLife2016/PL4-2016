@@ -68,13 +68,7 @@ public class GraphLayout extends CellLayout {
                 if (cellCount < 2) {
                     continue;
                 }
-//                for (Cell c : cell.getCellChildren()) {
-//                    for (Cell c2 : c.getCellParents()){
-//                        if (cell.getCellChildren().contains(c2)){
-//                            insertionPlacing(cell, c2);
-//                        }
-//                    }
-//                }
+
                 breadthFirstPlacing(cell);
             }
         }
@@ -119,30 +113,14 @@ public class GraphLayout extends CellLayout {
 
         }
         for (Cell child : cell.getCellChildren()) {
-
-        if (child.getCellChildren().size() > 1) {
-            currentX += offset;
-            currentY = (int) child.getLayoutY();
-            System.out.println("called");
-            cellCount = child.getCellChildren().size()-1;
-            breadthFirstPlacing(child);
-
-        }}
-    }
-
-    /**
-     * A method to place a Node's children and if need be, recursively their children.
-     *
-     * @param cell - The parent node.
-     */
-    private void insertionPlacing(Cell cell, Cell parentSibling) {
-        System.out.println("PS: " + parentSibling.getCellId() + " cell: "+cell.getCellId());
-        parentSibling.relocate(currentX, currentY - (offset * 2));
-        parentSibling.setRelocated(true);
-        currentX += offset;
-        cellCount = cell.getCellChildren().size() - 1;
-
-        breadthFirstPlacing(cell);
+            if (child.getCellChildren().size() > 1) {
+                currentX += offset;
+                currentY = (int) child.getLayoutY();
+                System.out.println("called");
+                cellCount = child.getCellChildren().size()-1;
+                breadthFirstPlacing(child);
+            }
+        }
     }
 
     /**
