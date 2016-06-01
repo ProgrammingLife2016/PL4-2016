@@ -54,9 +54,9 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        startMap = getNodeMapFromFile();
-        nodeIds = startMap.size();
-        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+        //startMap = getNodeMapFromFile(s);
+//        nodeIds = startMap.size();
+   //     levelMaps = GraphReducer.createLevelMaps(startMap, 1);
     }
 
     /**
@@ -66,11 +66,14 @@ public class Graph {
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile() {
+    public HashMap<Integer, Node> getNodeMapFromFile(String s) {
         try {
+            System.out.println("s: " + s);
             Parser parser = new Parser();
-            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+            InputStream inputStream = getClass().getResourceAsStream(s);
             startMap = parser.readGFA(inputStream);
+            nodeIds = startMap.size();
+            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
 
             inputStream.close();
         } catch (IOException e) {

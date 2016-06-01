@@ -32,7 +32,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         mainController = new MainController();
-        WindowFactory.createWindow(mainController.getRoot());
+        WindowFactory.createWindow(mainController);
 
 
     }
