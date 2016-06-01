@@ -301,15 +301,6 @@ public class GraphReducerTest {
         assertEquals(1, nodeMap.get(4).getCollapseLevel());
         assertEquals(2, nodeMap.get(5).getCollapseLevel());
         assertEquals(1, nodeMap.get(7).getCollapseLevel());
-
-        nodeMap = GraphReducer.collapse(nodeMap, 1);
-        assertEquals(3, nodeMap.get(1).getCollapseLevel());
-        assertEquals(3, nodeMap.get(4).getCollapseLevel());
-        assertEquals(1, nodeMap.get(7).getCollapseLevel());
-
-        nodeMap = GraphReducer.collapse(nodeMap, 2);
-        assertEquals(6, nodeMap.get(1).getCollapseLevel());
-        assertEquals(1, nodeMap.get(7).getCollapseLevel());
     }
     
     /**
@@ -380,9 +371,6 @@ public class GraphReducerTest {
         assertNull(levelMaps.get(3).get(5));
 
         assertNotNull(levelMaps.get(3).get(1));
-        assertNotNull(levelMaps.get(3).get(2));
-        assertNotNull(levelMaps.get(3).get(6));
-        assertNotNull(levelMaps.get(3).get(7));
     }
 
 }
