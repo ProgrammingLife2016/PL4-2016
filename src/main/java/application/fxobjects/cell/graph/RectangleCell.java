@@ -2,6 +2,7 @@ package application.fxobjects.cell.graph;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -55,6 +56,14 @@ public class RectangleCell extends Cell {
      * Method to set the focus.
      */
     public void focus() {
+        DropShadow borderGlow= new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.BLACK);
+        borderGlow.setWidth(70);
+        borderGlow.setHeight(70);
+        this.setEffect(borderGlow);
+
         this.selected = true;
         this.view.setStroke(Color.PURPLE);
         this.view.setStrokeWidth(4);
@@ -65,6 +74,7 @@ public class RectangleCell extends Cell {
      */
     public void resetFocus() {
         this.selected = false;
+        this.setEffect(null);
         this.view.setStroke(Color.DODGERBLUE);
         this.view.setStrokeWidth(1);
     }
