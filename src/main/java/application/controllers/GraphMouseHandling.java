@@ -37,7 +37,7 @@ class GraphMouseHandling {
             prevClick.resetFocus();
             node.focus();
              prevClick = node;
-        } else {
+        } else if (prevClick.getCellId() == node.getCellId()){
             prevClick.resetFocus();
             prevClick = null;
         }
@@ -86,5 +86,9 @@ class GraphMouseHandling {
 
     public Cell getPrevClick() {
         return prevClick;
+    }
+
+    public void setPrevClick(Cell prevClick) {
+        this.prevClick = prevClick;
     }
 }

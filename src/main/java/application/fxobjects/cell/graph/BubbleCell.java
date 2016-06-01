@@ -2,6 +2,7 @@ package application.fxobjects.cell.graph;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -55,12 +56,21 @@ public class BubbleCell extends Cell {
     }
 
     public void focus() {
+//        DropShadow borderGlow= new DropShadow();
+//        borderGlow.setOffsetY(0f);
+//        borderGlow.setOffsetX(0f);
+//        borderGlow.setColor(Color.YELLOW);
+//        borderGlow.setWidth(100);
+//        borderGlow.setHeight(100);
+//        this.setEffect(borderGlow);
+
         this.selected = true;
-        this.view.setStroke(Color.PURPLE);
+        this.view.setStroke(Color.RED);
         this.view.setStrokeWidth(4);
     }
 
     public void resetFocus() {
+        setEffect(null);
         this.selected = false;
         this.view.setStroke(Color.YELLOW);
         this.view.setStrokeWidth(1);

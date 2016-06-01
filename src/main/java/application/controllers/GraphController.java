@@ -48,13 +48,11 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
+            graphMouseHandling.getPrevClick().resetFocus();
             if (event.getDeltaY() != 0) {
                 if (graphMouseHandling.getPrevClick() != null) {
                     graphMouseHandling.getPrevClick().resetFocus();
-                    System.out.println("Reset focus");
-                }
-
-                if (event.getDeltaY() < 0) {
+                } else if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
@@ -73,18 +71,16 @@ public class GraphController extends Controller<ScrollPane> {
 
     private void focus(Cell prevClick) {
         for (Cell c : graph.getModel().getAllCells()) {
-            System.out.println(c.getCellId());
             if (c.getCellId() == prevClick.getCellId()) {
                 prevClick = c;
-                System.out.println("Found it");
                 break;
             }
             if (c.getCellId() > prevClick.getCellId()) {
                 prevClick = c;
-                System.out.println("Didnt");
                 break;
             }
         }
+        graphMouseHandling.setPrevClick(prevClick);
         prevClick.focus();
         getRoot().setHvalue((prevClick.getLayoutX() - 300) / graph.getMaxWidth());
     }
