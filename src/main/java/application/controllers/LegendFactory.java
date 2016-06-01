@@ -27,10 +27,10 @@ public class LegendFactory {
      */
     public HBox createLegend() {
         final VBox col1 = new VBox();
-        col1.getChildren().add(new RectangleCell(0));
-        col1.getChildren().add(new BubbleCell(0, "N"));
-        col1.getChildren().add(new IndelCell(0, "N"));
-        col1.getChildren().add(new CollectionCell(0, "N"));
+        col1.getChildren().add(new RectangleCell(0, 1));
+        col1.getChildren().add(new BubbleCell(0, 1, "N"));
+        col1.getChildren().add(new IndelCell(0,1, "N"));
+        col1.getChildren().add(new CollectionCell(0,1, "N"));
 
         final VBox col2 = new VBox();
         col2.getChildren().add(new Text("  -  Basic Node"));

@@ -84,6 +84,7 @@ public final class GraphReducer {
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
             newNode.setCollapseLevel(n.getCollapseLevel());
+            newNode.setNucleotides(n.getNucleotides());
 
             res.put(i, newNode);
         }
@@ -158,6 +159,7 @@ public final class GraphReducer {
         parent.setType(NodeType.COLLECTION);
         parent.setSequence("");
         parent.setCollapseLevel(totalCollapseLevel);
+        parent.setNucleotides(parent.getNucleotides()+child.getNucleotides());
 
         // Retrieve the single grandchild of the node.
         Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
@@ -325,6 +327,7 @@ public final class GraphReducer {
                 for (Node bubbleChild : bubble) {
                     if (!bubbleChild.equals(child)) {
                         child.unionGenomes(bubbleChild);
+                        child.setNucleotides(child.getNucleotides()+bubbleChild.getNucleotides());
                         parent.removeLink(bubbleChild.getId());
                         nodeMap.remove(bubbleChild.getId());
                     }

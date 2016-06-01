@@ -45,7 +45,7 @@ public class Model {
      * Class constructor.
      */
     public Model() {
-        graphParent = new RectangleCell(1);
+        graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
 
         // clear model, create lists
@@ -157,23 +157,22 @@ public class Model {
      * @param type The type of cell.
      * @return True for testing purposes.
      */
-    public Boolean addCell(int id, String text, CellType type) {
+    public Boolean addCell(int id, String text, int nucleotides, CellType type) {
         switch (type) {
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
+                RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
                 addCell(rectangleCell);
-
                 break;
             case BUBBLE:
-                BubbleCell bubbleCell = new BubbleCell(id, text);
+                BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
                 addCell(bubbleCell);
                 break;
             case INDEL:
-                IndelCell indelCell = new IndelCell(id, text);
+                IndelCell indelCell = new IndelCell(id, nucleotides, text);
                 addCell(indelCell);
                 break;
             case COLLECTION:
-                CollectionCell collectionCell = new CollectionCell(id, text);
+                CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
                 break;
             case TREELEAF:

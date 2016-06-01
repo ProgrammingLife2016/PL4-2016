@@ -19,8 +19,8 @@ public class RectangleCell extends Cell {
      *
      * @param id  The ID of a cell.
      */
-    public RectangleCell(int id) {
-        this(id, new StackPane());
+    public RectangleCell(int id, int nucleotides) {
+        this(id, nucleotides, new StackPane());
     }
     /**
      * Rectangle cell constructor.
@@ -28,12 +28,13 @@ public class RectangleCell extends Cell {
      * @param id  The ID of a cell.
      * @param pane A given stack pane.
      */
-    public RectangleCell(int id, StackPane pane) {
+    public RectangleCell(int id, int nucleotides, StackPane pane) {
         super(id);
 
         pane.setMaxHeight(10);
         this.selected = false;
-        this.view = new Rectangle(10, 10);
+        double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
+        this.view = new Rectangle(sideSize , sideSize);
         this.view.setStroke(Color.DODGERBLUE);
         this.view.setStrokeWidth(1);
         this.view.setFill(Color.DODGERBLUE);

@@ -56,6 +56,11 @@ public class Node {
     private List<String> genomes;
 
     /**
+     * Amount of nucleotides in the node.
+     */
+    private int nucleotides;
+
+    /**
      * Node constructor.
      *
      * @param id  - Node identifier.
@@ -83,7 +88,7 @@ public class Node {
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
-
+        this.nucleotides = seq.length();
         this.collapseLevel = 1;
     }
 
@@ -386,4 +391,11 @@ public class Node {
 
     }
 
+    public int getNucleotides() {
+        return nucleotides;
+    }
+
+    public void setNucleotides(int nucleotides) {
+        this.nucleotides = nucleotides;
+    }
 }

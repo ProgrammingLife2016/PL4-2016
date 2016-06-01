@@ -77,9 +77,9 @@ public class PhylogeneticTree {
 
         for (TreeNode node : tree.nodes) {
             if (node.isLeaf()) {
-                model.addCell(node.getKey(), node.getName(), CellType.TREELEAF);
+                model.addCell(node.getKey(), node.getName(), 0, CellType.TREELEAF);
             } else {
-                model.addCell(node.getKey(), node.getName(), CellType.TREEMIDDLE);
+                model.addCell(node.getKey(), node.getName(),0, CellType.TREEMIDDLE);
             }
         }
     }

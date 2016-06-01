@@ -20,8 +20,8 @@ public class BubbleCell extends Cell {
      * @param id            The ID of a cell.
      * @param collapseLevel The collapse level of a cell.
      */
-    public BubbleCell(int id, String collapseLevel) {
-        this(id, new StackPane(), new Text(collapseLevel));
+    public BubbleCell(int id, int nucleotides, String collapseLevel) {
+        this(id, nucleotides, new StackPane(), new Text(collapseLevel));
     }
 
     /**
@@ -31,10 +31,10 @@ public class BubbleCell extends Cell {
      * @param pane          A given stack pane.
      * @param text          A given text element.
      */
-    public BubbleCell(int id, StackPane pane, Text text) {
+    public BubbleCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
 
-        this.view = new Circle(10);
+        this.view = new Circle(Math.min(10.0 + ((double)nucleotides) / 80000, 100));
         this.view.setStroke(Color.YELLOW);
         this.view.setStrokeWidth(1);
         this.view.setFill(Color.YELLOW);

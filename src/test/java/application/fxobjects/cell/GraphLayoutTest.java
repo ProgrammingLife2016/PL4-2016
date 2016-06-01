@@ -107,7 +107,7 @@ public class GraphLayoutTest {
      */
     @Test
     public void testExecute() {
-        Cell celll = spy(new RectangleCell(1));
+        Cell celll = spy(new RectangleCell(1,1));
 
         Model model = spy(new Model());
         model.addCell(celll);
@@ -124,8 +124,8 @@ public class GraphLayoutTest {
      */
     @Test
     public void testBreadthFirstPlacing() {
-        Cell celll = spy(new RectangleCell(1));
-        Cell cell2 = spy(new RectangleCell(2));
+        Cell celll = spy(new RectangleCell(1,1));
+        Cell cell2 = spy(new RectangleCell(2,1));
 
         celll.addCellChild(cell2);
 

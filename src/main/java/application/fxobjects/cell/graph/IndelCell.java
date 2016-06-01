@@ -21,8 +21,8 @@ public class IndelCell extends Cell {
      * @param id            The ID of a cell.
      * @param collapseLevel The collapse level of a cell.
      */
-    public IndelCell(int id, String collapseLevel) {
-        this(id, new StackPane(), new Text(collapseLevel));
+    public IndelCell(int id,int nucleotides, String collapseLevel) {
+        this(id, nucleotides, new StackPane(), new Text(collapseLevel));
     }
 
     /**
@@ -32,14 +32,13 @@ public class IndelCell extends Cell {
      * @param pane          A given stack pane.
      * @param text          A given text element.
      */
-    public IndelCell(int id, StackPane pane, Text text) {
+    public IndelCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
 
-        double width = 20;
-        double height = 20;
+        double sideSize = Math.min(10.0 + ((double)nucleotides) / 80000, 100);
 
         this.selected = false;
-        this.view = new Polygon(width / 2, 0, width, height, 0, height);
+        this.view = new Polygon(sideSize / 2, 0, sideSize, sideSize, 0, sideSize);
         this.view.setStroke(Color.RED);
         this.view.setStrokeWidth(1);
         this.view.setFill(Color.RED);

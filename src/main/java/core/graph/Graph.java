@@ -191,7 +191,7 @@ public class Graph {
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
             if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+                toret.addCell(root.getId(), root.getSequence(),root.getNucleotides(), CellType.RECTANGLE);
             }
             // In this case we know that the genomes in the graph are only this ones.
             genomes = currentGenomes;
@@ -214,7 +214,7 @@ public class Graph {
             }
         } else { // Draw all nodes.
             //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+            toret.addCell(root.getId(), root.getSequence(), root.getNucleotides(), CellType.RECTANGLE);
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
 
@@ -254,19 +254,19 @@ public class Graph {
         NodeType type = nodeMap.get(j).getType();
 
         if (type == NodeType.BASE) {
-            toret.addCell(to.getId(), to.getSequence(),
+            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
                     CellType.RECTANGLE);
 
         } else if (type == NodeType.BUBBLE) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()),
+                    Integer.toString(to.getCollapseLevel()),to.getNucleotides(),
                     CellType.BUBBLE);
         } else if (type == NodeType.INDEL) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()),
+                    Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.INDEL);
         } else if (type == NodeType.COLLECTION) {
-            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
         }
 

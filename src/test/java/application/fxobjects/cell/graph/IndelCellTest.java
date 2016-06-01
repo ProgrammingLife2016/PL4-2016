@@ -25,7 +25,7 @@ public class IndelCellTest {
         StackPane pane = spy(new StackPane());
         Text text = spy(new Text());
 
-        c = new IndelCell(1, pane, text);
+        c = new IndelCell(1,1,pane, text);
     }
 
     /**
