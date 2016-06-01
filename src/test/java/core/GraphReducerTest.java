@@ -2,6 +2,7 @@ package core;
 
 import java.util.*;
 
+import core.graph.cell.CellType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -136,7 +137,7 @@ public class GraphReducerTest {
         assertEquals(2, (int) nodeMap.get(1).getLinks(nodeMap).get(0));
 
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
-        assertEquals(NodeType.BUBBLE, nodeMap.get(2).getType());
+        assertEquals(CellType.BUBBLE, nodeMap.get(2).getType());
         assertEquals("", nodeMap.get(2).getSequence());
 
         assertNull(nodeMap.get(3));
@@ -168,9 +169,9 @@ public class GraphReducerTest {
      */
     @Test
     public void testBubbleCollapseLevel() {
-        List<NodeType> types = new ArrayList<>(Arrays.asList(NodeType.BUBBLE, NodeType.INDEL));
+        List<CellType> types = new ArrayList<>(Arrays.asList(CellType.BUBBLE, CellType.INDEL));
 
-        for (NodeType type : types) {
+        for (CellType type : types) {
             for (int i = 1; i <= 4; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(4);
                 nodeMap.get(i).setType(type);
@@ -190,7 +191,7 @@ public class GraphReducerTest {
                 assertNull(nodeMap.get(3));
 
                 if (i == 4) {
-                    assertNotEquals(NodeType.BUBBLE, nodeMap.get(4));
+                    assertNotEquals(CellType.BUBBLE, nodeMap.get(4));
                 }
             }
         }
@@ -249,7 +250,7 @@ public class GraphReducerTest {
         assertEquals(nodeMap.get(1).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
         assertEquals(nodeMap.get(6).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
         assertEquals(nodeMap.get(1).getLinks(),new ArrayList<>(Arrays.asList(2, 3)));
-        assertEquals(nodeMap.get(2).getType(), NodeType.INDEL);
+        assertEquals(nodeMap.get(2).getType(), CellType.INDEL);
         assertEquals(nodeMap.get(2).getGenomes(), new ArrayList<>(Arrays.asList("A","B", "C")));
         assertEquals(nodeMap.get(4).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
     }
@@ -325,7 +326,7 @@ public class GraphReducerTest {
         assertEquals(2, nodeMap.get(3).getLinks(nodeMap).size());
 
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
-        assertEquals(NodeType.INDEL, nodeMap.get(2).getType());
+        assertEquals(CellType.INDEL, nodeMap.get(2).getType());
         assertEquals("", nodeMap.get(2).getSequence());
     }
     /**

@@ -1,12 +1,12 @@
 package application.fxobjects.cell;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -79,7 +79,6 @@ public abstract class Cell extends Pane {
      * @param view A given view node.
      */
     public void setView(Node view) {
-
         this.view = view;
         getChildren().add(view);
 
@@ -142,4 +141,15 @@ public abstract class Cell extends Pane {
      * @return the cellshape.
      */
     public abstract Shape getCellShape();
+
+    /**
+     * Abstract method.
+     */
+    public void focus() { }
+
+    /**
+     * Abstract method.
+     */
+    public void resetFocus() { }
+
 }

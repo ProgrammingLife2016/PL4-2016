@@ -2,6 +2,7 @@ package application.fxobjects.cell.graph;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,6 +17,7 @@ public class CollectionCell extends Cell {
     private final CellType type = CellType.COLLECTION;
     private Text text;
     private Shape shape;
+    private boolean selected;
 
     /**
      * Bubble cell constructor.
@@ -30,17 +32,20 @@ public class CollectionCell extends Cell {
     /**
      * Bubble cell constructor.
      *
-     * @param id            The ID of a cell.
-     * @param pane          A given stack pane.
-     * @param text          A given text element.
+     * @param id   The ID of a cell.
+     * @param pane A given stack pane.
+     * @param text A given text element.
      */
     public CollectionCell(int id, StackPane pane, Text text) {
         super(id);
 
         shape = new Circle(10);
         shape.setStroke(Color.LIGHTGREEN);
+        shape.setStrokeWidth(1);
         shape.setFill(Color.LIGHTGREEN);
         pane.getChildren().addAll(shape, text);
+        this.selected = false;
+
         setView(pane);
     }
 
@@ -67,4 +72,32 @@ public class CollectionCell extends Cell {
      * @return the cellshape.
      */
     public Shape getCellShape() { return shape; }
+
+    /**
+     * Method to set the focus.
+     */
+    public void focus() {
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.BLACK);
+        borderGlow.setWidth(70);
+        borderGlow.setHeight(70);
+        this.setEffect(borderGlow);
+
+        this.selected = true;
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
+    }
+
+    /**
+     * Method to reset the focus.
+     */
+    public void resetFocus() {
+        this.setEffect(null);
+        this.selected = false;
+        shape.setStroke(Color.LIGHTGREEN);
+        shape.setStrokeWidth(1);
+    }
+
 }

@@ -32,7 +32,7 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param m               the mainController.
+     * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(MainController m) {
@@ -48,17 +48,48 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (graphMouseHandling.getPrevClick() != null) {
+                graphMouseHandling.getPrevClick().resetFocus();
+            }
             if (event.getDeltaY() != 0) {
+                if (graphMouseHandling.getPrevClick() != null) {
+                    graphMouseHandling.getPrevClick().resetFocus();
+                }
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
+                    if (graphMouseHandling.getPrevClick() != null) {
+                        focus(graphMouseHandling.getPrevClick());
+                    }
                     event.consume();
-
-                } else if (event.getDeltaY() > 0) {
+                }
+                if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
+                    if (graphMouseHandling.getPrevClick() != null) {
+                        focus(graphMouseHandling.getPrevClick());
+                    }
                     event.consume();
                 }
             }
         });
+    }
+
+    /**
+     * Method to focus on a Cell.
+     *
+     * @param prevClick the cell to focus to.
+     */
+    public void focus(Cell prevClick) {
+        prevClick.resetFocus();
+        for (Cell c : graph.getModel().getAllCells()) {
+            if ((c.getCellId() == prevClick.getCellId()) ||
+                    (c.getCellId() > prevClick.getCellId())) {
+                prevClick = c;
+                break;
+            }
+        }
+        graphMouseHandling.setPrevClick(prevClick);
+        prevClick.focus();
+        getRoot().setHvalue((prevClick.getLayoutX() - 300) / graph.getMaxWidth());
     }
 
     /**
@@ -79,6 +110,12 @@ public class GraphController extends Controller<ScrollPane> {
         return zoomController;
     }
 
+    /**
+     * Init method.
+     *
+     * @param location  unused.
+     * @param resources unused.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
@@ -86,13 +123,13 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref             the reference string.
-     * @param depth           the depth to draw.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      */
     public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
 
-        //We received a different reference, so we need to redraw.
+        //We received a different reference of depth, so we need to redraw.
         if (depth <= size - 1 && depth >= 0
                 && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
@@ -154,5 +191,14 @@ public class GraphController extends Controller<ScrollPane> {
                 new SnapshotParameters(), image);
 
         return snapshot;
+    }
+
+    /**
+     * Getter for the graphMouseHandling
+     *
+     * @return
+     */
+    public GraphMouseHandling getGraphMouseHandling() {
+        return graphMouseHandling;
     }
 }
