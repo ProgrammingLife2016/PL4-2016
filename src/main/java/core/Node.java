@@ -36,7 +36,8 @@ public class Node {
     private int collapseLevel;
 
     /**
-     * 'Depth' of the node in the genome.
+     * 'Depth' of the node in the genome. This is represented as the n'th nucleotide.
+     * The zIndex of the next node will be zIndex + len(sequence).
      */
     private int zIndex;
 

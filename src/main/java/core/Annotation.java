@@ -1,5 +1,9 @@
 package core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Class representing a gene annotation according to the specification on
  * http://www.sequenceontology.org/gff3.shtml and differences in provided GFF data.
@@ -23,10 +27,28 @@ public class Annotation implements Comparable<Annotation> {
     private String nameAttr;
     private String displayNameAttr;
 
+    private List<Node> spannedNodes;
+    private int OffsetInFirstSpannedNode;
+    private int OffsetInLastSpannedNode;
+
     /**
      * Sets up a gene annotation.
      */
     public Annotation() {
+        seqid = "";
+        source = "";
+        type = "";
+        start = 0;
+        end = 0;
+        score = 0;
+        strand = "";
+        phase = "";
+        callhounClassAttr = "";
+        idAttr = 0;
+        nameAttr = "";
+        displayNameAttr = "";
+
+        spannedNodes = new ArrayList<Node>();
     }
 
     /**
@@ -221,6 +243,29 @@ public class Annotation implements Comparable<Annotation> {
         this.displayNameAttr = displayNameAttr;
     }
 
+    /**
+     * Gets the nodes spanned by the annotation.
+     * @return The nodes spanned by the annotation.
+     */
+    public List<Node> getSpannedNodes() {
+        return spannedNodes;
+    }
+
+    /**
+     * Sets the nodes spanned by the annotation.
+     * @param coveredNodes The nodes spanned by the annotation.
+     */
+    public void setSpannedNodes(List<Node> coveredNodes) {
+        this.spannedNodes = coveredNodes;
+    }
+
+    /**
+     * Adds a new spanned by the annotation.
+     * @param node A new spanned by the annotation.
+     */
+    public void addSpannedNode(Node node) {
+        spannedNodes.add(node);
+    }
     @Override
     public String toString() {
         return "Annotation{" +
@@ -248,4 +293,74 @@ public class Annotation implements Comparable<Annotation> {
 
         return 0;
     }
+
+    /**
+     * Determines the nodes spanned by the annotation.
+     *
+     * @param startLoopIdx The index to start the enumeration at.
+     * @param nodeMap A hash map of nodes in the reference.
+     * @return the new startLoopIndex.
+     */
+    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap) {
+        int startNodeId = findFirstSpannedNode(nodeMap, startLoopIdx, this.start);
+        int endNodeId = findLastSpannedNode(nodeMap, startLoopIdx, this.end);
+
+        for (int idx = startNodeId; idx < endNodeId; idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
+            addSpannedNode(n);
+        }
+
+        return endNodeId;
+    }
+
+    /**
+     * Finds the node containing the DNA sequence at start of the annotation.
+     *
+     * @param nodeMap A given node map.
+     * @param startLoopIdx The index to start the enumeration at.
+     * @param start The start index of the annotation.
+     * @return The id of the Node containing the DNA sequence at start of the annotation.
+     */
+    public int findFirstSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int start) {
+        for (int idx = startLoopIdx; idx < nodeMap.keySet().size(); idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
+            int nLower = n.getzIndex();
+            int nUpper = n.getzIndex() + n.getSequence().length();
+
+            if (nLower <= start && nUpper >= start) {
+                return idx;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Finds the node containing the DNA sequence at end of the annotation.
+     *
+     * @param nodeMap A given node map.
+     * @param startLoopIdx The index to start the enumeration at.
+     * @param end The end index of the annotation.
+     * @return The id of the Node containing the DNA sequence at end of the annotation.
+     */
+    public int findLastSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int end) {
+        for (int idx = startLoopIdx; idx < nodeMap.keySet().size(); idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
+            int nLower = n.getzIndex();
+            int nUpper = n.getzIndex() + n.getSequence().length();
+
+            if (nLower <= end && nUpper >= end) {
+                return idx;
+            }
+        }
+
+        return 0;
+    }
+
 }
