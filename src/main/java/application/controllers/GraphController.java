@@ -73,7 +73,7 @@ public class GraphController extends Controller<ScrollPane> {
         });
     }
 
-    private void focus(Cell prevClick) {
+    public void focus(Cell prevClick) {
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
             if (c.getCellId() == prevClick.getCellId()) {
@@ -189,5 +189,9 @@ public class GraphController extends Controller<ScrollPane> {
                 new SnapshotParameters(), image);
 
         return snapshot;
+    }
+
+    public GraphMouseHandling getGraphMouseHandling() {
+        return graphMouseHandling;
     }
 }
