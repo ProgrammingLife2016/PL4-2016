@@ -7,7 +7,6 @@ import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 /**
  * Abstract cell class representing a node in the gui.

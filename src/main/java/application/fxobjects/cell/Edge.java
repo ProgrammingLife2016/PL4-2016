@@ -1,15 +1,9 @@
 package application.fxobjects.cell;
 
 import core.graph.cell.EdgeType;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.WritableDoubleValue;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 
 import static core.graph.cell.EdgeType.GRAPH_REF;
@@ -89,8 +83,8 @@ public class Edge extends Group {
                 0.0, 0.0,
                 5.0, 10.0);
 
-        System.out.println(source.toString() + ": " + Math.abs(line.endXProperty().get() - line.startXProperty().get()));
-        arrow.layoutXProperty().bind(line.endXProperty().subtract(Math.abs((line.getBoundsInParent().getWidth() * 0.5))));
+        arrow.layoutXProperty().bind(line.endXProperty().subtract(
+                Math.abs((line.getBoundsInParent().getWidth() * 0.5))));
         arrow.layoutYProperty().bind(line.endYProperty().multiply(0.5));
         arrow.setStroke(c);
         getChildren().add(arrow);
