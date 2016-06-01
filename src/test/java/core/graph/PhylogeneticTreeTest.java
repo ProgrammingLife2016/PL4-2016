@@ -41,24 +41,24 @@ public class PhylogeneticTreeTest {
         pt.setModel(model);
         assertEquals(model, pt.getModel());
     }
-
-    /**
-     * Test for the getTreeFromFile method.
-     */
-    @Test
-    public void testGetTreeFromFile() {
-        Tree tree = pt.getTreeFromFile();
-        assertNotEquals(0, tree.getLeafCount());
-    }
+//
+//    /**
+//     * Test for the getTreeFromFile method.
+//     */
+//    @Test
+//    public void testGetTreeFromFile() {
+//        Tree tree = pt.getTreeFromFile();
+//        assertNotEquals(0, tree.getLeafCount());
+//    }
 
     /**
      * Test for the setup method.
      */
-    @Test
-    public void testSetup() {
-        Tree tree = pt.getTreeFromFile();
-        pt.setup(tree);
-
-        verify(model, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
-    }
+//    @Test
+//    public void testSetup() {
+//        Tree tree = pt.getTreeFromFile();
+//        pt.setup(tree);
+//
+//        verify(model, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+//    }
 }

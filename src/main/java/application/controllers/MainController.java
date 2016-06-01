@@ -65,6 +65,7 @@ public class MainController extends Controller<BorderPane> {
     public void initTree(String s) {
         treeController = new TreeController(this,
                 this.getClass().getResourceAsStream("/metadata.xlsx"), s);
+        fillTree();
     }
 
     /**
