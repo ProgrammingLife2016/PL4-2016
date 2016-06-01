@@ -2,7 +2,6 @@ package application.fxobjects.cell.graph;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -14,7 +13,6 @@ import javafx.scene.text.Text;
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
     private Circle view;
-    private boolean selected;
 
     /**
      * Bubble cell constructor.
@@ -36,7 +34,6 @@ public class BubbleCell extends Cell {
     public BubbleCell(int id, StackPane pane, Text text) {
         super(id);
 
-        this.selected = false;
         this.view = new Circle(10);
         this.view.setStroke(Color.YELLOW);
         this.view.setStrokeWidth(1);
@@ -55,6 +52,9 @@ public class BubbleCell extends Cell {
         return type;
     }
 
+    /**
+     * Method to set the focus.
+     */
     public void focus() {
 //        DropShadow borderGlow= new DropShadow();
 //        borderGlow.setOffsetY(0f);
@@ -64,14 +64,15 @@ public class BubbleCell extends Cell {
 //        borderGlow.setHeight(100);
 //        this.setEffect(borderGlow);
 
-        this.selected = true;
         this.view.setStroke(Color.RED);
         this.view.setStrokeWidth(4);
     }
 
+    /**
+     * Method to reset the focus.
+     */
     public void resetFocus() {
         setEffect(null);
-        this.selected = false;
         this.view.setStroke(Color.YELLOW);
         this.view.setStrokeWidth(1);
     }

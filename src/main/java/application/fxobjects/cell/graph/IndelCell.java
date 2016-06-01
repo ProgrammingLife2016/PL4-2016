@@ -57,12 +57,18 @@ public class IndelCell extends Cell {
         return type;
     }
 
+    /**
+     * Method to set the focus.
+     */
     public void focus() {
         this.selected = true;
         this.view.setStroke(Color.PURPLE);
         this.view.setStrokeWidth(4);
     }
 
+    /**
+     * Method to reset the focus.
+     */
     public void resetFocus() {
         this.selected = false;
         this.view.setStroke(Color.RED);

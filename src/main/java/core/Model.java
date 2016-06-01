@@ -282,7 +282,7 @@ public class Model {
         // cells
         allCells.addAll(addedCells);
         allCells.sort((o1, o2) -> {
-            if(o1.getCellId()>o2.getCellId()) {
+            if (o1.getCellId() > o2.getCellId()) {
                 return 1;
             }
             return -1;

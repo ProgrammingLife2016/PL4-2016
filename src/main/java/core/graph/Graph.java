@@ -366,48 +366,53 @@ public class Graph {
     }
 
     /**
-     * Get the current level
+     * Get the current level.
      *
-     * @return the current level
+     * @return the current level.
      */
     public int getCurrentInt() {
         return currentInt;
     }
 
     /**
-     * Get the current highlighted strain
+     * Get the current highlighted strain.
      *
-     * @return the current highlighted strain
+     * @return the current highlighted strain.
      */
     public Object getCurrentRef() {
         return currentRef;
     }
 
     /**
-     * Get the levelMaps
+     * Get the levelMaps.
      *
-     * @return the levelMaps
+     * @return the levelMaps.
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }
 
     /**
-     * Set the levelMaps
+     * Set the levelMaps.
      *
-     * @param levelMaps the levelMaps
+     * @param levelMaps the levelMaps.
      */
     public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
         this.levelMaps = levelMaps;
     }
 
     /**
-     * Method to reset the current view
+     * Method to reset the current view.
      */
     public void reset() {
         this.currentInt = -1;
     }
 
+    /**
+     * Method to get the MaxWidth.
+     *
+     * @return the MaxWidth.
+     */
     public double getMaxWidth() {
         return current.getMaxWidth();
     }

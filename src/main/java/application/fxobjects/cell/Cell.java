@@ -1,12 +1,11 @@
 package application.fxobjects.cell;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -136,9 +135,14 @@ public abstract class Cell extends Pane {
         return cellId + "";
     }
 
-
+    /**
+     * Abstract method.
+     */
     public void focus() { }
 
+    /**
+     * Abstract method.
+     */
     public void resetFocus() { }
 
 }

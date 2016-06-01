@@ -36,8 +36,8 @@ class GraphMouseHandling {
         } else if (prevClick.getCellId() != node.getCellId()) {
             prevClick.resetFocus();
             node.focus();
-             prevClick = node;
-        } else if (prevClick.getCellId() == node.getCellId()){
+            prevClick = node;
+        } else if (prevClick.getCellId() == node.getCellId()) {
             prevClick.resetFocus();
             prevClick = null;
         }
@@ -84,10 +84,20 @@ class GraphMouseHandling {
         node.setOnDragDetected(onMouseDraggedEventHandler);
     }
 
+    /**
+     * Getter for the prevClick
+     *
+     * @return the Cell that is last clicked.
+     */
     public Cell getPrevClick() {
         return prevClick;
     }
 
+    /**
+     * Setter for the prevClick.
+     *
+     * @param prevClick the cell to set to.
+     */
     public void setPrevClick(Cell prevClick) {
         this.prevClick = prevClick;
     }
