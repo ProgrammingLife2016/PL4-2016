@@ -28,6 +28,9 @@ class GraphMouseHandling {
         info += "Seq: \n" + clicked.getSequence() + "\n";
 
         mainController.getListFactory().modifyNodeInfo(info);
+
+        System.out.println("click");
+        node.focus();
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {

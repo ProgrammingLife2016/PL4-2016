@@ -135,4 +135,10 @@ public abstract class Cell extends Pane {
     public String toString() {
         return cellId + "";
     }
+
+    public void focus() {
+        System.out.println("focus");
+        this.getStylesheets().add("/css/cell.css");
+        this.getStyleClass().add("focus");
+    }
 }
