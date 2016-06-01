@@ -24,7 +24,7 @@ public class GraphLayout extends CellLayout {
     private int centerY;
     private double maxWidth;
 
-    private static final int BASE_X = 175;
+    private static final int BASE_X = 100;
 
     /**
      * Class constructor.
