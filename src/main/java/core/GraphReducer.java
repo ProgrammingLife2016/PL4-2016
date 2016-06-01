@@ -111,7 +111,12 @@ public final class GraphReducer {
             complexBubbleCollapse(nodeMap, parent);
             collapseComplexIndel(nodeMap, parent);
             if (zoomLevel > 0) {
-                collapseNodeSequence(nodeMap, parent);
+                boolean collapsed = true;
+                int collapseCount = 0;
+                while(collapsed && collapseCount < 6) {
+                    collapsed = collapseNodeSequence(nodeMap, parent);
+                    collapseCount++;
+                }
             }
         }
 
