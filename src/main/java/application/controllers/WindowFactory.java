@@ -72,6 +72,8 @@ public final class WindowFactory {
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
         System.out.println("selected: " + selectedFile.getAbsolutePath());
 
+        mainController.init();
+
         return directoryChooser;
     }
 

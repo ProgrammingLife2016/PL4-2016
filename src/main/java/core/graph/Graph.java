@@ -71,6 +71,7 @@ public class Graph {
             System.out.println("s: " + s);
             Parser parser = new Parser();
             InputStream inputStream = getClass().getResourceAsStream(s);
+
             startMap = parser.readGFAAsResource(inputStream);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
