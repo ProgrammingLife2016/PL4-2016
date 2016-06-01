@@ -2,7 +2,6 @@ package core.graph;
 
 import core.Model;
 import core.Node;
-import core.NodeType;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
 import org.junit.Before;
@@ -35,11 +34,11 @@ public class GraphTest {
         when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
 
         HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
-        nodeMap.put(1, new Node(1, NodeType.BASE, "", 1));
-        nodeMap.put(2, new Node(2, NodeType.BUBBLE, "", 2));
-        nodeMap.put(3, new Node(3, NodeType.INDEL, "", 3));
-        nodeMap.put(4, new Node(4, NodeType.COLLECTION, "", 4));
-        nodeMap.put(5, new Node(5, NodeType.COLLECTION, "", 5));
+        nodeMap.put(1, new Node(1, CellType.RECTANGLE, "", 1));
+        nodeMap.put(2, new Node(2, CellType.BUBBLE, "", 2));
+        nodeMap.put(3, new Node(3, CellType.INDEL, "", 3));
+        nodeMap.put(4, new Node(4, CellType.COLLECTION, "", 4));
+        nodeMap.put(5, new Node(5, CellType.COLLECTION, "", 5));
 
         nodeMap.get(1).setGenomes(new ArrayList<>(Arrays.asList("1")));
         nodeMap.get(2).setGenomes(new ArrayList<>(Arrays.asList("1")));

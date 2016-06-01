@@ -253,21 +253,21 @@ public class Graph {
                         Object ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
-        NodeType type = nodeMap.get(j).getType();
+        CellType type = nodeMap.get(j).getType();
 
-        if (type == NodeType.BASE) {
+        if (type == CellType.RECTANGLE) {
             toret.addCell(to.getId(), to.getSequence(),
                     CellType.RECTANGLE);
 
-        } else if (type == NodeType.BUBBLE) {
+        } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()),
                     CellType.BUBBLE);
-        } else if (type == NodeType.INDEL) {
+        } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()),
                     CellType.INDEL);
-        } else if (type == NodeType.COLLECTION) {
+        } else if (type == CellType.COLLECTION) {
             toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
                     CellType.COLLECTION);
         }
