@@ -15,9 +15,15 @@ public class Poc {
         int startLoopIndex = 0;
         for (Annotation a : annotations) {
             startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, nodeMap);
-        }
 
-        System.out.println(annotations.get(0).getSpannedNodes().size());
+            for (Node n : a.getSpannedNodes()) {
+                System.out.println("Annotation ID: " + a.getStart()
+                        + ", Node: " + n.getId());
+            }
+            //for (Node n : a.getSpannedNodes()) {
+            //    n.setAnnotation(a);
+            //}
+        }
     }
 
 

@@ -57,6 +57,11 @@ public class Node {
     private List<String> genomes;
 
     /**
+     * The annotation that spans this node.
+     */
+    private Annotation annotation;
+
+    /**
      * Node constructor.
      *
      * @param id  - Node identifier.
@@ -372,6 +377,24 @@ public class Node {
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
+    }
+
+    /**
+     * Get the annotation spanning the node.
+     *
+     * @return The annotation spanning the node.
+     */
+    public Annotation getAnnotation() {
+        return annotation;
+    }
+
+    /**
+     * Set the annotation spanning the node.
+     *
+     * @param annotation The annotation spanning the node.
+     */
+    public void setAnnotation(Annotation annotation) {
+        this.annotation = annotation;
     }
 
     @Override

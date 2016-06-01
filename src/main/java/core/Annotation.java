@@ -28,8 +28,8 @@ public class Annotation implements Comparable<Annotation> {
     private String displayNameAttr;
 
     private List<Node> spannedNodes;
-    private int OffsetInFirstSpannedNode;
-    private int OffsetInLastSpannedNode;
+    private int offsetInFirstSpannedNode;
+    private int offsetInLastSpannedNode;
 
     /**
      * Sets up a gene annotation.
@@ -49,6 +49,8 @@ public class Annotation implements Comparable<Annotation> {
         displayNameAttr = "";
 
         spannedNodes = new ArrayList<Node>();
+        offsetInFirstSpannedNode = 0;
+        offsetInLastSpannedNode = 0;
     }
 
     /**
@@ -332,6 +334,7 @@ public class Annotation implements Comparable<Annotation> {
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= start && nUpper >= start) {
+                offsetInFirstSpannedNode = start - n.getzIndex();
                 return idx;
             }
         }
@@ -356,6 +359,7 @@ public class Annotation implements Comparable<Annotation> {
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= end && nUpper >= end) {
+                offsetInLastSpannedNode = end - n.getzIndex();
                 return idx;
             }
         }
