@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 class GraphMouseHandling {
     private MainController mainController;
     private Cell prevClick;
+    private double prevInt = 0;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
@@ -32,10 +33,12 @@ class GraphMouseHandling {
 
         if (prevClick == null) {
             prevClick = node;
+            prevInt = node.getLayoutX();
             node.focus();
         } else if (prevClick.getCellId() != node.getCellId()) {
             prevClick.resetFocus();
             node.focus();
+            prevInt = node.getLayoutX();
             prevClick = node;
             System.out.println(node.getCellId());
         } else {
