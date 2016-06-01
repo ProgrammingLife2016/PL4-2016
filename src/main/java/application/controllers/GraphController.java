@@ -49,15 +49,26 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
+
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
+                    if(graphMouseHandling.getPrevClick() != null) {
+                        focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
+                    }
                     event.consume();
                 } else if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
+                    if(graphMouseHandling.getPrevClick() != null) {
+                        focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
+                    }
                     event.consume();
                 }
             }
         });
+    }
+
+    private void focus(Object prevClick, double prevInt) {
+        //@ToDo scroll the prevClick node to X: prevInt
     }
 
     /**

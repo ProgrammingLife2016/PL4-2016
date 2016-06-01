@@ -87,4 +87,12 @@ class GraphMouseHandling {
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnDragDetected(onMouseDraggedEventHandler);
     }
+
+    public Object getPrevClick() {
+        return prevClick;
+    }
+
+    public double getPrevInt() {
+        return prevInt;
+    }
 }
