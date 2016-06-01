@@ -6,6 +6,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -13,7 +14,8 @@ import javafx.scene.text.Text;
  */
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
-    private Polygon view;
+    private Text text;
+    private Shape shape;
     private boolean selected;
 
     /**
@@ -39,13 +41,14 @@ public class IndelCell extends Cell {
         double width = 20;
         double height = 20;
 
-        this.selected = false;
-        this.view = new Polygon(width / 2, 0, width, height, 0, height);
-        this.view.setStroke(Color.RED);
-        this.view.setStrokeWidth(1);
-        this.view.setFill(Color.RED);
+        shape = new Polygon(width / 2, 0, width, height, 0, height);
+        shape.setStroke(Color.RED);
+        shape.setStrokeWidth(1);
+        shape.setFill(Color.RED);
+        pane.getChildren().addAll(shape, text);
 
-        pane.getChildren().addAll(view, text);
+        this.selected = false;
+
         setView(pane);
     }
 
@@ -59,6 +62,20 @@ public class IndelCell extends Cell {
     }
 
     /**
+     * Return the Cell's text.
+     *
+     * @return the Cell's text.
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
+    /**
      * Method to set the focus.
      */
     public void focus() {
@@ -69,10 +86,9 @@ public class IndelCell extends Cell {
         borderGlow.setWidth(70);
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
-
         this.selected = true;
-        this.view.setStroke(Color.PURPLE);
-        this.view.setStrokeWidth(4);
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
     }
 
     /**
@@ -81,7 +97,7 @@ public class IndelCell extends Cell {
     public void resetFocus() {
         this.setEffect(null);
         this.selected = false;
-        this.view.setStroke(Color.RED);
-        this.view.setStrokeWidth(1);
+        shape.setStroke(Color.RED);
+        shape.setStrokeWidth(1);
     }
 }

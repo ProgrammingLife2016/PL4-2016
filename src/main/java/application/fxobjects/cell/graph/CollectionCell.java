@@ -6,6 +6,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -14,7 +15,8 @@ import javafx.scene.text.Text;
 public class CollectionCell extends Cell {
 
     private final CellType type = CellType.COLLECTION;
-    private Circle view;
+    private Text text;
+    private Shape shape;
     private boolean selected;
 
     /**
@@ -37,13 +39,13 @@ public class CollectionCell extends Cell {
     public CollectionCell(int id, StackPane pane, Text text) {
         super(id);
 
+        shape = new Circle(10);
+        shape.setStroke(Color.LIGHTGREEN);
+        shape.setStrokeWidth(1);
+        shape.setFill(Color.LIGHTGREEN);
+        pane.getChildren().addAll(shape, text);
         this.selected = false;
-        this.view = new Circle(10);
-        this.view.setStroke(Color.LIGHTGREEN);
-        this.view.setStrokeWidth(1);
-        this.view.setFill(Color.LIGHTGREEN);
 
-        pane.getChildren().addAll(view, text);
         setView(pane);
     }
 
@@ -55,6 +57,21 @@ public class CollectionCell extends Cell {
     public CellType getType() {
         return type;
     }
+
+    /**
+     * Return the Cell's text.
+     *
+     * @return the Cell's text.
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 
     /**
      * Method to set the focus.
@@ -69,8 +86,8 @@ public class CollectionCell extends Cell {
         this.setEffect(borderGlow);
 
         this.selected = true;
-        this.view.setStroke(Color.PURPLE);
-        this.view.setStrokeWidth(4);
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
     }
 
     /**
@@ -79,8 +96,8 @@ public class CollectionCell extends Cell {
     public void resetFocus() {
         this.setEffect(null);
         this.selected = false;
-        this.view.setStroke(Color.LIGHTGREEN);
-        this.view.setStrokeWidth(1);
+        shape.setStroke(Color.LIGHTGREEN);
+        shape.setStrokeWidth(1);
     }
 
 }

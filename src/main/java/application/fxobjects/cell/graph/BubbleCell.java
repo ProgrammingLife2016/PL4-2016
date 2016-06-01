@@ -1,11 +1,11 @@
 package application.fxobjects.cell.graph;
-
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -13,7 +13,11 @@ import javafx.scene.text.Text;
  */
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
-    private Circle view;
+    private Text text;
+    private Shape shape;
+    private boolean selected;
+
+
 
     /**
      * Bubble cell constructor.
@@ -35,12 +39,13 @@ public class BubbleCell extends Cell {
     public BubbleCell(int id, StackPane pane, Text text) {
         super(id);
 
-        this.view = new Circle(10);
-        this.view.setStroke(Color.YELLOW);
-        this.view.setStrokeWidth(1);
-        this.view.setFill(Color.YELLOW);
+        shape = new Circle(10);
+        shape.setStroke(Color.YELLOW);
+        shape.setStrokeWidth(1);
+        shape.setFill(Color.YELLOW);
+        pane.getChildren().addAll(shape, text);
+        this.selected = false;
 
-        pane.getChildren().addAll(view, text);
         setView(pane);
     }
 
@@ -54,6 +59,20 @@ public class BubbleCell extends Cell {
     }
 
     /**
+     * Return the Cell's text.
+     * @return the Cell's text.
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
+
+    /**
      * Method to set the focus.
      */
     public void focus() {
@@ -65,8 +84,8 @@ public class BubbleCell extends Cell {
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
 
-        this.view.setStroke(Color.PURPLE);
-        this.view.setStrokeWidth(4);
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
     }
 
     /**
@@ -74,8 +93,7 @@ public class BubbleCell extends Cell {
      */
     public void resetFocus() {
         this.setEffect(null);
-        this.view.setStroke(Color.YELLOW);
-        this.view.setStrokeWidth(1);
+        shape.setStroke(Color.YELLOW);
+        shape.setStrokeWidth(1);
     }
-
 }

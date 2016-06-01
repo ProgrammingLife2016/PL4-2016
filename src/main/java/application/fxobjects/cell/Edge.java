@@ -4,6 +4,7 @@ import core.graph.cell.EdgeType;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 
 import static core.graph.cell.EdgeType.GRAPH_REF;
 import static core.graph.cell.EdgeType.TREE;
@@ -53,11 +54,42 @@ public class Edge extends Group {
                     target.getBoundsInParent().getHeight() / 2.0));
             if (type == GRAPH_REF) {
                 line.setStroke(Color.YELLOW);
+                //addArrow(line, Color.YELLOW);
+            } else {
+                //addArrow(line, Color.BLACK);
             }
         }
 
 
         getChildren().add(line);
+    }
+
+    /**
+     * Add an arrowhead to the edges.
+     * @param l - the line the arrowhead shoul be added to.
+     */
+    private void addArrow(Line l, Color c) {
+        double startx = source.layoutXProperty().get();
+        double starty = source.layoutYProperty().get();
+        double endx = target.layoutXProperty().get();
+        double endy = target.layoutYProperty().get();
+
+
+
+        Polyline arrow = new Polyline();
+        arrow.getPoints().addAll(
+                0.0, 0.0,
+                -5.0, 10.0,
+                0.0, 0.0,
+                5.0, 10.0);
+
+        arrow.layoutXProperty().bind(line.endXProperty().subtract(
+                Math.abs((line.getBoundsInParent().getWidth() * 0.5))));
+        arrow.layoutYProperty().bind(line.endYProperty().multiply(0.5));
+        arrow.setStroke(c);
+        getChildren().add(arrow);
+
+
     }
 
     /**

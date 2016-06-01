@@ -7,12 +7,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+
 /**
  * Class representing a Rectangle shape. *
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
-    private Rectangle view;
+    private Text text;
+    private Shape shape;
     private boolean selected;
 
     /**
@@ -34,13 +38,15 @@ public class RectangleCell extends Cell {
         super(id);
 
         pane.setMaxHeight(10);
-        this.selected = false;
-        this.view = new Rectangle(10, 10);
-        this.view.setStroke(Color.DODGERBLUE);
-        this.view.setStrokeWidth(1);
-        this.view.setFill(Color.DODGERBLUE);
 
-        pane.getChildren().addAll(view);
+        this.selected = false;
+
+        shape = new Rectangle(10, 10);
+        shape.setStroke(Color.DODGERBLUE);
+        shape.setStrokeWidth(1);
+        shape.setFill(Color.DODGERBLUE);
+        pane.getChildren().addAll(shape);
+
         setView(pane);
     }
 
@@ -52,6 +58,21 @@ public class RectangleCell extends Cell {
     public CellType getType() {
         return type;
     }
+
+    /**
+     * Return the Cell's text.
+     *
+     * @return the Cell's text.
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 
     /**
      * Method to set the focus.
@@ -66,8 +87,8 @@ public class RectangleCell extends Cell {
         this.setEffect(borderGlow);
 
         this.selected = true;
-        this.view.setStroke(Color.PURPLE);
-        this.view.setStrokeWidth(4);
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
     }
 
     /**
@@ -76,7 +97,7 @@ public class RectangleCell extends Cell {
     public void resetFocus() {
         this.selected = false;
         this.setEffect(null);
-        this.view.setStroke(Color.DODGERBLUE);
-        this.view.setStrokeWidth(1);
+        shape.setStroke(Color.DODGERBLUE);
+        shape.setStrokeWidth(1);
     }
 }

@@ -198,15 +198,12 @@ public class Graph {
 
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
+                if (from == null) { continue; }
                 if (intersection(from.getGenomes(), currentGenomes) > 0) {
                     for (int j : from.getLinks(nodeMap)) {
                         Node to = nodeMap.get(j);
                         if (intersection(to.getGenomes(), currentGenomes) > 0) {
                             //Add next cell
-
                             addCell(nodeMap, toret, j, ref, to, from);
                         }
                     }
@@ -220,10 +217,7 @@ public class Graph {
 
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
-
+                if (from == null) { continue; }
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).
