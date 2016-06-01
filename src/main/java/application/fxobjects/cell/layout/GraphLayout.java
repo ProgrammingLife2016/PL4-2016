@@ -51,7 +51,6 @@ public class GraphLayout extends CellLayout {
     public void execute() {
         List<Cell> cells = model.getAddedCells();
         for (Cell cell : cells) {
-            System.out.println(cell.getCellId() +": "+ cell.getCellChildren().toString());
             if (!cell.isRelocated()) {
                 currentX += offset;
                 if (currentX > maxWidth) {
@@ -85,9 +84,7 @@ public class GraphLayout extends CellLayout {
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
-
-
-
+        
         for (Cell child : cell.getCellChildren()) {
             if (!child.isRelocated()) {
                 if (cellCount % 2 == 0) {
@@ -136,8 +133,7 @@ public class GraphLayout extends CellLayout {
             if (child.getCellChildren().size() > 1) {
                 currentX += offset;
                 currentY = (int) (child.getLayoutY() + (child.getCellShape().getLayoutBounds().getHeight() / 2));
-                System.out.println("called");
-                cellCount = child.getCellChildren().size()-1;
+                cellCount = child.getCellChildren().size() - 1;
                 breadthFirstPlacing(child);
             }
         }
@@ -235,6 +231,7 @@ public class GraphLayout extends CellLayout {
 
     /**
      * Get the max width
+     *
      * @return the max width
      */
     public double getMaxWidth() {
