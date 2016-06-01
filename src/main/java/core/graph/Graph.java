@@ -170,16 +170,25 @@ public class Graph {
      * @param depth the depth of the model
      * @return the new model
      */
-    private Model generateModel(Object ref, int depth) {
-        //Create a new Model to return
-        Model toret = new Model();
+    public Model generateModel(Object ref, int depth) {
+        return generateModel(ref, depth, new Model());
+    }
+
+    /**
+     * Method to generate a new model
+     *
+     * @param ref   reference object
+     * @param depth the depth of the model
+     * @param toret a given model
+     * @return the new model
+     */
+    public Model generateModel(Object ref, int depth, Model toret) {
         //Apply the levelMaps
         toret.setLevelMaps(levelMaps);
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         //Root Node
         Node root = nodeMap.get(1);
-
         if (currentGenomes.size() > 0) { //Draw selected references
             //We are now drawing only the selected items.
             // Only draw when the intersection > 0 (Node contains genome that we
@@ -190,7 +199,6 @@ public class Graph {
             // In this case we know that the genomes in the graph are only this ones.
             genomes = currentGenomes;
 
-            //current.clearCellMap();
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
                 if (from == null) {
@@ -342,6 +350,15 @@ public class Graph {
     }
 
     /**
+     * Getter method for the genomes.
+     *
+     * @return the genomes.
+     */
+    public List<String> getCurrentGenomes() {
+        return this.currentGenomes;
+    }
+
+    /**
      * Setter method for the genomes.
      *
      * @param genomes the genomes.
@@ -375,6 +392,15 @@ public class Graph {
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
+    }
+
+    /**
+     * Set the levelMaps
+     *
+     * @param levelMaps the levelMaps
+     */
+    public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
+        this.levelMaps = levelMaps;
     }
 
     /**

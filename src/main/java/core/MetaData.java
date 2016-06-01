@@ -16,11 +16,7 @@ import java.util.TreeMap;
  */
 public final class MetaData {
 
-    /**
-     * Contructor method for utility class.
-     */
-    protected MetaData() {
-        throw new UnsupportedOperationException();
+    private MetaData() {
     }
 
     /**
@@ -81,10 +77,10 @@ public final class MetaData {
                                 gen.setEthionamide(row.getCell(14).getStringCellValue());
                                 break;
                             case 16:
-                                gen.setIsoniazid(row.getCell(16).getStringCellValue());
+                                gen.setIsoniazid(row.getCell(15).getStringCellValue());
                                 break;
                             case 17:
-                                gen.setKanamycin(row.getCell(17).getStringCellValue());
+                                gen.setKanamycin(row.getCell(16).getStringCellValue());
                                 break;
                             case 18:
                                 gen.setPyrazinamide(row.getCell(18).getStringCellValue());
@@ -137,7 +133,7 @@ public final class MetaData {
      * @param s lineage string.
      * @return lineage code.
      */
-    private static int detLineage(String s) {
+    public static int detLineage(String s) {
         if (s.equals("unknown")) {
             return 0;
         } else if (s.equals("LIN animal")) {
