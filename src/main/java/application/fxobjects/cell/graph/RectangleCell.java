@@ -18,15 +18,16 @@ public class RectangleCell extends Cell {
     /**
      * Rectangle cell constructor.
      *
-     * @param id  The ID of a cell.
+     * @param id The ID of a cell.
      */
     public RectangleCell(int id) {
         this(id, new StackPane());
     }
+
     /**
      * Rectangle cell constructor.
      *
-     * @param id  The ID of a cell.
+     * @param id   The ID of a cell.
      * @param pane A given stack pane.
      */
     public RectangleCell(int id, StackPane pane) {
@@ -56,7 +57,7 @@ public class RectangleCell extends Cell {
      * Method to set the focus.
      */
     public void focus() {
-        DropShadow borderGlow= new DropShadow();
+        DropShadow borderGlow = new DropShadow();
         borderGlow.setOffsetY(0f);
         borderGlow.setOffsetX(0f);
         borderGlow.setColor(Color.BLACK);

@@ -48,7 +48,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
-            if(graphMouseHandling.getPrevClick() != null) {
+            if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
             }
             if (event.getDeltaY() != 0) {
@@ -73,6 +73,11 @@ public class GraphController extends Controller<ScrollPane> {
         });
     }
 
+    /**
+     * Method to focus on a Cell.
+     *
+     * @param prevClick the cell to focus to.
+     */
     public void focus(Cell prevClick) {
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
@@ -191,6 +196,11 @@ public class GraphController extends Controller<ScrollPane> {
         return snapshot;
     }
 
+    /**
+     * Getter for the graphMouseHandling
+     *
+     * @return
+     */
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;
     }

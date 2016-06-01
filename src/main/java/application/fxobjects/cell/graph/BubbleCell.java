@@ -28,9 +28,9 @@ public class BubbleCell extends Cell {
     /**
      * Bubble cell constructor.
      *
-     * @param id            The ID of a cell.
-     * @param pane          A given stack pane.
-     * @param text          A given text element.
+     * @param id   The ID of a cell.
+     * @param pane A given stack pane.
+     * @param text A given text element.
      */
     public BubbleCell(int id, StackPane pane, Text text) {
         super(id);
@@ -57,7 +57,7 @@ public class BubbleCell extends Cell {
      * Method to set the focus.
      */
     public void focus() {
-        DropShadow borderGlow= new DropShadow();
+        DropShadow borderGlow = new DropShadow();
         borderGlow.setOffsetY(0f);
         borderGlow.setOffsetX(0f);
         borderGlow.setColor(Color.BLACK);
