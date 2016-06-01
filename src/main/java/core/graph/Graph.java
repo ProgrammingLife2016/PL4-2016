@@ -24,7 +24,6 @@ public class Graph {
     private int currentInt = -1;
     private Object currentRef = null;
     private int nodeIds;
-
     /**
      * All the genomes that are in this graph.
      */
@@ -63,7 +62,6 @@ public class Graph {
      * Read a node map from a gfa file on disk.
      *
      * @return A node map read from file.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() {
@@ -84,10 +82,9 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref             the reference string.
-     * @param depth           the depth to draw.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth) {
@@ -133,7 +130,7 @@ public class Graph {
     /**
      * Method to Zoom out
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneUp(int depth) {
         int finalDepth = depth;
@@ -149,7 +146,7 @@ public class Graph {
     /**
      * Method to Zoom in
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneDown(int depth) {
         int finalDepth = depth;
@@ -242,12 +239,13 @@ public class Graph {
 
     /**
      * Method to add a new Cell to the graph
+     *
      * @param nodeMap the current NodeMap we are reading from
-     * @param toret the Model the Cell is added to
-     * @param j the number of the Cell
-     * @param ref the current Reference strain
-     * @param to cell we are going to
-     * @param from cell we are coming from
+     * @param toret   the Model the Cell is added to
+     * @param j       the number of the Cell
+     * @param ref     the current Reference strain
+     * @param to      cell we are going to
+     * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
                         Object ref, Node to, Node from) {
@@ -368,45 +366,54 @@ public class Graph {
     }
 
     /**
-     * Get the current level
+     * Get the current level.
      *
-     * @return the current level
+     * @return the current level.
      */
     public int getCurrentInt() {
         return currentInt;
     }
 
     /**
-     * Get the current highlighted strain
+     * Get the current highlighted strain.
      *
-     * @return the current highlighted strain
+     * @return the current highlighted strain.
      */
     public Object getCurrentRef() {
         return currentRef;
     }
 
     /**
-     * Get the levelMaps
+     * Get the levelMaps.
      *
-     * @return the levelMaps
+     * @return the levelMaps.
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }
 
     /**
-     * Set the levelMaps
+     * Set the levelMaps.
      *
-     * @param levelMaps the levelMaps
+     * @param levelMaps the levelMaps.
      */
     public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
         this.levelMaps = levelMaps;
     }
 
     /**
-     * Method to reset the current view
+     * Method to reset the current view.
      */
     public void reset() {
         this.currentInt = -1;
+    }
+
+    /**
+     * Method to get the MaxWidth.
+     *
+     * @return the MaxWidth.
+     */
+    public double getMaxWidth() {
+        return current.getMaxWidth();
     }
 }
