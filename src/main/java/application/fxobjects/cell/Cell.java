@@ -6,6 +6,8 @@ import java.util.List;
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -135,4 +137,10 @@ public abstract class Cell extends Pane {
     public String toString() {
         return cellId + "";
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public abstract Shape getCellShape();
 }

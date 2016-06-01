@@ -75,10 +75,12 @@ public class Edge extends Group {
      * @param l - the line the arrowhead shoul be added to.
      */
     private void addArrow(Line l, Color c) {
-        double startx = l.startXProperty().doubleValue();
-        double starty = l.startYProperty().doubleValue();
-        double endx = l.endXProperty().doubleValue();
-        double endy = l.endYProperty().doubleValue();
+        double startx = source.layoutXProperty().get();
+        double starty = source.layoutYProperty().get();
+        double endx = target.layoutXProperty().get();
+        double endy = target.layoutYProperty().get();
+
+
 
         Polyline arrow = new Polyline();
         arrow.getPoints().addAll(
@@ -87,16 +89,9 @@ public class Edge extends Group {
                 0.0, 0.0,
                 5.0, 10.0);
 
-        double angle = (Math.atan2(endy - starty, endx - startx) * 180 / Math.PI) - 90;
-        ObservableDoubleValue dodo = new SimpleDoubleProperty(angle);
-        arrow.rotateProperty().bind(dodo);
-
-
-
-//        arrow.layoutXProperty().bind(new SimpleDoubleProperty(Math.abs(line.endXProperty().get() - line.startXProperty().get() / 2)));
-//        arrow.layoutYProperty().bind(line.layoutYProperty().add(Math.abs(line.endYProperty().get() - line.startYProperty().get() / 2)));
-        arrow.layoutXProperty().bind(line.endXProperty());
-        arrow.layoutYProperty().bind(line.endYProperty());
+        System.out.println(source.toString() + ": " + Math.abs(line.endXProperty().get() - line.startXProperty().get()));
+        arrow.layoutXProperty().bind(line.endXProperty().subtract(Math.abs((line.getBoundsInParent().getWidth() * 0.5))));
+        arrow.layoutYProperty().bind(line.endYProperty().multiply(0.5));
         arrow.setStroke(c);
         getChildren().add(arrow);
 

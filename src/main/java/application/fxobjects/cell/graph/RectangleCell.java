@@ -6,11 +6,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+
 /**
  * Class representing a Rectangle shape. *
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
+    private Text text;
+    private Shape shape;
 
     /**
      * Rectangle cell constructor.
@@ -30,11 +35,14 @@ public class RectangleCell extends Cell {
         super(id);
 
         pane.setMaxHeight(10);
-        Rectangle view = new Rectangle(10, 10);
-        view.setStroke(Color.DODGERBLUE);
-        view.setFill(Color.DODGERBLUE);
 
-        pane.getChildren().addAll(view);
+        text.setVisible(false);
+        text.setManaged(false);
+        shape = new Rectangle(10, 10);
+        shape.setStroke(Color.DODGERBLUE);
+        shape.setFill(Color.DODGERBLUE);
+        pane.getChildren().addAll(shape, text);
+
         setView(pane);
     }
 
@@ -47,4 +55,18 @@ public class RectangleCell extends Cell {
         return type;
     }
 
+    /**
+     * Return the Cell's text.
+     *
+     * @return the Cell's text.
+     */
+    public Text getText() {
+        return text;
+    }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }
