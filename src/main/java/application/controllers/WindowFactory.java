@@ -63,7 +63,7 @@ public final class WindowFactory {
      *
      * @return the directoryChooser.
      */
-    public static FileChooser createDirectoryChooser() {
+    public static FileChooser createGraphChooser() {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Graph File");
 
@@ -72,7 +72,18 @@ public final class WindowFactory {
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
         System.out.println("selected: " + selectedFile.getAbsolutePath());
 
-        mainController.init();
+        mainController.initGraph();
+
+        return directoryChooser;
+    }
+
+    public static FileChooser createTreeChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Tree File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }

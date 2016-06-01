@@ -32,7 +32,7 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Constructor method for this class.
      *
-     * @param m               the mainController.
+     * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphController(MainController m) {
@@ -86,8 +86,8 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Init method for this class.
      *
-     * @param ref             the reference string.
-     * @param depth           the depth to draw.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      */
     public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();

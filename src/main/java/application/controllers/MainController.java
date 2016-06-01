@@ -51,18 +51,20 @@ public class MainController extends Controller<BorderPane> {
         // Create the new GraphController
         graphController = new GraphController(this);
 
+
     }
 
-    public void init() {
-
+    public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
         //Fill the graph
         fillGraph(null, new ArrayList<>());
 
-        //Create the TreeController
+    }
+
+    public void initTree(String s) {
         treeController = new TreeController(this,
-                this.getClass().getResourceAsStream("/metadata.xlsx"));
+                this.getClass().getResourceAsStream("/metadata.xlsx"), s);
     }
 
     /**

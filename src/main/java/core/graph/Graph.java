@@ -56,7 +56,7 @@ public class Graph {
 
         //startMap = getNodeMapFromFile(s);
 //        nodeIds = startMap.size();
-   //     levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+        //     levelMaps = GraphReducer.createLevelMaps(startMap, 1);
     }
 
     /**
@@ -68,19 +68,15 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String s) {
         try {
-            System.out.println("s: " + s);
             Parser parser = new Parser();
-            InputStream inputStream = getClass().getResourceAsStream(s);
 
-            startMap = parser.readGFAAsResource(inputStream);
+            startMap = parser.readGFAAsString(s);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
 
-            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return startMap;
     }
@@ -88,8 +84,8 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref             the reference string.
-     * @param depth           the depth to draw.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      * @throws IOException Throw exception on read GFA read failure.
      */
@@ -137,7 +133,7 @@ public class Graph {
     /**
      * Method to Zoom out
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneUp(int depth) {
         int finalDepth = depth;
@@ -153,7 +149,7 @@ public class Graph {
     /**
      * Method to Zoom in
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneDown(int depth) {
         int finalDepth = depth;
@@ -246,12 +242,13 @@ public class Graph {
 
     /**
      * Method to add a new Cell to the graph
+     *
      * @param nodeMap the current NodeMap we are reading from
-     * @param toret the Model the Cell is added to
-     * @param j the number of the Cell
-     * @param ref the current Reference strain
-     * @param to cell we are going to
-     * @param from cell we are coming from
+     * @param toret   the Model the Cell is added to
+     * @param j       the number of the Cell
+     * @param ref     the current Reference strain
+     * @param to      cell we are going to
+     * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
                         Object ref, Node to, Node from) {
