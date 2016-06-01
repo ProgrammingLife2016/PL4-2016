@@ -43,7 +43,7 @@ public class ParserTest {
         InputStream is = getClass().getResourceAsStream("/TBTestFile.gfa");
 
         try {
-            map = p.readGFA(is);
+            map = p.readGFAAsResource(is);
             is.close();
         } catch (IOException e) {
             e.printStackTrace();
