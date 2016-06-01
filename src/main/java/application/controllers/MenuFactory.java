@@ -71,10 +71,6 @@ public class MenuFactory {
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
                 mainController.strainSelection(mainController.getTreeController().
                         getSelectedGenomes()));
-        MenuItem zoomOut = initMenuItem("Zoom out", null, event ->
-                mainController.switchScene(+1));
-        MenuItem zoomIn = initMenuItem("Zoom in", null, event ->
-                mainController.switchScene(-1));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
@@ -89,8 +85,7 @@ public class MenuFactory {
 
         Menu viewMenu = initMenu("View",
                 showGenomeSequence, showPhylogeneticTree, separatorOne,
-                showSelectedStrains, showOnlyThisStrain, separatorTwo,
-                zoomIn, zoomOut, resetView);
+                showSelectedStrains, showOnlyThisStrain, separatorTwo, resetView);
         return viewMenu;
 
     }
