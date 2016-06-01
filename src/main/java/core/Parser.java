@@ -2,10 +2,7 @@ package core;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -29,17 +26,15 @@ public class Parser {
     /**
      * Read the data from a .gfa file and put the nodes in a hashmap.
      *
-     * @param input - filepath of .gfa file to be parsed.
+     * @param bReader - reader to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
      * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     public final HashMap<Integer, Node>
-    readGFA(final InputStream input) {
+    readGFA(final BufferedReader bReader) {
         try {
-            BufferedReader bReader;
-            bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
             while ((nextLine = bReader.readLine()) != null) {
                 String[] content = nextLine.trim().split("\\s+");
@@ -81,5 +76,28 @@ public class Parser {
         return nodeMap;
     }
 
+
+    /**
+     * Read gfa file as a resource in the jar.
+     * @param input - the input.
+     * @return - A HashMap containing the information from the .gfa file.
+     */
+    public final HashMap<Integer, Node> readGFAAsResource(final InputStream input){
+        BufferedReader bReader;
+        bReader = new BufferedReader(new InputStreamReader(input));
+        return readGFA(bReader);
+    }
+
+    /**
+     * Read gfa file from a filepath.
+     * @param input - the input
+     * @return - A HashMap containing the information from the .gfa file.
+     * @throws IOException
+     */
+    public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException{
+        BufferedReader bReader;
+        bReader = new BufferedReader(new FileReader(input));
+        return readGFA(bReader);
+    }
 
 }
