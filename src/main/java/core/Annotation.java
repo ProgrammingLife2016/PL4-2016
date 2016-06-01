@@ -6,7 +6,7 @@ package core;
  *
  * @author Niels Warnars
  */
-public class Annotation {
+public class Annotation implements Comparable<Annotation> {
     private String seqid;
     private String source;
     private String type;
@@ -164,5 +164,32 @@ public class Annotation {
     public String getDisplayNameAttr() {
         return displayNameAttr;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Annotation{" +
+                "seqid='" + seqid + '\'' +
+                ", source='" + source + '\'' +
+                ", type='" + type + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", score=" + score +
+                ", strand='" + strand + '\'' +
+                ", phase='" + phase + '\'' +
+                ", callhounClassAttr='" + callhounClassAttr + '\'' +
+                ", idAttr=" + idAttr +
+                ", nameAttr='" + nameAttr + '\'' +
+                ", displayNameAttr='" + displayNameAttr + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Annotation o) {
+        if (this.getStart() > o.getStart())
+            return 1;
+        if (this.getStart() < o.getStart())
+            return -1;
+
+        return 0;
+    }
 }
