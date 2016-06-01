@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -15,6 +16,7 @@ import javafx.scene.text.Text;
 public class MiddleCell extends Cell {
     private final CellType type = CellType.TREEMIDDLE;
     private Text text;
+    private Shape shape = null;
 
     /**
      * Middle cell constructor.
@@ -50,4 +52,10 @@ public class MiddleCell extends Cell {
     public Text getText() {
         return text;
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }

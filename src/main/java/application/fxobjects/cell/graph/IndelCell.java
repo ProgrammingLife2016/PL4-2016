@@ -5,6 +5,7 @@ import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -13,6 +14,7 @@ import javafx.scene.text.Text;
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
     private Text text;
+    private Shape shape;
 
     /**
      * Indel cell constructor.
@@ -28,12 +30,11 @@ public class IndelCell extends Cell {
         double width = 20;
         double height = 20;
 
-        Polygon view = new Polygon(width / 2, 0, width, height, 0, height);
-        view.setStroke(Color.RED);
-        view.setFill(Color.RED);
-
+        shape = new Polygon(width / 2, 0, width, height, 0, height);
+        shape.setStroke(Color.RED);
+        shape.setFill(Color.RED);
         StackPane pane = new StackPane();
-        pane.getChildren().addAll(view, text);
+        pane.getChildren().addAll(shape, text);
         setView(pane);
     }
 
@@ -54,4 +55,10 @@ public class IndelCell extends Cell {
     public Text getText() {
         return text;
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }

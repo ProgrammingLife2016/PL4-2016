@@ -5,6 +5,7 @@ import core.graph.cell.CellType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -14,6 +15,7 @@ public class CollectionCell extends Cell {
 
     private final CellType type = CellType.COLLECTION;
     private Text text;
+    private Shape shape;
 
     /**
      * Bubble cell constructor.
@@ -25,12 +27,11 @@ public class CollectionCell extends Cell {
         super(id);
         text = new Text(collapseLevel);
 
-        Circle view = new Circle(10);
-        view.setStroke(Color.LIGHTGREEN);
-        view.setFill(Color.LIGHTGREEN);
-
+        shape = new Circle(10);
+        shape.setStroke(Color.LIGHTGREEN);
+        shape.setFill(Color.LIGHTGREEN);
         StackPane pane = new StackPane();
-        pane.getChildren().addAll(view, text);
+        pane.getChildren().addAll(shape, text);
         setView(pane);
     }
 
@@ -51,4 +52,10 @@ public class CollectionCell extends Cell {
     public Text getText() {
         return text;
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }

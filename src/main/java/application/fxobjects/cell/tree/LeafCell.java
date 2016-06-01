@@ -7,6 +7,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
@@ -16,6 +17,7 @@ public class LeafCell extends Cell {
     private final CellType type = CellType.TREELEAF;
     private Text text;
     private String name;
+    private Shape shape = null;
 
     /**
      * Phylogenetic leave cell constructor.
@@ -77,4 +79,10 @@ public class LeafCell extends Cell {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }
