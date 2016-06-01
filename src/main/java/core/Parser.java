@@ -33,7 +33,7 @@ public class Parser {
      * @return - A HashMap containing the information from the .gfa file.
      * @throws IOException Throw exception on read GFA read failure.
      */
-    @SuppressWarnings("checkstyle:magicnumbers")
+    @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     public final HashMap<Integer, Node>
     readGFA(final InputStream input) {
