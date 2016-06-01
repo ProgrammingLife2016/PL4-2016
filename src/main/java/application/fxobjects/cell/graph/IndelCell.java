@@ -39,7 +39,6 @@ public class IndelCell extends Cell {
         double width = 20;
         double height = 20;
 
-
         shape = new Polygon(width / 2, 0, width, height, 0, height);
         shape.setStroke(Color.RED);
         shape.setFill(Color.RED);
