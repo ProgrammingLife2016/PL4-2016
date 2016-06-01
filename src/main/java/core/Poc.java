@@ -12,7 +12,13 @@ public class Poc {
         HashMap<Integer, Node> nodeMap = getNodeMap("src\\main\\resources\\TB10.gfa");
         List<Annotation> annotations = getAnnotations("src\\main\\resources\\decorationV5_20130412.gff");
 
+        int counter = 0;
+        for (Node n : nodeMap.values()) {
+            counter += n.getSequence().length();
+        }
+
         System.out.println("Num nodes with reference: " + nodeMap.size());
+        System.out.println("Num nucleotides: " + counter);
     }
 
 

@@ -66,8 +66,19 @@ public final class AnnotationParser {
                 }
             }
 
-            Annotation ann = new Annotation(seqid, source, type, start, end, score, strand, phase,
-                    callhounClassAttr, idAttr, nameAttr, displayNameAttr);
+            Annotation ann = new Annotation();
+            ann.setSeqid(seqid);
+            ann.setSource(source);
+            ann.setType(type);
+            ann.setStart(start);
+            ann.setEnd(end);
+            ann.setScore(score);
+            ann.setStrand(strand);
+            ann.setPhase(phase);
+            ann.setCallhounClassAttr(callhounClassAttr);
+            ann.setIdAttr(idAttr);
+            ann.setNameAttr(nameAttr);
+            ann.setDisplayNameAttr(displayNameAttr);
 
             annotations.add(ann);
         }

@@ -18,7 +18,7 @@ public class AnnotationTest {
      */
     @Before
     public void setUp() {
-        a = new Annotation("a", "b", "c", 1, 2, 3, "d", "e", "f", 4, "g", "h");
+        a = new Annotation();
     }
 
     /**
@@ -26,6 +26,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetSeqid() {
+        a.setSeqid("a");
         assertEquals("a", a.getSeqid());
     }
 
@@ -34,6 +35,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetSource() {
+        a.setSource("b");
         assertEquals("b", a.getSource());
     }
 
@@ -42,6 +44,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetType() {
+        a.setType("c");
         assertEquals("c", a.getType());
     }
 
@@ -50,6 +53,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetStart() {
+        a.setStart(1);
         assertEquals(1, a.getStart());
     }
 
@@ -58,6 +62,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetEnd() {
+        a.setEnd(2);
         assertEquals(2, a.getEnd());
     }
 
@@ -66,6 +71,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetScore() {
+        a.setScore(3);
         assertEquals(3, a.getScore(), 0.0001);
     }
 
@@ -74,6 +80,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetStrand() {
+        a.setStrand("d");
         assertEquals("d", a.getStrand());
     }
 
@@ -82,6 +89,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetPhase() {
+        a.setPhase("e");
         assertEquals("e", a.getPhase());
     }
 
@@ -90,6 +98,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetCallhounClassAttr() {
+        a.setCallhounClassAttr("f");
         assertEquals("f", a.getCallhounClassAttr());
     }
 
@@ -98,6 +107,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetIdAttr() {
+        a.setIdAttr(4);
         assertEquals(4, a.getIdAttr(), 0.0001);
     }
 
@@ -106,6 +116,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetNameAttr() {
+        a.setNameAttr("g");
         assertEquals("g", a.getNameAttr());
     }
 
@@ -114,6 +125,7 @@ public class AnnotationTest {
      */
     @Test
     public void testGetDisplayNameAttr() {
+        a.setDisplayNameAttr("h");
         assertEquals("h", a.getDisplayNameAttr());
     }
 

@@ -25,41 +25,12 @@ public class Annotation implements Comparable<Annotation> {
 
     /**
      * Sets up a gene annotation.
-     *
-     * @param seqid The ID of the current feature.
-     * @param source The generator of this feature.
-     * @param type The type of feature.
-     * @param start The start coordinate of the feature.
-     * @param end The end coordinate of the feature.
-     * @param score The score of the feature.
-     * @param strand The strand of the feature.
-     * @param phase The phase of the feature.
-     * @param callhounClassAttr The type of data.
-     * @param idAttr The ID of the feature.
-     * @param nameAttr The name of the feature.
-     * @param displayNameAttr The display name for the feature.
      */
-    public Annotation(String seqid, String source, String type, int start, int end, float score,
-                      String strand, String phase, String callhounClassAttr, double idAttr,
-                      String nameAttr, String displayNameAttr) {
-
-        this.seqid = seqid;
-        this.source = source;
-        this.type = type;
-        this.start = start;
-        this.end = end;
-        this.score = score;
-        this.strand = strand;
-        this.phase = phase;
-        this.callhounClassAttr = callhounClassAttr;
-        this.idAttr = idAttr;
-        this.nameAttr = nameAttr;
-        this.displayNameAttr = displayNameAttr;
+    public Annotation() {
     }
 
     /**
      * Gets the seqid.
-     *
      * @return The seqid.
      */
     public String getSeqid() {
@@ -67,17 +38,31 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
+     * Sets the seqid.
+     * @param seqid The seqid.
+     */
+    public void setSeqid(String seqid) {
+        this.seqid = seqid;
+    }
+
+    /**
      * Gets the source.
-     *
-     * @return The source.
+     * @return Sets the source.
      */
     public String getSource() {
         return source;
     }
 
     /**
+     * Sets the source.
+     * @param source The source.
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
      * Gets the type.
-     *
      * @return The type.
      */
     public String getType() {
@@ -85,35 +70,63 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
-     * Gets the start coordinate.
-     *
-     * @return The start coordinate.
+     * Sets the type.
+     * @param type The type.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Gets the start.
+     * @return The start.
      */
     public int getStart() {
         return start;
     }
 
     /**
-     * Gets the end coordinate.
-     *
-     * @return The end coordinate.
+     * Sets the start.
+     * @param start The start.
+     */
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    /**
+     * Gets the end.
+     * @return The end.
      */
     public int getEnd() {
         return end;
     }
 
     /**
-     * Gets the score of the feature.
-     *
-     * @return The score of the feature.
+     * Sets the end.
+     * @param end The end.
+     */
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    /**
+     * Gets the score.
+     * @return The score.
      */
     public float getScore() {
         return score;
     }
 
     /**
+     * Sets
+     * @param score
+     */
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    /**
      * Gets the strand.
-     *
      * @return The strand.
      */
     public String getStrand() {
@@ -121,8 +134,15 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
+     * Sets the strand.
+     * @param strand The strand.
+     */
+    public void setStrand(String strand) {
+        this.strand = strand;
+    }
+
+    /**
      * Gets the phase.
-     *
      * @return The phase.
      */
     public String getPhase() {
@@ -130,39 +150,75 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
-     * Gets the callhounClass attribute.
-     *
-     * @return The callhounClass attribute.
+     * Sets the phase.
+     * @param phase The phase.
+     */
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
+    /**
+     * Gets the callhounClassAttr.
+     * @return The callhounClassAttr.
      */
     public String getCallhounClassAttr() {
         return callhounClassAttr;
     }
 
     /**
-     * Gets the ID attribute.
-     *
-     * @return The ID attribute.
+     * Sets the callhounClassAttr.
+     * @param callhounClassAttr The callhounClassAttr.
+     */
+    public void setCallhounClassAttr(String callhounClassAttr) {
+        this.callhounClassAttr = callhounClassAttr;
+    }
+
+    /**
+     * Gets the idAttr.
+     * @return The idAttr.
      */
     public double getIdAttr() {
         return idAttr;
     }
 
     /**
-     * Gets the Name attribute.
-     *
-     * @return The Name attribute.
+     * Sets the idAttr.
+     * @param idAttr The idAttr.
+     */
+    public void setIdAttr(double idAttr) {
+        this.idAttr = idAttr;
+    }
+
+    /**
+     * Gets the nameAttr.
+     * @return The nameAttr.
      */
     public String getNameAttr() {
         return nameAttr;
     }
 
     /**
-     * Gets the displayName attribute.
-     *
-     * @return The displayName attribute.
+     * Sets the nameAttr.
+     * @param nameAttr The nameAttr.
+     */
+    public void setNameAttr(String nameAttr) {
+        this.nameAttr = nameAttr;
+    }
+
+    /**
+     * Gets the displayNameAttr.
+     * @return The displayNameAttr.
      */
     public String getDisplayNameAttr() {
         return displayNameAttr;
+    }
+
+    /**
+     * Sets the displayNameAttr.
+     * @param displayNameAttr The displayNameAttr.
+     */
+    public void setDisplayNameAttr(String displayNameAttr) {
+        this.displayNameAttr = displayNameAttr;
     }
 
     @Override
