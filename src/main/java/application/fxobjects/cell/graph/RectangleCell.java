@@ -36,12 +36,10 @@ public class RectangleCell extends Cell {
 
         pane.setMaxHeight(10);
 
-        text.setVisible(false);
-        text.setManaged(false);
         shape = new Rectangle(10, 10);
         shape.setStroke(Color.DODGERBLUE);
         shape.setFill(Color.DODGERBLUE);
-        pane.getChildren().addAll(shape, text);
+        pane.getChildren().addAll(shape);
 
         setView(pane);
     }
