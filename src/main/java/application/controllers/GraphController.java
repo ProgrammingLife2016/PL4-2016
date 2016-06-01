@@ -74,7 +74,6 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     private void focus(Cell prevClick) {
-        graphMouseHandling.getPrevClick().resetFocus();
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
             if (c.getCellId() == prevClick.getCellId()) {
