@@ -10,10 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * MainController for GUI.
@@ -57,8 +54,7 @@ public class MainController extends Controller<BorderPane> {
         fillGraph(null, new ArrayList<>());
 
         // Create the TreeController
-        treeController = new TreeController(this,
-                this.getClass().getResourceAsStream("/metadata.xlsx"));
+        treeController = new TreeController(this);
     }
 
     /**
