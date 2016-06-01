@@ -49,17 +49,21 @@ public class GraphController extends Controller<ScrollPane> {
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() != 0) {
+                if (graphMouseHandling.getPrevClick() != null) {
+                    graphMouseHandling.getPrevClick().resetFocus();
+                    System.out.println("Reset focus");
+                }
 
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
                     if (graphMouseHandling.getPrevClick() != null) {
-                        focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
+                        focus(graphMouseHandling.getPrevClick());
                     }
                     event.consume();
                 } else if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
                     if (graphMouseHandling.getPrevClick() != null) {
-                        focus(graphMouseHandling.getPrevClick(), graphMouseHandling.getPrevInt());
+                        focus(graphMouseHandling.getPrevClick());
                     }
                     event.consume();
                 }
@@ -67,15 +71,17 @@ public class GraphController extends Controller<ScrollPane> {
         });
     }
 
-    private void focus(Cell prevClick, double prevInt) {
-        prevClick.resetFocus();
+    private void focus(Cell prevClick) {
         for (Cell c : graph.getModel().getAllCells()) {
+            System.out.println(c.getCellId());
             if (c.getCellId() == prevClick.getCellId()) {
                 prevClick = c;
+                System.out.println("Found it");
                 break;
             }
             if (c.getCellId() > prevClick.getCellId()) {
                 prevClick = c;
+                System.out.println("Didnt");
                 break;
             }
         }

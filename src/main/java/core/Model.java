@@ -16,10 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -284,6 +281,12 @@ public class Model {
     public void merge() {
         // cells
         allCells.addAll(addedCells);
+        allCells.sort((o1, o2) -> {
+            if(o1.getCellId()>o2.getCellId()) {
+                return 1;
+            }
+            return -1;
+        });
         addedCells.clear();
 
         // edges
