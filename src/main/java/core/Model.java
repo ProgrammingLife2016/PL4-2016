@@ -327,6 +327,11 @@ public class Model {
                 e.getSource().equals(p)).collect(Collectors.toList());
     }
 
+    /**
+     * Getter for the maxWidth
+     *
+     * @return the maxWidth of the model.
+     */
     public double getMaxWidth() {
         return graphLayout.getMaxWidth();
     }
