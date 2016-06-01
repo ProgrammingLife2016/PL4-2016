@@ -1,5 +1,6 @@
 package core;
 
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.*;
@@ -161,7 +162,7 @@ public final class GraphReducer {
 
         // Add up both collapse levels and add it to the parent
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
-        parent.setType(NodeType.COLLECTION);
+        parent.setType(CellType.COLLECTION);
         parent.setSequence("");
         parent.setCollapseLevel(totalCollapseLevel);
 
@@ -232,7 +233,7 @@ public final class GraphReducer {
                     grandChild.removeParent(parent.getId());
 
                     //Make the inserted node an Indel node.
-                    child.setType(NodeType.INDEL);
+                    child.setType(CellType.INDEL);
                     child.setSequence("");
                     child.setGenomes(allGenomes);
                     return true;
@@ -285,7 +286,7 @@ public final class GraphReducer {
                         nodeMap.remove(bubbleChild.getId());
                     }
                 }
-                child.setType(NodeType.BUBBLE);
+                child.setType(CellType.BUBBLE);
                 child.setCollapseLevel(bubble.size());
                 child.setSequence("");
                 return true;
