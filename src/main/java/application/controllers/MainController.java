@@ -98,9 +98,6 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setCenter(graphController.getRoot());
-        //graphController.initKeyHandler();
-
-
         this.getRoot().setRight(listVBox);
     }
 
