@@ -66,9 +66,10 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-                        zoomBox.replaceZoomBox(updateZoomBox());
+
                     }
 
+                    zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
@@ -76,9 +77,10 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-                        zoomBox.replaceZoomBox(updateZoomBox());
+
                     }
 
+                    zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
             }

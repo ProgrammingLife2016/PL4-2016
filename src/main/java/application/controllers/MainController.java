@@ -34,7 +34,6 @@ public class MainController extends Controller<BorderPane> {
     private HBox legend;
     private VBox listVBox;
     private ListView list;
-    private ScrollPane infoScroller;
     private int currentView;
     private ListFactory listFactory;
     private StackPane box;
@@ -178,7 +177,6 @@ public class MainController extends Controller<BorderPane> {
     private void createList() {
         listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
-        infoScroller = listFactory.getInfoScroller();
         list = listFactory.getList();
 
         list.setOnMouseClicked(event -> {
