@@ -421,7 +421,7 @@ public class TreeController extends Controller<ScrollPane> {
         for (Object c : root.getChildren()
                 ) {
             if (c instanceof LeafCell) {
-                if (((LeafCell) c).getName().equals(name)) {
+                if (((LeafCell) c).getName().contains(name)) {
                     selectedStrains.add((LeafCell) c);
                     System.out.println("Found it");
                     cLoc = ((LeafCell) c).getLayoutY();
@@ -434,5 +434,14 @@ public class TreeController extends Controller<ScrollPane> {
         colorSelectedStrains();
         modifyGraphOptions();
         getRoot().setVvalue(cLoc/max);
+    }
+
+    public void clear() {
+        selectedStrains.clear();
+        collectedStrains.clear();
+        collectedEdges.clear();
+        modifyGraphOptions();
+        colorSelectedStrains();
+
     }
 }

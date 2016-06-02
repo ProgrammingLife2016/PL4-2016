@@ -40,6 +40,7 @@ public class MainController extends Controller<BorderPane> {
     private ListFactory listFactory;
     private TextField textField;
     private Button searchButton;
+    private Button deselectButton;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -167,13 +168,24 @@ public class MainController extends Controller<BorderPane> {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
         searchButton = new Button("Search Genome");
+        deselectButton = new Button("Deselect All");
+
         textField = new TextField();
         searchButton.setOnAction(e -> {
-            treeController.getCellByName(textField.textProperty().get());
-            textField.setText("");
-            fillTree();
+            if(!textField.getText().isEmpty()) {
+                treeController.getCellByName(textField.textProperty().get().trim());
+                textField.setText("");
+                fillTree();
+            }
+
         });
-        hBox.getChildren().addAll(textField, searchButton);
+
+        deselectButton.setOnAction(e -> {
+            fillTree();
+            treeController.clear();
+
+        });
+        hBox.getChildren().addAll(textField, searchButton, deselectButton);
 
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
