@@ -4,6 +4,7 @@ import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import core.graph.Graph;
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -168,13 +169,16 @@ public class GraphController extends Controller<ScrollPane> {
             }
 
             double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
+            double MAX_EDGE_LENGTH_LONG = screenSize.getWidth();
             for (Edge e : graph.getModel().getAddedEdges()) {
                 double xLength = e.getLine().endXProperty().get()
                         - e.getLine().startXProperty().get();
                 double yLength = e.getLine().endYProperty().get()
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-                if (length > MAX_EDGE_LENGTH) {
+                if ((length > MAX_EDGE_LENGTH
+                        && !(e.getSource().getType() == CellType.RECTANGLE))
+                        || length > MAX_EDGE_LENGTH_LONG) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
