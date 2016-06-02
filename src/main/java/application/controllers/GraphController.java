@@ -212,7 +212,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @return A snapshot taken of the graph.
      */
     public Image takeSnapshot() {
-        WritableImage image = new WritableImage(2500,
+        WritableImage image = new WritableImage((int) graph.getModel().getGraphLayout().getMaxWidth() + 50,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);

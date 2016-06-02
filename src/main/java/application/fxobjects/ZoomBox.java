@@ -31,7 +31,7 @@ public class ZoomBox extends ScrollPane {
     private double zoomBoxHeight;
     private KeyHandler keyHandler;
     private GraphController graphController;
-    private Image image;
+    private static Image image;
 
     /**
      * Class constructor.
@@ -89,7 +89,7 @@ public class ZoomBox extends ScrollPane {
         Image snapshot = graphController.takeSnapshot();
         if (snap) {
             System.out.println("sa");
-            image =  snapshot;
+            image = snapshot;
         }
 
         ImagePattern pattern = new ImagePattern(image);
