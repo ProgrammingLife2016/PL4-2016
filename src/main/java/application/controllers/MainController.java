@@ -34,6 +34,7 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
+    private GridPane annotationSearchBox;
     private HBox legend;
     private VBox listVBox;
     private ListView list;
@@ -145,12 +146,24 @@ public class MainController extends Controller<BorderPane> {
         StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
         graphController.initKeyHandler();
 
+        // Place the annotationsearch box
+        createAnnotationSearchBox();
+        annotationSearchBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
-        hbox.setAlignment(Pos.CENTER);
 
-        hbox.getChildren().addAll(zoombox, legend);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(annotationSearchBox, zoombox, legend);
         this.getRoot().setBottom(hbox);
+    }
+
+    /**
+     * Method to create the annotation search box.
+     */
+    private void createAnnotationSearchBox() {
+        annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
     }
 
     /**

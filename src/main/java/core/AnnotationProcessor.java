@@ -86,6 +86,22 @@ public class AnnotationProcessor {
     }
 
     /**
+     * Finds an annotation by a specified annotation id.
+     *
+     * @param id A specified annotation id.
+     * @return The found annotation.
+     */
+    public Annotation findAnnotationByID(long id) {
+        for (Annotation a : annotations) {
+            if (a.getIdAttr() == id) {
+                return a;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the list of annotations.
      *
      * @return The list of annotations.
