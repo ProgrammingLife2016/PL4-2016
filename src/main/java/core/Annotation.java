@@ -304,62 +304,32 @@ public class Annotation implements Comparable<Annotation> {
      * @return the new startLoopIndex.
      */
     public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap) {
-        int startNodeId = findFirstSpannedNode(nodeMap, startLoopIdx, this.start);
-        int endNodeId = findLastSpannedNode(nodeMap, startNodeId, this.end);
+        int startNodeId = -1;
+        int endNodeId = -1;
 
-        for (int idx = startNodeId; idx <= endNodeId; idx++) {
-            Node n = nodeMap.get(idx);
-            if (n == null) continue;
-
-            addSpannedNode(n);
-        }
-
-        System.out.println(startNodeId + " : " + endNodeId);
-
-        return endNodeId;
-    }
-
-    /**
-     * Finds the node containing the DNA sequence at start of the annotation.
-     *
-     * @param nodeMap A given node map.
-     * @param startLoopIdx The index to start the enumeration at.
-     * @param start The start index of the annotation.
-     * @return The id of the Node containing the DNA sequence at start of the annotation.
-     */
-    public int findFirstSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int start) {
+        Boolean nodesMustBeAdded = false;
         for (Node n : nodeMap.values()) {
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= start && nUpper >= start) {
                 offsetInFirstSpannedNode = start - n.getzIndex();
-                return n.getId();
+                nodesMustBeAdded = true;
+                startNodeId = n.getId();
             }
-        }
-            return -1;
-    }
 
-    /**
-     * Finds the node containing the DNA sequence at end of the annotation.
-     *
-     * @param nodeMap A given node map.
-     * @param startLoopIdx The index to start the enumeration at.
-     * @param end The end index of the annotation.
-     * @return The id of the Node containing the DNA sequence at end of the annotation.
-     */
-    public int findLastSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int end) {
-        for (Node n : nodeMap.values()) {
-            int nLower = n.getzIndex();
-            int nUpper = n.getzIndex() + n.getSequence().length();
+            if (nodesMustBeAdded) {
+                addSpannedNode(n);
+            }
 
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
-                return n.getId();
+                endNodeId = n.getId();
+                //System.out.println(startNodeId + " : " + endNodeId);
+                return endNodeId;
             }
         }
 
         return -1;
     }
-
 }

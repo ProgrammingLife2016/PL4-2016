@@ -24,7 +24,7 @@ public class Poc {
             startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, nodeMap);
 
             if (startLoopIndex == -1) break;
-            int sz = a.getSpannedNodes().size();
+            System.out.println(a.getSpannedNodes().size());
 
             //for (Node n : a.getSpannedNodes()) {
             //    n.setAnnotation(a);
