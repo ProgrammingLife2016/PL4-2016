@@ -91,7 +91,7 @@ public class MainController extends Controller<BorderPane> {
      */
     private void initGUI() {
         createZoomBoxAndLegend();
-        if (secondCount == -1){
+        if (secondCount == -1) {
             createList();
             setListItems();
             secondCount++;
@@ -191,6 +191,9 @@ public class MainController extends Controller<BorderPane> {
     }
 
 
+    /**
+     * Method to perform action upon listItem selection
+     */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();

@@ -91,8 +91,8 @@ public class GraphLayout extends CellLayout {
                 if (cellCount % 2 == 0) {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY - evenChildOffset -
-                                    (child.getCellShape().getLayoutBounds().getHeight() / 2));
+                            currentY - evenChildOffset
+                                    - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     evenChildOffset = (yOffset / 2) * modifier;
                     child.setRelocated(true);
                     modifier *= -1;
