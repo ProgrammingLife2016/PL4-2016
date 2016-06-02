@@ -31,7 +31,8 @@ public class GraphTest {
     public void setUp() {
         g = new Graph();
         mockedModel = mock(Model.class);
-        when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
+        when(mockedModel.addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class))).thenReturn(true);
 
         HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
         nodeMap.put(1, new Node(1, CellType.RECTANGLE, "", 1));
@@ -81,11 +82,10 @@ public class GraphTest {
     @Test
     public void testGenerateModel() {
         List<String> genomes = new ArrayList<>(Arrays.asList("1", "2"));
-
         g.setCurrentGenomes(genomes);
         g.generateModel("", 1, mockedModel);
-
-        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class));
     }
 
     /**
@@ -103,8 +103,10 @@ public class GraphTest {
                 g.getLevelMaps().get(0).get(5));
 
         g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1", "2")));
-        verify(mockedModel, atLeast(4)).addCell(anyInt(), anyString(), any(CellType.class));
-        verify(mockedModel, atLeast(4)).addEdge(anyInt(), anyInt(), anyInt(), any(EdgeType.class));
+        verify(mockedModel, atLeast(4)).addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class));
+        verify(mockedModel, atLeast(4)).addEdge(anyInt(), anyInt(),
+                anyInt(), any(EdgeType.class));
     }
 
     /**

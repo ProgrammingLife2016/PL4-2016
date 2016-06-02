@@ -191,8 +191,8 @@ public class Graph {
             // Only draw when the intersection > 0 (Node contains genome that we
             // want to draw.
             if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
-            }
+                toret.addCell(root.getId(), root.getSequence(),
+                        root.getNucleotides(), CellType.RECTANGLE); }
             // In this case we know that the genomes in the graph are only this ones.
             genomes = currentGenomes;
 
@@ -211,10 +211,10 @@ public class Graph {
             }
         } else { // Draw all nodes.
             //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+            toret.addCell(root.getId(), root.getSequence(),
+                    root.getNucleotides(), CellType.RECTANGLE);
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
-
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
                 if (from == null) { continue; }
@@ -248,19 +248,18 @@ public class Graph {
         CellType type = nodeMap.get(j).getType();
 
         if (type == CellType.RECTANGLE) {
-            toret.addCell(to.getId(), to.getSequence(),
+            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
                     CellType.RECTANGLE);
-
         } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()),
-                    CellType.BUBBLE);
+                    to.getNucleotides(), CellType.BUBBLE);
         } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()),
+                    Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.INDEL);
         } else if (type == CellType.COLLECTION) {
-            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
         }
 

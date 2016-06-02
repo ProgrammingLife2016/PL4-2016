@@ -15,34 +15,31 @@ public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
     private Shape shape;
 
-
-
     /**
      * Bubble cell constructor.
-     *
      * @param id            The ID of a cell.
-     * @param collapseLevel The collapse level of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
+     * @param collapseLevel The collapse level of this cell.
      */
-    public BubbleCell(int id, String collapseLevel) {
-        this(id, new StackPane(), new Text(collapseLevel));
+    public BubbleCell(int id, int nucleotides, String collapseLevel) {
+        this(id, nucleotides, new StackPane(), new Text(collapseLevel));
     }
 
     /**
      * Bubble cell constructor.
      *
      * @param id   The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param pane A given stack pane.
      * @param text A given text element.
      */
-    public BubbleCell(int id, StackPane pane, Text text) {
+    public BubbleCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
-
-        shape = new Circle(10);
+        shape = new Circle(Math.min(10.0 + ((double) nucleotides) / 80000, 100));
         shape.setStroke(Color.YELLOW);
         shape.setStrokeWidth(1);
         shape.setFill(Color.YELLOW);
         pane.getChildren().addAll(shape, text);
-
         setView(pane);
     }
 
