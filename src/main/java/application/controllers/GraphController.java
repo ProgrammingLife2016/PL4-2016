@@ -153,7 +153,9 @@ public class GraphController extends Controller<ScrollPane> {
                 double yLength = e.getLine().endYProperty().get()
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-                System.out.println(e.getSource().toString() + " " + length);
+
+                //System.out.println(e.getSource().toString() + " " + length);
+
                 if (length > MAX_EDGE_LENGTH) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);

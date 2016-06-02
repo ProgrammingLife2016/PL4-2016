@@ -37,48 +37,70 @@ public class Parser {
     public final HashMap<Integer, Node>
     readGFA(final InputStream input) {
         try {
-            BufferedReader bReader;
-            bReader = new BufferedReader(new InputStreamReader(input));
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
             while ((nextLine = bReader.readLine()) != null) {
-                String[] content = nextLine.trim().split("\\s+");
-                switch (nextLine.charAt(0)) {
-                    case 'H':
-                        break;
-                    case 'S':
-                        int id = Integer.parseInt(content[1]);
-                        String sequence = content[2];
-                        int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
-                        String[] genomes = content[4].split(":")[2].split(";");
-                        for (int i = 0; i < genomes.length; i++) {
-                            genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
-                        }
-
-                        if (!nodeMap.containsKey(id)) {
-                            nodeMap.put(id, new Node(id, sequence, z));
-                        } else {
-                            nodeMap.get(id).setSequence(sequence);
-                            nodeMap.get(id).setzIndex(z);
-                        }
-
-                        nodeMap.get(id).addAllGenome(genomes);
-                        break;
-                    case 'L':
-                        int orig = Integer.parseInt(content[1]);
-                        int dest = Integer.parseInt(content[3]);
-                        nodeMap.get(orig).addLink(dest);
-                        break;
-                    default:
-                        break;
-                }
+                processNextLine(nextLine);
             }
+
             bReader.close();
+
+            new AnnotationProcessor(nodeMap, "/decorationV5_20130412.gff")
+                    .matchNodesAndAnnotations();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        System.out.println("POC - NodeMap size: " + nodeMap.size());
+
+        int counter = 0;
+        for (Node n : nodeMap.values()) {
+            if (n.getGenomes().contains("MT_H37RV_BRD_V5.ref")) {
+                counter++;
+            }
+        }
+
+        System.out.println("POC - Num reference nodes: " + counter);
+
         return nodeMap;
     }
 
+    /**
+     * Processes a given line from the GFA file.
+     *
+     * @param nextLine A given line to process.
+     */
+    private void processNextLine(String nextLine) {
+        String[] content = nextLine.trim().split("\\s+");
+        switch (nextLine.charAt(0)) {
+            case 'H':
+                break;
+            case 'S':
+                int id = Integer.parseInt(content[1]);
+                String sequence = content[2];
+                int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
+                String[] genomes = content[4].split(":")[2].split(";");
+                for (int i = 0; i < genomes.length; i++) {
+                    genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
+                }
+
+                if (!nodeMap.containsKey(id)) {
+                    nodeMap.put(id, new Node(id, sequence, z));
+                } else {
+                    nodeMap.get(id).setSequence(sequence);
+                    nodeMap.get(id).setzIndex(z);
+                }
+
+                nodeMap.get(id).addAllGenome(genomes);
+                break;
+            case 'L':
+                int orig = Integer.parseInt(content[1]);
+                int dest = Integer.parseInt(content[3]);
+                nodeMap.get(orig).addLink(dest);
+                break;
+            default:
+                break;
+        }
+    }
 
 }

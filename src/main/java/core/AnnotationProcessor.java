@@ -14,7 +14,6 @@ import static core.AnnotationParser.readCDSFilteredGFF;
  */
 public class AnnotationProcessor {
 
-    private String reference;
     private List<Annotation> annotations;
     private HashMap<Integer, Node> filteredNodeMap;
 
@@ -22,17 +21,12 @@ public class AnnotationProcessor {
      * Initializes a new annotation parser.
      *
      * @param nodeMap A given hash map of nodes.
-     * @param annotationsFile The name/path of the GFF file.
-     * @param reference The genome on which the annotations are based.
+     * @param gffFile The name/path of the GFF file.
      * @throws IOException Throw exception on read failure.
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String annotationsFile,
-                               String reference) throws IOException {
-        this.reference = reference;
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String gffFile) throws IOException {
+        annotations = readCDSFilteredGFF(getClass().getResourceAsStream(gffFile));
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
-
-        InputStream gffIS = getClass().getResourceAsStream(annotationsFile);
-        annotations = readCDSFilteredGFF(gffIS);
     }
 
     /**
@@ -50,8 +44,6 @@ public class AnnotationProcessor {
             }
         }
     }
-
-
 
     /**
      * Determines the index of the last key in a given node map.
@@ -78,7 +70,12 @@ public class AnnotationProcessor {
      * @return A hash map of nodes present in the reference.
      */
     private HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
+        String reference = "";
         HashMap<Integer, Node> nodeMap = new HashMap<>();
+
+        if (annotations.size() > 0) {
+            reference = annotations.get(0).getSeqid() + ".ref";
+        }
 
         for (Node n : baseNodeMap.values()) {
             if (n.getGenomes().contains(reference)) {
