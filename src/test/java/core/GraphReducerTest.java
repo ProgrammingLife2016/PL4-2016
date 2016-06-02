@@ -4,6 +4,7 @@ import java.util.*;
 
 import core.graph.cell.CellType;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
@@ -15,8 +16,9 @@ public class GraphReducerTest {
 
     /**
      * Create a node map with a given amount of nodes.
-     * @param numNodes  The number of nodes to create.
-     * @return  A node map with a given amount of nodes.
+     *
+     * @param numNodes The number of nodes to create.
+     * @return A node map with a given amount of nodes.
      */
     private HashMap<Integer, Node> createNodeMap(int numNodes) {
         HashMap<Integer, Node> nodeMap = new HashMap<>();
@@ -163,6 +165,7 @@ public class GraphReducerTest {
         assertEquals(nodeMap.get(2).getLinks(nodeMap), new ArrayList<>(Arrays.asList(3)));
         assertEquals(nodeMap.get(5).getParents(), new ArrayList<>(Arrays.asList(3, 6)));
     }
+
     /**
      * Test whether the counter for the number of lower collapses is working correctly
      * when the bubble contains a collapsed bubble at a child of the parent in the bubble.
@@ -198,7 +201,8 @@ public class GraphReducerTest {
     }
 
     /**
-     * Test whether the genomes that are in the deletion edge are added to the indel node when collapsed.
+     * Test whether the genomes that are in the deletion edge
+     * are added to the indel node when collapsed.
      */
     @Test
     public void testGenomesInIndel() {
@@ -212,24 +216,31 @@ public class GraphReducerTest {
         nodeMap.get(2).setGenomes(new ArrayList<>(Arrays.asList("W", "X", "Y", "Z")));
         nodeMap.get(3).setGenomes(new ArrayList<>(Arrays.asList("A", "W", "X", "Y", "Z")));
         nodeMap.get(4).setGenomes(new ArrayList<>(Arrays.asList("B", "C", "D")));
-        nodeMap.get(5).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "W", "X", "Y", "Z")));
+        nodeMap.get(5).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C", "D",
+                "E", "W", "X", "Y", "Z")));
 
         GraphReducer.determineParents(nodeMap);
         GraphReducer.collapseIndel(nodeMap, nodeMap.get(1));
 
-        assertEquals(nodeMap.get(5).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "W", "X", "Y", "Z")));
-        assertEquals(nodeMap.get(3).getGenomes(), new ArrayList<>(Arrays.asList("A","W", "X", "Y", "Z")));
-        assertEquals(nodeMap.get(1).getLinks(),new ArrayList<>(Arrays.asList(3, 4)));
-        assertEquals(nodeMap.get(4).getGenomes(), new ArrayList<>(Arrays.asList("B", "C", "D", "E")));
+        assertEquals(nodeMap.get(5).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E",
+                        "W", "X", "Y", "Z")));
+        assertEquals(nodeMap.get(3).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "W", "X", "Y", "Z")));
+        assertEquals(nodeMap.get(1).getLinks(),
+                new ArrayList<>(Arrays.asList(3, 4)));
+        assertEquals(nodeMap.get(4).getGenomes(),
+                new ArrayList<>(Arrays.asList("B", "C", "D", "E")));
     }
 
     /**
-     * Test whether the genomes that are in the deletion edge are added to the indel node when collapsed.
+     * Test whether the genomes that are in the deletion edge
+     * are added to the indel node when collapsed.
      */
     @Test
     public void testGenomesInIndel2() {
         HashMap<Integer, Node> nodeMap = createNodeMap(6);
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2,3,4)));
+        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3, 4)));
         nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
         nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(6)));
         nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
@@ -247,16 +258,19 @@ public class GraphReducerTest {
         GraphReducer.determineParents(nodeMap);
         GraphReducer.collapseIndel(nodeMap, nodeMap.get(1));
 
-        assertEquals(nodeMap.get(1).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
-        assertEquals(nodeMap.get(6).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
-        assertEquals(nodeMap.get(1).getLinks(),new ArrayList<>(Arrays.asList(2, 3)));
+        assertEquals(nodeMap.get(1).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
+        assertEquals(nodeMap.get(6).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
+        assertEquals(nodeMap.get(1).getLinks(), new ArrayList<>(Arrays.asList(2, 3)));
         assertEquals(nodeMap.get(2).getType(), CellType.INDEL);
-        assertEquals(nodeMap.get(2).getGenomes(), new ArrayList<>(Arrays.asList("A","B", "C")));
+        assertEquals(nodeMap.get(2).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
         assertEquals(nodeMap.get(4).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
     }
 
     /**
-     * Test whether the genomes that are in the deletion edge are added to the indel node when collapsed.
+     * Test whether the genomes that are in the deletion edge are
+     * added to the indel node when collapsed.
      */
     @Test
     public void testGenomesInBubble() {
@@ -270,14 +284,17 @@ public class GraphReducerTest {
         nodeMap.get(2).setGenomes(new ArrayList<>(Arrays.asList("X", "Y")));
         nodeMap.get(3).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C")));
         nodeMap.get(4).setGenomes(new ArrayList<>(Arrays.asList("D", "E")));
-        nodeMap.get(5).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
+        nodeMap.get(5).setGenomes(new ArrayList<>(
+                Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
 
         GraphReducer.determineParents(nodeMap);
         GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
 
-        assertEquals(nodeMap.get(5).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
-        assertEquals(nodeMap.get(3).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
-        assertEquals(nodeMap.get(1).getLinks(),new ArrayList<>(Arrays.asList(3)));
+        assertEquals(nodeMap.get(5).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
+        assertEquals(nodeMap.get(3).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
+        assertEquals(nodeMap.get(1).getLinks(), new ArrayList<>(Arrays.asList(3)));
     }
 
     /**
@@ -303,7 +320,7 @@ public class GraphReducerTest {
         assertEquals(2, nodeMap.get(5).getCollapseLevel());
         assertEquals(1, nodeMap.get(7).getCollapseLevel());
     }
-    
+
     /**
      * Test the collapsing of a triangle of nodes.
      */
@@ -329,6 +346,7 @@ public class GraphReducerTest {
         assertEquals(CellType.INDEL, nodeMap.get(2).getType());
         assertEquals("", nodeMap.get(2).getSequence());
     }
+
     /**
      * Test that indels in which the child has more than one child itself should not collapse.
      */

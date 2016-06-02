@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
@@ -29,6 +30,8 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private MainController mainController;
     private ZoomBox zoomBox;
+    private static final double MAX_EDGE_LENGTH = 300;
+
 
     /**
      * Constructor method for this class.
@@ -36,6 +39,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
+
     public GraphController(MainController m) {
         super(new ScrollPane());
         this.graph = new Graph();
@@ -164,19 +168,30 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
+            for (Edge e : graph.getModel().getAddedEdges()) {
+                double xLength = e.getLine().endXProperty().get()
+                        - e.getLine().startXProperty().get();
+                double yLength = e.getLine().endYProperty().get()
+                        - e.getLine().startYProperty().get();
+                double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+                System.out.println(e.getSource().toString() + " " + length);
+                if (length > MAX_EDGE_LENGTH) {
+                    e.getLine().getStrokeDashArray().addAll(3d, 17d);
+                    e.getLine().setOpacity(0.2d);
+                    double newY = e.getSource().getLayoutY()
+                            + (e.getSource().getLayoutY()
+                            - (screenSize.getHeight() - 150) / 2) * 2.5;
+                    newY = Math.max(newY, 10);
+                    newY = Math.min(newY, screenSize.getHeight() * 0.7);
+                    e.getSource().relocate(e.getSource().getLayoutX(), newY);
+                }
+            }
             initMouseHandler();
             graph.endUpdate();
         }
         //Set Graph as center.
         this.getRoot().setContent(root);
     }
-
-    /**
-     * Method to attach the keyHandler to the root of the Controller
-     */
-//    public void initKeyHandler() {
-//        this.getRoot().setOnKeyPressed(zoomBox.getKeyHandler());
-//    }
 
     /**
      * Method to attach the mouseHandler to each cell in the graph
@@ -218,9 +233,12 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Getter for the graphMouseHandling
+     * Getter for the graphMouseHandling.
+     * <p>
+     * <<<<<<< HEAD
      *
-     * @return the graphMouseHandler
+     * @return the graphMouseHandling.
+     * >>>>>>> master
      */
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;
