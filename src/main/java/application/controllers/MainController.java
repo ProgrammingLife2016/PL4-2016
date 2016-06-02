@@ -7,7 +7,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 
 import java.net.URL;
 import java.util.*;
@@ -48,10 +51,14 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
 
+        ImageView imageView = new ImageView("/DART2N.png");
+        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
+        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+
+        this.getRoot().setCenter(imageView);
+
         // Create the new GraphController
         graphController = new GraphController(this);
-
-
     }
 
     public void initGraph() {
@@ -96,7 +103,6 @@ public class MainController extends Controller<BorderPane> {
         createZoomBoxAndLegend();
         createList();
         this.getRoot().setCenter(graphController.getRoot());
-        //graphController.initKeyHandler();
 
         setListItems();
         this.getRoot().setRight(listVBox);
