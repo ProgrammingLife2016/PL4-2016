@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import core.graph.Graph;
@@ -24,12 +25,13 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-    private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
     private AnchorPane root;
     private Rectangle2D screenSize;
     private MainController mainController;
+    private ZoomBox zoomBox;
     private static final double MAX_EDGE_LENGTH = 300;
+
 
     /**
      * Constructor method for this class.
@@ -37,15 +39,16 @@ public class GraphController extends Controller<ScrollPane> {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
+
     public GraphController(MainController m) {
         super(new ScrollPane());
         this.graph = new Graph();
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.root = new AnchorPane();
         this.mainController = m;
 
+        this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -53,26 +56,53 @@ public class GraphController extends Controller<ScrollPane> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
             }
+
             if (event.getDeltaY() != 0) {
                 if (graphMouseHandling.getPrevClick() != null) {
                     graphMouseHandling.getPrevClick().resetFocus();
                 }
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
+
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
+                        zoomBox.replaceZoomBox(updateZoomBox());
                     }
+
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
+
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
+                        zoomBox.replaceZoomBox(updateZoomBox());
                     }
+
                     event.consume();
                 }
             }
         });
+    }
+
+    /**
+     * Method to update the ZoomBox locations
+     *
+     * @return the new places to update
+     */
+    public double[] updateZoomBox() {
+        double left = Math.abs(this.getRoot().getViewportBounds().getMinX());
+        double middle = this.getRoot().getViewportBounds().getWidth();
+        double total = graph.getModel().getGraphLayout().getMaxWidth();
+
+        double rightOffset = left / total;
+        double shown = middle / total;
+
+        double[] places = new double[2];
+        places[0] = rightOffset;
+        places[1] = shown;
+
+        return places;
     }
 
     /**
@@ -83,8 +113,8 @@ public class GraphController extends Controller<ScrollPane> {
     public void focus(Cell prevClick) {
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
-            if ((c.getCellId() == prevClick.getCellId())
-                    || (c.getCellId() > prevClick.getCellId())) {
+            if (c.getCellId() == prevClick.getCellId()
+                    || c.getCellId() > prevClick.getCellId()) {
                 prevClick = c;
                 break;
             }
@@ -101,15 +131,6 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public Graph getGraph() {
         return graph;
-    }
-
-    /**
-     * Getter method for the ZoomController
-     *
-     * @return the ZoomController
-     */
-    public ZoomController getZoomController() {
-        return zoomController;
     }
 
     /**
@@ -173,13 +194,6 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Method to attach the keyHandler to the root of the Controller
-     */
-    public void initKeyHandler() {
-        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
-    }
-
-    /**
      * Method to attach the mouseHandler to each cell in the graph
      */
     public void initMouseHandler() {
@@ -205,7 +219,12 @@ public class GraphController extends Controller<ScrollPane> {
      * @return A snapshot taken of the graph.
      */
     public Image takeSnapshot() {
-        WritableImage image = new WritableImage(2500,
+        int pref = (int) graph.getModel().getGraphLayout().getMaxWidth();
+        if ((pref + 50 > 2500)) {
+            pref = 2500;
+        }
+
+        WritableImage image = new WritableImage(pref,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
@@ -215,10 +234,22 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Getter for the graphMouseHandling.
+     * <p>
+     * <<<<<<< HEAD
      *
      * @return the graphMouseHandling.
+     * >>>>>>> master
      */
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;
+    }
+
+    /**
+     * Getter for the ZoomBox
+     *
+     * @return the zoomBox
+     */
+    public ZoomBox getZoomBox() {
+        return zoomBox;
     }
 }

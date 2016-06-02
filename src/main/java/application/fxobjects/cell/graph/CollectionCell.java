@@ -15,9 +15,7 @@ import javafx.scene.text.Text;
 public class CollectionCell extends Cell {
 
     private final CellType type = CellType.COLLECTION;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Bubble cell constructor.
@@ -44,7 +42,6 @@ public class CollectionCell extends Cell {
         shape.setStrokeWidth(1);
         shape.setFill(Color.LIGHTGREEN);
         pane.getChildren().addAll(shape, text);
-        this.selected = false;
 
         setView(pane);
     }
@@ -56,15 +53,6 @@ public class CollectionCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**
@@ -85,7 +73,6 @@ public class CollectionCell extends Cell {
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
 
-        this.selected = true;
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -95,7 +82,6 @@ public class CollectionCell extends Cell {
      */
     public void resetFocus() {
         this.setEffect(null);
-        this.selected = false;
         shape.setStroke(Color.LIGHTGREEN);
         shape.setStrokeWidth(1);
     }
