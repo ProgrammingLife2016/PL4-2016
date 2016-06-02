@@ -51,7 +51,7 @@ public class Model {
         graphParent = new RectangleCell(1);
         graphLayout = new GraphLayout(null, 0, 0);
 
-        // clear model, create lists
+        // clearSelection model, create lists
         clear();
     }
 

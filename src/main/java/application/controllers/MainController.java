@@ -170,11 +170,12 @@ public class MainController extends Controller<BorderPane> {
         textField = new TextField();
         searchButton.setOnAction(e -> {
             if (!textField.getText().isEmpty()) {
-                treeController.applySelectionByName(textField.textProperty().get().trim());
+                treeController.applyCellHighlight(
+                        treeController.getCellByName(
+                                textField.textProperty().get().trim()));
                 textField.setText("");
                 fillTree();
             }
-
         });
 
         deselectButton.setOnAction(e -> {

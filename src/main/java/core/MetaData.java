@@ -18,6 +18,7 @@ public final class MetaData {
     public static final TreeMap<String, Genome> META_DATA = parse();
 
     private MetaData() {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -35,8 +36,8 @@ public final class MetaData {
 
             sheet.forEach(row -> {
                 if (row.getCell(0) != null && row.getCell(0).getStringCellValue().contains("TKK")) {
-                    Genome gen = new Genome();
                     String name = row.getCell(0).getStringCellValue();
+                    Genome gen = new Genome(name);
                     for (int i = 1; i < 28; i++) {
                         switch (i) {
                             case 1:

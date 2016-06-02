@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
+import static core.Filter.*;
+
 import java.util.ArrayList;
 
 /**
@@ -150,16 +152,46 @@ public class MenuFactory {
 
     private void initLineageFilter() {
         filterLineage = new Menu("Lineage");
-        CheckMenuItem lin1 = initCheckMenuItem("LIN 1", null, null);
-        CheckMenuItem lin2 = initCheckMenuItem("LIN 2", null, null);
-        CheckMenuItem lin3 = initCheckMenuItem("LIN 3", null, null);
-        CheckMenuItem lin4 = initCheckMenuItem("LIN 4", null, null);
-        CheckMenuItem lin5 = initCheckMenuItem("LIN 5", null, null);
-        CheckMenuItem lin6 = initCheckMenuItem("LIN 6", null, null);
-        CheckMenuItem lin7 = initCheckMenuItem("LIN 7", null, null);
-        CheckMenuItem lin8 = initCheckMenuItem("LIN animal", null, null);
-        CheckMenuItem lin9 = initCheckMenuItem("LIN B", null, null);
-        CheckMenuItem lin10 = initCheckMenuItem("LIN CANETTII", null, null);
+        CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
+        lin1.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN1, lin1.isSelected()));
+        CheckMenuItem lin2 = new CheckMenuItem("LIN 2");
+        lin2.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN2, lin2.isSelected()));
+        CheckMenuItem lin3 = new CheckMenuItem("LIN 3");
+        lin3.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN3, lin3.isSelected()));
+        CheckMenuItem lin4 = new CheckMenuItem("LIN 4");
+        lin4.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN4, lin4.isSelected()));
+        CheckMenuItem lin5 = new CheckMenuItem("LIN 5");
+        lin5.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN5, lin5.isSelected()));
+        CheckMenuItem lin6 = new CheckMenuItem("LIN 6");
+        lin6.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN6, lin6.isSelected()));
+        CheckMenuItem lin7 = new CheckMenuItem("LIN 7");
+        lin7.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN7, lin7.isSelected()));
+        CheckMenuItem lin8 = new CheckMenuItem("LIN animal");
+        lin8.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN8, lin8.isSelected()));
+        CheckMenuItem lin9 = new CheckMenuItem("LIN B");
+        lin9.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN9, lin9.isSelected()));
+        CheckMenuItem lin10 = new CheckMenuItem("LIN CANETTII");
+        lin10.setOnAction(event ->
+                mainController.getTreeController().filterPhyloLineage(
+                        LIN10, lin10.isSelected()));
 
         filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
     }
@@ -207,7 +239,7 @@ public class MenuFactory {
                 dist6, dist7, dist8, dist9, dist10, dist11);
     }
 
-    private void initSpecimenFilter(){
+    private void initSpecimenFilter() {
         CheckMenuItem spec1 = initCheckMenuItem("blood", null, null);
         CheckMenuItem spec2 = initCheckMenuItem("CSF", null, null);
         CheckMenuItem spec3 = initCheckMenuItem("pleura", null, null);
