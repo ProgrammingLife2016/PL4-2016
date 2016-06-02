@@ -29,7 +29,7 @@ public class GraphController extends Controller<ScrollPane> {
     private AnchorPane root;
     private Rectangle2D screenSize;
     private MainController mainController;
-    private final double MAX_EDGE_LENGTH = 300;
+    private static final double MAX_EDGE_LENGTH = 300;
 
     /**
      * Constructor method for this class.
@@ -83,8 +83,8 @@ public class GraphController extends Controller<ScrollPane> {
     public void focus(Cell prevClick) {
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
-            if ((c.getCellId() == prevClick.getCellId()) ||
-                    (c.getCellId() > prevClick.getCellId())) {
+            if ((c.getCellId() == prevClick.getCellId())
+                    || (c.getCellId() > prevClick.getCellId())) {
                 prevClick = c;
                 break;
             }
@@ -147,16 +147,18 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
-            for(Edge e : graph.getModel().getAddedEdges()) {
-                double xLength = e.getLine().endXProperty().get() - e.getLine().startXProperty().get();
-                double yLength = e.getLine().endYProperty().get() - e.getLine().startYProperty().get();
+            for (Edge e : graph.getModel().getAddedEdges()) {
+                double xLength = e.getLine().endXProperty().get()
+                        - e.getLine().startXProperty().get();
+                double yLength = e.getLine().endYProperty().get()
+                        - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
                 System.out.println(e.getSource().toString() + " " + length);
                 if (length > MAX_EDGE_LENGTH) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = e.getSource().getLayoutY() +
-                            (e.getSource().getLayoutY() - (screenSize.getHeight() - 150) / 2) * 2.5;
+                    double newY = e.getSource().getLayoutY()
+                            + (e.getSource().getLayoutY() - (screenSize.getHeight() - 150) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.7);
                     e.getSource().relocate(e.getSource().getLayoutX(), newY);
@@ -211,9 +213,9 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Getter for the graphMouseHandling
+     * Getter for the graphMouseHandling.
      *
-     * @return
+     * @return the graphMouseHandling.
      */
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;
