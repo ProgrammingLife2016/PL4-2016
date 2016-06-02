@@ -177,9 +177,11 @@ public class GraphController extends Controller<ScrollPane> {
                 if (length > MAX_EDGE_LENGTH) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = e.getSource().getLayoutY()
-                            + (e.getSource().getLayoutY()
-                            - (screenSize.getHeight() - 150) / 2) * 2.5;
+                    double newY = (e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
+                            + ((e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                            - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.7);
                     e.getSource().relocate(e.getSource().getLayoutX(), newY);

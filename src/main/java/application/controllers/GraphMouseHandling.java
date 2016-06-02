@@ -44,10 +44,10 @@ class GraphMouseHandling {
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        Node node = (Node) event.getSource();
+        Cell node = (Cell) event.getSource();
 
-        double offsetX = event.getX() + node.getLayoutX();
-        double offsetY = event.getY() + node.getLayoutY();
+        double offsetX = event.getX() + node.getLayoutX() - node.getCellShape().getLayoutBounds().getWidth() / 2;
+        double offsetY = event.getY() + node.getLayoutY() - node.getCellShape().getLayoutBounds().getHeight() / 2;
 
         event.getSceneX();
         node.relocate(offsetX, offsetY);
