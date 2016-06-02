@@ -309,39 +309,38 @@ public class MenuFactory {
     }
 
     private void initSpoligotypeFilter() {
-        CheckMenuItem spo1 = initCheckMenuItem("LAM4", null, null);
-        CheckMenuItem spo2 = initCheckMenuItem("T1", null, null);
-        CheckMenuItem spo3 = initCheckMenuItem("LAM11-ZWE", null, null);
-        CheckMenuItem spo4 = initCheckMenuItem("S", null, null);
-        CheckMenuItem spo5 = initCheckMenuItem("T3", null, null);
-        CheckMenuItem spo6 = initCheckMenuItem("X2", null, null);
-        CheckMenuItem spo7 = initCheckMenuItem("X3", null, null);
-        CheckMenuItem spo8 = initCheckMenuItem("Bejing", null, null);
+        CheckMenuItem spo1 = initCheckMenuItem("Bejing", null, null);
+        CheckMenuItem spo2 = initCheckMenuItem("CAS", null, null);
+        CheckMenuItem spo3 = initCheckMenuItem("CAS1-Delhi", null, null);
+        CheckMenuItem spo4 = initCheckMenuItem("CAS1-Kili", null, null);
+        CheckMenuItem spo5 = initCheckMenuItem("EAI1-SOM", null, null);
+        CheckMenuItem spo6 = initCheckMenuItem("H1", null, null);
+        CheckMenuItem spo7 = initCheckMenuItem("H37Rv", null, null);
+        CheckMenuItem spo8 = initCheckMenuItem("LAM11-ZWE", null, null);
         CheckMenuItem spo9 = initCheckMenuItem("LAM3", null, null);
-        CheckMenuItem spo10 = initCheckMenuItem("LAM6", null, null);
-        CheckMenuItem spo11 = initCheckMenuItem("CAS1-Kili", null, null);
-        CheckMenuItem spo12 = initCheckMenuItem("EAI1-SOM", null, null);
-        CheckMenuItem spo13 = initCheckMenuItem("LAM9", null, null);
-        CheckMenuItem spo14 = initCheckMenuItem("T5-RUS1", null, null);
-        CheckMenuItem spo15 = initCheckMenuItem("H1", null, null);
-        CheckMenuItem spo16 = initCheckMenuItem("CAS", null, null);
-        CheckMenuItem spo17 = initCheckMenuItem("CAS1-Delhi", null, null);
-        CheckMenuItem spo18 = initCheckMenuItem("H37Rv", null, null);
-        CheckMenuItem spo19 = initCheckMenuItem("T2", null, null);
-        CheckMenuItem spo20 = initCheckMenuItem("H1", null, null);
-        CheckMenuItem spo21 = initCheckMenuItem("LAM4", null, null);
-        CheckMenuItem spo22 = initCheckMenuItem("LAM5", null, null);
+        CheckMenuItem spo10 = initCheckMenuItem("LAM4", null, null);
+        CheckMenuItem spo11 = initCheckMenuItem("LAM4", null, null);
+        CheckMenuItem spo12 = initCheckMenuItem("LAM5", null, null);
+        CheckMenuItem spo13 = initCheckMenuItem("LAM6", null, null);
+        CheckMenuItem spo14 = initCheckMenuItem("LAM9", null, null);
+        CheckMenuItem spo15 = initCheckMenuItem("S", null, null);
+        CheckMenuItem spo16 = initCheckMenuItem("T1", null, null);
+        CheckMenuItem spo17 = initCheckMenuItem("T2", null, null);
+        CheckMenuItem spo18 = initCheckMenuItem("T3", null, null);
+        CheckMenuItem spo19 = initCheckMenuItem("T5-RUS1", null, null);
+        CheckMenuItem spo20 = initCheckMenuItem("X2", null, null);
+        CheckMenuItem spo21 = initCheckMenuItem("X3", null, null);
 
         filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5,
                 spo6, spo7, spo8, spo9, spo10,
                 spo11, spo12, spo13, spo14, spo15,
                 spo16, spo17, spo18, spo19, spo20,
-                spo21, spo22);
+                spo21);
     }
 
     private void initGenoDSTFilter() {
-        CheckMenuItem gen1 = initCheckMenuItem("MDR", null, null);
-        CheckMenuItem gen2 = initCheckMenuItem("Drug-resistant (other)", null, null);
+        CheckMenuItem gen1 = initCheckMenuItem("Drug-resistant (other)", null, null);
+        CheckMenuItem gen2 = initCheckMenuItem("MDR", null, null);
         CheckMenuItem gen3 = initCheckMenuItem("susceptible", null, null);
         CheckMenuItem gen4 = initCheckMenuItem("XDR", null, null);
 
