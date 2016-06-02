@@ -43,7 +43,6 @@ public class MenuFactory {
         Menu viewMenu = initViewMenu();
         Menu filterMenu = initFilterMenu();
         Menu helpMenu = initHelpMenu();
-
         bar.getMenus().addAll(fileMenu, viewMenu, filterMenu, helpMenu);
         return bar;
     }

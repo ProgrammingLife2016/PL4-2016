@@ -2,12 +2,13 @@ package application.controllers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -37,6 +38,8 @@ public class MainController extends Controller<BorderPane> {
     private ScrollPane infoScroller;
     private int currentView;
     private ListFactory listFactory;
+    private TextField textField;
+    private Button searchButton;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -161,9 +164,23 @@ public class MainController extends Controller<BorderPane> {
      * Method to create the menu bar.
      */
     private void createMenu() {
+        VBox vBox = new VBox();
+        HBox hBox = new HBox();
+        searchButton = new Button("Search Genome");
+        textField = new TextField();
+        searchButton.setOnAction(e -> {
+            treeController.getCellByName(textField.textProperty().get());
+            textField.setText("");
+            fillTree();
+        });
+        hBox.getChildren().addAll(textField, searchButton);
+
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
-        this.getRoot().setTop(menuBar);
+
+        vBox.getChildren().addAll(menuBar, hBox);
+
+        this.getRoot().setTop(vBox);
     }
 
     /**
@@ -182,8 +199,11 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();
+                getTextField().setText((String)list.getSelectionModel().getSelectedItem());
+
                 fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
                 graphController.takeSnapshot();
+
             }
         });
 
@@ -263,5 +283,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void setCurrentView(int currentView) {
         this.currentView = currentView;
+    }
+
+    public TextField getTextField() {
+        return textField;
     }
 }

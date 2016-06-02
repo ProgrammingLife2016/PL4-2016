@@ -26,7 +26,6 @@ class GraphMouseHandling {
         info += clicked.getGenomes().size() + " Genomes in Node: \n"
                 + clicked.getGenomesAsString() + "\n";
         info += "Seq: \n" + clicked.getSequence() + "\n";
-
         mainController.getListFactory().modifyNodeInfo(info);
     };
 

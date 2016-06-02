@@ -25,7 +25,6 @@ import static core.MetaData.META_DATA;
 
 /**
  * Class responsible for setting up the scroll pane containing the phylogenetic tree.
- * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
@@ -33,6 +32,7 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
+    private AnchorPane root;
 
     /**
      * Class constructor.
@@ -77,7 +77,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Add cells from the model to the gui.
      */
     public void init() {
-        AnchorPane root = new AnchorPane();
+        root = new AnchorPane();
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
@@ -413,5 +413,26 @@ public class TreeController extends Controller<ScrollPane> {
 
 
         }
+    }
+
+    public void getCellByName(String name) {
+        double max = 0;
+        double cLoc = 0;
+        for (Object c : root.getChildren()
+                ) {
+            if (c instanceof LeafCell) {
+                if (((LeafCell) c).getName().equals(name)) {
+                    selectedStrains.add((LeafCell) c);
+                    System.out.println("Found it");
+                    cLoc = ((LeafCell) c).getLayoutY();
+                }
+                if (((LeafCell) c).getLayoutX() > max) {
+                    max = ((LeafCell) c).getLayoutY();
+                }
+            }
+        }
+        colorSelectedStrains();
+        modifyGraphOptions();
+        getRoot().setVvalue(cLoc/max);
     }
 }
