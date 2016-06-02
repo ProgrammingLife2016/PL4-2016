@@ -30,7 +30,6 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private MainController mainController;
     private ZoomBox zoomBox;
-    private static final double MAX_EDGE_LENGTH = 300;
 
 
     /**
@@ -168,6 +167,7 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
+            double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
             for (Edge e : graph.getModel().getAddedEdges()) {
                 double xLength = e.getLine().endXProperty().get()
                         - e.getLine().startXProperty().get();
