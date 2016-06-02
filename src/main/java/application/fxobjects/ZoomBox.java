@@ -65,7 +65,7 @@ public class ZoomBox extends ScrollPane {
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
 
-        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
+        zoomRect = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
@@ -90,6 +90,10 @@ public class ZoomBox extends ScrollPane {
 
     }
 
+    /**
+     * Method to set the ZoomBox to the new locations
+     * @param places the new locations
+     */
     public void replaceZoomBox(double[] places) {
         double rightOffset = places[0];
         double shown = places[1];

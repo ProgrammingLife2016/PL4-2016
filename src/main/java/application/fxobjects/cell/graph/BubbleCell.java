@@ -13,9 +13,7 @@ import javafx.scene.text.Text;
  */
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
 
 
@@ -44,7 +42,6 @@ public class BubbleCell extends Cell {
         shape.setStrokeWidth(1);
         shape.setFill(Color.YELLOW);
         pane.getChildren().addAll(shape, text);
-        this.selected = false;
 
         setView(pane);
     }
@@ -56,14 +53,6 @@ public class BubbleCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**

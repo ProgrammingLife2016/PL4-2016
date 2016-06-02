@@ -14,9 +14,7 @@ import javafx.scene.text.Text;
  */
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Indel cell constructor.
@@ -47,8 +45,6 @@ public class IndelCell extends Cell {
         shape.setFill(Color.RED);
         pane.getChildren().addAll(shape, text);
 
-        this.selected = false;
-
         setView(pane);
     }
 
@@ -59,15 +55,6 @@ public class IndelCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**
@@ -86,7 +73,7 @@ public class IndelCell extends Cell {
         borderGlow.setWidth(70);
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
-        this.selected = true;
+
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -96,7 +83,7 @@ public class IndelCell extends Cell {
      */
     public void resetFocus() {
         this.setEffect(null);
-        this.selected = false;
+
         shape.setStroke(Color.RED);
         shape.setStrokeWidth(1);
     }
