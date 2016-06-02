@@ -85,6 +85,11 @@ public class ZoomBox extends ScrollPane {
         return zoomBox;
     }
 
+    /**
+     * Method to take a snapshot
+     *
+     * @param snap boolean to indicate if we need to refresh the snapshot
+     */
     public void fillZoomBox(boolean snap) {
         Image snapshot = graphController.takeSnapshot();
         if (snap) {
@@ -101,13 +106,7 @@ public class ZoomBox extends ScrollPane {
     public void reset() {
         zoomRect.setWidth(zoomBoxWidth);
     }
-
-
-/**
- * Method to set the zoomBox to a different place
- * @param places the places to be set
- */
-
+    
 
     /**
      * Method to set the ZoomBox to the new locations
