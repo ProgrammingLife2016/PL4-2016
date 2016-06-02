@@ -184,7 +184,7 @@ public class GraphController extends Controller<ScrollPane> {
                             + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
-                    newY = Math.min(newY, screenSize.getHeight() * 0.7);
+                    newY = Math.min(newY, screenSize.getHeight() * 0.67);
                     e.getSource().relocate(e.getSource().getLayoutX(), newY);
                 }
             }
