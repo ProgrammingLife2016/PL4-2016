@@ -392,10 +392,18 @@ public class Node {
 
     }
 
+    /**
+     * Returns the amount of Nucleotides contained in the node
+     * @return the amount of nucleotides
+     */
     public int getNucleotides() {
         return nucleotides;
     }
 
+    /**
+     * Sets the amount of nucleotides in the Node.
+     * @param nucleotides the amount of nucleotides to be set.
+     */
     public void setNucleotides(int nucleotides) {
         this.nucleotides = nucleotides;
     }

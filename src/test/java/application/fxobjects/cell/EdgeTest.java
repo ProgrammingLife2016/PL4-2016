@@ -31,7 +31,7 @@ public class EdgeTest {
      */
     @Before
     public void setUp() {
-        edge = new Edge(new RectangleCell(0,1), new RectangleCell(1,1), 10, EdgeType.GRAPH);
+        edge = new Edge(new RectangleCell(0, 1), new RectangleCell(1, 1), 10, EdgeType.GRAPH);
     }
 
     /**

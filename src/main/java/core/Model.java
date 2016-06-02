@@ -154,6 +154,7 @@ public class Model {
      *
      * @param id   the id, which represents the sequence.
      * @param text The text of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param type The type of cell.
      * @return True for testing purposes.
      */

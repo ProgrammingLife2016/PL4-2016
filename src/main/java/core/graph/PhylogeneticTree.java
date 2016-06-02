@@ -79,7 +79,7 @@ public class PhylogeneticTree {
             if (node.isLeaf()) {
                 model.addCell(node.getKey(), node.getName(), 0, CellType.TREELEAF);
             } else {
-                model.addCell(node.getKey(), node.getName(),0, CellType.TREEMIDDLE);
+                model.addCell(node.getKey(), node.getName(), 0, CellType.TREEMIDDLE);
             }
         }
     }

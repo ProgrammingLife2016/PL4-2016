@@ -16,15 +16,14 @@ public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
     private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Indel cell constructor.
-     *
      * @param id            The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param collapseLevel The collapse level of a cell.
      */
-    public IndelCell(int id,int nucleotides, String collapseLevel) {
+    public IndelCell(int id, int nucleotides, String collapseLevel) {
         this(id, nucleotides, new StackPane(), new Text(collapseLevel));
     }
 
@@ -32,20 +31,18 @@ public class IndelCell extends Cell {
      * Indel cell constructor.
      *
      * @param id   The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param pane A given stack pane.
      * @param text A given text element.
      */
     public IndelCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
-
-        double sideSize = Math.min(10.0 + ((double)nucleotides) / 80000, 100);
-
+        double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
         shape = new Polygon(sideSize / 2, 0, sideSize, sideSize, 0, sideSize);
         shape.setStroke(Color.RED);
         shape.setStrokeWidth(1);
         shape.setFill(Color.RED);
         pane.getChildren().addAll(shape, text);
-        this.selected = false;
         setView(pane);
     }
 
@@ -83,7 +80,6 @@ public class IndelCell extends Cell {
         borderGlow.setWidth(70);
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
-        this.selected = true;
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -93,7 +89,6 @@ public class IndelCell extends Cell {
      */
     public void resetFocus() {
         this.setEffect(null);
-        this.selected = false;
         shape.setStroke(Color.RED);
         shape.setStrokeWidth(1);
     }
