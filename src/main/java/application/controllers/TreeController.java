@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.LineageColor;
 import application.fxobjects.cell.layout.CellLayout;
 import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
@@ -200,17 +201,28 @@ public class TreeController extends Controller<ScrollPane> {
      */
     @SuppressWarnings("checkstyle:linelength")
     private void applyColorOnCells() {
-        collectedStrains.forEach(s ->
-                        s.setBackground(
+        collectedStrains.forEach(s -> {
+                    LeafCell c = (LeafCell) s;
+                    if (c.getName().contains("TKK")) {
+                        c.setBackground(
                                 new Background(
                                         new BackgroundFill(
                                                 determineSelectedLeafLinColor(
                                                         META_DATA.get(
-                                                                ((LeafCell) s).getName()).getLineage()
+                                                                (c.getName())).getLineage()
                                                 ), null, null
                                         )
                                 )
-                        )
+                        );
+                    } else if (c.getName().contains("G")) {
+                        c.setBackground(
+                                new Background(
+                                        new BackgroundFill(LineageColor.SLIN4, null, null
+                                        )
+                                )
+                        );
+                    }
+                }
         );
     }
 
@@ -219,18 +231,28 @@ public class TreeController extends Controller<ScrollPane> {
      */
     @SuppressWarnings("checkstyle:linelength")
     private void revertColorOnCells() {
-        collectedStrains.forEach(s ->
-                        s.setBackground(
-                                new Background(
-                                        new BackgroundFill(
-                                                determineLeafLinColor(
-                                                        META_DATA.get(
-                                                                ((LeafCell) s).getName()).getLineage()
-                                                ), null, null
-                                        )
+        collectedStrains.forEach(s -> {
+            LeafCell c = (LeafCell) s;
+            if (c.getName().contains("TKK")) {
+                c.setBackground(
+                        new Background(
+                                new BackgroundFill(
+                                        determineLeafLinColor(
+                                                META_DATA.get(
+                                                        (c.getName())).getLineage()
+                                        ), null, null
                                 )
                         )
-        );
+                );
+            } else if (c.getName().contains("G")) {
+                c.setBackground(
+                        new Background(
+                                new BackgroundFill(LineageColor.GLIN4, null, null
+                                )
+                        )
+                );
+            }
+        });
     }
 
     /**
