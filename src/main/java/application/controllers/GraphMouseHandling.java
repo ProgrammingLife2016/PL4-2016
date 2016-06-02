@@ -8,6 +8,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
+import static java.lang.String.format;
+
 /**
  * Class responsible for the handling of mouse events
  */
@@ -23,10 +25,17 @@ class GraphMouseHandling {
                 .get(node.getCellId());
 
         String info = "";
-        info += "Genome ID: " + clicked.getId() + "\n";
-        info += clicked.getGenomes().size() + " Genomes in Node: \n"
-                + clicked.getGenomesAsString() + "\n";
-        info += "Seq: \n" + clicked.getSequence() + "\n";
+        info += format("Genome ID: %d \n", clicked.getId());
+        info += format("%d genomes in Node: \n%s\n",
+                clicked.getGenomes().size(), clicked.getGenomesAsString());
+
+        if (clicked.getAnnotations().size() > 0) {
+            info += format("Responsible for: \n%s", clicked.getAnnotationsAsString());
+        }
+
+        if (clicked.getSequence().length() > 0) {
+            info += format("Seq: %s\n", clicked.getSequence());
+        }
 
         mainController.getListFactory().modifyNodeInfo(info);
 

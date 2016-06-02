@@ -34,7 +34,7 @@ public final class AnnotationParser {
         BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
 
         while ((nextLine = bReader.readLine()) != null) {
-            String[] content = nextLine.trim().split("\\s+");
+            String[] content = nextLine.trim().split("\t");
             Annotation ann = new Annotation();
 
             ann.setSeqid(content[0]);

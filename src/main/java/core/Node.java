@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
@@ -391,12 +393,46 @@ public class Node {
     }
 
     /**
+     * Sets the annotations spanning the node.
+     *
+     * @param annotations The annotations spanning the node.
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    /**
      * Adds a new annotation spanning the node.
      *
      * @param annotation The annotation spanning the node.
      */
     public void addAnnotation(Annotation annotation) {
         this.annotations.add(annotation);
+    }
+
+    /**
+     * Returns annotation data as a string.
+     *
+     * @return Annotation data as string.
+     */
+    public String getAnnotationsAsString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Annotation a : getAnnotations()) {
+            sb.append(format("- %s, spanning nodes: ", a.getDisplayNameAttr()));
+
+            if (a.getSpannedNodes().size() >= 1) {
+                String prefix = "";
+                for (Node n : a.getSpannedNodes()) {
+                    sb.append(prefix);
+                    prefix = ",";
+                    sb.append(n.getId());
+                }
+            }
+            sb.append("\n\n");
+        }
+
+        return sb.toString();
     }
 
     @Override
