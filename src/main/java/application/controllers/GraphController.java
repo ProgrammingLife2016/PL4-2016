@@ -83,6 +83,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to update the ZoomBox locations
+     *
      * @return the new places to update
      */
     public double[] updateZoomBox() {
@@ -127,15 +128,6 @@ public class GraphController extends Controller<ScrollPane> {
     public Graph getGraph() {
         return graph;
     }
-
-    /**
-     * Getter method for the ZoomController
-     *
-     * @return the ZoomController
-     */
-//  //  public ZoomController getZoomController() {
-//        return zoomController;
-//    }
 
     /**
      * Init method.
@@ -212,7 +204,12 @@ public class GraphController extends Controller<ScrollPane> {
      * @return A snapshot taken of the graph.
      */
     public Image takeSnapshot() {
-        WritableImage image = new WritableImage((int) graph.getModel().getGraphLayout().getMaxWidth() + 50,
+        int pref = (int) graph.getModel().getGraphLayout().getMaxWidth();
+        if ((pref + 50 > 2500)) {
+            pref = 2500;
+        }
+
+        WritableImage image = new WritableImage(pref,
                 (int) screenSize.getHeight());
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
@@ -229,5 +226,7 @@ public class GraphController extends Controller<ScrollPane> {
         return graphMouseHandling;
     }
 
-    public ZoomBox getZoomBox() { return zoomBox; }
+    public ZoomBox getZoomBox() {
+        return zoomBox;
+    }
 }

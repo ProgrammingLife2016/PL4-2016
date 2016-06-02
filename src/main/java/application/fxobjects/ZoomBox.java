@@ -88,7 +88,6 @@ public class ZoomBox extends ScrollPane {
     public void fillZoomBox(boolean snap) {
         Image snapshot = graphController.takeSnapshot();
         if (snap) {
-            System.out.println("sa");
             image = snapshot;
         }
 
