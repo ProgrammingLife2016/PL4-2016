@@ -439,5 +439,7 @@ public class TreeController extends Controller<ScrollPane> {
     public void clearSelection() {
         selectedStrains.forEach(this::revertCellHighlight);
         selectedStrains.clear();
+        modifyGraphOptions();
+
     }
 }

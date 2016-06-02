@@ -164,7 +164,7 @@ public class MainController extends Controller<BorderPane> {
     private void createMenu() {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
-        searchButton = new Button("Search Genome");
+        searchButton = new Button("Search Genome (In Tree)");
         deselectButton = new Button("Deselect All");
 
         textField = new TextField();
@@ -178,8 +178,8 @@ public class MainController extends Controller<BorderPane> {
         });
 
         deselectButton.setOnAction(e -> {
-            fillTree();
             treeController.clearSelection();
+            fillTree();
 
         });
         hBox.getChildren().addAll(textField, searchButton, deselectButton);
