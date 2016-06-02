@@ -121,7 +121,7 @@ public class GraphController extends Controller<ScrollPane> {
         }
         graphMouseHandling.setPrevClick(prevClick);
         prevClick.focus();
-        getRoot().setHvalue((prevClick.getLayoutX() - 300) / graph.getMaxWidth());
+        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
     /**
@@ -174,7 +174,6 @@ public class GraphController extends Controller<ScrollPane> {
                 double yLength = e.getLine().endYProperty().get()
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-                System.out.println(e.getSource().toString() + " " + length);
                 if (length > MAX_EDGE_LENGTH) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
