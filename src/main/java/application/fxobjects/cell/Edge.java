@@ -53,7 +53,7 @@ public class Edge extends Group {
             line.endYProperty().bind(target.layoutYProperty().add(
                     target.getBoundsInParent().getHeight() / 2.0));
             if (type == GRAPH_REF) {
-                line.setStroke(Color.GREENYELLOW);
+                line.setStroke(Color.DARKORANGE);
                 //addArrow(line, Color.YELLOW);
             }
 //            else {
