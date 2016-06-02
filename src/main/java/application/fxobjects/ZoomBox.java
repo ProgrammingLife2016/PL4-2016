@@ -1,12 +1,10 @@
 package application.fxobjects;
 
 import application.controllers.GraphController;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -29,8 +27,8 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
-    private KeyHandler keyHandler;
     private GraphController graphController;
+    private static Image image;
 
     /**
      * Class constructor.
@@ -38,14 +36,12 @@ public class ZoomBox extends ScrollPane {
      * @param g the GraphController currently active
      */
     public ZoomBox(GraphController g) {
-        this.keyHandler = new KeyHandler();
         this.graphController = g;
         initVariables();
         right = new StackPane();
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
-        this.setOnKeyPressed(keyHandler);
     }
 
     /**
@@ -65,7 +61,7 @@ public class ZoomBox extends ScrollPane {
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
 
-        zoomRect = new Rectangle(rectX, 20, 20, zoomBoxHeight);
+        zoomRect = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
@@ -78,16 +74,61 @@ public class ZoomBox extends ScrollPane {
      */
     public Group initZoomBox() {
         Group zoomBox = new Group();
-        Image image = null;
-        image = graphController.takeSnapshot();
-        ImagePattern pattern = new ImagePattern(image);
-
-        zoomRectBorder.setFill(pattern);
 
         zoomBox.getChildren().addAll(zoomRectBorder, zoomRect);
 
         return zoomBox;
+    }
 
+    /**
+     * Method to take a snapshot
+     *
+     * @param snap boolean to indicate if we need to refresh the snapshot
+     */
+    public void fillZoomBox(boolean snap) {
+        Image snapshot = graphController.takeSnapshot();
+        if (snap) {
+            image = snapshot;
+        }
+
+        ImagePattern pattern = new ImagePattern(image);
+        zoomRectBorder.setFill(pattern);
+    }
+
+    /**
+     * Method to reset the ZoomBox's place
+     */
+    public void reset() {
+        zoomRect.setWidth(zoomBoxWidth);
+    }
+
+
+    /**
+     * Method to set the ZoomBox to the new locations
+     *
+     * @param places the new locations
+     */
+    public void replaceZoomBox(double[] places) {
+        double rightOffset = places[0];
+        double shown = places[1];
+
+        double maxX = zoomRect.getX();
+        double currPos = zoomRect.getX();
+        double right = currPos + rightOffset * zoomBoxWidth;
+        double newWidth = shown * zoomBoxWidth;
+
+        if (right > maxX) {
+            right = maxX;
+        }
+
+        if (newWidth > zoomBoxWidth) {
+            newWidth = zoomBoxWidth;
+        } else if (newWidth < 50) {
+            newWidth = 50;
+        }
+
+        zoomRect.setX(right);
+        zoomRect.setWidth(newWidth);
     }
 
     /**
@@ -98,16 +139,6 @@ public class ZoomBox extends ScrollPane {
     public StackPane getZoomBox() {
         return right;
     }
-
-    /**
-     * Getter for the KeyHandler
-     *
-     * @return the KeyHandler
-     */
-    public KeyHandler getKeyHandler() {
-        return keyHandler;
-    }
-
 
     /**
      * Check the boundaries of the zoombox to see if a movement is allowed.
@@ -183,40 +214,6 @@ public class ZoomBox extends ScrollPane {
                 && zoomRect.getWidth() + delta * (zoomRect.getWidth()
                 * zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
             scaleZoomRectIn(-delta);
-        }
-    }
-
-    /**
-     * Zoom using the ASDW keys.
-     *
-     * @param event A KeyEvent.
-     */
-    public void moveRectangle(KeyEvent event) {
-        double offset = 10;
-        switch (event.getCode()) {
-            case A:
-                if (checkRectBoundaries(-offset, 0)) {
-                    zoomRect.setX(zoomRect.getX() - offset);
-                }
-                break;
-            case D:
-                if (checkRectBoundaries(offset, 0)) {
-                    zoomRect.setX(zoomRect.getX() + offset);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Handles the move function
-     */
-    private class KeyHandler implements EventHandler<KeyEvent> {
-
-        @Override
-        public void handle(KeyEvent event) {
-            moveRectangle(event);
         }
     }
 }

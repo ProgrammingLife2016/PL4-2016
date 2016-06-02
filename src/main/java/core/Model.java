@@ -16,10 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,7 +45,7 @@ public class Model {
      * Class constructor.
      */
     public Model() {
-        graphParent = new RectangleCell(1);
+        graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
 
         // clear model, create lists
@@ -157,26 +154,26 @@ public class Model {
      *
      * @param id   the id, which represents the sequence.
      * @param text The text of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param type The type of cell.
      * @return True for testing purposes.
      */
-    public Boolean addCell(int id, String text, CellType type) {
+    public Boolean addCell(int id, String text, int nucleotides, CellType type) {
         switch (type) {
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
+                RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
                 addCell(rectangleCell);
-
                 break;
             case BUBBLE:
-                BubbleCell bubbleCell = new BubbleCell(id, text);
+                BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
                 addCell(bubbleCell);
                 break;
             case INDEL:
-                IndelCell indelCell = new IndelCell(id, text);
+                IndelCell indelCell = new IndelCell(id, nucleotides, text);
                 addCell(indelCell);
                 break;
             case COLLECTION:
-                CollectionCell collectionCell = new CollectionCell(id, text);
+                CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
                 break;
             case TREELEAF:
@@ -284,6 +281,12 @@ public class Model {
     public void merge() {
         // cells
         allCells.addAll(addedCells);
+        allCells.sort((o1, o2) -> {
+            if (o1.getCellId() > o2.getCellId()) {
+                return 1;
+            }
+            return -1;
+        });
         addedCells.clear();
 
         // edges
@@ -296,8 +299,8 @@ public class Model {
      */
     public void setLayout() {
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.graphLayout = new GraphLayout(this, (int) (screenSize.getWidth() / 40),
-                (int) (screenSize.getHeight() - 25) / 2);
+        this.graphLayout = new GraphLayout(this, (int) ((screenSize.getWidth() - 288) / 35),
+                (int) (screenSize.getHeight() - 150) / 2);
 
         graphLayout.execute();
     }
@@ -322,5 +325,14 @@ public class Model {
     public List<Edge> getEdgeFromParent(Cell p) {
         return addedEdges.stream().filter(e ->
                 e.getSource().equals(p)).collect(Collectors.toList());
+    }
+
+    /**
+     * Getter for the maxWidth
+     *
+     * @return the maxWidth of the model.
+     */
+    public double getMaxWidth() {
+        return graphLayout.getMaxWidth();
     }
 }

@@ -28,31 +28,26 @@ public class EdgeTest {
 
     /**
      * Set up method for testing purposes.
-     *
-     * @throws Exception possible Exception.
      */
     @Before
-    public void setUp() throws Exception {
-        edge = new Edge(new RectangleCell(0), new RectangleCell(1), 10, EdgeType.GRAPH);
+    public void setUp() {
+        edge = new Edge(new RectangleCell(0, 1), new RectangleCell(1, 1), 10, EdgeType.GRAPH);
     }
 
     /**
      * Test whether the constructor works correctly.
      *
-     * @throws Exception possible Exception.
      */
     @Test
-    public void testConstructor() throws Exception {
+    public void testConstructor() {
         assertNotNull(edge);
     }
 
     /**
      * Test whether getSource() and setSource() work correctly.
-     *
-     * @throws Exception possible Exception.
      */
     @Test
-    public void testGetAndSetSource() throws Exception {
+    public void testGetAndSetSource() {
         edge.setSource(testCell);
 
         assertEquals(testCell, edge.getSource());
@@ -60,11 +55,9 @@ public class EdgeTest {
 
     /**
      * Test whether getTarget() and setTarget() work correctly.
-     *
-     * @throws Exception possible Exception.
      */
     @Test
-    public void testGetAndSetTarget() throws Exception {
+    public void testGetAndSetTarget() {
         edge.setTarget(testCell);
 
         assertEquals(testCell, edge.getTarget());
@@ -72,11 +65,9 @@ public class EdgeTest {
 
     /**
      * Test whether getLine() and setLine() work correcly.
-     *
-     * @throws Exception possible Exception.
      */
     @Test
-    public void testGetAndSetLine() throws Exception {
+    public void testGetAndSetLine() {
         edge.setLine(testLine);
 
         assertEquals(testLine, edge.getLine());

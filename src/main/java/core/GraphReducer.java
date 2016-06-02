@@ -1,5 +1,6 @@
 package core;
 
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.*;
@@ -85,6 +86,7 @@ public final class GraphReducer {
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
             newNode.setCollapseLevel(n.getCollapseLevel());
+            newNode.setNucleotides(n.getNucleotides());
 
             res.put(i, newNode);
         }
@@ -161,9 +163,10 @@ public final class GraphReducer {
 
         // Add up both collapse levels and add it to the parent
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
-        parent.setType(NodeType.COLLECTION);
+        parent.setType(CellType.COLLECTION);
         parent.setSequence("");
         parent.setCollapseLevel(totalCollapseLevel);
+        parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
 
         // Retrieve the single grandchild of the node.
         Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
@@ -232,7 +235,7 @@ public final class GraphReducer {
                     grandChild.removeParent(parent.getId());
 
                     //Make the inserted node an Indel node.
-                    child.setType(NodeType.INDEL);
+                    child.setType(CellType.INDEL);
                     child.setSequence("");
                     child.setGenomes(allGenomes);
                     return true;
@@ -280,12 +283,13 @@ public final class GraphReducer {
                 for (Node bubbleChild : bubble) {
                     if (!bubbleChild.equals(child)) {
                         child.unionGenomes(bubbleChild);
+                        child.setNucleotides(child.getNucleotides() + bubbleChild.getNucleotides());
                         parent.removeLink(bubbleChild.getId());
                         grandChild.removeParent(bubbleChild.getId());
                         nodeMap.remove(bubbleChild.getId());
                     }
                 }
-                child.setType(NodeType.BUBBLE);
+                child.setType(CellType.BUBBLE);
                 child.setCollapseLevel(bubble.size());
                 child.setSequence("");
                 return true;

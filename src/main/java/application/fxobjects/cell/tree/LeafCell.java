@@ -7,6 +7,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 /**
  * Class representing a Phylogenetic leave node.
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 public class LeafCell extends Cell {
     private final CellType type = CellType.TREELEAF;
     private String name;
+    private Shape shape = null;
 
 
     /**
@@ -67,4 +69,10 @@ public class LeafCell extends Cell {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public Shape getCellShape() { return shape; }
 }

@@ -10,10 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * MainController for GUI.
@@ -37,9 +34,10 @@ public class MainController extends Controller<BorderPane> {
     private HBox legend;
     private VBox listVBox;
     private ListView list;
-    private ScrollPane infoScroller;
     private int currentView;
     private ListFactory listFactory;
+    private StackPane box;
+    private int count;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -47,6 +45,8 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
+
+        this.count = -1;
 
         // Create the new GraphController
         graphController = new GraphController(this);
@@ -66,6 +66,7 @@ public class MainController extends Controller<BorderPane> {
         treeController = new TreeController(this,
                 this.getClass().getResourceAsStream("/metadata.xlsx"), s);
         fillTree();
+
     }
 
     /**
@@ -95,8 +96,7 @@ public class MainController extends Controller<BorderPane> {
         createZoomBoxAndLegend();
         createList();
         this.getRoot().setCenter(graphController.getRoot());
-        graphController.takeSnapshot();
-        graphController.initKeyHandler();
+        //graphController.initKeyHandler();
 
         setListItems();
         this.getRoot().setRight(listVBox);
@@ -114,6 +114,9 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.update(ref, currentView);
 
+        graphController.getZoomBox().fillZoomBox(count == -1);
+
+        count++;
         initGUI();
     }
 
@@ -148,15 +151,13 @@ public class MainController extends Controller<BorderPane> {
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
 
-        graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        graphController.initKeyHandler();
-
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
         hbox.setAlignment(Pos.CENTER);
 
-        hbox.getChildren().addAll(zoombox, legend);
+        box = graphController.getZoomBox().getZoomBox();
+
+        hbox.getChildren().addAll(box, legend);
         this.getRoot().setBottom(hbox);
     }
 
@@ -183,18 +184,17 @@ public class MainController extends Controller<BorderPane> {
     private void createList() {
         listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
-        infoScroller = listFactory.getInfoScroller();
         list = listFactory.getList();
-
-        list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController.getZoomController()
-                .getZoomBox().getKeyHandler());
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();
                 fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
+                //graphController.takeSnapshot();
+                if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
+                    graphController.focus(getGraphController()
+                            .getGraphMouseHandling().getPrevClick());
+                }
             }
         });
 

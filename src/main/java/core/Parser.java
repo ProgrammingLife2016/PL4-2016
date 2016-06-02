@@ -28,7 +28,6 @@ public class Parser {
      *
      * @param bReader - reader to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
