@@ -15,24 +15,16 @@ public class Poc {
         InputStream is = new FileInputStream("src\\main\\resources\\decorationV5_20130412.gff");
         List<Annotation> annotations = readCDSFilteredGFF(is);
 
-        System.out.println("Num CDS nodes: " + nodeMap.size());
-
-        long startTime = System.currentTimeMillis();
-
         int startLoopIndex = 0;
         for (Annotation a : annotations) {
             startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, nodeMap);
 
             if (startLoopIndex == -1) break;
-            int sz = a.getSpannedNodes().size();
-
+            System.out.println(a.getSpannedNodes().size());
             //for (Node n : a.getSpannedNodes()) {
             //    n.setAnnotation(a);
             //}
         }
-
-        long stopTime = System.currentTimeMillis();
-        System.out.println("Elapsed time: " + (stopTime - startTime) + " ms");
     }
 
 

@@ -314,8 +314,6 @@ public class Annotation implements Comparable<Annotation> {
             addSpannedNode(n);
         }
 
-        System.out.println(startNodeId + " : " + endNodeId);
-
         return endNodeId;
     }
 
@@ -328,13 +326,16 @@ public class Annotation implements Comparable<Annotation> {
      * @return The id of the Node containing the DNA sequence at start of the annotation.
      */
     public int findFirstSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int start) {
-        for (Node n : nodeMap.values()) {
+        for (int idx = startLoopIdx; idx < nodeMap.keySet().size(); idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= start && nUpper >= start) {
                 offsetInFirstSpannedNode = start - n.getzIndex();
-                return n.getId();
+                return idx;
             }
         }
             return -1;
@@ -349,13 +350,16 @@ public class Annotation implements Comparable<Annotation> {
      * @return The id of the Node containing the DNA sequence at end of the annotation.
      */
     public int findLastSpannedNode(HashMap<Integer, Node> nodeMap, int startLoopIdx, int end) {
-        for (Node n : nodeMap.values()) {
+        for (int idx = startLoopIdx; idx < nodeMap.keySet().size(); idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
-                return n.getId();
+                return idx;
             }
         }
 
