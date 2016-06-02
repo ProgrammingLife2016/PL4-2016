@@ -2,13 +2,10 @@ package application.controllers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
@@ -182,7 +179,7 @@ public class MainController extends Controller<BorderPane> {
 
         deselectButton.setOnAction(e -> {
             fillTree();
-            treeController.clear();
+            treeController.clearSelection();
 
         });
         hBox.getChildren().addAll(textField, searchButton, deselectButton);
