@@ -6,6 +6,7 @@ import application.fxobjects.cell.LineageColor;
 import application.fxobjects.cell.layout.CellLayout;
 import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
+import core.Filter;
 import core.MetaData;
 import core.graph.PhylogeneticTree;
 import javafx.scene.control.ScrollPane;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static core.Filter.*;
+import static application.fxobjects.cell.LineageColor.*;
 import static application.fxobjects.cell.LineageColor.*;
 import static core.MetaData.META_DATA;
 
@@ -133,7 +136,7 @@ public class TreeController extends Controller<ScrollPane> {
                 applyColorUpwards(parentList, determineEdgeLinColor(META_DATA.get(name).getLineage()), 4.0);
                 applyColorOnCell(cell, determineSelectedLeafLinColor(META_DATA.get(name).getLineage()));
             } else if (name.contains("G")) {
-                applyColorUpwards(parentList, LIN4, 4.0);
+                applyColorUpwards(parentList, LineageColor.LIN4, 4.0);
                 applyColorOnCell(cell, SLIN4);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
@@ -440,4 +443,15 @@ public class TreeController extends Controller<ScrollPane> {
         selectedStrains.forEach(this::revertCellHighlight);
         selectedStrains.clear();
     }
+//
+//    public void filterPhyloLineage(Filter f) {
+//        switch (f) {
+//            case LIN1 : META_DATA.values().forEach(s -> {
+//                if(s.getLineage() == 1) {
+//                    selectedStrains.add(getCellByName(s.getName()));
+//                }
+//            });
+//                break;
+//        }
+//    }
 }
