@@ -92,9 +92,23 @@ public class ZoomBox extends ScrollPane {
         }
 
         ImagePattern pattern = new ImagePattern(image);
-
         zoomRectBorder.setFill(pattern);
     }
+
+    /**
+     * Method to reset the ZoomBox's place
+     */
+    public void reset() {
+        zoomRect.setWidth(zoomBoxWidth);
+    }
+
+
+/**
+ * Method to set the zoomBox to a different place
+ * @param places the places to be set
+ */
+
+
     /**
      * Method to set the ZoomBox to the new locations
      *
