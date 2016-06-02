@@ -53,11 +53,12 @@ public class Edge extends Group {
             line.endYProperty().bind(target.layoutYProperty().add(
                     target.getBoundsInParent().getHeight() / 2.0));
             if (type == GRAPH_REF) {
-                line.setStroke(Color.YELLOW);
+                line.setStroke(Color.DARKORANGE);
                 //addArrow(line, Color.YELLOW);
-            } else {
-                //addArrow(line, Color.BLACK);
             }
+//            else {
+//                //addArrow(line, Color.BLACK);
+//            }
         }
 
 
@@ -69,12 +70,10 @@ public class Edge extends Group {
      * @param l - the line the arrowhead shoul be added to.
      */
     private void addArrow(Line l, Color c) {
-        double startx = source.layoutXProperty().get();
-        double starty = source.layoutYProperty().get();
-        double endx = target.layoutXProperty().get();
-        double endy = target.layoutYProperty().get();
-
-
+//        double startx = source.layoutXProperty().get();
+//        double starty = source.layoutYProperty().get();
+//        double endx = target.layoutXProperty().get();
+//        double endy = target.layoutYProperty().get();
 
         Polyline arrow = new Polyline();
         arrow.getPoints().addAll(

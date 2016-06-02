@@ -64,6 +64,11 @@ public class Node {
      */
     private List<Annotation> annotations;
 
+    /*
+     * Amount of nucleotides in the node.
+     */
+    private int nucleotides;
+
     /**
      * Node constructor.
      *
@@ -94,6 +99,7 @@ public class Node {
         this.genomes = new ArrayList<>();
         this.annotations = new ArrayList<>();
 
+        this.nucleotides = seq.length();
         this.collapseLevel = 1;
     }
 
@@ -448,4 +454,19 @@ public class Node {
 
     }
 
+    /**
+     * Returns the amount of Nucleotides contained in the node
+     * @return the amount of nucleotides
+     */
+    public int getNucleotides() {
+        return nucleotides;
+    }
+
+    /**
+     * Sets the amount of nucleotides in the Node.
+     * @param nucleotides the amount of nucleotides to be set.
+     */
+    public void setNucleotides(int nucleotides) {
+        this.nucleotides = nucleotides;
+    }
 }

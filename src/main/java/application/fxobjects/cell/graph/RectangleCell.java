@@ -8,40 +8,36 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 /**
  * Class representing a Rectangle shape. *
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Rectangle cell constructor.
-     *
      * @param id The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      */
-    public RectangleCell(int id) {
-        this(id, new StackPane());
+    public RectangleCell(int id, int nucleotides) {
+        this(id, nucleotides, new StackPane());
     }
 
     /**
      * Rectangle cell constructor.
      *
      * @param id   The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param pane A given stack pane.
      */
-    public RectangleCell(int id, StackPane pane) {
+    public RectangleCell(int id, int nucleotides, StackPane pane) {
         super(id);
 
         pane.setMaxHeight(10);
-
-        this.selected = false;
-
-        shape = new Rectangle(10, 10);
+        double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
+        shape = new Rectangle(sideSize, sideSize);
         shape.setStroke(Color.DODGERBLUE);
         shape.setStrokeWidth(1);
         shape.setFill(Color.DODGERBLUE);
@@ -68,19 +64,13 @@ public class RectangleCell extends Cell {
     }
 
     /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
-    }
-
-    /**
      * Returns the cellshape.
+     *
      * @return the cellshape.
      */
-    public Shape getCellShape() { return shape; }
+    public Shape getCellShape() {
+        return shape;
+    }
 
     /**
      * Method to set the focus.
@@ -94,7 +84,6 @@ public class RectangleCell extends Cell {
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
 
-        this.selected = true;
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -103,7 +92,6 @@ public class RectangleCell extends Cell {
      * Method to reset the focus.
      */
     public void resetFocus() {
-        this.selected = false;
         this.setEffect(null);
         shape.setStroke(Color.DODGERBLUE);
         shape.setStrokeWidth(1);

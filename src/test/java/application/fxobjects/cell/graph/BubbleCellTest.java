@@ -25,7 +25,7 @@ public class BubbleCellTest {
         StackPane pane = spy(new StackPane());
         Text text = spy(new Text());
 
-        c = new BubbleCell(1, pane, text);
+        c = new BubbleCell(1, 1, pane, text);
     }
 
     /**

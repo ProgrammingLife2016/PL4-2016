@@ -35,7 +35,7 @@ public class AnnotationSearchBoxFactory {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
 
-        Text title = new Text("Highlight an annotation on its ID");
+        Text title = new Text("Highlight an annotation based on its ID");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         grid.add(title, 0, 0);
 

@@ -27,7 +27,7 @@ public class PhylogeneticTreeTest {
         model = mock(Model.class);
         pt = new PhylogeneticTree(model);
 
-        when(model.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
+        when(model.addCell(anyInt(), anyString(), anyInt(), any(CellType.class))).thenReturn(true);
     }
 
     /**
@@ -59,6 +59,6 @@ public class PhylogeneticTreeTest {
         Tree tree = pt.getTreeFromFile();
         pt.setup(tree);
 
-        verify(model, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+        verify(model, atLeast(1)).addCell(anyInt(), anyString(), anyInt(), any(CellType.class));
     }
 }

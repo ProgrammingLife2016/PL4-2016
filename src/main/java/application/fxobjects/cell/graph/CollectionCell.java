@@ -15,37 +15,33 @@ import javafx.scene.text.Text;
 public class CollectionCell extends Cell {
 
     private final CellType type = CellType.COLLECTION;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Bubble cell constructor.
-     *
      * @param id            The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param collapseLevel The collapse level of a cell.
      */
-    public CollectionCell(int id, String collapseLevel) {
-        this(id, new StackPane(), new Text(collapseLevel));
+    public CollectionCell(int id, int nucleotides, String collapseLevel) {
+        this(id, nucleotides, new StackPane(), new Text(collapseLevel));
     }
 
     /**
      * Bubble cell constructor.
      *
      * @param id   The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param pane A given stack pane.
      * @param text A given text element.
      */
-    public CollectionCell(int id, StackPane pane, Text text) {
+    public CollectionCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
-
-        shape = new Circle(10);
+        shape = new Circle(Math.min(10.0 + ((double) nucleotides) / 80000, 100));
         shape.setStroke(Color.LIGHTGREEN);
         shape.setStrokeWidth(1);
         shape.setFill(Color.LIGHTGREEN);
         pane.getChildren().addAll(shape, text);
-        this.selected = false;
-
         setView(pane);
     }
 
@@ -56,15 +52,6 @@ public class CollectionCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**
@@ -85,7 +72,6 @@ public class CollectionCell extends Cell {
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
 
-        this.selected = true;
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -95,7 +81,6 @@ public class CollectionCell extends Cell {
      */
     public void resetFocus() {
         this.setEffect(null);
-        this.selected = false;
         shape.setStroke(Color.LIGHTGREEN);
         shape.setStrokeWidth(1);
     }
