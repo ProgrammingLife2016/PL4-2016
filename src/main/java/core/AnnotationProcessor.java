@@ -18,7 +18,16 @@ public class AnnotationProcessor {
     private List<Annotation> annotations;
     private HashMap<Integer, Node> filteredNodeMap;
 
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String annotationsFile, String reference) throws IOException {
+    /**
+     * Initializes a new annotation parser.
+     *
+     * @param nodeMap A given hash map of nodes.
+     * @param annotationsFile The name/path of the GFF file.
+     * @param reference The genome on which the annotations are based.
+     * @throws IOException Throw exception on read failure.
+     */
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String annotationsFile,
+                               String reference) throws IOException {
         this.reference = reference;
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
 
@@ -33,7 +42,8 @@ public class AnnotationProcessor {
         int startLoopIndex = 0;
         int nodeMapSize = determineNodeMapSize(filteredNodeMap);
         for (Annotation a : annotations) {
-            startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, filteredNodeMap, nodeMapSize);
+            startLoopIndex = a.detNodesSpannedByAnnotation(
+                    startLoopIndex, filteredNodeMap, nodeMapSize);
 
             for (Node n : a.getSpannedNodes()) {
                 n.addAnnotation(a);

@@ -20,7 +20,6 @@ public class Poc {
         int counter = 0;
         for (Node n : nodeMap.values()) {
             if (n.getGenomes().contains(reference)) {
-            //if (n.getAnnotations().size() > 0) {
                 counter++;
             }
         }

@@ -1,5 +1,7 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
  *
  * @author Niels Warnars
  */
+@SuppressFBWarnings("URF_UNREAD_FIELD")
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Annotation implements Comparable<Annotation> {
     private String seqid;
     private String source;
@@ -142,8 +146,8 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
-     * Sets
-     * @param score
+     * Sets the score.
+     * @param score The score.
      */
     public void setScore(float score) {
         this.score = score;
@@ -279,12 +283,14 @@ public class Annotation implements Comparable<Annotation> {
                 + '}';
     }
 
+    @SuppressFBWarnings("EQ_COMPARETO_USE_OBJECT_EQUALS")
     @Override
     public int compareTo(Annotation o) {
-        if (this.getStart() > o.getStart())
+        if (this.getStart() >= o.getStart()) {
             return 1;
-        if (this.getStart() < o.getStart())
+        } else if (this.getStart() < o.getStart()) {
             return -1;
+        }
 
         return 0;
     }
@@ -294,16 +300,17 @@ public class Annotation implements Comparable<Annotation> {
      *
      * @param startLoopIdx The index to start the enumeration at.
      * @param nodeMap A hash map of nodes in the reference.
+     * @param nodeMapSize The original size of the node map.
      * @return the new startLoopIndex.
      */
-    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap, int nodeMapSize) {
-        int startNodeId = -1;
-        int endNodeId = -1;
-
+    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap,
+                                           int nodeMapSize) {
         Boolean nodesMustBeAdded = false;
         for (int idx = startLoopIdx; idx < nodeMapSize; idx++) {
             Node n = nodeMap.get(idx);
-            if (n == null) continue;
+            if (n == null) {
+                continue;
+            }
 
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
@@ -311,7 +318,6 @@ public class Annotation implements Comparable<Annotation> {
             if (nLower <= start && nUpper >= start) {
                 offsetInFirstSpannedNode = start - n.getzIndex();
                 nodesMustBeAdded = true;
-                startNodeId = n.getId();
             }
 
             if (nodesMustBeAdded) {
@@ -320,9 +326,7 @@ public class Annotation implements Comparable<Annotation> {
 
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
-                endNodeId = n.getId();
-//                System.out.println(startNodeId + " : " + endNodeId);
-                return endNodeId;
+                return n.getId();
             }
         }
 
