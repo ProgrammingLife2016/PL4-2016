@@ -55,9 +55,10 @@ public class Edge extends Group {
             if (type == GRAPH_REF) {
                 line.setStroke(Color.YELLOW);
                 //addArrow(line, Color.YELLOW);
-            } else {
-                //addArrow(line, Color.BLACK);
             }
+//            else {
+//                addArrow(line, Color.BLACK);
+//            }
         }
 
 
