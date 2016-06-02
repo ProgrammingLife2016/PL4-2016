@@ -26,9 +26,5 @@ public class Poc {
         }
 
         System.out.println("POC - Num reference nodes: " + counter);
-
-        for (Annotation a : ap.getAnnotations()) {
-            System.out.println(a.getSpannedNodes().size());
-        }
     }
 }

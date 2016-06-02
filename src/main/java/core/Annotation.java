@@ -38,19 +38,19 @@ public class Annotation implements Comparable<Annotation> {
         seqid = "";
         source = "";
         type = "";
-        start = 0;
-        end = 0;
-        score = 0;
+        start = -1;
+        end = -1;
+        score = -1;
         strand = "";
         phase = "";
         callhounClassAttr = "";
-        idAttr = 0;
+        idAttr = -1;
         nameAttr = "";
         displayNameAttr = "";
 
         spannedNodes = new ArrayList<Node>();
-        offsetInFirstSpannedNode = 0;
-        offsetInLastSpannedNode = 0;
+        offsetInFirstSpannedNode = -1;
+        offsetInLastSpannedNode = -1;
     }
 
     /**
@@ -321,7 +321,7 @@ public class Annotation implements Comparable<Annotation> {
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
                 endNodeId = n.getId();
-                System.out.println(startNodeId + " : " + endNodeId);
+//                System.out.println(startNodeId + " : " + endNodeId);
                 return endNodeId;
             }
         }
