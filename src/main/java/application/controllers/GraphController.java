@@ -29,6 +29,7 @@ public class GraphController extends Controller<ScrollPane> {
     private AnchorPane root;
     private Rectangle2D screenSize;
     private MainController mainController;
+    private final double MAX_EDGE_LENGTH = 300;
 
     /**
      * Constructor method for this class.
@@ -151,20 +152,19 @@ public class GraphController extends Controller<ScrollPane> {
                 double yLength = e.getLine().endYProperty().get() - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
                 System.out.println(e.getSource().toString() + " " + length);
-                if (length > 200) {
+                if (length > MAX_EDGE_LENGTH) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = e.getSource().getLayoutY() - (screenSize.getHeight() - 150) / 2;
-                    e.getSource().relocate(e.getSource().getLayoutX(), e.getSource().getLayoutY() + newY * 3);
+                    double newY = e.getSource().getLayoutY() +
+                            (e.getSource().getLayoutY() - (screenSize.getHeight() - 150) / 2) * 2.5;
+                    newY = Math.max(newY, 10);
+                    newY = Math.min(newY, screenSize.getHeight() * 0.7);
+                    e.getSource().relocate(e.getSource().getLayoutX(), newY);
                 }
-
             }
-
             initMouseHandler();
             graph.endUpdate();
         }
-
-
         //Set Graph as center.
         this.getRoot().setContent(root);
     }
