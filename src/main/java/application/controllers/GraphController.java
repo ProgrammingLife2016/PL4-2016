@@ -51,26 +51,51 @@ public class GraphController extends Controller<ScrollPane> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
             }
+
             if (event.getDeltaY() != 0) {
                 if (graphMouseHandling.getPrevClick() != null) {
                     graphMouseHandling.getPrevClick().resetFocus();
                 }
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
+
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
                     }
+
+                    getZoomController().getZoomBox().replaceZoomBox(updateZoomBox());
+
+
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
+
+
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
                     }
+
+                    getZoomController().getZoomBox().replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
             }
         });
+    }
+
+    public double[] updateZoomBox() {
+        double left = Math.abs(this.getRoot().getViewportBounds().getMinX());
+        double middle = this.getRoot().getViewportBounds().getWidth();
+        double total = graph.getModel().getGraphLayout().getMaxWidth();
+
+        double rightOffset = left / total;
+        double shown = middle / total;
+
+        double[] places = new double[2];
+        places[0] = rightOffset;
+        places[1] = shown;
+
+        return places;
     }
 
     /**

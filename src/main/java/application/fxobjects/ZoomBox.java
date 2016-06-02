@@ -90,6 +90,29 @@ public class ZoomBox extends ScrollPane {
 
     }
 
+    public void replaceZoomBox(double[] places) {
+        double rightOffset = places[0];
+        double shown = places[1];
+
+        double maxX = zoomRect.getX();
+        double currPos = zoomRect.getX();
+        double right = currPos + rightOffset * zoomBoxWidth;
+        double newWidth = shown * zoomBoxWidth;
+
+        if (right > maxX) {
+            right = maxX;
+        }
+
+        if (newWidth > zoomBoxWidth) {
+            newWidth = zoomBoxWidth;
+        } else if (newWidth < 50) {
+            newWidth = 50;
+        }
+
+        zoomRect.setX(right);
+        zoomRect.setWidth(newWidth);
+    }
+
     /**
      * Return the zoom box.
      *
