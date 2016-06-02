@@ -305,9 +305,9 @@ public class Annotation implements Comparable<Annotation> {
      */
     public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap) {
         int startNodeId = findFirstSpannedNode(nodeMap, startLoopIdx, this.start);
-        int endNodeId = findLastSpannedNode(nodeMap, startLoopIdx, this.end);
+        int endNodeId = findLastSpannedNode(nodeMap, startNodeId, this.end);
 
-        for (int idx = startNodeId; idx < endNodeId; idx++) {
+        for (int idx = startNodeId; idx <= endNodeId; idx++) {
             Node n = nodeMap.get(idx);
             if (n == null) continue;
 
@@ -338,8 +338,7 @@ public class Annotation implements Comparable<Annotation> {
                 return idx;
             }
         }
-
-        return 0;
+            return -1;
     }
 
     /**
@@ -364,7 +363,7 @@ public class Annotation implements Comparable<Annotation> {
             }
         }
 
-        return 0;
+        return -1;
     }
 
 }

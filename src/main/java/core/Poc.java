@@ -4,22 +4,23 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static core.AnnotationParser.readCDSFilteredGFF;
+
 /**
  * Annotation data POC.
  */
 public class Poc {
     public static void main(String[] args) throws IOException {
         HashMap<Integer, Node> nodeMap = getNodeMap("src\\main\\resources\\TB10.gfa");
-        List<Annotation> annotations = getAnnotations("src\\main\\resources\\decorationV5_20130412.gff");
+        InputStream is = new FileInputStream("src\\main\\resources\\decorationV5_20130412.gff");
+        List<Annotation> annotations = readCDSFilteredGFF(is);
 
         int startLoopIndex = 0;
         for (Annotation a : annotations) {
             startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, nodeMap);
 
-            for (Node n : a.getSpannedNodes()) {
-                System.out.println("Annotation ID: " + a.getStart()
-                        + ", Node: " + n.getId());
-            }
+            if (startLoopIndex == -1) break;
+            System.out.println(a.getSpannedNodes().size());
             //for (Node n : a.getSpannedNodes()) {
             //    n.setAnnotation(a);
             //}
@@ -48,25 +49,5 @@ public class Poc {
         }
 
         return nodeMap;
-    }
-
-
-
-
-    /**
-     * Gets a list of CDS filtered and sorted annotations from disk.
-     *
-     * @param path The path to the gff file.
-     * @return A filtered and sorted list of annotations.
-     * @throws IOException Throw an exception on read failure.
-     */
-    private static List<Annotation> getAnnotations(String path) throws IOException {
-        InputStream is = new FileInputStream(path);
-
-        List<Annotation> annotations = AnnotationParser.readGFF(is).stream()
-                .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
-
-        Collections.sort(annotations);
-        return annotations;
     }
 }

@@ -2,12 +2,11 @@ package core;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Parser for Annotation data from a gff file.
@@ -84,6 +83,21 @@ public final class AnnotationParser {
         }
 
         bReader.close();
+        return annotations;
+    }
+
+    /**
+     * Gets a list of CDS filtered and sorted annotations from disk.
+     *
+     * @param input The input stream containing the annotation data.
+     * @return A filtered and sorted list of annotations.
+     * @throws IOException Throw an exception on read failure.
+     */
+    public static List<Annotation> readCDSFilteredGFF(InputStream input) throws IOException {
+        List<Annotation> annotations = readGFF(input).stream()
+                .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
+
+        Collections.sort(annotations);
         return annotations;
     }
 
