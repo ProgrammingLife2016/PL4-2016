@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
  */
 class GraphMouseHandling {
     private MainController mainController;
+    private Cell prevClick;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
@@ -28,6 +29,18 @@ class GraphMouseHandling {
         info += "Seq: \n" + clicked.getSequence() + "\n";
 
         mainController.getListFactory().modifyNodeInfo(info);
+
+        if (prevClick == null) {
+            prevClick = node;
+            node.focus();
+        } else if (prevClick.getCellId() != node.getCellId()) {
+            prevClick.resetFocus();
+            node.focus();
+            prevClick = node;
+        } else if (prevClick.getCellId() == node.getCellId()) {
+            prevClick.resetFocus();
+            prevClick = null;
+        }
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
@@ -56,6 +69,7 @@ class GraphMouseHandling {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     GraphMouseHandling(MainController m) {
         this.mainController = m;
+        this.prevClick = null;
     }
 
     /**
@@ -68,5 +82,23 @@ class GraphMouseHandling {
         node.setOnMouseEntered(onMouseEnteredEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
         node.setOnDragDetected(onMouseDraggedEventHandler);
+    }
+
+    /**
+     * Getter for the prevClick
+     *
+     * @return the Cell that is last clicked.
+     */
+    public Cell getPrevClick() {
+        return prevClick;
+    }
+
+    /**
+     * Setter for the prevClick.
+     *
+     * @param prevClick the cell to set to.
+     */
+    public void setPrevClick(Cell prevClick) {
+        this.prevClick = prevClick;
     }
 }
