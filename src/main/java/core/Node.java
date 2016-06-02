@@ -57,9 +57,9 @@ public class Node {
     private List<String> genomes;
 
     /**
-     * The annotation that spans this node.
+     * The annotations that this node is part of.
      */
-    private Annotation annotation;
+    private List<Annotation> annotations;
 
     /**
      * Node constructor.
@@ -89,6 +89,7 @@ public class Node {
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
+        this.annotations = new ArrayList<>();
 
         this.collapseLevel = 1;
     }
@@ -382,19 +383,19 @@ public class Node {
     /**
      * Get the annotation spanning the node.
      *
-     * @return The annotation spanning the node.
+     * @return The annotations spanning the node.
      */
-    public Annotation getAnnotation() {
-        return annotation;
+    public List<Annotation> getAnnotations() {
+        return annotations;
     }
 
     /**
-     * Set the annotation spanning the node.
+     * Adds a new annotation spanning the node.
      *
      * @param annotation The annotation spanning the node.
      */
-    public void setAnnotation(Annotation annotation) {
-        this.annotation = annotation;
+    public void addAnnotation(Annotation annotation) {
+        this.annotations.add(annotation);
     }
 
     @Override

@@ -254,20 +254,13 @@ public class Annotation implements Comparable<Annotation> {
     }
 
     /**
-     * Sets the nodes spanned by the annotation.
-     * @param coveredNodes The nodes spanned by the annotation.
-     */
-    public void setSpannedNodes(List<Node> coveredNodes) {
-        this.spannedNodes = coveredNodes;
-    }
-
-    /**
      * Adds a new spanned by the annotation.
      * @param node A new spanned by the annotation.
      */
     public void addSpannedNode(Node node) {
         spannedNodes.add(node);
     }
+
     @Override
     public String toString() {
         return "Annotation{" +
@@ -303,12 +296,15 @@ public class Annotation implements Comparable<Annotation> {
      * @param nodeMap A hash map of nodes in the reference.
      * @return the new startLoopIndex.
      */
-    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap) {
+    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap, int nodeMapSize) {
         int startNodeId = -1;
         int endNodeId = -1;
 
         Boolean nodesMustBeAdded = false;
-        for (Node n : nodeMap.values()) {
+        for (int idx = startLoopIdx; idx < nodeMapSize; idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) continue;
+
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
 
@@ -325,7 +321,7 @@ public class Annotation implements Comparable<Annotation> {
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
                 endNodeId = n.getId();
-                //System.out.println(startNodeId + " : " + endNodeId);
+                System.out.println(startNodeId + " : " + endNodeId);
                 return endNodeId;
             }
         }
