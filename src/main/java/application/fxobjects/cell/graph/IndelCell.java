@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
  */
 public class IndelCell extends Cell {
     private final CellType type = CellType.INDEL;
-    private Text text;
     private Shape shape;
 
     /**
@@ -53,15 +52,6 @@ public class IndelCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**

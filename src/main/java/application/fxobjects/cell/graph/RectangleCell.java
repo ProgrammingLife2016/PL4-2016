@@ -8,16 +8,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 /**
  * Class representing a Rectangle shape. *
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
-    private Text text;
     private Shape shape;
-    private boolean selected;
 
     /**
      * Rectangle cell constructor.
@@ -39,8 +36,6 @@ public class RectangleCell extends Cell {
         super(id);
 
         pane.setMaxHeight(10);
-
-        this.selected = false;
         double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
         shape = new Rectangle(sideSize, sideSize);
         shape.setStroke(Color.DODGERBLUE);
@@ -61,19 +56,13 @@ public class RectangleCell extends Cell {
     }
 
     /**
-     * Return the Cell's text.
-     *
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
-    }
-
-    /**
      * Returns the cellshape.
+     *
      * @return the cellshape.
      */
-    public Shape getCellShape() { return shape; }
+    public Shape getCellShape() {
+        return shape;
+    }
 
     /**
      * Method to set the focus.
@@ -87,7 +76,6 @@ public class RectangleCell extends Cell {
         borderGlow.setHeight(70);
         this.setEffect(borderGlow);
 
-        this.selected = true;
         shape.setStroke(Color.PURPLE);
         shape.setStrokeWidth(4);
     }
@@ -96,7 +84,6 @@ public class RectangleCell extends Cell {
      * Method to reset the focus.
      */
     public void resetFocus() {
-        this.selected = false;
         this.setEffect(null);
         shape.setStroke(Color.DODGERBLUE);
         shape.setStrokeWidth(1);

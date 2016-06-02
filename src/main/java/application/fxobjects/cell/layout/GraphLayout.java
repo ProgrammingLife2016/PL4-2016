@@ -96,7 +96,9 @@ public class GraphLayout extends CellLayout {
                     evenChildOffset = (yOffset / 2) * modifier;
                     child.setRelocated(true);
                     modifier *= -1;
-                    if (modifier > 0) { modifier++; }
+                    if (modifier > 0) {
+                        modifier++;
+                    }
                 } else {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
@@ -106,7 +108,9 @@ public class GraphLayout extends CellLayout {
                     child.setRelocated(true);
 
                     modifier *= -1;
-                    if (modifier < 0) { modifier--; }
+                    if (modifier < 0) {
+                        modifier--;
+                    }
                 }
             } else if (child.getLayoutX() < cell.getLayoutX()) {
                 if (cellCount % 2 == 0) {
@@ -118,7 +122,9 @@ public class GraphLayout extends CellLayout {
                     child.setRelocated(true);
 
                     modifier *= -1;
-                    if (modifier > 0) { modifier++; }
+                    if (modifier > 0) {
+                        modifier++;
+                    }
                 } else {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
@@ -128,7 +134,9 @@ public class GraphLayout extends CellLayout {
                     child.setRelocated(true);
 
                     modifier *= -1;
-                    if (modifier < 0) { modifier--; }
+                    if (modifier < 0) {
+                        modifier--;
+                    }
                 }
             }
         }

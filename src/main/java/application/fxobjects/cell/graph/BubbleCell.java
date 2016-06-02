@@ -13,7 +13,6 @@ import javafx.scene.text.Text;
  */
 public class BubbleCell extends Cell {
     private final CellType type = CellType.BUBBLE;
-    private Text text;
     private Shape shape;
 
     /**
@@ -51,14 +50,6 @@ public class BubbleCell extends Cell {
      */
     public CellType getType() {
         return type;
-    }
-
-    /**
-     * Return the Cell's text.
-     * @return the Cell's text.
-     */
-    public Text getText() {
-        return text;
     }
 
     /**
