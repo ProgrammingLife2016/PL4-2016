@@ -37,7 +37,8 @@ public class Node {
     private int collapseLevel;
 
     /**
-     * 'Depth' of the node in the genome.
+     * 'Depth' of the node in the genome. This is represented as the n'th nucleotide.
+     * The zIndex of the next node will be zIndex + len(sequence).
      */
     private int zIndex;
 
@@ -55,6 +56,11 @@ public class Node {
      * List of genomes of which this node is a part.
      */
     private List<String> genomes;
+
+    /**
+     * The annotations that this node is part of.
+     */
+    private List<Annotation> annotations;
 
     /**
      * Node constructor.
@@ -84,6 +90,7 @@ public class Node {
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
+        this.annotations = new ArrayList<>();
 
         this.collapseLevel = 1;
     }
@@ -372,6 +379,24 @@ public class Node {
      */
     public void setGenomes(List<String> genomes) {
         this.genomes = genomes;
+    }
+
+    /**
+     * Get the annotation spanning the node.
+     *
+     * @return The annotations spanning the node.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Adds a new annotation spanning the node.
+     *
+     * @param annotation The annotation spanning the node.
+     */
+    public void addAnnotation(Annotation annotation) {
+        this.annotations.add(annotation);
     }
 
     @Override
