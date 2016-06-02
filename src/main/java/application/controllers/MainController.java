@@ -169,8 +169,8 @@ public class MainController extends Controller<BorderPane> {
 
         textField = new TextField();
         searchButton.setOnAction(e -> {
-            if(!textField.getText().isEmpty()) {
-                treeController.getCellByName(textField.textProperty().get().trim());
+            if (!textField.getText().isEmpty()) {
+                treeController.applySelectionByName(textField.textProperty().get().trim());
                 textField.setText("");
                 fillTree();
             }
@@ -208,7 +208,7 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();
-                getTextField().setText((String)list.getSelectionModel().getSelectedItem());
+                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
 
                 fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
                 graphController.takeSnapshot();
@@ -294,6 +294,11 @@ public class MainController extends Controller<BorderPane> {
         this.currentView = currentView;
     }
 
+    /**
+     * Getter for the textfiel.d
+     *
+     * @return the textfield.
+     */
     public TextField getTextField() {
         return textField;
     }
