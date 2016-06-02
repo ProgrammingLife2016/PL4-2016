@@ -109,8 +109,8 @@ public class GraphController extends Controller<ScrollPane> {
     public void focus(Cell prevClick) {
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
-            if ((c.getCellId() == prevClick.getCellId())
-                    || (c.getCellId() > prevClick.getCellId())) {
+            if (c.getCellId() == prevClick.getCellId()
+                    || c.getCellId() > prevClick.getCellId()) {
                 prevClick = c;
                 break;
             }
@@ -174,9 +174,9 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Method to attach the keyHandler to the root of the Controller
      */
-    public void initKeyHandler() {
-        this.getRoot().setOnKeyPressed(zoomBox.getKeyHandler());
-    }
+//    public void initKeyHandler() {
+//        this.getRoot().setOnKeyPressed(zoomBox.getKeyHandler());
+//    }
 
     /**
      * Method to attach the mouseHandler to each cell in the graph
@@ -226,6 +226,11 @@ public class GraphController extends Controller<ScrollPane> {
         return graphMouseHandling;
     }
 
+    /**
+     * Getter for the ZoomBox
+     *
+     * @return the zoomBox
+     */
     public ZoomBox getZoomBox() {
         return zoomBox;
     }

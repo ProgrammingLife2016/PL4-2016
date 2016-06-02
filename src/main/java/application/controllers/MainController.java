@@ -90,7 +90,7 @@ public class MainController extends Controller<BorderPane> {
         createZoomBoxAndLegend();
         createList();
         this.getRoot().setCenter(graphController.getRoot());
-        graphController.initKeyHandler();
+        //graphController.initKeyHandler();
 
         setListItems();
         this.getRoot().setRight(listVBox);
@@ -144,7 +144,6 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
-        graphController.initKeyHandler();
 
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
@@ -181,10 +180,6 @@ public class MainController extends Controller<BorderPane> {
         listVBox = listFactory.createInfoList("");
         infoScroller = listFactory.getInfoScroller();
         list = listFactory.getList();
-
-        list.setOnKeyPressed(graphController.getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController
-                .getZoomBox().getKeyHandler());
 
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {

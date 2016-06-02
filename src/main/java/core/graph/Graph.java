@@ -1,6 +1,5 @@
 package core.graph;
 
-import application.fxobjects.ZoomBox;
 import core.*;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;

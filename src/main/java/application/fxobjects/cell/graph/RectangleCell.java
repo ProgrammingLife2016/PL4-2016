@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 /**
  * Class representing a Rectangle shape. *
@@ -57,9 +56,12 @@ public class RectangleCell extends Cell {
 
     /**
      * Returns the cellshape.
+     *
      * @return the cellshape.
      */
-    public Shape getCellShape() { return shape; }
+    public Shape getCellShape() {
+        return shape;
+    }
 
     /**
      * Method to set the focus.
