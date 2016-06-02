@@ -7,6 +7,8 @@ import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.graph.RectangleCell;
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.EdgeType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -42,19 +44,24 @@ public class AnnotationSearchBoxFactory {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
 
-        Text title = new Text("Highlight an annotation specified by its ID");
+        Text title = new Text("Highlight an annotation on its ID");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         grid.add(title, 0, 0);
 
         final TextField box = new TextField();
         box.setPrefColumnCount(10);
-        name.getText();
-        GridPane.setConstraints(box, 0, 1);
-        grid.getChildren().add(box);
+        grid.add(box, 0, 1);
 
         Button search = new Button("Search");
-        GridPane.setConstraints(search, 1, 1);
-        grid.getChildren().add(search);
+        grid.add(search, 1, 1);
+
+        search.setOnAction(e -> {
+            if ((box.getText() != null && !box.getText().isEmpty())) {
+                System.out.println("Input: " + box.getText());
+            } else {
+                System.out.println("No input");
+            }
+        });
 
         return grid;
     }
