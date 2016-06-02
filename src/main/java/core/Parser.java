@@ -30,6 +30,7 @@ public class Parser {
     /**
      * Read the data from a .gfa file and put the nodes in a hashmap.
      *
+     * @param annotations A list of annotations.
      * @param input - filepath of .gfa file to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
      */
@@ -52,13 +53,6 @@ public class Parser {
             e.printStackTrace();
         }
 
-        int counter = 0;
-        for (Node n : nodeMap.values()) {
-            if (n.getGenomes().contains("MT_H37RV_BRD_V5.ref")) {
-                counter++;
-            }
-        }
-        
         return nodeMap;
     }
 

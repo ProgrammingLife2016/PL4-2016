@@ -153,6 +153,15 @@ public class Model {
     }
 
     /**
+     * Gets the cell map.
+     *
+     * @return The cell map.
+     */
+    public Map<Integer, Cell> getCellMap() {
+        return cellMap;
+    }
+
+    /**
      * Get a list of annotations.
      *
      * @return A list of annotations.

@@ -21,7 +21,8 @@ public class AnnotationProcessor {
      * @param annotations List of annotations.
      * @throws IOException Throw exception on read failure.
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) throws IOException {
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations)
+            throws IOException {
         this.annotations = annotations;
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
     }
@@ -86,6 +87,7 @@ public class AnnotationProcessor {
     /**
      * Finds an annotation by a specified annotation id.
      *
+     * @param annotations A list of annotations.
      * @param id A specified annotation id.
      * @return The found annotation.
      */

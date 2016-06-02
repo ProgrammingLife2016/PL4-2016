@@ -51,6 +51,14 @@ public class RectangleCell extends Cell {
     }
 
     /**
+     * Highlight the rectangle cell.
+     */
+    public void setHighLight() {
+        shape.setStroke(Color.YELLOW);
+        shape.setStrokeWidth(4);
+    }
+
+    /**
      * Return the type of the Cell.
      *
      * @return the type of the Cell.

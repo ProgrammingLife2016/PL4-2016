@@ -76,7 +76,8 @@ public final class AnnotationParser {
      * @throws IOException Throw an exception on read failure.
      */
     public static List<Annotation> readCDSFilteredGFF(InputStream input) {
-        List<Annotation> annotations = null;
+        List<Annotation> annotations = new ArrayList<>();
+
         try {
             annotations = readGFF(input).stream()
                     .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());

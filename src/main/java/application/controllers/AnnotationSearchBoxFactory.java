@@ -1,19 +1,10 @@
 package application.controllers;
 
-import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
-import application.fxobjects.cell.graph.RectangleCell;
-import application.fxobjects.cell.tree.MiddleCell;
-import core.graph.cell.EdgeType;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;

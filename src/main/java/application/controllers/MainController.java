@@ -1,7 +1,9 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.RectangleCell;
 import core.Annotation;
 import core.AnnotationProcessor;
+import core.Node;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -9,12 +11,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * MainController for GUI.
@@ -170,7 +168,7 @@ public class MainController extends Controller<BorderPane> {
         Button search = (Button) annotationSearchBox.getChildren().get(3);
 
         search.setOnAction(e -> {
-            if ((box.getText() != null && !box.getText().isEmpty())) {
+            if (box.getText() != null && !box.getText().isEmpty()) {
                 long input = Long.parseLong(box.getText());
                 System.out.println("Input: " + input);
 
@@ -180,6 +178,13 @@ public class MainController extends Controller<BorderPane> {
                         annotations, input);
 
                 System.out.println(ann);
+
+                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                        = graphController.getGraph().getModel().getCellMap();
+
+                for (Node n : ann.getSpannedNodes()) {
+                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                }
             } else {
                 System.out.println("No input");
             }
