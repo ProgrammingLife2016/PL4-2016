@@ -79,6 +79,7 @@ public class MenuFactory {
                     .getGraph().getLevelMaps().size() - 1);
             mainController.fillGraph(null, new ArrayList<>());
             mainController.getGraphController().getZoomBox().reset();
+            mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
 
         });
 
