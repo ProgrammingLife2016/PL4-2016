@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -23,11 +24,11 @@ import java.util.ResourceBundle;
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
-    private ZoomController zoomController;
     private GraphMouseHandling graphMouseHandling;
     private AnchorPane root;
     private Rectangle2D screenSize;
     private MainController mainController;
+    private ZoomBox zoomBox;
 
     /**
      * Constructor method for this class.
@@ -39,11 +40,11 @@ public class GraphController extends Controller<ScrollPane> {
         super(new ScrollPane());
         this.graph = new Graph();
         this.screenSize = Screen.getPrimary().getVisualBounds();
-        this.zoomController = new ZoomController(this);
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.root = new AnchorPane();
         this.mainController = m;
 
+        this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -61,22 +62,19 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
+                        zoomBox.replaceZoomBox(updateZoomBox());
                     }
-
-                    getZoomController().getZoomBox().replaceZoomBox(updateZoomBox());
-
 
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
 
-
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
+                        zoomBox.replaceZoomBox(updateZoomBox());
                     }
 
-                    getZoomController().getZoomBox().replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
             }
@@ -135,9 +133,9 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @return the ZoomController
      */
-    public ZoomController getZoomController() {
-        return zoomController;
-    }
+//  //  public ZoomController getZoomController() {
+//        return zoomController;
+//    }
 
     /**
      * Init method.
@@ -185,7 +183,7 @@ public class GraphController extends Controller<ScrollPane> {
      * Method to attach the keyHandler to the root of the Controller
      */
     public void initKeyHandler() {
-        this.getRoot().setOnKeyPressed(zoomController.getZoomBox().getKeyHandler());
+        this.getRoot().setOnKeyPressed(zoomBox.getKeyHandler());
     }
 
     /**
@@ -230,4 +228,6 @@ public class GraphController extends Controller<ScrollPane> {
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;
     }
+
+    public ZoomBox getZoomBox() { return zoomBox; }
 }

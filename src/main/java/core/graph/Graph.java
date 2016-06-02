@@ -1,5 +1,6 @@
 package core.graph;
 
+import application.fxobjects.ZoomBox;
 import core.*;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
@@ -394,6 +395,7 @@ public class Graph {
     public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
         this.levelMaps = levelMaps;
     }
+
 
     /**
      * Method to reset the current view.
