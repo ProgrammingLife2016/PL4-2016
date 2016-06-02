@@ -3,10 +3,7 @@ package application.controllers;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -18,6 +15,10 @@ import java.util.ArrayList;
  */
 @SuppressFBWarnings("MS_PKGPROTECT")
 public class MenuFactory {
+    protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
+    filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
+    filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
+    filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
@@ -40,18 +41,17 @@ public class MenuFactory {
     public MenuBar createMenu(MenuBar bar) {
         Menu fileMenu = initFileMenu();
         Menu viewMenu = initViewMenu();
+        Menu filterMenu = initFilterMenu();
         Menu helpMenu = initHelpMenu();
 
-        bar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
+        bar.getMenus().addAll(fileMenu, viewMenu, filterMenu, helpMenu);
         return bar;
     }
 
     private Menu initHelpMenu() {
         shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
 
-        Menu helpMenu = initMenu("Help", shortcuts);
-        return helpMenu;
-
+        return initMenu("Help", shortcuts);
     }
 
     private Menu initViewMenu() {
@@ -83,10 +83,9 @@ public class MenuFactory {
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);
 
-        Menu viewMenu = initMenu("View",
+        return initMenu("View",
                 showGenomeSequence, showPhylogeneticTree, separatorOne,
                 showSelectedStrains, showOnlyThisStrain, separatorTwo, resetView);
-        return viewMenu;
 
     }
 
@@ -98,9 +97,34 @@ public class MenuFactory {
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
                 null);
 
-        Menu fileMenu = initMenu("File", loadGenome, loadPhylogeneticTree);
-        return fileMenu;
+        return initMenu("File", loadGenome, loadPhylogeneticTree);
+    }
 
+    private Menu initFilterMenu() {
+        initLineageFilter();
+        initHIVFilter();
+        initCohortFilter();
+        initDistrictFilter();
+        initSpecimenFilter();
+        initIsolationFilter();
+        initPhenoDSTfilter();
+        initCapreomycinFilter();
+        initEthambutolFilter();
+        initEthionamideFilter();
+        initIsoniazidFilter();
+        initKanamycinFilter();
+        initPyrazinamideFilter();
+        initOfloxacinFilter();
+        initRifampinFilter();
+        initStreptomycinFilter();
+        initSpoligotypeFilter();
+        initGenoDSTFilter();
+        initTFFilter();
+
+        return initMenu("Filter", filterCapreomycin, filterCohort, filterEthambutol, filterEthionAmide,
+                filterGenoDST, filterHIV, filterIsolation, filterIsoniazid, filterKanamycin, filterLineage,
+                filterOfloxacin, filterPhenoDST, filterPyrazinamide, filterRifampin, filterSpecimenType,
+                filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF);
     }
 
     private Menu initMenu(String title, final MenuItem... items) {
@@ -115,5 +139,227 @@ public class MenuFactory {
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
         return newItem;
+    }
+
+    private CheckMenuItem initCheckMenuItem(String title, KeyCombination combination,
+                                  EventHandler<ActionEvent> handler) {
+        CheckMenuItem newItem = new CheckMenuItem(title);
+        newItem.setAccelerator(combination);
+        newItem.setOnAction(handler);
+        return newItem;
+    }
+
+    private void initLineageFilter() {
+        filterLineage = new Menu("Lineage");
+        CheckMenuItem lin1 = initCheckMenuItem("LIN 1", null, null);
+        CheckMenuItem lin2 = initCheckMenuItem("LIN 2", null, null);
+        CheckMenuItem lin3 = initCheckMenuItem("LIN 3", null, null);
+        CheckMenuItem lin4 = initCheckMenuItem("LIN 4", null, null);
+        CheckMenuItem lin5 = initCheckMenuItem("LIN 5", null, null);
+        CheckMenuItem lin6 = initCheckMenuItem("LIN 6", null, null);
+        CheckMenuItem lin7 = initCheckMenuItem("LIN 7", null, null);
+        CheckMenuItem lin8 = initCheckMenuItem("LIN animal", null, null);
+        CheckMenuItem lin9 = initCheckMenuItem("LIN B", null, null);
+        CheckMenuItem lin10 = initCheckMenuItem("LIN CANETTII", null, null);
+
+        filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
+    }
+
+    private void initHIVFilter() {
+        final ToggleGroup hiv = new ToggleGroup();
+        RadioMenuItem pos = new RadioMenuItem("Positive");
+        RadioMenuItem neg = new RadioMenuItem("Negative");
+        RadioMenuItem non = new RadioMenuItem("Either");
+
+        pos.setToggleGroup(hiv);
+        neg.setToggleGroup(hiv);
+        non.setToggleGroup(hiv);
+
+        non.setSelected(true);
+
+        filterHIV = initMenu("HIV", pos, neg, non);
+    }
+
+    private void initCohortFilter() {
+        filterCohort = new Menu("Cohort");
+        CheckMenuItem cohort1 = initCheckMenuItem("KZNSUR", null, null);
+        CheckMenuItem cohort2 = initCheckMenuItem("PROX", null, null);
+        CheckMenuItem cohort3 = initCheckMenuItem("NHLS", null, null);
+        CheckMenuItem cohort4 = initCheckMenuItem("CUBS", null, null);
+        CheckMenuItem cohort5 = initCheckMenuItem("Phage", null, null);
+
+        filterCohort = initMenu("Cohort", cohort1, cohort2, cohort3, cohort4, cohort5);
+    }
+
+    private void initDistrictFilter() {
+        CheckMenuItem dist1 = initCheckMenuItem("Amajuba", null, null);
+        CheckMenuItem dist2 = initCheckMenuItem("eThekwini", null, null);
+        CheckMenuItem dist3 = initCheckMenuItem("iLembe", null, null);
+        CheckMenuItem dist4 = initCheckMenuItem("Sisonke", null, null);
+        CheckMenuItem dist5 = initCheckMenuItem("Ugu", null, null);
+        CheckMenuItem dist6 = initCheckMenuItem("uMgungundlovu", null, null);
+        CheckMenuItem dist7 = initCheckMenuItem("uMkhanyakude", null, null);
+        CheckMenuItem dist8 = initCheckMenuItem("uMzinyathi", null, null);
+        CheckMenuItem dist9 = initCheckMenuItem("Uthukela", null, null);
+        CheckMenuItem dist10 = initCheckMenuItem("uThungulu", null, null);
+        CheckMenuItem dist11 = initCheckMenuItem("Zululand", null, null);
+
+        filterStudyDistrict = initMenu("Study District", dist1, dist2, dist3, dist4, dist5,
+                dist6, dist7, dist8, dist9, dist10, dist11);
+    }
+
+    private void initSpecimenFilter(){
+        CheckMenuItem spec1 = initCheckMenuItem("blood", null, null);
+        CheckMenuItem spec2 = initCheckMenuItem("CSF", null, null);
+        CheckMenuItem spec3 = initCheckMenuItem("pleura", null, null);
+        CheckMenuItem spec4 = initCheckMenuItem("pleural fluid", null, null);
+        CheckMenuItem spec5 = initCheckMenuItem("pus", null, null);
+        CheckMenuItem spec6 = initCheckMenuItem("sputum", null, null);
+
+        filterSpecimenType = initMenu("Specimen type", spec1, spec2, spec3, spec4, spec5, spec6);
+    }
+
+    private void initIsolationFilter() {
+        CheckMenuItem iso1 = initCheckMenuItem("single colony", null, null);
+        CheckMenuItem iso2 = initCheckMenuItem("non-single colony", null, null);
+
+        filterIsolation = initMenu("DNA isolation", iso1, iso2);
+    }
+
+    private void initPhenoDSTfilter() {
+        CheckMenuItem dst1 = initCheckMenuItem("MDR", null, null);
+        CheckMenuItem dst2 = initCheckMenuItem("mono", null, null);
+        CheckMenuItem dst3 = initCheckMenuItem("poly", null, null);
+        CheckMenuItem dst4 = initCheckMenuItem("susceptible", null, null);
+        CheckMenuItem dst5 = initCheckMenuItem("XDR", null, null);
+
+        filterPhenoDST = initMenu("Phenotypic DST", dst1, dst2, dst3, dst4, dst5);
+    }
+
+    private void initCapreomycinFilter() {
+        CheckMenuItem cap1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem cap2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem cap3 = initCheckMenuItem("U", null, null);
+
+        filterCapreomycin = initMenu("Capreomycin", cap1, cap2, cap3);
+    }
+
+    private void initEthambutolFilter() {
+        CheckMenuItem eth1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem eth2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem eth3 = initCheckMenuItem("U", null, null);
+
+        filterEthambutol = initMenu("Ethambutol", eth1, eth2, eth3);
+    }
+
+    private void initEthionamideFilter() {
+        CheckMenuItem eth1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem eth2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem eth3 = initCheckMenuItem("U", null, null);
+
+        filterEthionAmide = initMenu("Ethionamide", eth1, eth2, eth3);
+    }
+
+    private void initIsoniazidFilter() {
+        CheckMenuItem iso1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem iso2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem iso3 = initCheckMenuItem("U", null, null);
+
+        filterIsoniazid = initMenu("Isoniazid", iso1, iso2, iso3);
+    }
+
+    private void initKanamycinFilter() {
+        CheckMenuItem kan1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem kan2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem kan3 = initCheckMenuItem("U", null, null);
+
+        filterKanamycin = initMenu("Kanamycin", kan1, kan2, kan3);
+    }
+
+    private void initPyrazinamideFilter() {
+        CheckMenuItem pyr1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem pyr2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem pyr3 = initCheckMenuItem("U", null, null);
+
+        filterPyrazinamide = initMenu("Pyrazinamide", pyr1, pyr2, pyr3);
+    }
+
+    private void initOfloxacinFilter() {
+        CheckMenuItem ofl1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem ofl2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem ofl3 = initCheckMenuItem("U", null, null);
+
+        filterOfloxacin = initMenu("Ofloxacin", ofl1, ofl2, ofl3);
+    }
+
+    private void initRifampinFilter() {
+        CheckMenuItem rif1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem rif2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem rif3 = initCheckMenuItem("U", null, null);
+
+        filterRifampin = initMenu("Rifampin", rif1, rif2, rif3);
+    }
+
+    private void initStreptomycinFilter() {
+        CheckMenuItem str1 = initCheckMenuItem("R", null, null);
+        CheckMenuItem str2 = initCheckMenuItem("S", null, null);
+        CheckMenuItem str3 = initCheckMenuItem("U", null, null);
+
+        filterStreptomycin = initMenu("Streptomycin", str1, str2, str3);
+    }
+
+    private void initSpoligotypeFilter() {
+        CheckMenuItem spo1 = initCheckMenuItem("LAM4", null, null);
+        CheckMenuItem spo2 = initCheckMenuItem("T1", null, null);
+        CheckMenuItem spo3 = initCheckMenuItem("LAM11-ZWE", null, null);
+        CheckMenuItem spo4 = initCheckMenuItem("S", null, null);
+        CheckMenuItem spo5 = initCheckMenuItem("T3", null, null);
+        CheckMenuItem spo6 = initCheckMenuItem("X2", null, null);
+        CheckMenuItem spo7 = initCheckMenuItem("X3", null, null);
+        CheckMenuItem spo8 = initCheckMenuItem("Bejing", null, null);
+        CheckMenuItem spo9 = initCheckMenuItem("LAM3", null, null);
+        CheckMenuItem spo10 = initCheckMenuItem("LAM6", null, null);
+        CheckMenuItem spo11 = initCheckMenuItem("CAS1-Kili", null, null);
+        CheckMenuItem spo12 = initCheckMenuItem("EAI1-SOM", null, null);
+        CheckMenuItem spo13 = initCheckMenuItem("LAM9", null, null);
+        CheckMenuItem spo14 = initCheckMenuItem("T5-RUS1", null, null);
+        CheckMenuItem spo15 = initCheckMenuItem("H1", null, null);
+        CheckMenuItem spo16 = initCheckMenuItem("CAS", null, null);
+        CheckMenuItem spo17 = initCheckMenuItem("CAS1-Delhi", null, null);
+        CheckMenuItem spo18 = initCheckMenuItem("H37Rv", null, null);
+        CheckMenuItem spo19 = initCheckMenuItem("T2", null, null);
+        CheckMenuItem spo20 = initCheckMenuItem("H1", null, null);
+        CheckMenuItem spo21 = initCheckMenuItem("LAM4", null, null);
+        CheckMenuItem spo22 = initCheckMenuItem("LAM5", null, null);
+
+        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5,
+                spo6, spo7, spo8, spo9, spo10,
+                spo11, spo12, spo13, spo14, spo15,
+                spo16, spo17, spo18, spo19, spo20,
+                spo21, spo22);
+    }
+
+    private void initGenoDSTFilter() {
+        CheckMenuItem gen1 = initCheckMenuItem("MDR", null, null);
+        CheckMenuItem gen2 = initCheckMenuItem("Drug-resistant (other)", null, null);
+        CheckMenuItem gen3 = initCheckMenuItem("susceptible", null, null);
+        CheckMenuItem gen4 = initCheckMenuItem("XDR", null, null);
+
+        filterGenoDST = initMenu("Genotypic DST", gen1, gen2, gen3, gen4);
+    }
+
+    private void initTFFilter() {
+        final ToggleGroup tf = new ToggleGroup();
+        RadioMenuItem pos = new RadioMenuItem("True");
+        RadioMenuItem neg = new RadioMenuItem("False");
+        RadioMenuItem non = new RadioMenuItem("Either");
+
+        pos.setToggleGroup(tf);
+        neg.setToggleGroup(tf);
+        non.setToggleGroup(tf);
+
+        non.setSelected(true);
+
+        filterTF = initMenu("Tugela Ferry XDR", pos, neg, non);
     }
 }
