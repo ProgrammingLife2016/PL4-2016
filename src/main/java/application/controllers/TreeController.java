@@ -436,12 +436,9 @@ public class TreeController extends Controller<ScrollPane> {
         getRoot().setVvalue(cLoc/max);
     }
 
-    public void clear() {
+    public void clearSelection() {
         selectedStrains.clear();
-        collectedStrains.clear();
-        collectedEdges.clear();
         modifyGraphOptions();
-        colorSelectedStrains();
-
+        applyColorOnCells();
     }
 }
