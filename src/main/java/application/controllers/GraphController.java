@@ -4,6 +4,7 @@ import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import core.graph.Graph;
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -30,7 +31,6 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private MainController mainController;
     private ZoomBox zoomBox;
-    private static final double MAX_EDGE_LENGTH = 300;
 
 
     /**
@@ -66,9 +66,10 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-                        zoomBox.replaceZoomBox(updateZoomBox());
+
                     }
 
+                    zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
@@ -76,9 +77,10 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-                        zoomBox.replaceZoomBox(updateZoomBox());
+
                     }
 
+                    zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
             }
@@ -168,20 +170,26 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
+            double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
+            double MAX_EDGE_LENGTH_LONG = screenSize.getWidth();
             for (Edge e : graph.getModel().getAddedEdges()) {
                 double xLength = e.getLine().endXProperty().get()
                         - e.getLine().startXProperty().get();
                 double yLength = e.getLine().endYProperty().get()
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-                if (length > MAX_EDGE_LENGTH) {
+                if ((length > MAX_EDGE_LENGTH
+                        && !(e.getSource().getType() == CellType.RECTANGLE))
+                        || length > MAX_EDGE_LENGTH_LONG) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = e.getSource().getLayoutY()
-                            + (e.getSource().getLayoutY()
-                            - (screenSize.getHeight() - 150) / 2) * 2.5;
+                    double newY = (e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
+                            + ((e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                            - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
-                    newY = Math.min(newY, screenSize.getHeight() * 0.7);
+                    newY = Math.min(newY, screenSize.getHeight() * 0.67);
                     e.getSource().relocate(e.getSource().getLayoutX(), newY);
                 }
             }
@@ -232,12 +240,8 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
-     * Getter for the graphMouseHandling.
-     * <p>
-     * <<<<<<< HEAD
-     *
-     * @return the graphMouseHandling.
-     * >>>>>>> master
+     * Getter for the graphMouseHandling
+     * @return the graphMouseHandling object of the GraphController
      */
     public GraphMouseHandling getGraphMouseHandling() {
         return graphMouseHandling;

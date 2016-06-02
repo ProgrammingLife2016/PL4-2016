@@ -201,8 +201,13 @@ public class GraphReducerTest {
     }
 
     /**
+<<<<<<< HEAD
+     * Test whether the genomes that are in the deletion
+     * edge are added to the indel node when collapsed.
+=======
      * Test whether the genomes that are in the deletion edge
      * are added to the indel node when collapsed.
+>>>>>>> master
      */
     @Test
     public void testGenomesInIndel() {
@@ -215,20 +220,20 @@ public class GraphReducerTest {
         nodeMap.get(1).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
         nodeMap.get(2).setGenomes(new ArrayList<>(Arrays.asList("W", "X", "Y", "Z")));
         nodeMap.get(3).setGenomes(new ArrayList<>(Arrays.asList("A", "W", "X", "Y", "Z")));
-        nodeMap.get(4).setGenomes(new ArrayList<>(Arrays.asList("B", "C", "D")));
-        nodeMap.get(5).setGenomes(new ArrayList<>(Arrays.asList("A", "B", "C", "D",
-                "E", "W", "X", "Y", "Z")));
+        nodeMap.get(4).setGenomes(
+                new ArrayList<>(Arrays.asList("B", "C", "D")));
+        nodeMap.get(5).setGenomes(
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "W", "X", "Y", "Z")));
+
 
         GraphReducer.determineParents(nodeMap);
         GraphReducer.collapseIndel(nodeMap, nodeMap.get(1));
 
         assertEquals(nodeMap.get(5).getGenomes(),
-                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E",
-                        "W", "X", "Y", "Z")));
+                new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "W", "X", "Y", "Z")));
         assertEquals(nodeMap.get(3).getGenomes(),
                 new ArrayList<>(Arrays.asList("A", "W", "X", "Y", "Z")));
-        assertEquals(nodeMap.get(1).getLinks(),
-                new ArrayList<>(Arrays.asList(3, 4)));
+        assertEquals(nodeMap.get(1).getLinks(), new ArrayList<>(Arrays.asList(3, 4)));
         assertEquals(nodeMap.get(4).getGenomes(),
                 new ArrayList<>(Arrays.asList("B", "C", "D", "E")));
     }
@@ -262,6 +267,19 @@ public class GraphReducerTest {
                 new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
         assertEquals(nodeMap.get(6).getGenomes(),
                 new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E")));
+        assertEquals(nodeMap.get(1).getLinks(),
+                new ArrayList<>(Arrays.asList(2, 3)));
+        assertEquals(nodeMap.get(2).getType(), CellType.INDEL);
+        assertEquals(nodeMap.get(2).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C")));
+        assertEquals(nodeMap.get(4).getGenomes(),
+                new ArrayList<>(Arrays.asList("A", "B", "C")));
+    }
+
+    /**
+     * Test whether the genomes that are in the deletion edge
+     * are added to the indel node when collapsed.
+=======
         assertEquals(nodeMap.get(1).getLinks(), new ArrayList<>(Arrays.asList(2, 3)));
         assertEquals(nodeMap.get(2).getType(), CellType.INDEL);
         assertEquals(nodeMap.get(2).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
@@ -271,6 +289,7 @@ public class GraphReducerTest {
     /**
      * Test whether the genomes that are in the deletion edge are
      * added to the indel node when collapsed.
+>>>>>>> master
      */
     @Test
     public void testGenomesInBubble() {

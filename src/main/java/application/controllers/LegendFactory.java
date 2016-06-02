@@ -40,10 +40,10 @@ public class LegendFactory {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         grid.add(title, 0, 0);
 
-        grid.add(new RectangleCell(0), 0, 1);
-        grid.add(new BubbleCell(0, "N"), 0, 2);
-        grid.add(new IndelCell(0, "N"), 0, 3);
-        grid.add(new CollectionCell(0, "N"), 0, 4);
+        grid.add(new RectangleCell(0, 1), 0, 1);
+        grid.add(new BubbleCell(0, 1, "N"), 0, 2);
+        grid.add(new IndelCell(0, 1, "N"), 0, 3);
+        grid.add(new CollectionCell(0, 1, "N"), 0, 4);
 
         MiddleCell mc1 = new MiddleCell(0);
         MiddleCell mc2 = new MiddleCell(0);

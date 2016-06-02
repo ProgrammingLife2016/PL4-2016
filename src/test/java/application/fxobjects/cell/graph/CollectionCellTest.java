@@ -25,7 +25,7 @@ public class CollectionCellTest {
         StackPane pane = spy(new StackPane());
         Text text = spy(new Text());
 
-        c = new CollectionCell(1, pane, text);
+        c = new CollectionCell(1, 1, pane, text);
     }
 
     /**
