@@ -1,7 +1,5 @@
 package core;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -10,16 +8,19 @@ import java.util.List;
 import static core.AnnotationParser.readCDSFilteredGFF;
 
 /**
- * Class responsible
+ * Class responsible for processing the annotation data.
+ *
  * @author Niels Warnars
  */
 public class AnnotationProcessor {
 
+    private String reference;
     private List<Annotation> annotations;
-    private HashMap<Integer, Node> nodeMap;
+    private HashMap<Integer, Node> filteredNodeMap;
 
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String annotationsFile) throws IOException {
-        this.nodeMap = filterAnnotationsInNodeMap(nodeMap);
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String annotationsFile, String reference) throws IOException {
+        this.reference = reference;
+        this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
 
         InputStream gffIS = getClass().getResourceAsStream(annotationsFile);
         annotations = readCDSFilteredGFF(gffIS);
@@ -29,12 +30,10 @@ public class AnnotationProcessor {
      * Matches reference nodes and annotations to each other.
      */
     public void matchNodesAndAnnotations() {
-        System.out.println("Num CDS nodes: " + nodeMap.size());
-
         int startLoopIndex = 0;
-        int nodeMapSize = determineNodeMapSize(nodeMap);
+        int nodeMapSize = determineNodeMapSize(filteredNodeMap);
         for (Annotation a : annotations) {
-            startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, nodeMap, nodeMapSize);
+            startLoopIndex = a.detNodesSpannedByAnnotation(startLoopIndex, filteredNodeMap, nodeMapSize);
 
             for (Node n : a.getSpannedNodes()) {
                 n.addAnnotation(a);
@@ -66,18 +65,26 @@ public class AnnotationProcessor {
     /**
      * Filters out all nodes in a node map that do not belong to the reference.
      *
-     * @param nodeMap A given map containing all nodes read from disk.
      * @return A hash map of nodes present in the reference.
      */
-    private HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> nodeMap) {
-        int numNodes = nodeMap.size();
+    private HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
 
-        for (int i = 1; i <= numNodes; i++) {
-            if (!nodeMap.get(i).getGenomes().contains("MT_H37RV_BRD_V5.ref")) {
-                nodeMap.remove(i);
+        for (Node n : baseNodeMap.values()) {
+            if (n.getGenomes().contains(reference)) {
+                nodeMap.put(n.getId(), n);
             }
         }
 
         return nodeMap;
+    }
+
+    /**
+     * Gets the list of annotations.
+     *
+     * @return The list of annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
     }
 }
