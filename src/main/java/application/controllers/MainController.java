@@ -170,9 +170,10 @@ public class MainController extends Controller<BorderPane> {
         textField = new TextField();
         searchButton.setOnAction(e -> {
             if (!textField.getText().isEmpty()) {
-                treeController.applyCellHighlight(
-                        treeController.getCellByName(
-                                textField.textProperty().get().trim()));
+                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                        textField.textProperty().get().trim());
+                treeController.applyCellHighlight(cell);
+                treeController.selectStrain(cell);
                 textField.setText("");
                 fillTree();
             }

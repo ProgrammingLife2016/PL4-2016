@@ -110,6 +110,14 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Add a single strain to selection.
+     * @param cell the strain to add.
+     */
+    public void selectStrain(Cell cell) {
+        selectedStrains.add(cell);
+    }
+
+    /**
      * Colors the selected strains after un-hover.
      */
     public void colorSelectedStrains() {
@@ -426,7 +434,6 @@ public class TreeController extends Controller<ScrollPane> {
                 ) {
             if (c instanceof LeafCell) {
                 if (((LeafCell) c).getName().contains(name)) {
-                    selectedStrains.add((LeafCell) c);
                     return (Cell) c;
                 }
             }
@@ -445,7 +452,6 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     public void filterPhyloLineage(Filter f, boolean state) {
-        collectedStrains.clear();
         switch (f) {
             case LIN1:
                 META_DATA.values().forEach(s -> {
@@ -577,7 +583,6 @@ public class TreeController extends Controller<ScrollPane> {
                     }
                 });
                 break;
-
         }
     }
 }
