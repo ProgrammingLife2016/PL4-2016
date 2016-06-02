@@ -4,6 +4,11 @@ import application.fxobjects.cell.graph.BubbleCell;
 import application.fxobjects.cell.graph.CollectionCell;
 import application.fxobjects.cell.graph.IndelCell;
 import application.fxobjects.cell.graph.RectangleCell;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -26,26 +31,28 @@ public class LegendFactory {
      * @return A legend panel.
      */
     public HBox createLegend() {
-        final VBox col1 = new VBox();
-        col1.getChildren().add(new RectangleCell(0));
-        col1.getChildren().add(new BubbleCell(0, "N"));
-        col1.getChildren().add(new IndelCell(0, "N"));
-        col1.getChildren().add(new CollectionCell(0, "N"));
+        final GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
 
-        final VBox col2 = new VBox();
-        col2.getChildren().add(new Text("  -  Basic Node"));
-        col2.getChildren().add(new Text("  -  Bubble Node"));
-        col2.getChildren().add(new Text("  -  Indel Node"));
-        col2.getChildren().add(new Text("  -  Collection Node"));
+        grid.add(new RectangleCell(0), 0, 0);
+        grid.add(new BubbleCell(0, "N"), 0, 1);
+        grid.add(new IndelCell(0, "N"), 0, 2);
+        grid.add(new CollectionCell(0, "N"), 0, 3);
 
-        final VBox col3 = new VBox();
-        col3.getChildren().add(new Text(""));
-        col3.getChildren().add(new Text("  -  Contains N other nodes"));
-        col3.getChildren().add(new Text("  -  Contains N other nodes"));
-        col3.getChildren().add(new Text("  -  Contains N (horizontally collapsed) nodes"));
+        grid.add(new Text("-    Basic Node"), 1, 0);
+        grid.add(new Text("-    Bubble Node"), 1, 1);
+        grid.add(new Text("-    Indel Node"), 1, 2);
+        grid.add(new Text("-    Collection Node"), 1, 3);
+
+        grid.add(new Text(""), 2, 0);
+        grid.add(new Text("  -    Contains N other nodes"), 2, 1);
+        grid.add(new Text("  -    Contains N other nodes"), 2, 2);
+        grid.add(new Text("  -    Contains N (horizontally collapsed) nodes"), 2, 3);
 
         HBox legend = new HBox();
-        legend.getChildren().addAll(col1, col2, col3);
+        legend.getChildren().addAll(grid);
         return legend;
     }
 
