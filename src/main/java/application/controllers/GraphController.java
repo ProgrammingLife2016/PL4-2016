@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
 import core.graph.Graph;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
@@ -145,9 +146,25 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
 
+            for(Edge e : graph.getModel().getAddedEdges()) {
+                double xLength = e.getLine().endXProperty().get() - e.getLine().startXProperty().get();
+                double yLength = e.getLine().endYProperty().get() - e.getLine().startYProperty().get();
+                double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+                System.out.println(e.getSource().toString() + " " + length);
+                if (length > 200) {
+                    e.getLine().getStrokeDashArray().addAll(3d, 17d);
+                    e.getLine().setOpacity(0.2d);
+                    double newY = e.getSource().getLayoutY() - (screenSize.getHeight() - 150) / 2;
+                    e.getSource().relocate(e.getSource().getLayoutX(), e.getSource().getLayoutY() + newY * 3);
+                }
+
+            }
+
             initMouseHandler();
             graph.endUpdate();
         }
+
+
         //Set Graph as center.
         this.getRoot().setContent(root);
     }
