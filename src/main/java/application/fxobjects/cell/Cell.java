@@ -3,6 +3,7 @@ package application.fxobjects.cell;
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +135,12 @@ public abstract class Cell extends Pane {
     public String toString() {
         return cellId + "";
     }
+
+    /**
+     * Returns the cellshape.
+     * @return the cellshape.
+     */
+    public abstract Shape getCellShape();
 
     /**
      * Abstract method.

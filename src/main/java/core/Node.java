@@ -1,5 +1,6 @@
 package core;
 
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Node {
     /**
      * The type of node.
      */
-    private NodeType type;
+    private CellType type;
 
     /**
      * Actual nucleic acid sequence of the node.
@@ -68,7 +69,7 @@ public class Node {
      * @param z   - The 'depth' of the node in the genome.
      */
     public Node(int id, String seq, int z) {
-        this(id, NodeType.BASE, seq, z);
+        this(id, CellType.RECTANGLE, seq, z);
     }
 
 
@@ -80,7 +81,7 @@ public class Node {
      * @param seq  - Actual nucleic acid sequence contents of the node.
      * @param z    - The 'depth' of the node in the genome.
      */
-    public Node(int id, NodeType type, String seq, int z) {
+    public Node(int id, CellType type, String seq, int z) {
         this.id = id;
         this.type = type;
         this.sequence = seq;
@@ -241,7 +242,7 @@ public class Node {
      *
      * @return The node type.
      */
-    public NodeType getType() {
+    public CellType getType() {
         return type;
     }
 
@@ -250,7 +251,7 @@ public class Node {
      *
      * @param type The node type.
      */
-    public void setType(NodeType type) {
+    public void setType(CellType type) {
         this.type = type;
     }
 

@@ -188,6 +188,10 @@ public class MainController extends Controller<BorderPane> {
                 graphController.getGraph().reset();
                 fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
                 graphController.takeSnapshot();
+                if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
+                    graphController.focus(getGraphController()
+                            .getGraphMouseHandling().getPrevClick());
+                }
             }
         });
 

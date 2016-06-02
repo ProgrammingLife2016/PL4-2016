@@ -198,15 +198,12 @@ public class Graph {
 
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
+                if (from == null) { continue; }
                 if (intersection(from.getGenomes(), currentGenomes) > 0) {
                     for (int j : from.getLinks(nodeMap)) {
                         Node to = nodeMap.get(j);
                         if (intersection(to.getGenomes(), currentGenomes) > 0) {
                             //Add next cell
-
                             addCell(nodeMap, toret, j, ref, to, from);
                         }
                     }
@@ -220,10 +217,7 @@ public class Graph {
 
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
-
+                if (from == null) { continue; }
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).
@@ -251,21 +245,20 @@ public class Graph {
                         Object ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
-        NodeType type = nodeMap.get(j).getType();
+        CellType type = nodeMap.get(j).getType();
 
-        if (type == NodeType.BASE) {
+        if (type == CellType.RECTANGLE) {
             toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
                     CellType.RECTANGLE);
-
-        } else if (type == NodeType.BUBBLE) {
+        } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()),to.getNucleotides(),
                     CellType.BUBBLE);
-        } else if (type == NodeType.INDEL) {
+        } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.INDEL);
-        } else if (type == NodeType.COLLECTION) {
+        }else if (type == CellType.COLLECTION) {
             toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
         }
