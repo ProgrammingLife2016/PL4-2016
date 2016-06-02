@@ -418,30 +418,32 @@ public class TreeController extends Controller<ScrollPane> {
         }
     }
 
-    public void getCellByName(String name) {
-        double max = 0;
-        double cLoc = 0;
+    /**
+     * Method that selects Cells by its name.
+     *
+     * @param name the name to search for.
+     */
+    public void applySelectionByName(String name) {
         for (Object c : root.getChildren()
                 ) {
             if (c instanceof LeafCell) {
                 if (((LeafCell) c).getName().contains(name)) {
                     selectedStrains.add((LeafCell) c);
-                    System.out.println("Found it");
-                    cLoc = ((LeafCell) c).getLayoutY();
-                }
-                if (((LeafCell) c).getLayoutX() > max) {
-                    max = ((LeafCell) c).getLayoutY();
                 }
             }
         }
         colorSelectedStrains();
         modifyGraphOptions();
-        getRoot().setVvalue(cLoc/max);
     }
 
+    /**
+     * Method to clear all selected genomes.
+     */
     public void clearSelection() {
         selectedStrains.forEach(this::revertCellHighlight);
         selectedStrains.clear();
+        modifyGraphOptions();
+
     }
 //
 //    public void filterPhyloLineage(Filter f) {
