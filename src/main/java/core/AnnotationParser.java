@@ -53,7 +53,7 @@ public final class AnnotationParser {
                 if (pair[0].equals("calhounClass")) {
                     ann.setCallhounClassAttr(pair[1]);
                 } else if (pair[0].equals("ID")) {
-                    ann.setIdAttr(Double.parseDouble(pair[1]));
+                    ann.setIdAttr(Long.parseLong(pair[1]));
                 } else if (pair[0].equals("Name")) {
                     ann.setNameAttr(pair[1]);
                 } else if (pair[0].equals("displayName")) {
@@ -75,9 +75,14 @@ public final class AnnotationParser {
      * @return A filtered and sorted list of annotations.
      * @throws IOException Throw an exception on read failure.
      */
-    public static List<Annotation> readCDSFilteredGFF(InputStream input) throws IOException {
-        List<Annotation> annotations = readGFF(input).stream()
-                .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
+    public static List<Annotation> readCDSFilteredGFF(InputStream input) {
+        List<Annotation> annotations = null;
+        try {
+            annotations = readGFF(input).stream()
+                    .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Collections.sort(annotations);
         return annotations;

@@ -1,14 +1,15 @@
 package application.controllers;
 
+import core.Annotation;
+import core.AnnotationProcessor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -164,6 +165,25 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createAnnotationSearchBox() {
         annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
+
+        TextField box = (TextField) annotationSearchBox.getChildren().get(2);
+        Button search = (Button) annotationSearchBox.getChildren().get(3);
+
+        search.setOnAction(e -> {
+            if ((box.getText() != null && !box.getText().isEmpty())) {
+                long input = Long.parseLong(box.getText());
+                System.out.println("Input: " + input);
+
+                List<Annotation> annotations
+                        = graphController.getGraph().getModel().getAnnotations();
+                Annotation ann = AnnotationProcessor.findAnnotationByID(
+                        annotations, input);
+
+                System.out.println(ann);
+            } else {
+                System.out.println("No input");
+            }
+        });
     }
 
     /**

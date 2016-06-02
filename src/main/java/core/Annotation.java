@@ -27,7 +27,7 @@ public class Annotation implements Comparable<Annotation> {
     private String phase;
 
     private String callhounClassAttr;
-    private double idAttr;
+    private long idAttr;
     private String nameAttr;
     private String displayNameAttr;
 
@@ -205,7 +205,7 @@ public class Annotation implements Comparable<Annotation> {
      * Gets the idAttr.
      * @return The idAttr.
      */
-    public double getIdAttr() {
+    public long getIdAttr() {
         return idAttr;
     }
 
@@ -213,7 +213,7 @@ public class Annotation implements Comparable<Annotation> {
      * Sets the idAttr.
      * @param idAttr The idAttr.
      */
-    public void setIdAttr(double idAttr) {
+    public void setIdAttr(long idAttr) {
         this.idAttr = idAttr;
     }
 

@@ -48,20 +48,16 @@ public class AnnotationSearchBoxFactory {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         grid.add(title, 0, 0);
 
+        Text title2 = new Text("(Only works when completely zoomed in)");
+        title2.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        grid.add(title2, 0, 1);
+
         final TextField box = new TextField();
         box.setPrefColumnCount(10);
-        grid.add(box, 0, 1);
+        grid.add(box, 0, 2);
 
         Button search = new Button("Search");
-        grid.add(search, 1, 1);
-
-        search.setOnAction(e -> {
-            if ((box.getText() != null && !box.getText().isEmpty())) {
-                System.out.println("Input: " + box.getText());
-            } else {
-                System.out.println("No input");
-            }
-        });
+        grid.add(search, 1, 2);
 
         return grid;
     }

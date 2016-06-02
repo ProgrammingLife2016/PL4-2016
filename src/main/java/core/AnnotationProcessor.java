@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import static core.AnnotationParser.readCDSFilteredGFF;
-
 /**
  * Class responsible for processing the annotation data.
  *
@@ -20,11 +18,11 @@ public class AnnotationProcessor {
      * Initializes a new annotation parser.
      *
      * @param nodeMap A given hash map of nodes.
-     * @param gffFile The name/path of the GFF file.
+     * @param annotations List of annotations.
      * @throws IOException Throw exception on read failure.
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, String gffFile) throws IOException {
-        annotations = readCDSFilteredGFF(getClass().getResourceAsStream(gffFile));
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) throws IOException {
+        this.annotations = annotations;
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
     }
 
@@ -91,7 +89,7 @@ public class AnnotationProcessor {
      * @param id A specified annotation id.
      * @return The found annotation.
      */
-    public Annotation findAnnotationByID(long id) {
+    public static Annotation findAnnotationByID(List<Annotation> annotations, long id) {
         for (Annotation a : annotations) {
             if (a.getIdAttr() == id) {
                 return a;

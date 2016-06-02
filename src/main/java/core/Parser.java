@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Skullyhoofd on 24/04/2016.
@@ -35,7 +36,7 @@ public class Parser {
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     public final HashMap<Integer, Node>
-    readGFA(final InputStream input) {
+    readGFA(final InputStream input, List<Annotation> annotations) {
         try {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
@@ -45,13 +46,11 @@ public class Parser {
 
             bReader.close();
 
-            new AnnotationProcessor(nodeMap, "/decorationV5_20130412.gff")
+            new AnnotationProcessor(nodeMap, annotations)
                     .matchNodesAndAnnotations();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("POC - NodeMap size: " + nodeMap.size());
 
         int counter = 0;
         for (Node n : nodeMap.values()) {
@@ -59,9 +58,7 @@ public class Parser {
                 counter++;
             }
         }
-
-        System.out.println("POC - Num reference nodes: " + counter);
-
+        
         return nodeMap;
     }
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static core.AnnotationParser.readCDSFilteredGFF;
+
 /**
  * Class representing a graph.
  */
@@ -44,6 +46,11 @@ public class Graph {
      */
     private List<HashMap<Integer, Node>> levelMaps;
 
+    /**
+     * Reference annotations.
+     */
+    private List<Annotation> annotations;
+
 
     /**
      * Class constructor.
@@ -52,6 +59,9 @@ public class Graph {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
+
+        annotations = readCDSFilteredGFF(
+                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
 
         startMap = getNodeMapFromFile();
         nodeIds = startMap.size();
@@ -68,7 +78,7 @@ public class Graph {
         try {
             Parser parser = new Parser();
             InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-            startMap = parser.readGFA(inputStream);
+            startMap = parser.readGFA(inputStream, annotations);
 
             inputStream.close();
         } catch (IOException e) {
@@ -180,10 +190,13 @@ public class Graph {
      * @return the new model
      */
     public Model generateModel(Object ref, int depth, Model toret) {
-        //Apply the levelMaps
+        //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
+        toret.setAnnotations(annotations);
+
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+
         //Root Node
         Node root = nodeMap.get(1);
         if (currentGenomes.size() > 0) { //Draw selected references
