@@ -41,6 +41,8 @@ public class MainController extends Controller<BorderPane> {
     private ListFactory listFactory;
     private StackPane box;
     private int count;
+    private int secondCount;
+    private int selectedIndex;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -50,6 +52,7 @@ public class MainController extends Controller<BorderPane> {
         loadFXMLfile("/fxml/main.fxml");
 
         this.count = -1;
+        this.secondCount = -1;
 
         // Create the new GraphController
         graphController = new GraphController(this);
@@ -90,11 +93,13 @@ public class MainController extends Controller<BorderPane> {
      */
     private void initGUI() {
         createZoomBoxAndLegend();
-        createList();
-        this.getRoot().setCenter(graphController.getRoot());
-        //graphController.initKeyHandler();
+        if (secondCount == -1) {
+            createList();
+            setListItems();
+            secondCount++;
+        }
 
-        setListItems();
+        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -111,7 +116,6 @@ public class MainController extends Controller<BorderPane> {
         graphController.update(ref, currentView);
 
         graphController.getZoomBox().fillZoomBox(count == -1);
-
         count++;
         initGUI();
     }
@@ -211,24 +215,34 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the Info-list
      */
-    private void createList() {
+    public void createList() {
         listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
         list = listFactory.getList();
 
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                graphController.getGraph().reset();
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                //graphController.takeSnapshot();
-                if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
-                    graphController.focus(getGraphController()
-                            .getGraphMouseHandling().getPrevClick());
-                }
-            }
-        });
+        list.setOnMouseClicked(event -> listSelect());
 
+        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
+
+        setListItems();
         this.getRoot().setRight(listVBox);
+    }
+
+
+    /**
+     * Method to perform action upon listItem selection
+     */
+    public void listSelect() {
+        if (!(list.getSelectionModel().getSelectedItem() == null)) {
+            selectedIndex = list.getSelectionModel().getSelectedIndex();
+            graphController.getGraph().reset();
+            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+            if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
+                graphController.focus(getGraphController()
+                        .getGraphMouseHandling().getPrevClick());
+            }
+        }
+
     }
 
     /**
