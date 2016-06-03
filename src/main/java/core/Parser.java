@@ -92,17 +92,6 @@ public class Parser {
         }
     }
 
-//    /**
-//     * Read gfa file as a resource in the jar.
-//     * @param input - the input.
-//     * @return - A HashMap containing the information from the .gfa file.
-//     */
-//    public final HashMap<Integer, Node> readGFAAsResource(final InputStream input){
-//        BufferedReader bReader;
-//        bReader = new BufferedReader(new InputStreamReader(input));
-//        return readGFA(bReader, null);
-//    }
-
     /**
      * Read gfa file from a filepath.
      * @param input - the input
@@ -110,15 +99,7 @@ public class Parser {
      * @throws IOException
      */
     public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a) throws IOException{
-//        InputStream stream =
-//
-
-//        BufferedReader bReader;
-//        BufferedReader = new BufferedReader(new FileReader(input));
-//
         FileInputStream fileInputStream = new FileInputStream(input);
-
-//        InputStream inputStream = new InputStream(bReader);
 
         return readGFA(fileInputStream, a);
     }
