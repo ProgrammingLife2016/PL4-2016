@@ -193,34 +193,16 @@ public class Graph {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
         toret.setAnnotations(annotations);
+
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
 
         //Root Node
         Node root = nodeMap.get(1);
         if (currentGenomes.size() > 0) { //Draw selected references
-            //We are now drawing only the selected items.
-            // Only draw when the intersection > 0 (Node contains genome that we
-            // want to draw.
-            if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(),
-                        root.getNucleotides(), CellType.RECTANGLE); }
-            // In this case we know that the genomes in the graph are only this ones.
-            genomes = currentGenomes;
-
-            for (int i = 1; i < nodeIds; i++) {
-                Node from = nodeMap.get(i);
-                if (from == null) { continue; }
-                if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                    for (int j : from.getLinks(nodeMap)) {
-                        Node to = nodeMap.get(j);
-                        if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                            //Add next cell
-                            addCell(nodeMap, toret, j, ref, to, from);
-                        }
-                    }
-                }
-            }
+            // We are now drawing only the selected items.
+            System.out.println("DRAWING SELECTED NODES");
+            generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
             //Create a new genome list.
             toret.addCell(root.getId(), root.getSequence(),
@@ -239,10 +221,45 @@ public class Graph {
                 }
             }
         }
+
         toret.setLayout();
         return toret;
     }
 
+
+    /**
+     * Draws the selected genomes.
+     *
+     * @param nodeMap map of nodes.
+     * @param root Root of the graph.
+     * @param toret A given model.
+     * @param ref Reference object.
+     */
+    private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
+                                                 Model toret, Object ref) {
+        if (intersection(root.getGenomes(), currentGenomes) > 0) {
+            toret.addCell(root.getId(), root.getSequence(),
+                    root.getNucleotides(), CellType.RECTANGLE); }
+
+        // In this case we know that the genomes in the graph are only this ones.
+        genomes = currentGenomes;
+
+        // Only draw when the intersection > 0 (Node contains genome that we
+        // want to draw.
+        for (int i = 1; i < nodeIds; i++) {
+            Node from = nodeMap.get(i);
+            if (from == null) { continue; }
+            if (intersection(from.getGenomes(), currentGenomes) > 0) {
+                for (int j : from.getLinks(nodeMap)) {
+                    Node to = nodeMap.get(j);
+                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
+                        //Add next cell
+                        addCell(nodeMap, toret, j, ref, to, from);
+                    }
+                }
+            }
+        }
+    }
     /**
      * Method to add a new Cell to the graph
      *

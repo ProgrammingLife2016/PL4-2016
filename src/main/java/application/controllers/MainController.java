@@ -175,14 +175,11 @@ public class MainController extends Controller<BorderPane> {
         search.setOnAction(e -> {
             if (box.getText() != null && !box.getText().isEmpty()) {
                 long input = Long.parseLong(box.getText());
-                System.out.println("Input: " + input);
 
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
                 Annotation ann = AnnotationProcessor.findAnnotationByID(
                         annotations, input);
-
-                System.out.println(ann);
 
                 Map<Integer, application.fxobjects.cell.Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
@@ -190,8 +187,6 @@ public class MainController extends Controller<BorderPane> {
                 for (Node n : ann.getSpannedNodes()) {
                     ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                 }
-            } else {
-                System.out.println("No input");
             }
         });
     }
