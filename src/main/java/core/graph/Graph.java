@@ -62,11 +62,6 @@ public class Graph {
 
         annotations = readCDSFilteredGFF(
                 getClass().getResourceAsStream("/decorationV5_20130412.gff"));
-
-//        startMap = getNodeMapFromFile();
-//        nodeIds = startMap.size();
-//        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-
     }
 
     /**
@@ -78,8 +73,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String s) {
         try {
             Parser parser = new Parser();
-            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-            //startMap = parser.readGFA(inputStream, annotations);
 
             startMap = parser.readGFAAsString(s, annotations);
             nodeIds = startMap.size();
