@@ -1,5 +1,9 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.RectangleCell;
+import core.Annotation;
+import core.AnnotationProcessor;
+import core.Node;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -29,15 +33,19 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
+    private GridPane annotationSearchBox;
     private HBox legend;
     private VBox listVBox;
     private ListView list;
-    private ScrollPane infoScroller;
     private int currentView;
     private ListFactory listFactory;
     private TextField textField;
     private Button searchButton;
     private Button deselectButton;
+    private StackPane box;
+    private int count;
+    private int secondCount;
+    private int selectedIndex;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -45,6 +53,9 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
+
+        this.count = -1;
+        this.secondCount = -1;
 
         // Create the new GraphController
         graphController = new GraphController(this);
@@ -83,12 +94,13 @@ public class MainController extends Controller<BorderPane> {
      */
     private void initGUI() {
         createZoomBoxAndLegend();
-        createList();
-        this.getRoot().setCenter(graphController.getRoot());
-        graphController.takeSnapshot();
-        graphController.initKeyHandler();
+        if (secondCount == -1) {
+            createList();
+            setListItems();
+            secondCount++;
+        }
 
-        setListItems();
+        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -104,6 +116,8 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.update(ref, currentView);
 
+        graphController.getZoomBox().fillZoomBox(count == -1);
+        count++;
         initGUI();
     }
 
@@ -138,16 +152,48 @@ public class MainController extends Controller<BorderPane> {
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
 
-        graphController.getZoomController().createZoomBox();
-        StackPane zoombox = graphController.getZoomController().getZoomBox().getZoomBox();
-        graphController.initKeyHandler();
+        // Place the annotationsearch box
+        createAnnotationSearchBox();
+        annotationSearchBox.setAlignment(Pos.CENTER_LEFT);
 
+        // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
-        hbox.setAlignment(Pos.CENTER);
 
-        hbox.getChildren().addAll(zoombox, legend);
+        // Place the zoom box
+        box = graphController.getZoomBox().getZoomBox();
+
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(annotationSearchBox, box, legend);
         this.getRoot().setBottom(hbox);
+    }
+
+    /**
+     * Method to create the annotation search box.
+     */
+    private void createAnnotationSearchBox() {
+        annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
+
+        TextField box = (TextField) annotationSearchBox.getChildren().get(2);
+        Button search = (Button) annotationSearchBox.getChildren().get(3);
+
+        search.setOnAction(e -> {
+            if (box.getText() != null && !box.getText().isEmpty()) {
+                long input = Long.parseLong(box.getText());
+
+                List<Annotation> annotations
+                        = graphController.getGraph().getModel().getAnnotations();
+                Annotation ann = AnnotationProcessor.findAnnotationByID(
+                        annotations, input);
+
+                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                        = graphController.getGraph().getModel().getCellMap();
+
+                for (Node n : ann.getSpannedNodes()) {
+                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                }
+            }
+        });
     }
 
     /**
@@ -197,16 +243,13 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the Info-list
      */
-    private void createList() {
+    public void createList() {
         listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
-        infoScroller = listFactory.getInfoScroller();
         list = listFactory.getList();
 
-        list.setOnKeyPressed(graphController.getZoomController().getZoomBox().getKeyHandler());
-        infoScroller.setOnKeyPressed(graphController.getZoomController()
-                .getZoomBox().getKeyHandler());
-
+        list.setOnMouseClicked(event -> listSelect());
+        
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();
@@ -218,7 +261,27 @@ public class MainController extends Controller<BorderPane> {
             }
         });
 
+        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
+
+        setListItems();
         this.getRoot().setRight(listVBox);
+    }
+
+
+    /**
+     * Method to perform action upon listItem selection
+     */
+    public void listSelect() {
+        if (!(list.getSelectionModel().getSelectedItem() == null)) {
+            selectedIndex = list.getSelectionModel().getSelectedIndex();
+            graphController.getGraph().reset();
+            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+            if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
+                graphController.focus(getGraphController()
+                        .getGraphMouseHandling().getPrevClick());
+            }
+        }
+
     }
 
     /**

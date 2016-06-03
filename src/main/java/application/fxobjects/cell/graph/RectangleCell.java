@@ -2,40 +2,56 @@ package application.fxobjects.cell.graph;
 
 import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import javafx.scene.shape.Shape;
 
 /**
  * Class representing a Rectangle shape. *
  */
 public class RectangleCell extends Cell {
     private final CellType type = CellType.RECTANGLE;
+    private Shape shape;
+
+    /**
+     * Rectangle cell constructor.
+     * @param id The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
+     */
+    public RectangleCell(int id, int nucleotides) {
+        this(id, nucleotides, new StackPane());
+    }
 
     /**
      * Rectangle cell constructor.
      *
-     * @param id  The ID of a cell.
-     */
-    public RectangleCell(int id) {
-        this(id, new StackPane());
-    }
-    /**
-     * Rectangle cell constructor.
-     *
-     * @param id  The ID of a cell.
+     * @param id   The ID of a cell.
+     * @param nucleotides The amount of nucleotides contained in this cell.
      * @param pane A given stack pane.
      */
-    public RectangleCell(int id, StackPane pane) {
+    public RectangleCell(int id, int nucleotides, StackPane pane) {
         super(id);
 
         pane.setMaxHeight(10);
-        Rectangle view = new Rectangle(10, 10);
-        view.setStroke(Color.DODGERBLUE);
-        view.setFill(Color.DODGERBLUE);
+        double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
+        shape = new Rectangle(sideSize, sideSize);
+        shape.setStroke(Color.DODGERBLUE);
+        shape.setStrokeWidth(1);
+        shape.setFill(Color.DODGERBLUE);
+        pane.getChildren().addAll(shape);
 
-        pane.getChildren().addAll(view);
         setView(pane);
+    }
+
+    /**
+     * Highlight the rectangle cell.
+     */
+    public void setHighLight() {
+        shape.setStroke(Color.YELLOW);
+        shape.setStrokeWidth(4);
     }
 
     /**
@@ -47,4 +63,37 @@ public class RectangleCell extends Cell {
         return type;
     }
 
+    /**
+     * Returns the cellshape.
+     *
+     * @return the cellshape.
+     */
+    public Shape getCellShape() {
+        return shape;
+    }
+
+    /**
+     * Method to set the focus.
+     */
+    public void focus() {
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.BLACK);
+        borderGlow.setWidth(70);
+        borderGlow.setHeight(70);
+        this.setEffect(borderGlow);
+
+        shape.setStroke(Color.PURPLE);
+        shape.setStrokeWidth(4);
+    }
+
+    /**
+     * Method to reset the focus.
+     */
+    public void resetFocus() {
+        this.setEffect(null);
+        shape.setStroke(Color.DODGERBLUE);
+        shape.setStrokeWidth(1);
+    }
 }

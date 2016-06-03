@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static core.AnnotationParser.readCDSFilteredGFF;
+
 /**
  * Class representing a graph.
  */
@@ -24,7 +26,6 @@ public class Graph {
     private int currentInt = -1;
     private Object currentRef = null;
     private int nodeIds;
-
     /**
      * All the genomes that are in this graph.
      */
@@ -45,6 +46,11 @@ public class Graph {
      */
     private List<HashMap<Integer, Node>> levelMaps;
 
+    /**
+     * Reference annotations.
+     */
+    private List<Annotation> annotations;
+
 
     /**
      * Class constructor.
@@ -53,6 +59,9 @@ public class Graph {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
+
+        annotations = readCDSFilteredGFF(
+                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
 
         startMap = getNodeMapFromFile();
         nodeIds = startMap.size();
@@ -63,14 +72,13 @@ public class Graph {
      * Read a node map from a gfa file on disk.
      *
      * @return A node map read from file.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile() {
         try {
             Parser parser = new Parser();
             InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-            startMap = parser.readGFA(inputStream);
+            startMap = parser.readGFA(inputStream, annotations);
 
             inputStream.close();
         } catch (IOException e) {
@@ -84,10 +92,9 @@ public class Graph {
     /**
      * Add the nodes and edges of the graph to the model.
      *
-     * @param ref             the reference string.
-     * @param depth           the depth to draw.
+     * @param ref   the reference string.
+     * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
-     * @throws IOException Throw exception on read GFA read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(Object ref, int depth) {
@@ -133,7 +140,7 @@ public class Graph {
     /**
      * Method to Zoom out
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneUp(int depth) {
         int finalDepth = depth;
@@ -149,7 +156,7 @@ public class Graph {
     /**
      * Method to Zoom in
      *
-     * @param depth           Depth to be loaded
+     * @param depth Depth to be loaded
      */
     private void loadOneDown(int depth) {
         int finalDepth = depth;
@@ -183,50 +190,28 @@ public class Graph {
      * @return the new model
      */
     public Model generateModel(Object ref, int depth, Model toret) {
-        //Apply the levelMaps
+        //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
+        toret.setAnnotations(annotations);
+
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+
         //Root Node
         Node root = nodeMap.get(1);
         if (currentGenomes.size() > 0) { //Draw selected references
-            //We are now drawing only the selected items.
-            // Only draw when the intersection > 0 (Node contains genome that we
-            // want to draw.
-            if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
-            }
-            // In this case we know that the genomes in the graph are only this ones.
-            genomes = currentGenomes;
-
-            for (int i = 1; i < nodeIds; i++) {
-                Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
-                if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                    for (int j : from.getLinks(nodeMap)) {
-                        Node to = nodeMap.get(j);
-                        if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                            //Add next cell
-
-                            addCell(nodeMap, toret, j, ref, to, from);
-                        }
-                    }
-                }
-            }
+            // We are now drawing only the selected items.
+            System.out.println("DRAWING SELECTED NODES");
+            generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
             //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(), CellType.RECTANGLE);
+            toret.addCell(root.getId(), root.getSequence(),
+                    root.getNucleotides(), CellType.RECTANGLE);
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
-
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) {
-                    continue;
-                }
-
+                if (from == null) { continue; }
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).
@@ -236,39 +221,74 @@ public class Graph {
                 }
             }
         }
+
         toret.setLayout();
         return toret;
     }
 
+
+    /**
+     * Draws the selected genomes.
+     *
+     * @param nodeMap map of nodes.
+     * @param root Root of the graph.
+     * @param toret A given model.
+     * @param ref Reference object.
+     */
+    private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
+                                                 Model toret, Object ref) {
+        if (intersection(root.getGenomes(), currentGenomes) > 0) {
+            toret.addCell(root.getId(), root.getSequence(),
+                    root.getNucleotides(), CellType.RECTANGLE); }
+
+        // In this case we know that the genomes in the graph are only this ones.
+        genomes = currentGenomes;
+
+        // Only draw when the intersection > 0 (Node contains genome that we
+        // want to draw.
+        for (int i = 1; i < nodeIds; i++) {
+            Node from = nodeMap.get(i);
+            if (from == null) { continue; }
+            if (intersection(from.getGenomes(), currentGenomes) > 0) {
+                for (int j : from.getLinks(nodeMap)) {
+                    Node to = nodeMap.get(j);
+                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
+                        //Add next cell
+                        addCell(nodeMap, toret, j, ref, to, from);
+                    }
+                }
+            }
+        }
+    }
     /**
      * Method to add a new Cell to the graph
+     *
      * @param nodeMap the current NodeMap we are reading from
-     * @param toret the Model the Cell is added to
-     * @param j the number of the Cell
-     * @param ref the current Reference strain
-     * @param to cell we are going to
-     * @param from cell we are coming from
+     * @param toret   the Model the Cell is added to
+     * @param j       the number of the Cell
+     * @param ref     the current Reference strain
+     * @param to      cell we are going to
+     * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
                         Object ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
-        NodeType type = nodeMap.get(j).getType();
+        CellType type = nodeMap.get(j).getType();
 
-        if (type == NodeType.BASE) {
-            toret.addCell(to.getId(), to.getSequence(),
+        if (type == CellType.RECTANGLE) {
+            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
                     CellType.RECTANGLE);
-
-        } else if (type == NodeType.BUBBLE) {
+        } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
                     Integer.toString(to.getCollapseLevel()),
-                    CellType.BUBBLE);
-        } else if (type == NodeType.INDEL) {
+                    to.getNucleotides(), CellType.BUBBLE);
+        } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()),
+                    Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.INDEL);
-        } else if (type == NodeType.COLLECTION) {
-            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()),
+        } else if (type == CellType.COLLECTION) {
+            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
         }
 
@@ -368,45 +388,55 @@ public class Graph {
     }
 
     /**
-     * Get the current level
+     * Get the current level.
      *
-     * @return the current level
+     * @return the current level.
      */
     public int getCurrentInt() {
         return currentInt;
     }
 
     /**
-     * Get the current highlighted strain
+     * Get the current highlighted strain.
      *
-     * @return the current highlighted strain
+     * @return the current highlighted strain.
      */
     public Object getCurrentRef() {
         return currentRef;
     }
 
     /**
-     * Get the levelMaps
+     * Get the levelMaps.
      *
-     * @return the levelMaps
+     * @return the levelMaps.
      */
     public List<HashMap<Integer, Node>> getLevelMaps() {
         return levelMaps;
     }
 
     /**
-     * Set the levelMaps
+     * Set the levelMaps.
      *
-     * @param levelMaps the levelMaps
+     * @param levelMaps the levelMaps.
      */
     public void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
         this.levelMaps = levelMaps;
     }
 
+
     /**
-     * Method to reset the current view
+     * Method to reset the current view.
      */
     public void reset() {
         this.currentInt = -1;
+    }
+
+    /**
+     * Method to get the MaxWidth.
+     *
+     * @return the MaxWidth.
+     */
+    public double getMaxWidth() {
+        return current.getMaxWidth();
     }
 }

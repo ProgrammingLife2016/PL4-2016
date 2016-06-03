@@ -18,7 +18,7 @@ public class Main extends Application {
     /**
      * Usual main method to start the application.
      *
-     * @param args runtime arguments.
+     * @param args runtime agit cgitrguments.
      */
     public static void main(String[] args) {
         launch(args);

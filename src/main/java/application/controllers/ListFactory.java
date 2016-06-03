@@ -91,6 +91,7 @@ public class ListFactory {
      */
     public void modifyNodeInfo(String id) {
         this.id.setText(id);
+        this.id.setWrappingWidth(infoScroller.widthProperty().doubleValue());
     }
 
     /**

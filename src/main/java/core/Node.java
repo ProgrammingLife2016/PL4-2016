@@ -1,11 +1,14 @@
 package core;
 
+import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  * Created by Skullyhoofd on 25/04/2016.
@@ -23,7 +26,7 @@ public class Node {
     /**
      * The type of node.
      */
-    private NodeType type;
+    private CellType type;
 
     /**
      * Actual nucleic acid sequence of the node.
@@ -36,7 +39,8 @@ public class Node {
     private int collapseLevel;
 
     /**
-     * 'Depth' of the node in the genome.
+     * 'Depth' of the node in the genome. This is represented as the n'th nucleotide.
+     * The zIndex of the next node will be zIndex + len(sequence).
      */
     private int zIndex;
 
@@ -56,6 +60,16 @@ public class Node {
     private List<String> genomes;
 
     /**
+     * The annotations that this node is part of.
+     */
+    private List<Annotation> annotations;
+
+    /*
+     * Amount of nucleotides in the node.
+     */
+    private int nucleotides;
+
+    /**
      * Node constructor.
      *
      * @param id  - Node identifier.
@@ -63,7 +77,7 @@ public class Node {
      * @param z   - The 'depth' of the node in the genome.
      */
     public Node(int id, String seq, int z) {
-        this(id, NodeType.BASE, seq, z);
+        this(id, CellType.RECTANGLE, seq, z);
     }
 
 
@@ -75,7 +89,7 @@ public class Node {
      * @param seq  - Actual nucleic acid sequence contents of the node.
      * @param z    - The 'depth' of the node in the genome.
      */
-    public Node(int id, NodeType type, String seq, int z) {
+    public Node(int id, CellType type, String seq, int z) {
         this.id = id;
         this.type = type;
         this.sequence = seq;
@@ -83,7 +97,9 @@ public class Node {
         this.links = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
+        this.annotations = new ArrayList<>();
 
+        this.nucleotides = seq.length();
         this.collapseLevel = 1;
     }
 
@@ -236,7 +252,7 @@ public class Node {
      *
      * @return The node type.
      */
-    public NodeType getType() {
+    public CellType getType() {
         return type;
     }
 
@@ -245,7 +261,7 @@ public class Node {
      *
      * @param type The node type.
      */
-    public void setType(NodeType type) {
+    public void setType(CellType type) {
         this.type = type;
     }
 
@@ -373,6 +389,59 @@ public class Node {
         this.genomes = genomes;
     }
 
+    /**
+     * Get the annotation spanning the node.
+     *
+     * @return The annotations spanning the node.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Sets the annotations spanning the node.
+     *
+     * @param annotations The annotations spanning the node.
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    /**
+     * Adds a new annotation spanning the node.
+     *
+     * @param annotation The annotation spanning the node.
+     */
+    public void addAnnotation(Annotation annotation) {
+        this.annotations.add(annotation);
+    }
+
+    /**
+     * Returns annotation data as a string.
+     *
+     * @return Annotation data as string.
+     */
+    public String getAnnotationsAsString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Annotation a : getAnnotations()) {
+            sb.append(format("- %s (ID: %d), spanning nodes: ", a.getDisplayNameAttr(),
+                    a.getIdAttr()));
+
+            if (a.getSpannedNodes().size() >= 1) {
+                String prefix = "";
+                for (Node n : a.getSpannedNodes()) {
+                    sb.append(prefix);
+                    prefix = ",";
+                    sb.append(n.getId());
+                }
+            }
+            sb.append("\n\n");
+        }
+
+        return sb.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -386,4 +455,19 @@ public class Node {
 
     }
 
+    /**
+     * Returns the amount of Nucleotides contained in the node
+     * @return the amount of nucleotides
+     */
+    public int getNucleotides() {
+        return nucleotides;
+    }
+
+    /**
+     * Sets the amount of nucleotides in the Node.
+     * @param nucleotides the amount of nucleotides to be set.
+     */
+    public void setNucleotides(int nucleotides) {
+        this.nucleotides = nucleotides;
+    }
 }

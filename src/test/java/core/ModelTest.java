@@ -111,9 +111,9 @@ public class ModelTest {
     @Test
     public void testGetAllEdges() {
         Model m = new Model();
-        m.addCell(1, "", CellType.RECTANGLE);
-        m.addCell(2, "", CellType.RECTANGLE);
-        m.addCell(3, "", CellType.RECTANGLE);
+        m.addCell(1, "", 1, CellType.RECTANGLE);
+        m.addCell(2, "", 1, CellType.RECTANGLE);
+        m.addCell(3, "", 1, CellType.RECTANGLE);
 
         m.addEdge(1, 2, 1, EdgeType.GRAPH);
         m.addEdge(2, 3, 1, EdgeType.GRAPH);

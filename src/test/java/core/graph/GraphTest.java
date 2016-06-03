@@ -2,7 +2,6 @@ package core.graph;
 
 import core.Model;
 import core.Node;
-import core.NodeType;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
 import org.junit.Before;
@@ -32,14 +31,15 @@ public class GraphTest {
     public void setUp() {
         g = new Graph();
         mockedModel = mock(Model.class);
-        when(mockedModel.addCell(anyInt(), anyString(), any(CellType.class))).thenReturn(true);
+        when(mockedModel.addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class))).thenReturn(true);
 
         HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
-        nodeMap.put(1, new Node(1, NodeType.BASE, "", 1));
-        nodeMap.put(2, new Node(2, NodeType.BUBBLE, "", 2));
-        nodeMap.put(3, new Node(3, NodeType.INDEL, "", 3));
-        nodeMap.put(4, new Node(4, NodeType.COLLECTION, "", 4));
-        nodeMap.put(5, new Node(5, NodeType.COLLECTION, "", 5));
+        nodeMap.put(1, new Node(1, CellType.RECTANGLE, "", 1));
+        nodeMap.put(2, new Node(2, CellType.BUBBLE, "", 2));
+        nodeMap.put(3, new Node(3, CellType.INDEL, "", 3));
+        nodeMap.put(4, new Node(4, CellType.COLLECTION, "", 4));
+        nodeMap.put(5, new Node(5, CellType.COLLECTION, "", 5));
 
         nodeMap.get(1).setGenomes(new ArrayList<>(Arrays.asList("1")));
         nodeMap.get(2).setGenomes(new ArrayList<>(Arrays.asList("1")));
@@ -82,11 +82,10 @@ public class GraphTest {
     @Test
     public void testGenerateModel() {
         List<String> genomes = new ArrayList<>(Arrays.asList("1", "2"));
-
         g.setCurrentGenomes(genomes);
         g.generateModel("", 1, mockedModel);
-
-        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(), any(CellType.class));
+        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class));
     }
 
     /**
@@ -104,8 +103,10 @@ public class GraphTest {
                 g.getLevelMaps().get(0).get(5));
 
         g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1", "2")));
-        verify(mockedModel, atLeast(4)).addCell(anyInt(), anyString(), any(CellType.class));
-        verify(mockedModel, atLeast(4)).addEdge(anyInt(), anyInt(), anyInt(), any(EdgeType.class));
+        verify(mockedModel, atLeast(4)).addCell(anyInt(), anyString(),
+                anyInt(), any(CellType.class));
+        verify(mockedModel, atLeast(4)).addEdge(anyInt(), anyInt(),
+                anyInt(), any(EdgeType.class));
     }
 
     /**

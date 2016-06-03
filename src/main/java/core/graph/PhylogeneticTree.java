@@ -57,7 +57,6 @@ public class PhylogeneticTree {
      * Set-up the tree model from a Newick data file.
      *
      * @return A Newick tree.
-     * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile() {
@@ -72,16 +71,15 @@ public class PhylogeneticTree {
      * Add TreeNodes to the model.
      *
      * @param tree A Newick Tree read from disk.
-     * @throws IOException Throw exception on read failure.
      */
     public void setup(Tree tree) {
         model.setTree(tree);
 
         for (TreeNode node : tree.nodes) {
             if (node.isLeaf()) {
-                model.addCell(node.getKey(), node.getName(), CellType.TREELEAF);
+                model.addCell(node.getKey(), node.getName(), 0, CellType.TREELEAF);
             } else {
-                model.addCell(node.getKey(), node.getName(), CellType.TREEMIDDLE);
+                model.addCell(node.getKey(), node.getName(), 0, CellType.TREEMIDDLE);
             }
         }
     }

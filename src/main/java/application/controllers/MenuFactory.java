@@ -79,6 +79,10 @@ public class MenuFactory {
             mainController.setCurrentView(mainController.getGraphController()
                     .getGraph().getLevelMaps().size() - 1);
             mainController.fillGraph(null, new ArrayList<>());
+            mainController.getGraphController().getZoomBox().reset();
+            mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
+            mainController.createList();
+
         });
 
         showSelectedStrains.setDisable(true);

@@ -46,7 +46,7 @@ public class AnnotationParserTest {
         assertEquals("d", a.getStrand());
         assertEquals("e", a.getPhase());
         assertEquals("f", a.getCallhounClassAttr());
-        assertEquals(4, a.getIdAttr(), 0.0001);
+        assertEquals(4, a.getIdAttr());
         assertEquals("g", a.getNameAttr());
         assertEquals("h", a.getDisplayNameAttr());
     }
