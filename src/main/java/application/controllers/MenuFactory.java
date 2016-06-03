@@ -80,6 +80,7 @@ public class MenuFactory {
             mainController.fillGraph(null, new ArrayList<>());
             mainController.getGraphController().getZoomBox().reset();
             mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
+            mainController.createList();
 
         });
 

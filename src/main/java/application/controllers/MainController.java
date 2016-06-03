@@ -178,7 +178,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the Info-list
      */
-    private void createList() {
+    public void createList() {
         listFactory = new ListFactory();
         listVBox = listFactory.createInfoList("");
         list = listFactory.getList();
@@ -186,6 +186,9 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> listSelect());
 
         list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
+
+        setListItems();
+        this.getRoot().setRight(listVBox);
     }
 
 
@@ -203,7 +206,6 @@ public class MainController extends Controller<BorderPane> {
             }
         }
 
-        this.getRoot().setRight(listVBox);
     }
 
     /**
