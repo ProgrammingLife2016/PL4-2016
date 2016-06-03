@@ -64,8 +64,9 @@ public class LegendFactory {
         grid.add(new Text("  -    Contains N other nodes"), 3, 2);
         grid.add(new Text("  -    Contains N other nodes"), 3, 3);
         grid.add(new Text("  -    Contains N (horizontally collapsed) nodes"), 3, 4);
-        grid.add(new Text("  -    A longer Edge typically crossing over other edges. " +
-                "Functionally identical to a normal Edge."), 3, 5);
+        grid.add(new Text("  -    A longer Edge typically crossing over other edges. "
+                + "Functionally identical to a normal Edge."), 3, 5);
+
         HBox legend = new HBox();
         legend.getChildren().addAll(grid);
         return legend;
