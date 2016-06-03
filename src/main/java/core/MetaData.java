@@ -15,27 +15,29 @@ import java.util.TreeMap;
  * @since 23-05-2016.
  */
 public final class MetaData {
+    public static final TreeMap<String, Genome> META_DATA = parse();
 
     private MetaData() {
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Parses MetaData into a Treemap.
      *
-     * @param stream InputStream of the file to parse.
      * @return a TreeMap with genomes sorted on their name.
      */
     @SuppressWarnings({"checkstyle:linelength", "checkstyle:methodlength"})
-    public static TreeMap<String, Genome> parse(InputStream stream) {
+    private static TreeMap<String, Genome> parse() {
         TreeMap<String, Genome> metaMap = new TreeMap<>();
         try {
+            InputStream stream = MetaData.class.getResourceAsStream("/metadata.xlsx");
             XSSFWorkbook book = new XSSFWorkbook(stream);
             XSSFSheet sheet = book.getSheetAt(0);
 
             sheet.forEach(row -> {
                 if (row.getCell(0) != null && row.getCell(0).getStringCellValue().contains("TKK")) {
-                    Genome gen = new Genome();
                     String name = row.getCell(0).getStringCellValue();
+                    Genome gen = new Genome(name);
                     for (int i = 1; i < 28; i++) {
                         switch (i) {
                             case 1:

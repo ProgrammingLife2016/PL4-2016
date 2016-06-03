@@ -43,6 +43,9 @@ public class MainController extends Controller<BorderPane> {
     private ListView list;
     private int currentView;
     private ListFactory listFactory;
+    private TextField textField;
+    private Button searchButton;
+    private Button deselectButton;
     private StackPane box;
     private int count;
     private int secondCount;
@@ -79,11 +82,11 @@ public class MainController extends Controller<BorderPane> {
     }
 
     public void initTree(String s) {
-        treeController = new TreeController(this,
-                this.getClass().getResourceAsStream("/metadata.xlsx"), s);
+        treeController = new TreeController(this, s);
         fillTree();
-
     }
+
+
 
     /**
      * Getter method for the current view level.
@@ -226,9 +229,36 @@ public class MainController extends Controller<BorderPane> {
      * Method to create the menu bar.
      */
     private void createMenu() {
+        VBox vBox = new VBox();
+        HBox hBox = new HBox();
+        searchButton = new Button("Search Genome (In Tree)");
+        deselectButton = new Button("Deselect All");
+
+        textField = new TextField();
+        searchButton.setOnAction(e -> {
+            if (!textField.getText().isEmpty()) {
+                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                        textField.textProperty().get().trim());
+                treeController.applyCellHighlight(cell);
+                treeController.selectStrain(cell);
+                textField.setText("");
+                fillTree();
+            }
+        });
+
+        deselectButton.setOnAction(e -> {
+            treeController.clearSelection();
+            fillTree();
+
+        });
+        hBox.getChildren().addAll(textField, searchButton, deselectButton);
+
         MenuFactory menuFactory = new MenuFactory(this);
         menuBar = menuFactory.createMenu(menuBar);
-        this.getRoot().setTop(menuBar);
+
+        vBox.getChildren().addAll(menuBar, hBox);
+
+        this.getRoot().setTop(vBox);
     }
 
     /**
@@ -240,6 +270,17 @@ public class MainController extends Controller<BorderPane> {
         list = listFactory.getList();
 
         list.setOnMouseClicked(event -> listSelect());
+        
+        list.setOnMouseClicked(event -> {
+            if (!(list.getSelectionModel().getSelectedItem() == null)) {
+                graphController.getGraph().reset();
+                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
+
+                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+                graphController.takeSnapshot();
+
+            }
+        });
 
         list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
 
@@ -337,5 +378,14 @@ public class MainController extends Controller<BorderPane> {
      */
     public void setCurrentView(int currentView) {
         this.currentView = currentView;
+    }
+
+    /**
+     * Getter for the textfiel.d
+     *
+     * @return the textfield.
+     */
+    public TextField getTextField() {
+        return textField;
     }
 }

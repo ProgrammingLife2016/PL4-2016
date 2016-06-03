@@ -4,6 +4,7 @@ package core.genome;
  * Created by Arthur on 5/30/16.
  */
 public class Genome {
+    private String name;
     private int age;
     private String sex;
     private boolean hiv;
@@ -30,7 +31,16 @@ public class Genome {
     /**
      * Construct the genome.
      */
-    public Genome() {
+    public Genome(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Getter method for the name of the genome.
+     * @return the name of the genome.
+     */
+    public String getName() {
+        return name;
     }
 
     /**

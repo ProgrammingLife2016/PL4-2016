@@ -1,6 +1,7 @@
 package application.fxobjects.cell.tree;
 
 import application.fxobjects.cell.Cell;
+import core.MetaData;
 import core.graph.cell.CellType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -9,6 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
+import static application.fxobjects.cell.LineageColor.*;
+
 /**
  * Class representing a Phylogenetic leave node.
  */
@@ -16,7 +19,6 @@ public class LeafCell extends Cell {
     private final CellType type = CellType.TREELEAF;
     private String name;
     private Shape shape = null;
-
 
     /**
      * Phylogenetic leave cell constructor.
@@ -39,7 +41,24 @@ public class LeafCell extends Cell {
         super(id);
         this.name = name;
 
-        pane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, null, null)));
+        if (name.contains("TKK")) {
+            this.setBackground(
+                    new Background(
+                            new BackgroundFill(
+                                    determineLeafLinColor(
+                                            MetaData.META_DATA.get(name).getLineage()
+                                    ), null, null
+                            )
+                    )
+            );
+        }
+        else if (name.contains("G")) {
+            this.setBackground(
+                    new Background(new BackgroundFill(determineLeafLinColor(4), null, null)));
+        }
+        else {
+            this.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        }
         setView(pane);
     }
 

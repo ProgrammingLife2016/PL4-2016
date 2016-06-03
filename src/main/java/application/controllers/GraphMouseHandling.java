@@ -25,6 +25,7 @@ class GraphMouseHandling {
                 .get(node.getCellId());
 
         String info = "";
+
         info += format("Genome ID: %d \n", clicked.getId());
         info += format("%d genomes in Node: \n%s\n",
                 clicked.getGenomes().size(), clicked.getGenomesAsString());

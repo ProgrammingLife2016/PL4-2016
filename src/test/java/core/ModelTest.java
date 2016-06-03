@@ -31,7 +31,7 @@ public class ModelTest {
     }
 
     /**
-     * Test the clear method by clearing a set model.
+     * Test the clearSelection method by clearing a set model.
      */
     @Test
     public void testClear() {

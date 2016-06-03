@@ -2,16 +2,19 @@ package application.controllers;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.LineageColor;
 import application.fxobjects.cell.layout.CellLayout;
 import application.fxobjects.cell.layout.TreeLayout;
 import application.fxobjects.cell.tree.LeafCell;
+import core.Filter;
 import core.MetaData;
-import core.genome.Genome;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
@@ -20,46 +23,34 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.TreeMap;
+
+import static application.fxobjects.cell.LineageColor.*;
+import static core.MetaData.META_DATA;
 
 /**
  * Class responsible for setting up the scroll pane containing the phylogenetic tree.
- * Created by Niek van der Laan on 5-9-2016
  */
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
     private List<Edge> collectedEdges;
     private List<Cell> selectedStrains;
     private List<Cell> collectedStrains;
-    private TreeMap<String, Genome> metaData;
     private TreeMouseHandling treeMouseHandling;
-
-    private static final Color LIN0 = Color.web("000000");
-    private static final Color LIN1 = Color.web("ed00c3");
-    private static final Color LIN2 = Color.web("0000ff");
-    private static final Color LIN3 = Color.web("500079");
-    private static final Color LIN4 = Color.web("ff0000");
-    private static final Color LIN5 = Color.web("4e2c00");
-    private static final Color LIN6 = Color.web("69ca00");
-    private static final Color LIN7 = Color.web("ff7e00");
-    private static final Color LIN8 = Color.web("00ff9c");
-    private static final Color LIN9 = Color.web("00ff9c");
-    private static final Color LIN10 = Color.web("00ffff");
+    private AnchorPane root;
 
     /**
      * Class constructor.
      *
-     * @param m  MainController.
-     * @param s  InputStream for metaData.
+     * @param m MainController.
      */
-    public TreeController(MainController m, InputStream s, String string) {
+    public TreeController(MainController m, String string) {
         super(new ScrollPane());
         this.pt = new PhylogeneticTree(string);
-        this.metaData = MetaData.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
@@ -109,7 +100,8 @@ public class TreeController extends Controller<ScrollPane> {
      * Add cells from the model to the gui.
      */
     public void init() {
-        AnchorPane root = new AnchorPane();
+        root = new AnchorPane();
+
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
 
@@ -140,6 +132,14 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Add a single strain to selection.
+     * @param cell the strain to add.
+     */
+    public void selectStrain(Cell cell) {
+        selectedStrains.add(cell);
+    }
+
+    /**
      * Colors the selected strains after un-hover.
      */
     public void colorSelectedStrains() {
@@ -151,19 +151,21 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param cell the Cell being hovered over.
      */
+    @SuppressWarnings("checkstyle:linelength")
     public void applyCellHighlight(Cell cell) {
         if (cell instanceof LeafCell) {
-            String temp = ((LeafCell) cell).getName();
-            collectedStrains.clear();
+            String name = ((LeafCell) cell).getName();
             List<Cell> parentList = new ArrayList<>();
             parentList.add(cell);
+            collectedStrains.clear();
             collectedStrains.add(cell);
 
-            if (temp.contains("TKK")) {
-                applyColorUpwards(parentList,
-                        determineLinColor(metaData.get(temp).getLineage()), 4.0);
-            } else if (temp.contains("G")) {
-                applyColorUpwards(parentList, determineLinColor(4), 4.0);
+            if (name.contains("TKK")) {
+                applyColorUpwards(parentList, determineEdgeLinColor(META_DATA.get(name).getLineage()), 4.0);
+                applyColorOnCell(cell, determineSelectedLeafLinColor(META_DATA.get(name).getLineage()));
+            } else if (name.contains("G")) {
+                applyColorUpwards(parentList, LineageColor.LIN4, 4.0);
+                applyColorOnCell(cell, SLIN4);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
@@ -176,12 +178,24 @@ public class TreeController extends Controller<ScrollPane> {
      * @param cell the Cell which is no longer being hovered over.
      */
     public void revertCellHighlight(Cell cell) {
-        List<Cell> parentList = new ArrayList<>();
-        parentList.add(cell);
-        collectedStrains.clear();
-        collectedStrains.add(cell);
+        if (cell instanceof LeafCell) {
+            String name = ((LeafCell) cell).getName();
+            List<Cell> parentList = new ArrayList<>();
+            parentList.add(cell);
+            collectedStrains.clear();
+            collectedStrains.add(cell);
 
-        applyColorUpwards(parentList, Color.BLACK, 1.0);
+            if (name.contains("TKK")) {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+                applyColorOnCell(cell, determineLeafLinColor(META_DATA.get(name).getLineage()));
+            } else if (name.contains("G")) {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+                applyColorOnCell(cell, GLIN4);
+            } else {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+            }
+            applyColorUpwards(parentList, Color.BLACK, 1.0);
+        }
     }
 
     /**
@@ -189,12 +203,14 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param edge the Edge being hovered over.
      */
+
     public void applyEdgeHighlight(Edge edge) {
         collectedEdges = new ArrayList<>();
         collectedStrains.clear();
         collectEdges(edge);
 
-        applyColorOnEdges(collectedEdges, determineLinColor(getCommonLineage()), 4.0);
+        applyColorOnCells();
+        applyColorOnEdges(determineEdgeLinColor(getCommonLineage()), 4.0);
     }
 
     /**
@@ -203,27 +219,81 @@ public class TreeController extends Controller<ScrollPane> {
      * @param edge the Edge which is no longer being hovered over.
      */
     public void revertEdgeHighlight(Edge edge) {
-        List<Cell> parentList = new ArrayList<>();
-        List<Cell> childList = new ArrayList<>();
-        parentList.add(edge.getSource());
-        childList.add(edge.getTarget());
+        collectedEdges = new ArrayList<>();
         collectedStrains.clear();
+        collectEdges(edge);
 
-        applyColorOnSelf(edge, Color.BLACK, 1.0);
-        applyColorUpwards(parentList, Color.BLACK, 1.0);
-        applyColorDownwards(childList, Color.BLACK, 1.0);
+        revertColorOnCells();
+        applyColorOnEdges(Color.BLACK, 1.0);
     }
 
     /**
-     * Apply a certain color and stroke to the edge being hovered over.
-     *
-     * @param e the given Edge.
-     * @param c the given Color.
-     * @param s the given stroke.
+     * Apply a certain color and stroke to all cells being hovered over.
      */
-    private void applyColorOnSelf(Edge e, Color c, double s) {
-        e.getLine().setStroke(c);
-        e.getLine().setStrokeWidth(s);
+    @SuppressWarnings("checkstyle:linelength")
+    private void applyColorOnCells() {
+        collectedStrains.forEach(s -> {
+                    LeafCell c = (LeafCell) s;
+                    if (c.getName().contains("TKK")) {
+                        c.setBackground(
+                                new Background(
+                                        new BackgroundFill(
+                                                determineSelectedLeafLinColor(
+                                                        META_DATA.get(
+                                                                (c.getName())).getLineage()
+                                                ), null, null
+                                        )
+                                )
+                        );
+                    } else if (c.getName().contains("G")) {
+                        c.setBackground(
+                                new Background(
+                                        new BackgroundFill(LineageColor.SLIN4, null, null
+                                        )
+                                )
+                        );
+                    }
+                }
+        );
+    }
+
+    /**
+     * Revert a certain color and stroke to all cells being hovered over.
+     */
+    @SuppressWarnings("checkstyle:linelength")
+    private void revertColorOnCells() {
+        collectedStrains.forEach(s -> {
+            LeafCell c = (LeafCell) s;
+            if (c.getName().contains("TKK")) {
+                c.setBackground(
+                        new Background(
+                                new BackgroundFill(
+                                        determineLeafLinColor(
+                                                META_DATA.get(
+                                                        (c.getName())).getLineage()
+                                        ), null, null
+                                )
+                        )
+                );
+            } else if (c.getName().contains("G")) {
+                c.setBackground(
+                        new Background(
+                                new BackgroundFill(LineageColor.GLIN4, null, null
+                                )
+                        )
+                );
+            }
+        });
+    }
+
+    /**
+     * Apply a certain color and stroke to the cell being hovered over.
+     *
+     * @param e the given Cell.
+     * @param c the given Color.
+     */
+    private void applyColorOnCell(Cell e, Color c) {
+        e.setBackground(new Background(new BackgroundFill(c, null, null)));
     }
 
     /**
@@ -247,38 +317,13 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
-     * Apply a certain color and stroke to the edges downwards from the node in the list.
-     *
-     * @param l the given List of Edges.
-     * @param c the given Color.
-     * @param s the given stroke.
-     */
-    private void applyColorDownwards(List<Cell> l, Color c, double s) {
-        while (!l.isEmpty()) {
-            Cell next = l.remove(0);
-            l.addAll(next.getCellChildren());
-
-            if (!(next instanceof LeafCell)) {
-                List<Edge> edges = pt.getModel().getEdgeFromParent(next);
-                edges.forEach(e -> {
-                    e.getLine().setStroke(c);
-                    e.getLine().setStrokeWidth(s);
-                });
-            } else {
-                collectedStrains.add(next);
-            }
-        }
-    }
-
-    /**
      * Apply a certain color and stroke to the edges in the list.
      *
-     * @param l the given List of Edges.
      * @param c the given Color.
      * @param s the given stroke.
      */
-    private void applyColorOnEdges(List<Edge> l, Color c, double s) {
-        l.forEach(e -> {
+    private void applyColorOnEdges(Color c, double s) {
+        collectedEdges.forEach(e -> {
             e.getLine().setStroke(c);
             e.getLine().setStrokeWidth(s);
         });
@@ -344,8 +389,8 @@ public class TreeController extends Controller<ScrollPane> {
         for (int i = 0; i < 10; i++) {
             int tempCount = 0;
             for (Cell c : collectedStrains) {
-                if (metaData.containsKey(((LeafCell) c).getName())
-                        && metaData.get(((LeafCell) c).getName()).getLineage() == i) {
+                if (MetaData.META_DATA.containsKey(((LeafCell) c).getName())
+                        && MetaData.META_DATA.get(((LeafCell) c).getName()).getLineage() == i) {
                     tempCount++;
                 }
             }
@@ -383,42 +428,6 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
-     * Determines the color of the edges for the corresponding lineages in a highlighted situation.
-     *
-     * @param l the lineage code.
-     * @return the color.
-     */
-    private Color determineLinColor(int l) {
-        switch (l) {
-            case 0:
-                return LIN0;
-            case 1:
-                return LIN1;
-            case 2:
-                return LIN2;
-            case 3:
-                return LIN3;
-            case 4:
-                return LIN4;
-            case 5:
-                return LIN5;
-            case 6:
-                return LIN6;
-            case 7:
-                return LIN7;
-            case 8:
-                return LIN8;
-            case 9:
-                return LIN9;
-            case 10:
-                return LIN10;
-            default:
-                break;
-        }
-        return LIN0;
-    }
-
-    /**
      * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
      */
     private void modifyGraphOptions() {
@@ -432,6 +441,170 @@ public class TreeController extends Controller<ScrollPane> {
         } else {
             MenuFactory.showOnlyThisStrain.setDisable(true);
             MenuFactory.showSelectedStrains.setDisable(false);
+
+
+        }
+    }
+
+    /**
+     * Method that selects Cells by its name.
+     *
+     * @param name the name to search for.
+     */
+    public Cell getCellByName(String name) {
+        for (Object c : root.getChildren()
+                ) {
+            if (c instanceof LeafCell) {
+                if (((LeafCell) c).getName().contains(name)) {
+                    return (Cell) c;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method to clear all selected genomes.
+     */
+    public void clearSelection() {
+        selectedStrains.forEach(this::revertCellHighlight);
+        selectedStrains.clear();
+        modifyGraphOptions();
+
+    }
+
+    public void filterPhyloLineage(Filter f, boolean state) {
+        switch (f) {
+            case LIN1:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 1 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 1){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN2:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 2 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 2){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN3:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 3 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 3){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN4:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 4 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 4){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN5:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 5 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 5){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN6:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 6 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 6){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN7:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 7 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 7){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN8:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 8 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 8){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN9:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 9 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 9){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
+            case LIN10:
+                META_DATA.values().forEach(s -> {
+                    if (s.getLineage() == 10 && state) {
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.add(cell);
+                        applyCellHighlight(cell);
+                    } else if (s.getLineage() == 10){
+                        Cell cell = getCellByName((s.getName()));
+                        selectedStrains.remove(cell);
+                        revertCellHighlight(cell);
+                    }
+                });
+                break;
         }
     }
 }
