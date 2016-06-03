@@ -51,6 +51,8 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
 
+        this.getRoot().getStylesheets().add("/css/main.css");
+
         ImageView imageView = new ImageView("/DART2N.png");
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
         imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
