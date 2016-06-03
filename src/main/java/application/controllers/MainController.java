@@ -1,12 +1,14 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.RectangleCell;
+import core.Annotation;
+import core.AnnotationProcessor;
+import core.Node;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.net.URL;
@@ -31,6 +33,7 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
+    private GridPane annotationSearchBox;
     private HBox legend;
     private VBox listVBox;
     private ListView list;
@@ -144,14 +147,48 @@ public class MainController extends Controller<BorderPane> {
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
 
+        // Place the annotationsearch box
+        createAnnotationSearchBox();
+        annotationSearchBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
-        hbox.setAlignment(Pos.CENTER);
 
+        // Place the zoom box
         box = graphController.getZoomBox().getZoomBox();
 
-        hbox.getChildren().addAll(box, legend);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.getChildren().addAll(annotationSearchBox, box, legend);
         this.getRoot().setBottom(hbox);
+    }
+
+    /**
+     * Method to create the annotation search box.
+     */
+    private void createAnnotationSearchBox() {
+        annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
+
+        TextField box = (TextField) annotationSearchBox.getChildren().get(2);
+        Button search = (Button) annotationSearchBox.getChildren().get(3);
+
+        search.setOnAction(e -> {
+            if (box.getText() != null && !box.getText().isEmpty()) {
+                long input = Long.parseLong(box.getText());
+
+                List<Annotation> annotations
+                        = graphController.getGraph().getModel().getAnnotations();
+                Annotation ann = AnnotationProcessor.findAnnotationByID(
+                        annotations, input);
+
+                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                        = graphController.getGraph().getModel().getCellMap();
+
+                for (Node n : ann.getSpannedNodes()) {
+                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                }
+            }
+        });
     }
 
     /**

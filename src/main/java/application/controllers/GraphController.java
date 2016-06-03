@@ -178,6 +178,7 @@ public class GraphController extends Controller<ScrollPane> {
                 double yLength = e.getLine().endYProperty().get()
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+
                 if ((length > MAX_EDGE_LENGTH
                         && !(e.getSource().getType() == CellType.RECTANGLE))
                         || length > MAX_EDGE_LENGTH_LONG) {

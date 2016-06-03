@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -43,7 +44,7 @@ public class ParserTest {
         InputStream is = getClass().getResourceAsStream("/TBTestFile.gfa");
 
         try {
-            map = p.readGFA(is);
+            map = p.readGFA(is, new ArrayList<Annotation>());
             is.close();
         } catch (IOException e) {
             e.printStackTrace();
