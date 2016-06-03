@@ -8,6 +8,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -54,17 +58,30 @@ public class MainController extends Controller<BorderPane> {
         this.count = -1;
         this.secondCount = -1;
 
+//        this.getRoot().getStylesheets().add("/css/main.css");
+
+        ImageView imageView = new ImageView("/DART2N.png");
+        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
+        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+
+        this.getRoot().setCenter(imageView);
+
         // Create the new GraphController
         graphController = new GraphController(this);
+    }
 
+    public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-        // Fill the graph
+        //Fill the graph
         fillGraph(null, new ArrayList<>());
 
-        // Create the TreeController
+    }
+
+    public void initTree(String s) {
         treeController = new TreeController(this,
-                this.getClass().getResourceAsStream("/metadata.xlsx"));
+                this.getClass().getResourceAsStream("/metadata.xlsx"), s);
+        fillTree();
 
     }
 
@@ -93,6 +110,8 @@ public class MainController extends Controller<BorderPane> {
      */
     private void initGUI() {
         createZoomBoxAndLegend();
+
+        this.getRoot().setCenter(graphController.getRoot());
         if (secondCount == -1) {
             createList();
             setListItems();

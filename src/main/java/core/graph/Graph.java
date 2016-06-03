@@ -63,9 +63,10 @@ public class Graph {
         annotations = readCDSFilteredGFF(
                 getClass().getResourceAsStream("/decorationV5_20130412.gff"));
 
-        startMap = getNodeMapFromFile();
-        nodeIds = startMap.size();
-        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+//        startMap = getNodeMapFromFile();
+//        nodeIds = startMap.size();
+//        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+
     }
 
     /**
@@ -74,17 +75,19 @@ public class Graph {
      * @return A node map read from file.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile() {
+    public HashMap<Integer, Node> getNodeMapFromFile(String s) {
         try {
             Parser parser = new Parser();
             InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
-            startMap = parser.readGFA(inputStream, annotations);
+            //startMap = parser.readGFA(inputStream, annotations);
 
-            inputStream.close();
+            startMap = parser.readGFAAsString(s, annotations);
+            nodeIds = startMap.size();
+            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return startMap;
     }

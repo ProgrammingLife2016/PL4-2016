@@ -8,12 +8,18 @@ import application.fxobjects.cell.tree.LeafCell;
 import core.MetaData;
 import core.genome.Genome;
 import core.graph.PhylogeneticTree;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +56,9 @@ public class TreeController extends Controller<ScrollPane> {
      * @param m  MainController.
      * @param s  InputStream for metaData.
      */
-    public TreeController(MainController m, InputStream s) {
+    public TreeController(MainController m, InputStream s, String string) {
         super(new ScrollPane());
-        this.pt = new PhylogeneticTree();
+        this.pt = new PhylogeneticTree(string);
         this.metaData = MetaData.parse(s);
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
@@ -70,6 +76,20 @@ public class TreeController extends Controller<ScrollPane> {
         init();
     }
 
+    /**
+     * Set-up the tree model from a Newick data file.
+     *
+     * @return A Newick tree.
+     * @throws IOException Throw exception on read failure.
+     */
+    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
+    public Tree getTreeFromFile(String s) {
+        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        TreeParser tp = new TreeParser(r);
+
+        return tp.tokenize("340tree.rooted.TKK");
+    }
     /**
      * Get the phylogenetic tree.
      *
