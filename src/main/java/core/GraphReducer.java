@@ -86,6 +86,9 @@ public final class GraphReducer {
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
             newNode.setCollapseLevel(n.getCollapseLevel());
+
+            // Annotations should for now only be shown at the most zoomed in level.
+            newNode.setAnnotations(new ArrayList<>());
             newNode.setNucleotides(n.getNucleotides());
 
             res.put(i, newNode);

@@ -6,9 +6,12 @@ import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static core.AnnotationParser.readCDSFilteredGFF;
 
 /**
  * Class representing a graph.
@@ -43,6 +46,11 @@ public class Graph {
      */
     private List<HashMap<Integer, Node>> levelMaps;
 
+    /**
+     * Reference annotations.
+     */
+    private List<Annotation> annotations;
+
 
     /**
      * Class constructor.
@@ -51,6 +59,13 @@ public class Graph {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
+
+        annotations = readCDSFilteredGFF(
+                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
+
+//        startMap = getNodeMapFromFile();
+//        nodeIds = startMap.size();
+//        levelMaps = GraphReducer.createLevelMaps(startMap, 1);
 
     }
 
@@ -63,8 +78,10 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String s) {
         try {
             Parser parser = new Parser();
+            InputStream inputStream = getClass().getResourceAsStream("/TB10.gfa");
+            //startMap = parser.readGFA(inputStream, annotations);
 
-            startMap = parser.readGFAAsString(s);
+            startMap = parser.readGFAAsString(s, annotations);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
 
@@ -176,35 +193,18 @@ public class Graph {
      * @return the new model
      */
     public Model generateModel(Object ref, int depth, Model toret) {
-        //Apply the levelMaps
+        //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
+        toret.setAnnotations(annotations);
+
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+
         //Root Node
         Node root = nodeMap.get(1);
         if (currentGenomes.size() > 0) { //Draw selected references
-            //We are now drawing only the selected items.
-            // Only draw when the intersection > 0 (Node contains genome that we
-            // want to draw.
-            if (intersection(root.getGenomes(), currentGenomes) > 0) {
-                toret.addCell(root.getId(), root.getSequence(),
-                        root.getNucleotides(), CellType.RECTANGLE); }
-            // In this case we know that the genomes in the graph are only this ones.
-            genomes = currentGenomes;
-
-            for (int i = 1; i < nodeIds; i++) {
-                Node from = nodeMap.get(i);
-                if (from == null) { continue; }
-                if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                    for (int j : from.getLinks(nodeMap)) {
-                        Node to = nodeMap.get(j);
-                        if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                            //Add next cell
-                            addCell(nodeMap, toret, j, ref, to, from);
-                        }
-                    }
-                }
-            }
+            // We are now drawing only the selected items.
+            generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
             //Create a new genome list.
             toret.addCell(root.getId(), root.getSequence(),
@@ -223,10 +223,45 @@ public class Graph {
                 }
             }
         }
+
         toret.setLayout();
         return toret;
     }
 
+
+    /**
+     * Draws the selected genomes.
+     *
+     * @param nodeMap map of nodes.
+     * @param root Root of the graph.
+     * @param toret A given model.
+     * @param ref Reference object.
+     */
+    private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
+                                                 Model toret, Object ref) {
+        if (intersection(root.getGenomes(), currentGenomes) > 0) {
+            toret.addCell(root.getId(), root.getSequence(),
+                    root.getNucleotides(), CellType.RECTANGLE); }
+
+        // In this case we know that the genomes in the graph are only this ones.
+        genomes = currentGenomes;
+
+        // Only draw when the intersection > 0 (Node contains genome that we
+        // want to draw.
+        for (int i = 1; i < nodeIds; i++) {
+            Node from = nodeMap.get(i);
+            if (from == null) { continue; }
+            if (intersection(from.getGenomes(), currentGenomes) > 0) {
+                for (int j : from.getLinks(nodeMap)) {
+                    Node to = nodeMap.get(j);
+                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
+                        //Add next cell
+                        addCell(nodeMap, toret, j, ref, to, from);
+                    }
+                }
+            }
+        }
+    }
     /**
      * Method to add a new Cell to the graph
      *

@@ -1,12 +1,20 @@
 package core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Class representing a gene annotation according to the specification on
  * http://www.sequenceontology.org/gff3.shtml and differences in provided GFF data.
  *
  * @author Niels Warnars
  */
-public class Annotation {
+@SuppressFBWarnings("URF_UNREAD_FIELD")
+@SuppressWarnings("PMD.UnusedPrivateField")
+public class Annotation implements Comparable<Annotation> {
     private String seqid;
     private String source;
     private String type;
@@ -19,47 +27,38 @@ public class Annotation {
     private String phase;
 
     private String callhounClassAttr;
-    private double idAttr;
+    private long idAttr;
     private String nameAttr;
     private String displayNameAttr;
 
+    private List<Node> spannedNodes;
+    private int offsetInFirstSpannedNode;
+    private int offsetInLastSpannedNode;
+
     /**
      * Sets up a gene annotation.
-     *
-     * @param seqid The ID of the current feature.
-     * @param source The generator of this feature.
-     * @param type The type of feature.
-     * @param start The start coordinate of the feature.
-     * @param end The end coordinate of the feature.
-     * @param score The score of the feature.
-     * @param strand The strand of the feature.
-     * @param phase The phase of the feature.
-     * @param callhounClassAttr The type of data.
-     * @param idAttr The ID of the feature.
-     * @param nameAttr The name of the feature.
-     * @param displayNameAttr The display name for the feature.
      */
-    public Annotation(String seqid, String source, String type, int start, int end, float score,
-                      String strand, String phase, String callhounClassAttr, double idAttr,
-                      String nameAttr, String displayNameAttr) {
+    public Annotation() {
+        seqid = "";
+        source = "";
+        type = "";
+        start = -1;
+        end = -1;
+        score = -1;
+        strand = "";
+        phase = "";
+        callhounClassAttr = "";
+        idAttr = -1;
+        nameAttr = "";
+        displayNameAttr = "";
 
-        this.seqid = seqid;
-        this.source = source;
-        this.type = type;
-        this.start = start;
-        this.end = end;
-        this.score = score;
-        this.strand = strand;
-        this.phase = phase;
-        this.callhounClassAttr = callhounClassAttr;
-        this.idAttr = idAttr;
-        this.nameAttr = nameAttr;
-        this.displayNameAttr = displayNameAttr;
+        spannedNodes = new ArrayList<Node>();
+        offsetInFirstSpannedNode = -1;
+        offsetInLastSpannedNode = -1;
     }
 
     /**
      * Gets the seqid.
-     *
      * @return The seqid.
      */
     public String getSeqid() {
@@ -67,17 +66,31 @@ public class Annotation {
     }
 
     /**
+     * Sets the seqid.
+     * @param seqid The seqid.
+     */
+    public void setSeqid(String seqid) {
+        this.seqid = seqid;
+    }
+
+    /**
      * Gets the source.
-     *
-     * @return The source.
+     * @return Sets the source.
      */
     public String getSource() {
         return source;
     }
 
     /**
+     * Sets the source.
+     * @param source The source.
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
      * Gets the type.
-     *
      * @return The type.
      */
     public String getType() {
@@ -85,35 +98,63 @@ public class Annotation {
     }
 
     /**
-     * Gets the start coordinate.
-     *
-     * @return The start coordinate.
+     * Sets the type.
+     * @param type The type.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Gets the start.
+     * @return The start.
      */
     public int getStart() {
         return start;
     }
 
     /**
-     * Gets the end coordinate.
-     *
-     * @return The end coordinate.
+     * Sets the start.
+     * @param start The start.
+     */
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    /**
+     * Gets the end.
+     * @return The end.
      */
     public int getEnd() {
         return end;
     }
 
     /**
-     * Gets the score of the feature.
-     *
-     * @return The score of the feature.
+     * Sets the end.
+     * @param end The end.
+     */
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    /**
+     * Gets the score.
+     * @return The score.
      */
     public float getScore() {
         return score;
     }
 
     /**
+     * Sets the score.
+     * @param score The score.
+     */
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    /**
      * Gets the strand.
-     *
      * @return The strand.
      */
     public String getStrand() {
@@ -121,8 +162,15 @@ public class Annotation {
     }
 
     /**
+     * Sets the strand.
+     * @param strand The strand.
+     */
+    public void setStrand(String strand) {
+        this.strand = strand;
+    }
+
+    /**
      * Gets the phase.
-     *
      * @return The phase.
      */
     public String getPhase() {
@@ -130,39 +178,158 @@ public class Annotation {
     }
 
     /**
-     * Gets the callhounClass attribute.
-     *
-     * @return The callhounClass attribute.
+     * Sets the phase.
+     * @param phase The phase.
+     */
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
+    /**
+     * Gets the callhounClassAttr.
+     * @return The callhounClassAttr.
      */
     public String getCallhounClassAttr() {
         return callhounClassAttr;
     }
 
     /**
-     * Gets the ID attribute.
-     *
-     * @return The ID attribute.
+     * Sets the callhounClassAttr.
+     * @param callhounClassAttr The callhounClassAttr.
      */
-    public double getIdAttr() {
+    public void setCallhounClassAttr(String callhounClassAttr) {
+        this.callhounClassAttr = callhounClassAttr;
+    }
+
+    /**
+     * Gets the idAttr.
+     * @return The idAttr.
+     */
+    public long getIdAttr() {
         return idAttr;
     }
 
     /**
-     * Gets the Name attribute.
-     *
-     * @return The Name attribute.
+     * Sets the idAttr.
+     * @param idAttr The idAttr.
+     */
+    public void setIdAttr(long idAttr) {
+        this.idAttr = idAttr;
+    }
+
+    /**
+     * Gets the nameAttr.
+     * @return The nameAttr.
      */
     public String getNameAttr() {
         return nameAttr;
     }
 
     /**
-     * Gets the displayName attribute.
-     *
-     * @return The displayName attribute.
+     * Sets the nameAttr.
+     * @param nameAttr The nameAttr.
+     */
+    public void setNameAttr(String nameAttr) {
+        this.nameAttr = nameAttr;
+    }
+
+    /**
+     * Gets the displayNameAttr.
+     * @return The displayNameAttr.
      */
     public String getDisplayNameAttr() {
         return displayNameAttr;
     }
-    
+
+    /**
+     * Sets the displayNameAttr.
+     * @param displayNameAttr The displayNameAttr.
+     */
+    public void setDisplayNameAttr(String displayNameAttr) {
+        this.displayNameAttr = displayNameAttr;
+    }
+
+    /**
+     * Gets the nodes spanned by the annotation.
+     * @return The nodes spanned by the annotation.
+     */
+    public List<Node> getSpannedNodes() {
+        return spannedNodes;
+    }
+
+    /**
+     * Adds a new spanned by the annotation.
+     * @param node A new spanned by the annotation.
+     */
+    public void addSpannedNode(Node node) {
+        spannedNodes.add(node);
+    }
+
+    @Override
+    public String toString() {
+        return "Annotation{"
+                + "seqid='" + seqid + '\''
+                + ", source='" + source + '\''
+                + ", type='" + type + '\''
+                + ", start=" + start
+                + ", end=" + end
+                + ", score=" + score
+                + ", strand='" + strand + '\''
+                + ", phase='" + phase + '\''
+                + ", callhounClassAttr='" + callhounClassAttr + '\''
+                + ", idAttr=" + idAttr
+                + ", nameAttr='" + nameAttr + '\''
+                + ", displayNameAttr='" + displayNameAttr + '\''
+                + '}';
+    }
+
+    @SuppressFBWarnings("EQ_COMPARETO_USE_OBJECT_EQUALS")
+    @Override
+    public int compareTo(Annotation o) {
+        if (this.getStart() >= o.getStart()) {
+            return 1;
+        } else if (this.getStart() < o.getStart()) {
+            return -1;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Determines the nodes spanned by the annotation.
+     *
+     * @param startLoopIdx The index to start the enumeration at.
+     * @param nodeMap A hash map of nodes in the reference.
+     * @param nodeMapSize The original size of the node map.
+     * @return the new startLoopIndex.
+     */
+    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap,
+                                           int nodeMapSize) {
+        Boolean nodesMustBeAdded = false;
+        for (int idx = startLoopIdx; idx < nodeMapSize; idx++) {
+            Node n = nodeMap.get(idx);
+            if (n == null) {
+                continue;
+            }
+
+            int nLower = n.getzIndex();
+            int nUpper = n.getzIndex() + n.getSequence().length();
+
+            if (nLower <= start && nUpper >= start) {
+                offsetInFirstSpannedNode = start - n.getzIndex();
+                nodesMustBeAdded = true;
+            }
+
+            if (nodesMustBeAdded) {
+                addSpannedNode(n);
+            }
+
+            if (nLower <= end && nUpper >= end) {
+                offsetInLastSpannedNode = end - n.getzIndex();
+                return n.getId();
+            }
+        }
+
+        return -1;
+    }
 }

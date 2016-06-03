@@ -36,6 +36,7 @@ public class Model {
 
     private List<HashMap<Integer, Node>> levelMaps;
 
+    private List<Annotation> annotations;
     private Tree tree;
     private GraphLayout graphLayout;
 
@@ -65,6 +66,8 @@ public class Model {
         cellMap = new HashMap<>();
 
         levelMaps = new ArrayList<>();
+
+        annotations = new ArrayList<>();
 
         tree = new Tree();
     }
@@ -147,6 +150,33 @@ public class Model {
      */
     public List<Edge> getAllEdges() {
         return allEdges;
+    }
+
+    /**
+     * Gets the cell map.
+     *
+     * @return The cell map.
+     */
+    public Map<Integer, Cell> getCellMap() {
+        return cellMap;
+    }
+
+    /**
+     * Get a list of annotations.
+     *
+     * @return A list of annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Set a list of annotations.
+     *
+     * @param annotations A list of annotations.
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
     }
 
     /**
