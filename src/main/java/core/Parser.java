@@ -2,10 +2,7 @@ package core;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +34,7 @@ public class Parser {
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     public final HashMap<Integer, Node>
+
     readGFA(final InputStream input, List<Annotation> annotations) {
         try {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
@@ -92,6 +90,37 @@ public class Parser {
             default:
                 break;
         }
+    }
+
+//    /**
+//     * Read gfa file as a resource in the jar.
+//     * @param input - the input.
+//     * @return - A HashMap containing the information from the .gfa file.
+//     */
+//    public final HashMap<Integer, Node> readGFAAsResource(final InputStream input){
+//        BufferedReader bReader;
+//        bReader = new BufferedReader(new InputStreamReader(input));
+//        return readGFA(bReader, null);
+//    }
+
+    /**
+     * Read gfa file from a filepath.
+     * @param input - the input
+     * @return - A HashMap containing the information from the .gfa file.
+     * @throws IOException
+     */
+    public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a) throws IOException{
+//        InputStream stream =
+//
+
+//        BufferedReader bReader;
+//        BufferedReader = new BufferedReader(new FileReader(input));
+//
+        FileInputStream fileInputStream = new FileInputStream(input);
+
+//        InputStream inputStream = new InputStream(bReader);
+
+        return readGFA(fileInputStream, a);
     }
 
 }

@@ -67,14 +67,14 @@ public class GraphTest {
         assertEquals(Model.class, model.getClass());
     }
 
-    /**
-     * Test for the getNodeMapFromFile method.
-     */
-    @Test
-    public void testGetNodeMapFromFile() {
-        HashMap<Integer, Node> nodeMap = g.getNodeMapFromFile();
-        assertNotEquals(0, nodeMap.size());
-    }
+//    /**
+//     * Test for the getNodeMapFromFile method.
+//     */
+//    @Test
+//    public void testGetNodeMapFromFile() {
+//        HashMap<Integer, Node> nodeMap = g.getNodeMapFromFile();
+//        assertNotEquals(0, nodeMap.size());
+//    }
 
     /**
      * Test for the generateModel method.

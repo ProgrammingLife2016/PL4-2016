@@ -3,9 +3,11 @@ package application.controllers;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * WindowFactory class.
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 public final class WindowFactory {
     static Rectangle2D screenSize;
     static Stage window;
+    static MainController mainController;
 
     /**
      * Private class constructor.
@@ -26,12 +29,13 @@ public final class WindowFactory {
     /**
      * Create method for windows.
      *
-     * @param c parent of the window
+     * @param m parent of the window
      * @return the constructed window.
      */
-    public static Stage createWindow(Parent c) {
+    public static Stage createWindow(MainController m) {
+        mainController = m;
         window = new Stage();
-        Scene scene = createScene(c);
+        Scene scene = createScene(m.getRoot());
 
         screenSize = Screen.getPrimary().getVisualBounds();
 
@@ -59,11 +63,26 @@ public final class WindowFactory {
      *
      * @return the directoryChooser.
      */
-    public static DirectoryChooser createDirectoryChooser() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
+    public static FileChooser createGraphChooser() {
+        FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Graph File");
 
-        directoryChooser.showDialog(window);
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+
+        mainController.initGraph();
+
+        return directoryChooser;
+    }
+
+    public static FileChooser createTreeChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Tree File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }
