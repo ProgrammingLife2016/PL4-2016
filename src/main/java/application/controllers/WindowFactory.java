@@ -70,7 +70,6 @@ public final class WindowFactory {
         File selectedFile = directoryChooser.showOpenDialog(window);
 
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
-        System.out.println("selected: " + selectedFile.getAbsolutePath());
 
         mainController.initGraph();
 

@@ -49,10 +49,6 @@ public class GraphController extends Controller<ScrollPane> {
         this.root = new AnchorPane();
         this.mainController = m;
 
-        this.getRoot().getStylesheets().add("/css/graphController.css");
-        this.root.getStylesheets().add("css/graphController.css");
-
-
         this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
