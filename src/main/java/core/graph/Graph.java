@@ -201,7 +201,6 @@ public class Graph {
         Node root = nodeMap.get(1);
         if (currentGenomes.size() > 0) { //Draw selected references
             // We are now drawing only the selected items.
-            System.out.println("DRAWING SELECTED NODES");
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
             //Create a new genome list.
