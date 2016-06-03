@@ -6,7 +6,6 @@ import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,9 +52,6 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        //startMap = getNodeMapFromFile(s);
-//        nodeIds = startMap.size();
-        //     levelMaps = GraphReducer.createLevelMaps(startMap, 1);
     }
 
     /**

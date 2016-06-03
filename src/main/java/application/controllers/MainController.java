@@ -7,10 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Screen;
 
 import java.net.URL;
 import java.util.*;
