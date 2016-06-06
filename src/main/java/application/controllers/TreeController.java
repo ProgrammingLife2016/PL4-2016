@@ -54,16 +54,8 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
-
-        this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-
-        this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
-            if (event.getDeltaY() != 0) {
-                event.consume();
-            }
-        });
-
         init();
     }
 
