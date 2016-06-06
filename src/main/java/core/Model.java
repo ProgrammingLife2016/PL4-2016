@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
  */
 public class Model {
 
-    private Cell leftMost;
-    private Cell rightMost;
-
     private Cell graphParent;
 
     private List<Cell> allCells;
@@ -185,10 +182,10 @@ public class Model {
     /**
      * Method to add a Cell (Node).
      *
-     * @param id   the id, which represents the sequence.
-     * @param text The text of a cell.
+     * @param id          the id, which represents the sequence.
+     * @param text        The text of a cell.
      * @param nucleotides The amount of nucleotides contained in this cell.
-     * @param type The type of cell.
+     * @param type        The type of cell.
      * @return True for testing purposes.
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
@@ -237,7 +234,6 @@ public class Model {
 
             return true;
         }
-
         return false;
     }
 
@@ -367,5 +363,17 @@ public class Model {
      */
     public double getMaxWidth() {
         return graphLayout.getMaxWidth();
+    }
+
+    public void addEdge(Edge e) {
+        addedEdges.add(e);
+    }
+
+    public Cell getLeftMost() {
+        return getGraphLayout().getLeftMost();
+    }
+
+    public Cell getRightMost() {
+        return getGraphLayout().getRightMost();
     }
 }

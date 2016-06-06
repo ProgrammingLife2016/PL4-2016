@@ -152,7 +152,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
-    public void update(Object ref, int depth) {
+    public void update(Object ref, int depth, int min) {
         int size = graph.getLevelMaps().size();
 
         //We received a different reference of depth, so we need to redraw.
@@ -163,12 +163,14 @@ public class GraphController extends Controller<ScrollPane> {
             graph.addGraphComponents(ref, depth);
 
             // add components to graph pane
+
+            int max = min + (int) screenSize.getMaxX();
             if (graph.getModel().getAllCells().size() > 0) {
-                root.getChildren().addAll(graph.getModel().getAllEdges());
-                root.getChildren().addAll(graph.getModel().getAllCells());
+                root.getChildren().addAll(graph.getModelAllInView(min,max).getAddedEdges());
+                root.getChildren().addAll(graph.getModelAllInView(min,max).getAddedCells());
             } else {
-                root.getChildren().addAll(graph.getModel().getAddedEdges());
-                root.getChildren().addAll(graph.getModel().getAddedCells());
+                root.getChildren().addAll(graph.getModelAddedInView(min,max).getAddedEdges());
+                root.getChildren().addAll(graph.getModelAddedInView(min,max).getAddedCells());
             }
 
             double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
