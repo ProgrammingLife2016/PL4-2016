@@ -8,9 +8,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -37,15 +34,13 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
-    private GridPane annotationSearchBox;
+
     private HBox legend;
     private VBox listVBox;
     private ListView list;
     private int currentView;
     private ListFactory listFactory;
-    private TextField textField;
-    private Button searchButton;
-    private Button deselectButton;
+    private TextField genomeTextField;
     private StackPane box;
     private int count;
     private int secondCount;
@@ -71,6 +66,9 @@ public class MainController extends Controller<BorderPane> {
         graphController = new GraphController(this);
     }
 
+    /**
+     * Initializes the graph.
+     */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
@@ -79,12 +77,15 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
+    /**
+     * Initializes the tree.
+     *
+     * @param s A given string.
+     */
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
     }
-
-
 
     /**
      * Getter method for the current view level.
@@ -171,10 +172,6 @@ public class MainController extends Controller<BorderPane> {
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
 
-        // Place the annotationsearch box
-        createAnnotationSearchBox();
-        annotationSearchBox.setAlignment(Pos.CENTER_LEFT);
-
         // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
@@ -183,39 +180,8 @@ public class MainController extends Controller<BorderPane> {
         box = graphController.getZoomBox().getZoomBox();
 
         hbox.setAlignment(Pos.CENTER);
-        hbox.getChildren().addAll(annotationSearchBox, box, legend);
+        hbox.getChildren().addAll(box, legend);
         this.getRoot().setBottom(hbox);
-    }
-
-    /**
-     * Method to create the annotation search box.
-     */
-    private void createAnnotationSearchBox() {
-        annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
-
-        TextField box = (TextField) annotationSearchBox.getChildren().get(2);
-        Button search = (Button) annotationSearchBox.getChildren().get(3);
-
-        search.setOnAction(e -> {
-            if (box.getText() != null && !box.getText().isEmpty()) {
-                List<Annotation> annotations
-                        = graphController.getGraph().getModel().getAnnotations();
-
-                try {
-                    Annotation ann =
-                            AnnotationProcessor.findAnnotation(annotations, box.getText());
-
-                    Map<Integer, application.fxobjects.cell.Cell> cellMap
-                            = graphController.getGraph().getModel().getCellMap();
-
-                    for (Node n : ann.getSpannedNodes()) {
-                        ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-                    }
-                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-                    //e1.printStackTrace();
-                }
-            }
-        });
     }
 
     /**
@@ -227,32 +193,80 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
+     * Adds an action listener to the genome search and deselect buttons.
+     *
+     * @param searchButton The genome search button.
+     * @param deselectButton The deselect button.
+     */
+   private void setSearchAndDeselectButtonActionListener(
+           Button searchButton, Button deselectButton) {
+       searchButton.setOnAction(e -> {
+           if (!genomeTextField.getText().isEmpty()) {
+               application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                       genomeTextField.textProperty().get().trim());
+               treeController.applyCellHighlight(cell);
+               treeController.selectStrain(cell);
+               genomeTextField.setText("");
+               fillTree();
+           }
+       });
+
+       deselectButton.setOnAction(e -> {
+           treeController.clearSelection();
+           fillTree();
+       });
+   }
+
+    /**
+     * Adds an action listener to the annotation highlight button.
+     *
+     * @param annotationTextField The annotation search field.
+     * @param highlightButton The annotation highlight button.
+     */
+    private void setHighlightButtonActionListener(
+            TextField annotationTextField, Button highlightButton) {
+        highlightButton.setOnAction(e -> {
+            if (!annotationTextField.getText().isEmpty()) {
+                List<Annotation> annotations
+                        = graphController.getGraph().getModel().getAnnotations();
+
+                try {
+                    Annotation ann = AnnotationProcessor
+                            .findAnnotation(annotations, annotationTextField.getText());
+
+                    Map<Integer, application.fxobjects.cell.Cell> cellMap
+                            = graphController.getGraph().getModel().getCellMap();
+
+                    for (Node n : ann.getSpannedNodes()) {
+                        ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                    }
+                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
+    /**
      * Method to create the menu bar.
+     *
+     * @param withSearch Which part of the menu to show.
      */
     public void createMenu(boolean withSearch) {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
-        searchButton = new Button("Search Genome (In Tree)");
-        deselectButton = new Button("Deselect All");
+        genomeTextField = new TextField();
 
-        textField = new TextField();
-        searchButton.setOnAction(e -> {
-            if (!textField.getText().isEmpty()) {
-                application.fxobjects.cell.Cell cell = treeController.getCellByName(
-                        textField.textProperty().get().trim());
-                treeController.applyCellHighlight(cell);
-                treeController.selectStrain(cell);
-                textField.setText("");
-                fillTree();
-            }
-        });
+        Button searchButton = new Button("Search Genome (In Tree)");
+        Button deselectButton = new Button("Deselect All");
 
-        deselectButton.setOnAction(e -> {
-            treeController.clearSelection();
-            fillTree();
+        TextField annotationTextField = new TextField();
+        Button highlightButton = new Button("Highlight annotation");
 
-        });
-        hBox.getChildren().addAll(textField, searchButton, deselectButton);
+        setSearchAndDeselectButtonActionListener(searchButton, deselectButton);
+        setHighlightButtonActionListener(annotationTextField, highlightButton);
+
+        hBox.getChildren().addAll(genomeTextField, searchButton,
+                deselectButton, annotationTextField, highlightButton);
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
@@ -390,6 +404,6 @@ public class MainController extends Controller<BorderPane> {
      * @return the textfield.
      */
     public TextField getTextField() {
-        return textField;
+        return genomeTextField;
     }
 }
