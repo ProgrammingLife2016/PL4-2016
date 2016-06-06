@@ -88,6 +88,19 @@ public class RectangleCell extends Cell {
         shape.setStrokeWidth(4);
     }
 
+    public void sideFocus() {
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.BLACK);
+        borderGlow.setWidth(40);
+        borderGlow.setHeight(40);
+        this.setEffect(borderGlow);
+
+        shape.setStroke(Color.MEDIUMPURPLE);
+        shape.setStrokeWidth(4);
+    }
+
     /**
      * Method to reset the focus.
      */

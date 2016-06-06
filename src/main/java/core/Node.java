@@ -70,6 +70,12 @@ public class Node {
     private int nucleotides;
 
     /**
+     * The IDs of all the nodes in the previous level
+     * that collapsed into this node
+     */
+    private ArrayList<Integer> previousLevelNodesIds;
+
+    /**
      * Node constructor.
      *
      * @param id  - Node identifier.
@@ -98,9 +104,9 @@ public class Node {
         this.parents = new ArrayList<>();
         this.genomes = new ArrayList<>();
         this.annotations = new ArrayList<>();
-
         this.nucleotides = seq.length();
         this.collapseLevel = 1;
+        this.previousLevelNodesIds = new ArrayList<>();
     }
 
     /**
@@ -469,5 +475,37 @@ public class Node {
      */
     public void setNucleotides(int nucleotides) {
         this.nucleotides = nucleotides;
+    }
+
+    /**
+     * Getter for the PreviousLevelNodesIds
+     * @return PreviousLevelNodesIds
+     */
+    public ArrayList<Integer> getPreviousLevelNodesIds() {
+        return previousLevelNodesIds;
+    }
+
+    /**
+     *
+     * @param previousLevelNodesIds
+     */
+    public void setPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
+        this.previousLevelNodesIds = previousLevelNodesIds;
+    }
+
+    /**
+     * Adds a single nodeId to the previousLevelNodesIds
+     * @param previousLevelNodeId the nodeId to be added to the list.
+     */
+    public void addPreviousLevelNodesId(int previousLevelNodeId) {
+        this.previousLevelNodesIds.add(previousLevelNodeId);
+    }
+
+    /**
+     * Adds a list of nodes to the previousLevelNodesIds
+     * @param previousLevelNodesIds
+     */
+    public void addPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
+        this.previousLevelNodesIds.addAll(previousLevelNodesIds);
     }
 }

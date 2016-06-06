@@ -123,7 +123,16 @@ public class GraphController extends Controller<ScrollPane> {
             }
         }
         graphMouseHandling.setPrevClick(prevClick);
+        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.getCurrentView()).get(prevClick.getCellId()));
+        System.out.println(graphMouseHandling.getFocusedNode().getPreviousLevelNodesIds().toString());
         prevClick.focus();
+        System.out.println(graph.getModel().getCellMap().toString());
+        for (int underlyingNodeId : graphMouseHandling.getFocusedNode().getPreviousLevelNodesIds()) {
+            Cell cell = graph.getModel().getCellMap().get(underlyingNodeId);
+            if (cell != null) {
+                cell.sideFocus();
+            }
+        }
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 

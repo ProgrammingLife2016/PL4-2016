@@ -16,6 +16,7 @@ import static java.lang.String.format;
 class GraphMouseHandling {
     private MainController mainController;
     private Cell prevClick;
+    private core.Node focusedNode;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         Cell node = (Cell) event.getSource();
@@ -23,6 +24,9 @@ class GraphMouseHandling {
         core.Node clicked = mainController.getGraphController().getGraph()
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
                 .get(node.getCellId());
+
+        focusedNode = clicked;
+
 
         String info = "";
 
@@ -80,6 +84,7 @@ class GraphMouseHandling {
     GraphMouseHandling(MainController m) {
         this.mainController = m;
         this.prevClick = null;
+        this.focusedNode = null;
     }
 
     /**
@@ -110,5 +115,21 @@ class GraphMouseHandling {
      */
     public void setPrevClick(Cell prevClick) {
         this.prevClick = prevClick;
+    }
+
+    /**
+     * Getter for the focused Node
+     * @return the node that is focused.
+     */
+    public core.Node getFocusedNode() {
+        return focusedNode;
+    }
+
+    /**
+     * Setter for the focused Node
+     * @param focusedNode the node that is to be focused.
+     */
+    public void setFocusedNode(core.Node focusedNode) {
+        this.focusedNode = focusedNode;
     }
 }

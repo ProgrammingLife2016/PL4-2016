@@ -147,6 +147,8 @@ public abstract class Cell extends Pane {
      */
     public void focus() { }
 
+    public void sideFocus() { }
+
     /**
      * Abstract method.
      */
