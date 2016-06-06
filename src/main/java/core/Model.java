@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
  */
 public class Model {
 
+    private Cell leftMost;
+    private Cell rightMost;
+
     private Cell graphParent;
 
     private List<Cell> allCells;
