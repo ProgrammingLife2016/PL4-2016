@@ -6,6 +6,9 @@ import application.fxobjects.cell.Edge;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
@@ -33,6 +36,8 @@ public class GraphController extends Controller<ScrollPane> {
     private MainController mainController;
     private ZoomBox zoomBox;
 
+    private int drawFrom = 0;
+
 
     /**
      * Constructor method for this class.
@@ -53,6 +58,19 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+
+        ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
+            Bounds bounds = getRoot().getViewportBounds();
+            drawFrom = -1 * (int) bounds.getMinX();
+            //int right = drawFrom + (int) bounds.getWidth();
+            //System.out.println(drawFrom);
+            update(graph.getCurrentRef(), graph.getCurrentInt());
+        };
+
+        //this.getRoot().viewportBoundsProperty().addListener(changeListener);
+        this.getRoot().hvalueProperty().addListener(changeListener);
+        //this.getRoot().vvalueProperty().addListener(changeListener);
+
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
@@ -67,10 +85,10 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
+
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
@@ -82,8 +100,13 @@ public class GraphController extends Controller<ScrollPane> {
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
+
                     event.consume();
                 }
+                Bounds bounds = getRoot().getViewportBounds();
+                drawFrom = -1 * (int) bounds.getMinX();
+                update(graph.getCurrentRef(), graph.getCurrentInt());
+
             }
         });
     }
@@ -152,26 +175,18 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
-    public void update(Object ref, int depth, int min) {
+    public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
+        int min = (int) (drawFrom - screenSize.getMaxX() * 1.5);
+        int max = (int) (drawFrom + screenSize.getMaxX() * 1.5);
 
         //We received a different reference of depth, so we need to redraw.
         if (depth <= size - 1 && depth >= 0
                 && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
-            root.getChildren().clear();
-
             graph.addGraphComponents(ref, depth);
 
             // add components to graph pane
-
-            int max = min + (int) screenSize.getMaxX();
-            if (graph.getModel().getAllCells().size() > 0) {
-                root.getChildren().addAll(graph.getModelAllInView(min,max).getAddedEdges());
-                root.getChildren().addAll(graph.getModelAllInView(min,max).getAddedCells());
-            } else {
-                root.getChildren().addAll(graph.getModelAddedInView(min,max).getAddedEdges());
-                root.getChildren().addAll(graph.getModelAddedInView(min,max).getAddedCells());
-            }
+            addToPane(min, max);
 
             double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
             double MAX_EDGE_LENGTH_LONG = screenSize.getWidth();
@@ -188,7 +203,7 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             + ((e.getSource().getLayoutY()
                             + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
@@ -199,9 +214,23 @@ public class GraphController extends Controller<ScrollPane> {
             }
             initMouseHandler();
             graph.endUpdate();
+        } else {
+            addToPane(min, max);
         }
+        graph.endUpdate();
         //Set Graph as center.
         this.getRoot().setContent(root);
+    }
+
+    private void addToPane(int min, int max) {
+        root.getChildren().clear();
+        if (graph.getModel().getAllCells().size() > 0) {
+            root.getChildren().addAll(graph.getModelAllInView(min, max).getAddedEdges());
+            root.getChildren().addAll(graph.getModelAllInView(min, max).getAddedCells());
+        } else {
+            root.getChildren().addAll(graph.getModelAddedInView(min, max).getAddedEdges());
+            root.getChildren().addAll(graph.getModelAddedInView(min, max).getAddedCells());
+        }
     }
 
     /**
@@ -245,6 +274,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Getter for the graphMouseHandling
+     *
      * @return the graphMouseHandling object of the GraphController
      */
     public GraphMouseHandling getGraphMouseHandling() {

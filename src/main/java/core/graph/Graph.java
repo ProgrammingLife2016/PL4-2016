@@ -450,17 +450,20 @@ public class Graph {
                 m.addCell(c);
             }
         }
+
         for (Edge e : this.getModel().getAddedEdges()) {
-            if(m.getAddedCells().contains(e.getSource()) || m.getAddedCells().contains(e.getTarget())) {
+            if (!(
+                    (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                            || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
+
+                    ) {
                 m.addEdge(e);
             }
-
         }
-
-
 
         return addFirstAndLast(m);
     }
+
     public Model getModelAllInView(int min, int max) {
         Model m = new Model();
 
@@ -469,16 +472,21 @@ public class Graph {
                 m.addCell(c);
             }
         }
+
         for (Edge e : this.getModel().getAllEdges()) {
-            if(m.getAddedCells().contains(e.getSource()) || m.getAddedCells().contains(e.getTarget())) {
+            if (!(
+                    (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                            || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
+
+                    ) {
                 m.addEdge(e);
             }
-
         }
+
         return addFirstAndLast(m);
     }
 
-    public Model addFirstAndLast(Model m) {
+    private Model addFirstAndLast(Model m) {
         if (current.getRightMost() != null) {
             if (!(m.getAllCells().contains(getModel().getLeftMost()))) {
                 m.addCell(getModel().getLeftMost());

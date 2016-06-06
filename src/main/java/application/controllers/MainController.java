@@ -133,8 +133,7 @@ public class MainController extends Controller<BorderPane> {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
-        //@Todo Zero shouldnt be zero here I guess.
-        graphController.update(ref, currentView, 0);
+        graphController.update(ref, currentView);
 
         graphController.getZoomBox().fillZoomBox(count == -1);
         count++;
