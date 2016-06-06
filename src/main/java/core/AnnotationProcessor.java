@@ -1,6 +1,5 @@
 package core;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class AnnotationProcessor {
      *
      * @param nodeMap A given hash map of nodes.
      * @param annotations List of annotations.
-     * @throws IOException Throw exception on read failure.
      */
     public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
         this.annotations = annotations;

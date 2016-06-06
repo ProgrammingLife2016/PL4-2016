@@ -102,7 +102,7 @@ public class AnnotationProcessorTest {
      * @throws AnnotationProcessor.TooManyAnnotationsFoundException throw exception on too many
      * matching annotations.
      */
-    @Test(expected=AnnotationProcessor.TooManyAnnotationsFoundException.class)
+    @Test(expected = AnnotationProcessor.TooManyAnnotationsFoundException.class)
     public void testFindAnnotationMultipleMatches()
             throws AnnotationProcessor.TooManyAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
