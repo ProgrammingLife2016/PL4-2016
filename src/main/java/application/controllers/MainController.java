@@ -198,13 +198,12 @@ public class MainController extends Controller<BorderPane> {
 
         search.setOnAction(e -> {
             if (box.getText() != null && !box.getText().isEmpty()) {
-                long input = Long.parseLong(box.getText());
-
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
 
                 try {
-                    Annotation ann = AnnotationProcessor.findAnnotation(annotations, "");
+                    Annotation ann =
+                            AnnotationProcessor.findAnnotation(annotations, box.getText());
 
                     Map<Integer, application.fxobjects.cell.Cell> cellMap
                             = graphController.getGraph().getModel().getCellMap();
@@ -213,7 +212,7 @@ public class MainController extends Controller<BorderPane> {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                     }
                 } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-                    e1.printStackTrace();
+                    //e1.printStackTrace();
                 }
             }
         });
