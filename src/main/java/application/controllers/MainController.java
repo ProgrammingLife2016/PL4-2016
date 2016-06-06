@@ -202,8 +202,7 @@ public class MainController extends Controller<BorderPane> {
 
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
-                Annotation ann = AnnotationProcessor.findAnnotationByID(
-                        annotations, input);
+                Annotation ann = AnnotationProcessor.findAnnotation(annotations, "");
 
                 Map<Integer, application.fxobjects.cell.Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
