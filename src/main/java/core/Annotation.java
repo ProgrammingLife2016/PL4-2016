@@ -290,6 +290,7 @@ public class Annotation implements Comparable<Annotation> {
                                            int nodeMapSize) {
         Boolean nodesMustBeAdded = false;
         for (int idx = startLoopIdx; idx < nodeMapSize; idx++) {
+            System.out.println("In loop");
             Node n = nodeMap.get(idx);
             if (n == null) {
                 continue;

@@ -1,6 +1,5 @@
 package core;
 
-import com.jcraft.jsch.HASH;
 import org.junit.Before;
 import org.junit.Test;
 

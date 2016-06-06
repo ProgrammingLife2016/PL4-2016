@@ -64,6 +64,7 @@ public class AnnotationProcessor {
     /**
      * Filters out all nodes in a node map that do not belong to the reference.
      *
+     * @param baseNodeMap a base node map.
      * @return A hash map of nodes present in the reference.
      */
     public HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
@@ -89,8 +90,10 @@ public class AnnotationProcessor {
      * @param annotations A list of annotations.
      * @param str A specified part of the display name to search on.
      * @return The found annotation.
+     * @throws TooManyAnnotationsFoundException Throws exception on too many matching annotations.
      */
-    public static Annotation findAnnotation(List<Annotation> annotations, String str) {
+    public static Annotation findAnnotation(List<Annotation> annotations, String str)
+            throws TooManyAnnotationsFoundException {
         int counter = 0;
         Annotation matchingAnnotation = null;
 
@@ -104,7 +107,7 @@ public class AnnotationProcessor {
         if (counter == 1) {
             return matchingAnnotation;
         } else if (counter > 1) {
-
+            throw new TooManyAnnotationsFoundException();
         }
         return null;
     }
@@ -116,5 +119,17 @@ public class AnnotationProcessor {
      */
     public List<Annotation> getAnnotations() {
         return annotations;
+    }
+
+    /**
+     * Exception for too many elements in a data structure.
+     */
+    public static class TooManyAnnotationsFoundException extends Exception {
+
+        /**
+         * Exception class constructor.
+         */
+        public TooManyAnnotationsFoundException() {
+        }
     }
 }

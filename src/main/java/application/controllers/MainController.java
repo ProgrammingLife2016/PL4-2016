@@ -202,13 +202,18 @@ public class MainController extends Controller<BorderPane> {
 
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
-                Annotation ann = AnnotationProcessor.findAnnotation(annotations, "");
 
-                Map<Integer, application.fxobjects.cell.Cell> cellMap
-                        = graphController.getGraph().getModel().getCellMap();
+                try {
+                    Annotation ann = AnnotationProcessor.findAnnotation(annotations, "");
 
-                for (Node n : ann.getSpannedNodes()) {
-                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                    Map<Integer, application.fxobjects.cell.Cell> cellMap
+                            = graphController.getGraph().getModel().getCellMap();
+
+                    for (Node n : ann.getSpannedNodes()) {
+                        ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                    }
+                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
