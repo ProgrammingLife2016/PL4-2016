@@ -71,7 +71,6 @@ public class TreeController extends Controller<ScrollPane> {
      * Set-up the tree model from a Newick data file.
      *
      * @return A Newick tree.
-     * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile(String s) {
@@ -606,5 +605,6 @@ public class TreeController extends Controller<ScrollPane> {
                 });
                 break;
         }
+        modifyGraphOptions();
     }
 }
