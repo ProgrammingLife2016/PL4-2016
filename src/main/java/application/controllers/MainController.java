@@ -103,7 +103,7 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-        createMenu();
+        createMenu(false);
     }
 
     /**
@@ -226,7 +226,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the menu bar.
      */
-    private void createMenu() {
+    public void createMenu(boolean withSearch) {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
         searchButton = new Button("Search Genome (In Tree)");
@@ -251,10 +251,13 @@ public class MainController extends Controller<BorderPane> {
         });
         hBox.getChildren().addAll(textField, searchButton, deselectButton);
 
-        MenuFactory menuFactory = new MenuFactory(this);
-        menuBar = menuFactory.createMenu(menuBar);
-
-        vBox.getChildren().addAll(menuBar, hBox);
+        if (withSearch) {
+            vBox.getChildren().addAll(menuBar, hBox);
+        } else {
+            MenuFactory menuFactory = new MenuFactory(this);
+            menuBar = menuFactory.createMenu(menuBar);
+            vBox.getChildren().addAll(menuBar);
+        }
 
         this.getRoot().setTop(vBox);
     }

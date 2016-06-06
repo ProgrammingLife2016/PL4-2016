@@ -97,10 +97,16 @@ public class MenuFactory {
     private Menu initFileMenu() {
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createGraphChooser());
+                t -> {
+                    WindowFactory.createGraphChooser();
+                    WindowFactory.createMenuWithSearch();
+                });
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createTreeChooser());
+                t -> {
+                    WindowFactory.createTreeChooser();
+                    WindowFactory.createMenuWithSearch();
+                });
 
         return initMenu("File", loadGenome, loadPhylogeneticTree);
     }
