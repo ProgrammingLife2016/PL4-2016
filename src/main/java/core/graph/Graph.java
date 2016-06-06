@@ -289,13 +289,15 @@ public class Graph {
 
         if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
             int width = (int) Math.round(maxEdgeWidth
-                    * (double) intersection(from.getGenomes(), to.getGenomes())
-                    / (double) Math.max(genomes.size(), 10)) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                    intersectingStrings(to.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
         } else {
             int width = (int) Math.round(maxEdgeWidth
-                    * (double) intersection(from.getGenomes(), to.getGenomes())
-                    / (double) Math.max(genomes.size(), 10)) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                    intersectingStrings(to.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -326,6 +328,22 @@ public class Graph {
             }
         }
         return i;
+    }
+
+    /**
+     * Method that returns a list of strings present in both lists.
+     * @param l1 first list
+     * @param l2 second list
+     * @return result
+     */
+    public List<String> intersectingStrings(List<String> l1, List<String> l2) {
+        ArrayList<String> res = new ArrayList<String>();
+        for (String s : l1) {
+            if (l2.contains(s)) {
+                res.add(s);
+            }
+        }
+        return res;
     }
 
     /**
