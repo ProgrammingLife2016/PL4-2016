@@ -486,8 +486,9 @@ public class Node {
     }
 
     /**
-     *
-     * @param previousLevelNodesIds
+     * Method to set the previousLevelNodesIds
+     * @param previousLevelNodesIds the list of Ids of all nodes collapsed
+     *                              in the previous level.
      */
     public void setPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
         this.previousLevelNodesIds = previousLevelNodesIds;
@@ -503,7 +504,8 @@ public class Node {
 
     /**
      * Adds a list of nodes to the previousLevelNodesIds
-     * @param previousLevelNodesIds
+     * @param previousLevelNodesIds the list of Ids of all nodes collapsed
+     *                              in the previous level.
      */
     public void addPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
         this.previousLevelNodesIds.addAll(previousLevelNodesIds);

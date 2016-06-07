@@ -74,6 +74,9 @@ public class IndelCell extends Cell {
         shape.setStrokeWidth(4);
     }
 
+    /**
+     * Method to set the side focus.
+     */
     public void sideFocus() {
         DropShadow borderGlow = new DropShadow();
         borderGlow.setOffsetY(0f);

@@ -262,43 +262,41 @@ public final class GraphReducer {
     public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
         List<Node> bubbleChildren = new ArrayList<>();
-        if (children.size() <= 1) {
-            return false;
-        }
-
-        // Add all children that have one child and parent to the list of potential bubble nodes.
-        for (int i = 0; i < children.size(); i++) {
-            Node child = nodeMap.get(children.get(i));
-            if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
-                bubbleChildren.add(child);
-            }
-        }
-
-        for (Node child : bubbleChildren) {
-            Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
-            List<Node> bubble = new ArrayList<Node>();
-            bubble.add(child);
-            for (Node otherChild : bubbleChildren) {
-                if (!otherChild.equals(child)
-                        && grandChild.equals(nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
-                    bubble.add(otherChild);
+        if (children.size() > 1) {
+            // Add all children that have one child and
+            // parent to the list of potential bubble nodes.
+            for (int i = 0; i < children.size(); i++) {
+                Node child = nodeMap.get(children.get(i));
+                if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
+                    bubbleChildren.add(child);
                 }
             }
-            if (bubble.size() > 1) {
-                for (Node bubbleChild : bubble) {
-                    if (!bubbleChild.equals(child)) {
-                        child.unionGenomes(bubbleChild);
-                        child.setNucleotides(child.getNucleotides() + bubbleChild.getNucleotides());
-                        child.addPreviousLevelNodesId(bubbleChild.getId());
-                        parent.removeLink(bubbleChild.getId());
-                        grandChild.removeParent(bubbleChild.getId());
-                        nodeMap.remove(bubbleChild.getId());
+            for (Node child : bubbleChildren) {
+                Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
+                List<Node> bubble = new ArrayList<Node>();
+                bubble.add(child);
+                for (Node otherChild : bubbleChildren) {
+                    if (!otherChild.equals(child) && grandChild.equals(
+                            nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
+                        bubble.add(otherChild);
                     }
                 }
-                child.setType(CellType.BUBBLE);
-                child.setCollapseLevel(bubble.size());
-                child.setSequence("");
-                return true;
+                if (bubble.size() > 1) {
+                    for (Node bubbleChild : bubble) {
+                        if (!bubbleChild.equals(child)) {
+                            child.unionGenomes(bubbleChild);
+                            child.setNucleotides(child.getNucleotides() + bubbleChild.getNucleotides());
+                            child.addPreviousLevelNodesId(bubbleChild.getId());
+                            parent.removeLink(bubbleChild.getId());
+                            grandChild.removeParent(bubbleChild.getId());
+                            nodeMap.remove(bubbleChild.getId());
+                        }
+                    }
+                    child.setType(CellType.BUBBLE);
+                    child.setCollapseLevel(bubble.size());
+                    child.setSequence("");
+                    return true;
+                }
             }
         }
         return false;
