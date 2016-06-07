@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.cell.Cell;
 
+import application.fxobjects.cell.graph.GraphCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -15,11 +16,11 @@ import static java.lang.String.format;
  */
 class GraphMouseHandling {
     private MainController mainController;
-    private Cell prevClick;
+    private GraphCell prevClick;
     private core.Node focusedNode;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
-        Cell node = (Cell) event.getSource();
+        GraphCell node = (GraphCell) event.getSource();
 
         core.Node clicked = mainController.getGraphController().getGraph()
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
@@ -60,7 +61,7 @@ class GraphMouseHandling {
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        Cell node = (Cell) event.getSource();
+        GraphCell node = (GraphCell) event.getSource();
 
         double offsetX = event.getX() + node.getLayoutX()
                 - node.getCellShape().getLayoutBounds().getWidth() / 2;
@@ -108,7 +109,7 @@ class GraphMouseHandling {
      *
      * @return the Cell that is last clicked.
      */
-    public Cell getPrevClick() {
+    public GraphCell getPrevClick() {
         return prevClick;
     }
 
@@ -117,7 +118,7 @@ class GraphMouseHandling {
      *
      * @param prevClick the cell to set to.
      */
-    public void setPrevClick(Cell prevClick) {
+    public void setPrevClick(GraphCell prevClick) {
         this.prevClick = prevClick;
     }
 

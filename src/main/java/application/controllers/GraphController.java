@@ -3,6 +3,7 @@ package application.controllers;
 import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.GraphCell;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -115,7 +116,7 @@ public class GraphController extends Controller<ScrollPane> {
         //Remove sideFocus of all underlying nodes.
         for (int underlyingNodeId : graphMouseHandling.
                 getFocusedNode().getPreviousLevelNodesIds()) {
-            Cell cell = graph.getModel().getCellMap().get(underlyingNodeId);
+            GraphCell cell = (GraphCell) graph.getModel().getCellMap().get(underlyingNodeId);
             if (cell != null) {
                 if (enable) {
                     cell.sideFocus();
@@ -132,13 +133,13 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param prevClick the cell to focus to.
      */
-    public void focus(Cell prevClick) {
+    public void focus(GraphCell prevClick) {
         sideFocus(false);
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
             if (c.getCellId() == prevClick.getCellId()
                     || c.getCellId() > prevClick.getCellId()) {
-                prevClick = c;
+                prevClick = (GraphCell) c;
                 break;
             }
         }
@@ -204,9 +205,9 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
                             + ((e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.67);
