@@ -92,6 +92,7 @@ public class Parser {
      * @return - A HashMap containing the information from the .gfa file.
      * @throws IOException Throw exception on read failure.
      */
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION")
     public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(input);
 
