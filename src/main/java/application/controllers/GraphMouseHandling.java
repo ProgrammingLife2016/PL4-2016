@@ -25,9 +25,6 @@ class GraphMouseHandling {
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
                 .get(node.getCellId());
 
-        focusedNode = clicked;
-
-
         String info = "";
 
         info += format("Genome ID: %d \n", clicked.getId());
@@ -46,14 +43,21 @@ class GraphMouseHandling {
 
         if (prevClick == null) {
             prevClick = node;
+            focusedNode = clicked;
             node.focus();
         } else if (prevClick.getCellId() != node.getCellId()) {
+            mainController.getGraphController().sideFocus(false);
+            System.out.println("clicked node not the same");
             prevClick.resetFocus();
             node.focus();
             prevClick = node;
+            focusedNode = clicked;
         } else if (prevClick.getCellId() == node.getCellId()) {
+            mainController.getGraphController().sideFocus(false);
+            System.out.println("clicked node the same");
             prevClick.resetFocus();
             prevClick = null;
+            focusedNode = null;
         }
     };
 

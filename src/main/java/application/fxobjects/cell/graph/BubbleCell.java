@@ -82,7 +82,6 @@ public class BubbleCell extends Cell {
         borderGlow.setWidth(40);
         borderGlow.setHeight(40);
         this.setEffect(borderGlow);
-        System.out.println("hi");
         shape.setStroke(Color.MEDIUMPURPLE);
         shape.setStrokeWidth(4);
     }

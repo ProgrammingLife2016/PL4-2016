@@ -56,6 +56,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
+                sideFocus(false);
             }
 
             if (event.getDeltaY() != 0) {
@@ -67,7 +68,6 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -78,7 +78,6 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -108,12 +107,31 @@ public class GraphController extends Controller<ScrollPane> {
         return places;
     }
 
+    public void sideFocus(boolean enable) {
+        //Remove sideFocus of all underlying nodes.
+        System.out.println("focused node: "+ graphMouseHandling.getFocusedNode().getId());
+        for (int underlyingNodeId : graphMouseHandling.getFocusedNode().getPreviousLevelNodesIds()) {
+            Cell cell = graph.getModel().getCellMap().get(underlyingNodeId);
+            if (cell != null) {
+                if (enable) {
+                    System.out.println("enable sidefocus: " + underlyingNodeId);
+                    cell.sideFocus();
+                } else {
+                    System.out.println("disable sidefocus: " + underlyingNodeId);
+                    cell.resetFocus();
+                }
+
+            }
+        }
+    }
+
     /**
      * Method to focus on a Cell.
      *
      * @param prevClick the cell to focus to.
      */
     public void focus(Cell prevClick) {
+        sideFocus(false);
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
             if (c.getCellId() == prevClick.getCellId()
@@ -124,15 +142,8 @@ public class GraphController extends Controller<ScrollPane> {
         }
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.getCurrentView()).get(prevClick.getCellId()));
-        System.out.println(graphMouseHandling.getFocusedNode().getPreviousLevelNodesIds().toString());
         prevClick.focus();
-        System.out.println(graph.getModel().getCellMap().toString());
-        for (int underlyingNodeId : graphMouseHandling.getFocusedNode().getPreviousLevelNodesIds()) {
-            Cell cell = graph.getModel().getCellMap().get(underlyingNodeId);
-            if (cell != null) {
-                cell.sideFocus();
-            }
-        }
+        sideFocus(true);
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
