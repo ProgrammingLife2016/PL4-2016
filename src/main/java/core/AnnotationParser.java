@@ -31,8 +31,7 @@ public final class AnnotationParser {
         List<Annotation> annotations = new ArrayList<Annotation>();
 
         String nextLine;
-        InputStreamReader isr = new InputStreamReader(input);
-        BufferedReader bReader = new BufferedReader(isr);
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
 
         while ((nextLine = bReader.readLine()) != null) {
             String[] content = nextLine.trim().split("\t");

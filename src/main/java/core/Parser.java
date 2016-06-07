@@ -31,11 +31,11 @@ public class Parser {
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
-    public final HashMap<Integer, Node>
-    readGFA(final InputStream input) {
+    public final HashMap<Integer, Node> readGFA(final InputStream input) {
         try {
-            BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
+
             while ((nextLine = bReader.readLine()) != null) {
                 processNextLine(nextLine);
             }

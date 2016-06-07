@@ -24,7 +24,7 @@ public class AnnotationParserTest {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     @Test
     public void testReadGFF() throws FileNotFoundException {
-        List<Annotation> annotations = new ArrayList<Annotation>();
+        List<Annotation> annotations = new ArrayList<>();
         InputStream is = getClass().getResourceAsStream("/TestFiles/TestFile.gff");
 
         try {

@@ -38,8 +38,8 @@ public class ParserTest {
     @SuppressFBWarnings({"DLS_DEAD_LOCAL_STORE",
             "OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE"})
     @Test
-    public void readGFA() {
-        HashMap<Integer, Node> map = new HashMap<Integer, Node>();
+    public void testReadGFA() {
+        HashMap<Integer, Node> map = new HashMap<>();
         InputStream is = getClass().getResourceAsStream("/TestFiles/TBTestFile.gfa");
 
         try {
