@@ -27,6 +27,7 @@ public class ZoomBox extends ScrollPane {
     private double graphBoxHeight;
     private double zoomBoxWidth;
     private double zoomBoxHeight;
+    private double rectX;
     private GraphController graphController;
     private static Image image;
 
@@ -56,7 +57,7 @@ public class ZoomBox extends ScrollPane {
         zoomBoxWidth = graphBoxWidth / 5.0;
         zoomBoxHeight = graphBoxHeight / 5.0;
 
-        double rectX = windowWidth - zoomBoxWidth - 20;
+        rectX = windowWidth - zoomBoxWidth - 20;
         zoomRectBorder = new Rectangle(rectX, 20, zoomBoxWidth, zoomBoxHeight);
         zoomRectBorder.setStroke(Color.LIGHTGREY);
         zoomRectBorder.setStrokeWidth(3);
@@ -112,19 +113,22 @@ public class ZoomBox extends ScrollPane {
         double rightOffset = places[0];
         double shown = places[1];
 
-        double maxX = zoomRect.getX();
-        double currPos = zoomRect.getX();
-        double right = currPos + rightOffset * zoomBoxWidth;
+        double right = rectX + rightOffset * zoomBoxWidth;
         double newWidth = shown * zoomBoxWidth;
 
+        double maxX = (rectX + zoomBoxWidth) - zoomRect.getWidth();
+
+        System.out.println("right: " + right);
+        System.out.println("maxX: " + maxX);
+
         if (right > maxX) {
+            System.out.println("too right");
             right = maxX;
+            System.out.println("new Right: " + right);
         }
 
         if (newWidth > zoomBoxWidth) {
             newWidth = zoomBoxWidth;
-        } else if (newWidth < 50) {
-            newWidth = 50;
         }
 
         zoomRect.setX(right);

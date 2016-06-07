@@ -6,8 +6,12 @@ import application.fxobjects.cell.Edge;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
@@ -19,6 +23,7 @@ import javafx.stage.Screen;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 
 /**
@@ -32,6 +37,7 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private MainController mainController;
     private ZoomBox zoomBox;
+    private DoubleProperty visibleAmount;
 
 
     /**
@@ -94,12 +100,14 @@ public class GraphController extends Controller<ScrollPane> {
      * @return the new places to update
      */
     public double[] updateZoomBox() {
-        double left = Math.abs(this.getRoot().getViewportBounds().getMinX());
-        double middle = this.getRoot().getViewportBounds().getWidth();
-        double total = graph.getModel().getGraphLayout().getMaxWidth();
+        Set<Node> nodes = this.getRoot().lookupAll(".scroll-bar");
+        nodes.stream().filter(node -> node instanceof ScrollBar).forEach(node -> {
+            ScrollBar sb = (ScrollBar) node;
+            visibleAmount = sb.visibleAmountProperty();
+        });
 
-        double rightOffset = left / total;
-        double shown = middle / total;
+        double rightOffset = this.getRoot().getHvalue();
+        double shown = visibleAmount.doubleValue();
 
         double[] places = new double[2];
         places[0] = rightOffset;
@@ -186,7 +194,7 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             + ((e.getSource().getLayoutY()
                             + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
@@ -195,6 +203,16 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getSource().relocate(e.getSource().getLayoutX(), newY);
                 }
             }
+
+            Set<Node> nodes = this.getRoot().lookupAll(".scroll-bar");
+            nodes.stream().filter(node -> node instanceof ScrollBar).forEach(node -> {
+                ScrollBar sb = (ScrollBar) node;
+                sb.valueProperty().addListener((ObservableValue<? extends Number> ov,
+                                                Number old_val, Number new_val) -> {
+                    zoomBox.replaceZoomBox(updateZoomBox());
+                });
+            });
+
             initMouseHandler();
             graph.endUpdate();
         }
@@ -243,6 +261,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Getter for the graphMouseHandling
+     *
      * @return the graphMouseHandling object of the GraphController
      */
     public GraphMouseHandling getGraphMouseHandling() {
