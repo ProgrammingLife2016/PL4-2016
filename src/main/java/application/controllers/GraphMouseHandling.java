@@ -47,14 +47,12 @@ class GraphMouseHandling {
             node.focus();
         } else if (prevClick.getCellId() != node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
-            System.out.println("clicked node not the same");
             prevClick.resetFocus();
             node.focus();
             prevClick = node;
             focusedNode = clicked;
         } else if (prevClick.getCellId() == node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
-            System.out.println("clicked node the same");
             prevClick.resetFocus();
             prevClick = null;
             focusedNode = null;

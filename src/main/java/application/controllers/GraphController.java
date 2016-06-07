@@ -118,10 +118,8 @@ public class GraphController extends Controller<ScrollPane> {
             Cell cell = graph.getModel().getCellMap().get(underlyingNodeId);
             if (cell != null) {
                 if (enable) {
-                    System.out.println("enable sidefocus: " + underlyingNodeId);
                     cell.sideFocus();
                 } else {
-                    System.out.println("disable sidefocus: " + underlyingNodeId);
                     cell.resetFocus();
                 }
 
