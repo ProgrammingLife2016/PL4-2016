@@ -97,7 +97,7 @@ public class MainController extends Controller<BorderPane> {
     public void initAnnotations(String path) {
         try {
             List<Annotation> annotations = AnnotationParser.readCDSFilteredGFF(path);
-            graphController.getGraph().getModel().setAnnotations(annotations);
+            graphController.getGraph().setAnnotations(annotations);
             graphController.getGraph().getModel().matchNodesAndAnnotations();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -246,7 +246,7 @@ public class MainController extends Controller<BorderPane> {
             if (!annotationTextField.getText().isEmpty()) {
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
-
+                System.out.println("Num annotations: " + annotations.size());
                 try {
                     Annotation ann = AnnotationProcessor
                             .findAnnotation(annotations, annotationTextField.getText());

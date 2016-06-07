@@ -41,6 +41,10 @@ public class Graph {
      */
     private List<HashMap<Integer, Node>> levelMaps;
 
+    /**
+     * Reference annotations.
+     */
+    private List<Annotation> annotations;
 
     /**
      * Class constructor.
@@ -49,6 +53,8 @@ public class Graph {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
+
+        annotations = new ArrayList<>();
     }
 
     /**
@@ -175,7 +181,8 @@ public class Graph {
     public Model generateModel(Object ref, int depth, Model toret) {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
-        toret.setAnnotations(current.getAnnotations());
+        toret.setAnnotations(annotations);
+        System.out.println("Num annotations: " + toret.getAnnotations().size());
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
@@ -423,6 +430,23 @@ public class Graph {
         this.levelMaps = levelMaps;
     }
 
+    /**
+     * Get the annotations.
+     *
+     * @return The annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Sets the annotations.
+     *
+     * @param annotations The annotations
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
 
     /**
      * Method to reset the current view.
