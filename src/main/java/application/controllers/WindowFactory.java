@@ -92,6 +92,20 @@ public final class WindowFactory {
     }
 
     /**
+     * Method that creates a directoryChooser.
+     * @return the directoryChooser
+     */
+    public static FileChooser createAnnotationChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Annotation File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        mainController.initAnnotations(selectedFile.getAbsolutePath());
+        return directoryChooser;
+    }
+
+    /**
      * Creates the menu including a searchBar.
      */
     public static void createMenuWithSearch() {

@@ -21,8 +21,9 @@ public class MenuFactory {
     filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
     filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
     filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
-    protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
-            showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+    protected static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
+            shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains,
+            showOnlyThisStrain;
     private MainController mainController;
 
     /**
@@ -108,7 +109,13 @@ public class MenuFactory {
                     WindowFactory.createMenuWithSearch();
                 });
 
-        return initMenu("File", loadGenome, loadPhylogeneticTree);
+        loadAnnotations = initMenuItem("Load Annotation data",
+                new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
+                t -> {
+                    WindowFactory.createAnnotationChooser();
+                    WindowFactory.createMenuWithSearch();
+                });
+        return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations);
     }
 
     private Menu initFilterMenu() {

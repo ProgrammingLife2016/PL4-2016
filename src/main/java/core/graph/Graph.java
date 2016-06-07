@@ -46,11 +46,6 @@ public class Graph {
      */
     private List<HashMap<Integer, Node>> levelMaps;
 
-    /**
-     * Reference annotations.
-     */
-    private List<Annotation> annotations;
-
 
     /**
      * Class constructor.
@@ -59,9 +54,6 @@ public class Graph {
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
-
-        annotations = readCDSFilteredGFF(
-                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
     }
 
     /**
@@ -74,7 +66,7 @@ public class Graph {
         try {
             Parser parser = new Parser();
 
-            startMap = parser.readGFAAsString(s, annotations);
+            startMap = parser.readGFAAsString(s);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
 
@@ -188,7 +180,7 @@ public class Graph {
     public Model generateModel(Object ref, int depth, Model toret) {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
-        toret.setAnnotations(annotations);
+        toret.setAnnotations(current.getAnnotations());
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);

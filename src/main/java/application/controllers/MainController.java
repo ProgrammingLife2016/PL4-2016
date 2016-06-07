@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.cell.graph.RectangleCell;
 import core.Annotation;
+import core.AnnotationParser;
 import core.AnnotationProcessor;
 import core.Node;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -12,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -80,11 +83,25 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Initializes the tree.
      *
-     * @param s A given string.
+     * @param s Path to the tree file.
      */
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
+    }
+
+    /**
+     * Initializes the annotation data.
+     *
+     * @param path Path to the annotation data file.
+     */
+    public void initAnnotations(String path) {
+        try {
+            List<Annotation> annotations = AnnotationParser.readCDSFilteredGFF(path);
+            graphController.getGraph().getModel().setAnnotations(annotations);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

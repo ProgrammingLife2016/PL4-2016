@@ -27,15 +27,13 @@ public class Parser {
     /**
      * Read the data from a .gfa file and put the nodes in a hashmap.
      *
-     * @param annotations A list of annotations.
      * @param input - filepath of .gfa file to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     public final HashMap<Integer, Node>
-
-    readGFA(final InputStream input, List<Annotation> annotations) {
+    readGFA(final InputStream input) {
         try {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
@@ -45,8 +43,7 @@ public class Parser {
 
             bReader.close();
 
-            new AnnotationProcessor(nodeMap, annotations)
-                    .matchNodesAndAnnotations();
+            //new AnnotationProcessor(nodeMap, annotations).matchNodesAndAnnotations();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,10 +95,10 @@ public class Parser {
      * @return - A HashMap containing the information from the .gfa file.
      * @throws IOException
      */
-    public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a) throws IOException{
+    public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(input);
 
-        return readGFA(fileInputStream, a);
+        return readGFA(fileInputStream);
     }
 
 }
