@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -40,9 +41,9 @@ public class ParserTest {
     @Test
     public void testReadGFA() {
         HashMap<Integer, Node> map = new HashMap<>();
-        InputStream is = getClass().getResourceAsStream("/TestFiles/TBTestFile.gfa");
 
         try {
+            InputStream is = new FileInputStream("src\\main\\resources\\TestFiles\\TBTestFile.gfa");
             map = p.readGFA(is);
             is.close();
         } catch (IOException e) {
