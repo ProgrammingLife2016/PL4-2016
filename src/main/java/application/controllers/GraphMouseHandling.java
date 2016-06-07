@@ -24,8 +24,6 @@ class GraphMouseHandling {
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
                 .get(node.getCellId());
 
-        System.out.println("Num annotations: " + mainController.getGraphController().getGraph()
-                .getModel().getAnnotations().size());
         String info = "";
 
         info += format("Genome ID: %d \n", clicked.getId());

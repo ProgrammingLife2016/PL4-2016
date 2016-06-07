@@ -182,7 +182,6 @@ public class Graph {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
         toret.setAnnotations(annotations);
-        System.out.println("Num annotations: " + toret.getAnnotations().size());
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
@@ -446,6 +445,10 @@ public class Graph {
      */
     public void setAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
+
+        zoomIn.setAnnotations(annotations);
+        current.setAnnotations(annotations);
+        zoomOut.setAnnotations(annotations);
     }
 
     /**

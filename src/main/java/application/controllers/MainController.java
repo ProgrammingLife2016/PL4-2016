@@ -243,10 +243,13 @@ public class MainController extends Controller<BorderPane> {
     private void setHighlightButtonActionListener(
             TextField annotationTextField, Button highlightButton) {
         highlightButton.setOnAction(e -> {
+            if (currentView != 0) {
+                return;
+            }
             if (!annotationTextField.getText().isEmpty()) {
                 List<Annotation> annotations
                         = graphController.getGraph().getModel().getAnnotations();
-                System.out.println("Num annotations: " + annotations.size());
+
                 try {
                     Annotation ann = AnnotationProcessor
                             .findAnnotation(annotations, annotationTextField.getText());

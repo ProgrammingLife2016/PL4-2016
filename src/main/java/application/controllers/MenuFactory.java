@@ -96,6 +96,11 @@ public class MenuFactory {
     }
 
     private Menu initFileMenu() {
+        loadAnnotations = initMenuItem("Load Annotation data",
+                new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
+                t -> {
+                    WindowFactory.createAnnotationChooser();
+                });
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
@@ -108,14 +113,7 @@ public class MenuFactory {
                     WindowFactory.createTreeChooser();
                     WindowFactory.createMenuWithSearch();
                 });
-
-        loadAnnotations = initMenuItem("Load Annotation data",
-                new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
-                t -> {
-                    WindowFactory.createAnnotationChooser();
-                    WindowFactory.createMenuWithSearch();
-                });
-        return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations);
+        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree);
     }
 
     private Menu initFilterMenu() {
