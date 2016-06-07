@@ -74,7 +74,7 @@ public final class AnnotationParser {
      *
      * @param path The path to the annotation data file.
      * @return A filtered and sorted list of annotations.
-     * @throws IOException Throw an exception on read failure.
+     * @throws FileNotFoundException Throw an exception on read failure.
      */
     public static List<Annotation> readCDSFilteredGFF(String path) throws FileNotFoundException {
         FileInputStream fileInputStream = new FileInputStream(path);

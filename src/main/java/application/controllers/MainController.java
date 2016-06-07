@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -77,7 +76,7 @@ public class MainController extends Controller<BorderPane> {
 
         //Fill the graph
         fillGraph(null, new ArrayList<>());
-
+        graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
     /**
@@ -99,6 +98,7 @@ public class MainController extends Controller<BorderPane> {
         try {
             List<Annotation> annotations = AnnotationParser.readCDSFilteredGFF(path);
             graphController.getGraph().getModel().setAnnotations(annotations);
+            graphController.getGraph().getModel().matchNodesAndAnnotations();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

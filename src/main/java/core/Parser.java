@@ -4,7 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Skullyhoofd on 24/04/2016.
@@ -42,8 +41,6 @@ public class Parser {
             }
 
             bReader.close();
-
-            //new AnnotationProcessor(nodeMap, annotations).matchNodesAndAnnotations();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,7 +90,7 @@ public class Parser {
      * Read gfa file from a filepath.
      * @param input - the input
      * @return - A HashMap containing the information from the .gfa file.
-     * @throws IOException
+     * @throws IOException Throw exception on read failure.
      */
     public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(input);

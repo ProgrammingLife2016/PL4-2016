@@ -70,7 +70,6 @@ public final class WindowFactory {
         File selectedFile = directoryChooser.showOpenDialog(window);
 
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
-
         mainController.initGraph();
 
         return directoryChooser;
@@ -85,7 +84,6 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Tree File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
         mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
@@ -100,8 +98,8 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Annotation File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
         mainController.initAnnotations(selectedFile.getAbsolutePath());
+
         return directoryChooser;
     }
 
