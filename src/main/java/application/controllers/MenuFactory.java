@@ -11,9 +11,7 @@ import javafx.scene.input.KeyCombination;
 import static core.Filter.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -128,23 +126,16 @@ public class MenuFactory {
         String recent02 = "Empty";
         String recent03 = "Empty";
 
-        if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0).equals("Empty"))) {
-                recent01 = mostRecent.get(0);
-            }
+        if (mostRecent.size() >= 1 && !(mostRecent.get(0).equals("Empty"))) {
+            recent01 = mostRecent.get(0);
         }
 
-        if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1).equals("Empty"))) {
-                recent02 = mostRecent.get(1);
-            }
-
+        if (mostRecent.size() >= 2 && !(mostRecent.get(1).equals("Empty"))) {
+            recent02 = mostRecent.get(1);
         }
 
-        if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2).equals("Empty"))) {
-                recent03 = mostRecent.get(2);
-            }
+        if (mostRecent.size() >= 3 && !(mostRecent.get(2).equals("Empty"))) {
+            recent03 = mostRecent.get(2);
         }
 
         final String finalRecent1 = recent01;
@@ -182,24 +173,20 @@ public class MenuFactory {
         String recent03 = "Empty";
 
 
-        if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0) == "Empty")) {
-                recent01 = mostRecent.get(0);
-            }
-        }
-
-
-        if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1) == "Empty")) {
-                recent02 = mostRecent.get(1);
-            }
+        if (mostRecent.size() >= 1 && !(mostRecent.get(0) == "Empty")) {
+            recent01 = mostRecent.get(0);
 
         }
 
-        if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2) == "Empty")) {
-                recent03 = mostRecent.get(2);
-            }
+
+        if (mostRecent.size() >= 2 && !(mostRecent.get(1) == "Empty")) {
+            recent02 = mostRecent.get(1);
+
+        }
+
+        if (mostRecent.size() >= 3 && !(mostRecent.get(2) == "Empty")) {
+            recent03 = mostRecent.get(2);
+
         }
 
 

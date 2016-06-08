@@ -140,6 +140,10 @@ public class MainController extends Controller<BorderPane> {
 
     }
 
+    /**
+     * Method to check whether the file containing recently opened NWK files is empty or not
+     */
+    @SuppressFBWarnings
     public void checkMostRecentNWKFile() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -156,6 +160,10 @@ public class MainController extends Controller<BorderPane> {
     }
 
 
+    /**
+     * Method to check whether the file containing recently opened GFA files is empty or not
+     */
+    @SuppressFBWarnings
     public void checkMostRecentGFAFile() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -171,6 +179,9 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
+    /**
+     * Write a recently chosen GFA file to the file
+     */
     public void writeMostRecentGFA() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -190,6 +201,9 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
+    /**
+     * Write a recently chosen NWK file to the file
+     */
     public void writeMostRecentNWK() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -209,19 +223,35 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
+    /**
+     * Get the list containing most recent GFA files
+     * @return the list
+     */
     public LinkedList getMostRecentGFA() {
         return mostRecentGFA;
     }
 
+    /**
+     * Get the list containing most recent NWK files
+     * @return the list
+     */
     public LinkedList getMostRecentNWK() {
         return mostRecentNWK;
     }
 
+    /**
+     * Add a file to the recent opened GFA files
+     * @param s the file to be added
+     */
     public void addRecentGFA(String s) {
         mostRecentGFA.addFirst(s);
         writeMostRecentGFA();
     }
 
+    /**
+     * Add a file to the recent opened NWK files
+     * @param s the file to be added
+     */
     public void addRecentNWK(String s) {
         mostRecentNWK.addFirst(s);
         writeMostRecentNWK();
@@ -573,7 +603,7 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Getter for the textfiel.d
+     * Getter for the textfield
      *
      * @return the textfield.
      */

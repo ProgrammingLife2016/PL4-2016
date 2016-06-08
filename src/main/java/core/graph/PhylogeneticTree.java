@@ -76,8 +76,8 @@ public class PhylogeneticTree {
         char[] x = s.toCharArray();
         String temp = "";
         for (int i = s.length(); i > 0; i--) {
-            if (!(x[i-1] == '\\' ))  {
-                temp += x[i-1];
+            if (!(x[i - 1] == '\\'))  {
+                temp += x[i - 1];
             } else {
                 break;
             }
