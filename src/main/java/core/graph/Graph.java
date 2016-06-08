@@ -172,7 +172,7 @@ public class Graph {
      * @param depth the depth of the model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth) {
+    public Model generateModel(ArrayList<String> ref, int depth) {
         return generateModel(ref, depth, new Model());
     }
 
@@ -184,7 +184,7 @@ public class Graph {
      * @param toret a given model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth, Model toret) {
+    public Model generateModel(ArrayList<String> ref, int depth, Model toret) {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
         toret.setAnnotations(annotations);
@@ -232,7 +232,7 @@ public class Graph {
      * @param ref     Reference object.
      */
     private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
-                                                  Model toret, Object ref) {
+                                                  Model toret, ArrayList<String> ref) {
         if (intersection(root.getGenomes(), currentGenomes) > 0) {
             toret.addCell(root.getId(), root.getSequence(),
                     root.getNucleotides(), CellType.RECTANGLE);
@@ -271,7 +271,7 @@ public class Graph {
      * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
-                        Object ref, Node to, Node from) {
+                        ArrayList<String> ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
         CellType type = nodeMap.get(j).getType();

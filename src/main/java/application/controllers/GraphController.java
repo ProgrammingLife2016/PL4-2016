@@ -210,6 +210,7 @@ public class GraphController extends Controller<ScrollPane> {
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (!(ref.equals(graph.getCurrentRef())) || depth != graph.getCurrentInt())) {
 
+            System.out.println("lullo");
             root.getChildren().clear();
 
             graph.addGraphComponents(ref, depth);
