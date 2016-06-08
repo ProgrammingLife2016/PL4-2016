@@ -88,15 +88,14 @@ public class Parser {
 
     /**
      * Read gfa file from a filepath.
-     * @param input - the input
-     * @return - A HashMap containing the information from the .gfa file.
+     *
+     * @param input the input
+     * @return A HashMap containing the information from the .gfa file.
      * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION")
     public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(input);
-
-        return readGFA(fileInputStream);
+        return readGFA(new FileInputStream(input));
     }
 
 }

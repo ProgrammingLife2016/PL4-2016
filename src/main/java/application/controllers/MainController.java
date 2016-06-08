@@ -1,10 +1,7 @@
 package application.controllers;
 
 import application.fxobjects.cell.graph.RectangleCell;
-import core.Annotation;
-import core.AnnotationParser;
-import core.AnnotationProcessor;
-import core.Node;
+import core.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -73,8 +70,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-
-        //Fill the graph
         fillGraph(null, new ArrayList<>());
         graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
