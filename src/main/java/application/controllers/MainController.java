@@ -72,7 +72,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-        fillGraph(null, new ArrayList<>());
+
+        fillGraph(new ArrayList<>(), new ArrayList<>());
+
         graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
@@ -144,7 +146,7 @@ public class MainController extends Controller<BorderPane> {
      * @param ref             the reference string.
      * @param selectedGenomes the genomes to display.
      */
-    public void fillGraph(Object ref, List<String> selectedGenomes) {
+    public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
@@ -162,7 +164,9 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        fillGraph(s.get(0), new ArrayList<>());
+        ArrayList<String> list2 = new ArrayList<>();
+        list2.add(s.get(0));
+        fillGraph(list2, new ArrayList<>());
         initGUI();
     }
 
@@ -174,7 +178,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(null, s);
+        fillGraph(new ArrayList<>(), s);
 
         initGUI();
         setListItems();
@@ -209,51 +213,47 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the genome search and deselect buttons.
      *
-     * @param searchButton The genome search button.
+     * @param searchButton   The genome search button.
      * @param deselectButton The deselect button.
      */
-   private void setSearchAndDeselectButtonActionListener(
-           Button searchButton, Button deselectButton) {
-       searchButton.setOnAction(e -> {
-           if (!genomeTextField.getText().isEmpty()) {
-               application.fxobjects.cell.Cell cell = treeController.getCellByName(
-                       genomeTextField.textProperty().get().trim());
-               treeController.applyCellHighlight(cell);
-               treeController.selectStrain(cell);
-               genomeTextField.setText("");
-               fillTree();
-           }
-       });
+    private void setSearchAndDeselectButtonActionListener(
+            Button searchButton, Button deselectButton) {
+        searchButton.setOnAction(e -> {
+            if (!genomeTextField.getText().isEmpty()) {
+                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().trim());
+                treeController.applyCellHighlight(cell);
+                treeController.selectStrain(cell);
+                genomeTextField.setText("");
+                fillTree();
+            }
+        });
 
-       deselectButton.setOnAction(e -> {
-           treeController.clearSelection();
-           fillTree();
-       });
-   }
+        deselectButton.setOnAction(e -> {
+            treeController.clearSelection();
+            fillTree();
+        });
+    }
 
     /**
      * Adds an action listener to the annotation highlight button.
      *
      * @param annotationTextField The annotation search field.
-     * @param highlightButton The annotation highlight button.
+     * @param highlightButton     The annotation highlight button.
      */
     private void setHighlightButtonActionListener(TextField annotationTextField,
                                                   Button highlightButton,
                                                   Button deselectAnnotationButton) {
-        highlightButton.setOnAction(e -> {
-            processAnnotationButtonPress(annotationTextField, e);
-        });
+        highlightButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
 
-        deselectAnnotationButton.setOnAction(e -> {
-            processAnnotationButtonPress(annotationTextField, e);
-        });
+        deselectAnnotationButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
     }
 
     /**
      * Performs the actions needed on Annotation highlight and deselect button presses.
      *
      * @param annotationTextField The annotation search box.
-     * @param e The ActionEvent that has been triggered.
+     * @param e                   The ActionEvent that has been triggered.
      */
     private void processAnnotationButtonPress(TextField annotationTextField, ActionEvent e) {
         if (currentView != 0) {
@@ -296,7 +296,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Deselects the old annotation.
      *
-     * @param cellMap Map of cells.
+     * @param cellMap     Map of cells.
      * @param annotations List of annotations.
      */
     private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
@@ -355,25 +355,29 @@ public class MainController extends Controller<BorderPane> {
         listVBox = listFactory.createInfoList("");
         list = listFactory.getList();
 
+
+//        list.setOnMouseClicked(event -> {
+//            if (!(list.getSelectionModel().getSelectedItem() == null)) {
+//                graphController.getGraph().reset();
+//
+//                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
+//
+//                fillGraph(highlights, graphController.getGenomes());
+////                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+//                graphController.takeSnapshot();
+//
+//            }
+//        });
         list.setOnMouseClicked(event -> listSelect());
-        
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                graphController.getGraph().reset();
-                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
-
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
-
-            }
-        });
-
-        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
 
         setListItems();
         this.getRoot().setRight(listVBox);
     }
 
+    /**
+     * All strains selected to highlight.
+     */
+    private ArrayList<String> highlights = new ArrayList<>();
 
     /**
      * Method to perform action upon listItem selection
@@ -382,7 +386,14 @@ public class MainController extends Controller<BorderPane> {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
-            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+
+            highlights.clear();
+
+            for (Object o : list.getSelectionModel().getSelectedItems()) {
+                highlights.add((String) o);
+            }
+
+            fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick());

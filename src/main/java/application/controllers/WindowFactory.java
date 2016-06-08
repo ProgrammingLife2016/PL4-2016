@@ -69,18 +69,15 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
-        try {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
-            mainController.initGraph();
-        } catch (Exception e) {
-            return null;
-        }
+        mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+        mainController.initGraph();
 
         return directoryChooser;
     }
 
     /**
      * Method that creates a directoryChooser.
+     *
      * @return the directoryChooser
      */
     public static FileChooser createTreeChooser() {
