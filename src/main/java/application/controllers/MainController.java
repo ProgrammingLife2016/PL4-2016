@@ -1,16 +1,11 @@
 package application.controllers;
 
 import application.fxobjects.cell.graph.RectangleCell;
-import core.Annotation;
-import core.AnnotationProcessor;
-import core.Node;
+import core.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -71,20 +66,23 @@ public class MainController extends Controller<BorderPane> {
         graphController = new GraphController(this);
     }
 
+    /**
+     * Initialize the graph.
+     */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-
-        //Fill the graph
         fillGraph(null, new ArrayList<>());
 
     }
 
+    /**
+     * Initialize the tree (controller).
+     * @param s The name of the tree.
+     */
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
     }
-
-
 
     /**
      * Getter method for the current view level.
@@ -225,6 +223,8 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to create the menu bar.
+     *
+     * @param withSearch Whether or not the search bar should be shown.
      */
     public void createMenu(boolean withSearch) {
         VBox vBox = new VBox();

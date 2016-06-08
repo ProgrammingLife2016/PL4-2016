@@ -190,8 +190,8 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedEdges());
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
-            double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
-            double MAX_EDGE_LENGTH_LONG = screenSize.getWidth();
+            double maxEdgeLength = screenSize.getWidth() / 6.4;
+            double maxEdgeLengthLong = screenSize.getWidth();
             for (Edge e : graph.getModel().getAddedEdges()) {
                 double xLength = e.getLine().endXProperty().get()
                         - e.getLine().startXProperty().get();
@@ -199,15 +199,15 @@ public class GraphController extends Controller<ScrollPane> {
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
 
-                if ((length > MAX_EDGE_LENGTH
-                        && !(e.getSource().getType() == CellType.RECTANGLE))
-                        || length > MAX_EDGE_LENGTH_LONG) {
+                if (length > maxEdgeLength
+                        && !(e.getSource().getType() == CellType.RECTANGLE)
+                        || length > maxEdgeLengthLong) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = (e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
-                            + ((e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
+                    double newY = e.getSource().getLayoutY()
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
+                            + (e.getSource().getLayoutY()
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.67);
@@ -248,7 +248,7 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public Image takeSnapshot() {
         int pref = (int) graph.getModel().getGraphLayout().getMaxWidth();
-        if ((pref + 50 > 2500)) {
+        if (pref + 50 > 2500) {
             pref = 2500;
         }
 

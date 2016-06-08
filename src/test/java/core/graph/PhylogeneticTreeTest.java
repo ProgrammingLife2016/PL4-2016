@@ -3,7 +3,6 @@ package core.graph;
 import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
