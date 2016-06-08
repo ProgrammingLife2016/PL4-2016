@@ -69,9 +69,16 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
-        mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+        try {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+            mainController.initGraph();
+        }
+        catch (Exception e) {
+            System.out.println("You probably closed te windows before selecting.");
+            return null;
+        }
 
-        mainController.initGraph();
+
 
         return directoryChooser;
     }

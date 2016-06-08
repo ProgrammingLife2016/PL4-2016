@@ -23,7 +23,11 @@ public class GraphLayout extends CellLayout {
     private CellType lastType;
     private int cellCount = 0;
     private int centerY;
+
     private double maxWidth;
+
+    private Cell leftMost;
+    private Cell rightMost;
 
     private static final int BASE_X = 100;
 
@@ -50,6 +54,8 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
+        int minWidth = Integer.MAX_VALUE;
+
         List<Cell> cells = model.getAddedCells();
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
@@ -57,6 +63,11 @@ public class GraphLayout extends CellLayout {
                 currentX += offset;
                 if (currentX > maxWidth) {
                     maxWidth = currentX;
+                    rightMost = cell;
+                }
+                if (currentX < minWidth) {
+                    minWidth = currentX;
+                    leftMost = cell;
                 }
                 currentY = centerY;
 
@@ -93,7 +104,7 @@ public class GraphLayout extends CellLayout {
             if (!child.isRelocated()) {
                 if (cellCount % 2 == 0) {
                     child.relocate(currentX
-                            - (child.getCellShape().getLayoutBounds().getWidth() / 2),
+                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2),
                             currentY - evenChildOffset
                                     - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     evenChildOffset = (yOffset / 2) * modifier;
@@ -252,5 +263,23 @@ public class GraphLayout extends CellLayout {
      */
     public double getMaxWidth() {
         return maxWidth;
+    }
+
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
+    public Cell getLeftMost() {
+        return leftMost;
+    }
+
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
+    public Cell getRightMost() {
+        return rightMost;
     }
 }
