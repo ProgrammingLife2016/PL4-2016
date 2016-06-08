@@ -54,6 +54,14 @@ public class Model {
     }
 
     /**
+     * Match the nodes in levelMap 0 to the annotation data.
+     */
+    public void matchNodesAndAnnotations() {
+        if (levelMaps.size() > 0) {
+            new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
+        }
+    }
+    /**
      * Remove all cells and edges.
      */
     public void clear() {

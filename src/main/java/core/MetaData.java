@@ -29,8 +29,30 @@ public final class MetaData {
     @SuppressWarnings({"checkstyle:linelength", "checkstyle:methodlength"})
     private static TreeMap<String, Genome> parse() {
         TreeMap<String, Genome> metaMap = new TreeMap<>();
+
         try {
             InputStream stream = MetaData.class.getResourceAsStream("/metadata.xlsx");
+            metaMap = parse(stream);
+            stream.close();
+
+            return metaMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return metaMap;
+    }
+    /**
+     * Parses MetaData into a Treemap.
+     *
+     * @param stream an InputStream to read the xlsx sheet from.
+     * @return a TreeMap with genomes sorted on their name.
+     */
+    @SuppressWarnings({"checkstyle:linelength", "checkstyle:methodlength"})
+    public static TreeMap<String, Genome> parse(InputStream stream) {
+        TreeMap<String, Genome> metaMap = new TreeMap<>();
+
+        try {
             XSSFWorkbook book = new XSSFWorkbook(stream);
             XSSFSheet sheet = book.getSheetAt(0);
 

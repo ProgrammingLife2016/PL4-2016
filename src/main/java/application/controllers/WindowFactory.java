@@ -72,13 +72,9 @@ public final class WindowFactory {
         try {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
-        }
-        catch (Exception e) {
-            System.out.println("You probably closed te windows before selecting.");
+        } catch (Exception e) {
             return null;
         }
-
-
 
         return directoryChooser;
     }
@@ -92,8 +88,21 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Tree File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
         mainController.initTree(selectedFile.getAbsolutePath());
+
+        return directoryChooser;
+    }
+
+    /**
+     * Method that creates a directoryChooser.
+     * @return the directoryChooser
+     */
+    public static FileChooser createAnnotationChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Annotation File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+        mainController.initAnnotations(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }

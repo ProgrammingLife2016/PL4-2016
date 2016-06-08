@@ -1,6 +1,5 @@
 package core;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,10 +18,8 @@ public class AnnotationProcessor {
      *
      * @param nodeMap A given hash map of nodes.
      * @param annotations List of annotations.
-     * @throws IOException Throw exception on read failure.
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations)
-            throws IOException {
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
         this.annotations = annotations;
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
     }
@@ -49,7 +46,7 @@ public class AnnotationProcessor {
      * @param nodeMap A given node map.
      * @return The index of the last key in the node map.
      */
-    private int determineNodeMapSize(HashMap<Integer, Node> nodeMap) {
+    public int determineNodeMapSize(HashMap<Integer, Node> nodeMap) {
         int lastKey = -1;
         for (int key : nodeMap.keySet()) {
             if (key > lastKey) {
@@ -65,9 +62,10 @@ public class AnnotationProcessor {
     /**
      * Filters out all nodes in a node map that do not belong to the reference.
      *
+     * @param baseNodeMap a base node map.
      * @return A hash map of nodes present in the reference.
      */
-    private HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
+    public HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
         String reference = "";
         HashMap<Integer, Node> nodeMap = new HashMap<>();
 
@@ -88,16 +86,27 @@ public class AnnotationProcessor {
      * Finds an annotation by a specified annotation id.
      *
      * @param annotations A list of annotations.
-     * @param id A specified annotation id.
+     * @param str A specified part of the display name to search on.
      * @return The found annotation.
+     * @throws TooManyAnnotationsFoundException Throws exception on too many matching annotations.
      */
-    public static Annotation findAnnotationByID(List<Annotation> annotations, long id) {
+    public static Annotation findAnnotation(List<Annotation> annotations, String str)
+            throws TooManyAnnotationsFoundException {
+        int counter = 0;
+        Annotation matchingAnnotation = null;
+
         for (Annotation a : annotations) {
-            if (a.getIdAttr() == id) {
-                return a;
+            if (a.getDisplayNameAttr().contains(str)) {
+                counter++;
+                matchingAnnotation = a;
             }
         }
 
+        if (counter == 1) {
+            return matchingAnnotation;
+        } else if (counter > 1) {
+            throw new TooManyAnnotationsFoundException();
+        }
         return null;
     }
 
@@ -108,5 +117,17 @@ public class AnnotationProcessor {
      */
     public List<Annotation> getAnnotations() {
         return annotations;
+    }
+
+    /**
+     * Exception for too many elements in a data structure.
+     */
+    public static class TooManyAnnotationsFoundException extends Exception {
+
+        /**
+         * Exception class constructor.
+         */
+        public TooManyAnnotationsFoundException() {
+        }
     }
 }
