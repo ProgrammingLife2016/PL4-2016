@@ -89,15 +89,9 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-<<<<<<< HEAD
-     * Initialize the tree (controller).
-     *
-     * @param s The name of the tree.
-=======
      * Initializes the tree.
      *
      * @param s Path to the tree file.
->>>>>>> master
      */
     public void initTree(String s) {
         treeController = new TreeController(this, s);
