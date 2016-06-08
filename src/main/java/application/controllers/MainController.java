@@ -241,7 +241,7 @@ public class MainController extends Controller<BorderPane> {
      * @param highlightButton The annotation highlight button.
      */
     private void setHighlightButtonActionListener(
-            TextField annotationTextField, Button highlightButton) {
+            TextField annotationTextField, Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
             if (currentView != 0) {
                 return;
@@ -265,7 +265,12 @@ public class MainController extends Controller<BorderPane> {
                 }
             }
         });
+
+        highlightButton.setOnAction(e -> {
+
+        });
     }
+
     /**
      * Method to create the menu bar.
      *
@@ -277,16 +282,17 @@ public class MainController extends Controller<BorderPane> {
         genomeTextField = new TextField();
 
         Button searchButton = new Button("Search Genome (In Tree)");
-        Button deselectButton = new Button("Deselect All");
+        Button deselectSearchButton = new Button("Deselect All");
 
         TextField annotationTextField = new TextField();
         Button highlightButton = new Button("Highlight annotation");
+        Button deselectAnnotationButton = new Button("Highlight annotation");
 
-        setSearchAndDeselectButtonActionListener(searchButton, deselectButton);
-        setHighlightButtonActionListener(annotationTextField, highlightButton);
+        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton);
+        setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
 
         hBox.getChildren().addAll(genomeTextField, searchButton,
-                deselectButton, annotationTextField, highlightButton);
+                deselectSearchButton, annotationTextField, highlightButton);
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
