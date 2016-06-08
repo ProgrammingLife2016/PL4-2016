@@ -290,17 +290,19 @@ public class Graph {
 
         ifStatement:
         if (from.getGenomes().contains(ref) && to.getGenomes().contains(ref)) {
-            for(int child : from.getLinks()) {
-                if((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
-                       ) {
+            boolean edgePlaced = false;
+            for (int child : from.getLinks()) {
+                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
+                        && nodeMap.get(child).getGenomes().contains(ref)) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
-                    if(nodeMap.get(child).getGenomes().contains(ref)) {
+                    if (nodeMap.get(child).getGenomes().contains(ref)) {
                         toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
-
                     }
-                    break ifStatement;
-
+                    edgePlaced = true;
                 }
+            }
+            if (edgePlaced) {
+                break ifStatement;
             }
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
 
