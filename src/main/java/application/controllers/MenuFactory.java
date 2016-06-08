@@ -169,8 +169,10 @@ public class MenuFactory {
     }
 
     private void initLineageFilter() {
-        List<String> lineageExtensions = new ArrayList<>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "animal", "B", "CANETTI"));
-        List<Filter> linFilters = new ArrayList<>(Arrays.asList(LIN1, LIN2, LIN3, LIN4, LIN5, LIN6, LIN7, LIN8, LIN9, LIN10));
+        List<String> lineageExtensions = new ArrayList<>(Arrays.asList(
+                "1", "2", "3", "4", "5", "6", "7", "animal", "B", "CANETTI"));
+        List<Filter> linFilters = new ArrayList<>(Arrays.asList(
+                LIN1, LIN2, LIN3, LIN4, LIN5, LIN6, LIN7, LIN8, LIN9, LIN10));
 
         filterLineage = new Menu("Lineage");
         for (int idx = 0; idx < lineageExtensions.size(); idx++) {
