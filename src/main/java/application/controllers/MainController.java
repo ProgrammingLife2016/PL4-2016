@@ -213,33 +213,33 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the genome search and deselect buttons.
      *
-     * @param searchButton The genome search button.
+     * @param searchButton   The genome search button.
      * @param deselectButton The deselect button.
      */
-   private void setSearchAndDeselectButtonActionListener(
-           Button searchButton, Button deselectButton) {
-       searchButton.setOnAction(e -> {
-           if (!genomeTextField.getText().isEmpty()) {
-               application.fxobjects.cell.Cell cell = treeController.getCellByName(
-                       genomeTextField.textProperty().get().trim());
-               treeController.applyCellHighlight(cell);
-               treeController.selectStrain(cell);
-               genomeTextField.setText("");
-               fillTree();
-           }
-       });
+    private void setSearchAndDeselectButtonActionListener(
+            Button searchButton, Button deselectButton) {
+        searchButton.setOnAction(e -> {
+            if (!genomeTextField.getText().isEmpty()) {
+                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().trim());
+                treeController.applyCellHighlight(cell);
+                treeController.selectStrain(cell);
+                genomeTextField.setText("");
+                fillTree();
+            }
+        });
 
-       deselectButton.setOnAction(e -> {
-           treeController.clearSelection();
-           fillTree();
-       });
-   }
+        deselectButton.setOnAction(e -> {
+            treeController.clearSelection();
+            fillTree();
+        });
+    }
 
     /**
      * Adds an action listener to the annotation highlight button.
      *
      * @param annotationTextField The annotation search field.
-     * @param highlightButton The annotation highlight button.
+     * @param highlightButton     The annotation highlight button.
      */
     private void setHighlightButtonActionListener(TextField annotationTextField,
                                                   Button highlightButton,
@@ -253,7 +253,7 @@ public class MainController extends Controller<BorderPane> {
      * Performs the actions needed on Annotation highlight and deselect button presses.
      *
      * @param annotationTextField The annotation search box.
-     * @param e The ActionEvent that has been triggered.
+     * @param e                   The ActionEvent that has been triggered.
      */
     private void processAnnotationButtonPress(TextField annotationTextField, ActionEvent e) {
         if (currentView != 0) {
@@ -296,7 +296,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Deselects the old annotation.
      *
-     * @param cellMap Map of cells.
+     * @param cellMap     Map of cells.
      * @param annotations List of annotations.
      */
     private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
@@ -356,7 +356,6 @@ public class MainController extends Controller<BorderPane> {
         list = listFactory.getList();
 
 
-        
 //        list.setOnMouseClicked(event -> {
 //            if (!(list.getSelectionModel().getSelectedItem() == null)) {
 //                graphController.getGraph().reset();
@@ -390,8 +389,8 @@ public class MainController extends Controller<BorderPane> {
 
             highlights.clear();
 
-            for(Object o: list.getSelectionModel().getSelectedItems()) {
-                highlights.add((String)o);
+            for (Object o : list.getSelectionModel().getSelectedItems()) {
+                highlights.add((String) o);
             }
 
             fillGraph(highlights, graphController.getGenomes());
