@@ -22,7 +22,7 @@ public class Graph {
     private Model current;
     private Model zoomOut;
     private int currentInt = -1;
-    private Object currentRef = null;
+    private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
     /**
      * All the genomes that are in this graph.
@@ -88,7 +88,7 @@ public class Graph {
      * @return Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth) {
+    public Boolean addGraphComponents(ArrayList<String> ref, int depth) {
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
@@ -168,7 +168,7 @@ public class Graph {
      * @param depth the depth of the model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth) {
+    public Model generateModel(ArrayList<String> ref, int depth) {
         return generateModel(ref, depth, new Model());
     }
 
@@ -180,7 +180,7 @@ public class Graph {
      * @param toret a given model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth, Model toret) {
+    public Model generateModel(ArrayList<String> ref, int depth, Model toret) {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
         toret.setAnnotations(annotations);
@@ -228,7 +228,7 @@ public class Graph {
      * @param ref     Reference object.
      */
     private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
-                                                  Model toret, Object ref) {
+                                                  Model toret, ArrayList<String> ref) {
         if (intersection(root.getGenomes(), currentGenomes) > 0) {
             toret.addCell(root.getId(), root.getSequence(),
                     root.getNucleotides(), CellType.RECTANGLE);
@@ -267,7 +267,7 @@ public class Graph {
      * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
-                        Object ref, Node to, Node from) {
+                        ArrayList<String> ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
         CellType type = nodeMap.get(j).getType();
@@ -288,17 +288,31 @@ public class Graph {
                     CellType.COLLECTION);
         }
 
-        if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
+        int width = (int) Math.round(maxEdgeWidth
+                * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                intersectingStrings(to.getGenomes(), genomes))
+                / (double) Math.max(genomes.size(), 10))) + 1;
+
+        ifStatement:
+        if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
+            boolean edgePlaced = false;
+            for (int child : from.getLinks()) {
+                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
+                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0
+                        && ref.size() < 2) {
+                    toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                    if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
+                        toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                    }
+                    edgePlaced = true;
+                }
+            }
+            if (edgePlaced) {
+                break ifStatement;
+            }
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+
         } else {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -332,7 +346,25 @@ public class Graph {
     }
 
     /**
+     * Method to get number of intersecting ints in a list.
+     *
+     * @param l1 first list.
+     * @param l2 second list.
+     * @return number of intersecting elements.
+     */
+    public int intersectionInt(List<Integer> l1, List<Integer> l2) {
+        int i = 0;
+        for (Integer s : l1) {
+            if (l2.contains(s)) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    /**
      * Method that returns a list of strings present in both lists.
+     *
      * @param l1 first list
      * @param l2 second list
      * @return result
@@ -415,7 +447,7 @@ public class Graph {
      *
      * @return the current highlighted strain.
      */
-    public Object getCurrentRef() {
+    public ArrayList<String> getCurrentRef() {
         return currentRef;
     }
 
@@ -518,6 +550,7 @@ public class Graph {
 
     /**
      * Adds the leftmost and rightmost cell to the Model.
+     *
      * @param m the Model to add cells to.
      * @return the new Model.
      */

@@ -61,7 +61,7 @@ public class MenuFactory {
 
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
-            mainController.fillGraph(null, new ArrayList<>());
+            mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
 
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
