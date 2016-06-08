@@ -292,17 +292,30 @@ public class Graph {
                     CellType.COLLECTION);
         }
 
-        if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
+        int width = (int) Math.round(maxEdgeWidth
+                * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                intersectingStrings(to.getGenomes(), genomes))
+                / (double) Math.max(genomes.size(), 10))) + 1;
+
+        ifStatement:
+        if (from.getGenomes().contains(ref) && to.getGenomes().contains(ref)) {
+            boolean edgePlaced = false;
+            for (int child : from.getLinks()) {
+                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
+                        && nodeMap.get(child).getGenomes().contains(ref)) {
+                    toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                    if (nodeMap.get(child).getGenomes().contains(ref)) {
+                        toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                    }
+                    edgePlaced = true;
+                }
+            }
+            if (edgePlaced) {
+                break ifStatement;
+            }
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+
         } else {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -328,6 +341,22 @@ public class Graph {
     public int intersection(List<String> l1, List<String> l2) {
         int i = 0;
         for (String s : l1) {
+            if (l2.contains(s)) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * Method to get number of intersecting ints in a list.
+     * @param l1 first list.
+     * @param l2 second list.
+     * @return number of intersecting elements.
+     */
+    public int intersectionInt(List<Integer> l1, List<Integer> l2) {
+        int i = 0;
+        for (Integer s : l1) {
             if (l2.contains(s)) {
                 i++;
             }
