@@ -1,21 +1,16 @@
 package application.fxobjects.cell.graph;
 
-import application.fxobjects.cell.Cell;
 import core.graph.cell.CellType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
-/**
- * Created by Niek on 5/25/2016.
- */
-public class CollectionCell extends Cell {
 
-    private final CellType type = CellType.COLLECTION;
-    private Shape shape;
+/**
+ * Class representing a collection of horizontally collapsed cells.
+ */
+public class CollectionCell extends GraphCell {
 
     /**
      * Bubble cell constructor.
@@ -43,37 +38,8 @@ public class CollectionCell extends Cell {
         shape.setFill(Color.LIGHTGREEN);
         pane.getChildren().addAll(shape, text);
         setView(pane);
-    }
 
-    /**
-     * Return the type of the Cell.
-     *
-     * @return the type of the Cell.
-     */
-    public CellType getType() {
-        return type;
-    }
-
-    /**
-     * Returns the cellshape.
-     * @return the cellshape.
-     */
-    public Shape getCellShape() { return shape; }
-
-    /**
-     * Method to set the focus.
-     */
-    public void focus() {
-        DropShadow borderGlow = new DropShadow();
-        borderGlow.setOffsetY(0f);
-        borderGlow.setOffsetX(0f);
-        borderGlow.setColor(Color.BLACK);
-        borderGlow.setWidth(70);
-        borderGlow.setHeight(70);
-        this.setEffect(borderGlow);
-
-        shape.setStroke(Color.PURPLE);
-        shape.setStrokeWidth(4);
+        type = CellType.COLLECTION;
     }
 
     /**
@@ -84,5 +50,4 @@ public class CollectionCell extends Cell {
         shape.setStroke(Color.LIGHTGREEN);
         shape.setStrokeWidth(1);
     }
-
 }

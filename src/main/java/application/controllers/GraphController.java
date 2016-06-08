@@ -3,6 +3,7 @@ package application.controllers;
 import application.fxobjects.ZoomBox;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.GraphCell;
 import core.graph.Graph;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -13,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
 import java.net.URL;
@@ -56,6 +56,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
+                sideFocus(false);
             }
 
             if (event.getDeltaY() != 0) {
@@ -67,7 +68,6 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -78,7 +78,6 @@ public class GraphController extends Controller<ScrollPane> {
 
                     if (graphMouseHandling.getPrevClick() != null) {
                         focus(graphMouseHandling.getPrevClick());
-
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -109,21 +108,46 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
+     * Method to either enable or disable sideFocus on nodes.
+     * @param enable if true then all sideFocus is removed
+     *               from the sideFocused nodes, reverse if false.
+     */
+    public void sideFocus(boolean enable) {
+        //Remove sideFocus of all underlying nodes.
+        for (int underlyingNodeId : graphMouseHandling.
+                getFocusedNode().getPreviousLevelNodesIds()) {
+            GraphCell cell = (GraphCell) graph.getModel().getCellMap().get(underlyingNodeId);
+            if (cell != null) {
+                if (enable) {
+                    cell.sideFocus();
+                } else {
+                    cell.resetFocus();
+                }
+
+            }
+        }
+    }
+
+    /**
      * Method to focus on a Cell.
      *
      * @param prevClick the cell to focus to.
      */
-    public void focus(Cell prevClick) {
+    public void focus(GraphCell prevClick) {
+        sideFocus(false);
         prevClick.resetFocus();
         for (Cell c : graph.getModel().getAllCells()) {
             if (c.getCellId() == prevClick.getCellId()
                     || c.getCellId() > prevClick.getCellId()) {
-                prevClick = c;
+                prevClick = (GraphCell) c;
                 break;
             }
         }
         graphMouseHandling.setPrevClick(prevClick);
+        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
+                getCurrentView()).get(prevClick.getCellId()));
         prevClick.focus();
+        sideFocus(true);
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
@@ -153,15 +177,11 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      */
     public void update(Object ref, int depth) {
-        int size = graph.getLevelMaps().size();
-
         //We received a different reference of depth, so we need to redraw.
-        if (depth <= size - 1 && depth >= 0
+        if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
-
             graph.addGraphComponents(ref, depth);
-
             // add components to graph pane
             if (graph.getModel().getAllCells().size() > 0) {
                 root.getChildren().addAll(graph.getModel().getAllEdges());
@@ -170,7 +190,6 @@ public class GraphController extends Controller<ScrollPane> {
                 root.getChildren().addAll(graph.getModel().getAddedEdges());
                 root.getChildren().addAll(graph.getModel().getAddedCells());
             }
-
             double MAX_EDGE_LENGTH = screenSize.getWidth() / 6.4;
             double MAX_EDGE_LENGTH_LONG = screenSize.getWidth();
             for (Edge e : graph.getModel().getAddedEdges()) {
@@ -186,9 +205,9 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
                             + ((e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2)
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.67);
