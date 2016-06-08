@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
 import java.net.URL;
@@ -180,15 +179,15 @@ public class GraphController extends Controller<ScrollPane> {
                         - e.getLine().startYProperty().get();
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
 
-                if ((length > MAX_EDGE_LENGTH
-                        && !(e.getSource().getType() == CellType.RECTANGLE))
+                if (length > MAX_EDGE_LENGTH
+                        && !(e.getSource().getType() == CellType.RECTANGLE)
                         || length > MAX_EDGE_LENGTH_LONG) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     e.getLine().setOpacity(0.2d);
-                    double newY = (e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2 )
-                            + ((e.getSource().getLayoutY()
-                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
+                    double newY = e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2
+                            + (e.getSource().getLayoutY()
+                            + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2
                             - (screenSize.getHeight() - 100) / 2) * 2.5;
                     newY = Math.max(newY, 10);
                     newY = Math.min(newY, screenSize.getHeight() * 0.67);
@@ -229,7 +228,7 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public Image takeSnapshot() {
         int pref = (int) graph.getModel().getGraphLayout().getMaxWidth();
-        if ((pref + 50 > 2500)) {
+        if (pref + 50 > 2500) {
             pref = 2500;
         }
 

@@ -94,11 +94,13 @@ public class Parser {
 
     /**
      * Read gfa file from a filepath.
-     * @param input - the input
+     * @param input the input
+     * @param a List of annotations
      * @return - A HashMap containing the information from the .gfa file.
-     * @throws IOException
+     * @throws IOException Throw exception on read failure.
      */
-    public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a) throws IOException{
+    public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a)
+            throws IOException {
         FileInputStream fileInputStream = new FileInputStream(input);
 
         return readGFA(fileInputStream, a);

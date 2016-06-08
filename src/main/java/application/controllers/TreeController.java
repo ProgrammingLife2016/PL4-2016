@@ -1,33 +1,17 @@
 package application.controllers;
 
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.LineageColor;
-import application.fxobjects.cell.layout.CellLayout;
-import application.fxobjects.cell.layout.TreeLayout;
+import application.fxobjects.cell.*;
+import application.fxobjects.cell.layout.*;
 import application.fxobjects.cell.tree.LeafCell;
 import core.Filter;
 import core.MetaData;
 import core.graph.PhylogeneticTree;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static application.fxobjects.cell.LineageColor.*;
 import static core.MetaData.META_DATA;
@@ -47,6 +31,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Class constructor.
      *
      * @param m MainController.
+     * @param string The name of the tree.
      */
     public TreeController(MainController m, String string) {
         super(new ScrollPane());
@@ -59,32 +44,8 @@ public class TreeController extends Controller<ScrollPane> {
         init();
     }
 
-    /**
-     * Set-up the tree model from a Newick data file.
-     *
-     * @return A Newick tree.
-     */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public Tree getTreeFromFile(String s) {
-        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
-        TreeParser tp = new TreeParser(r);
-
-        return tp.tokenize("340tree.rooted.TKK");
-    }
-    /**
-     * Get the phylogenetic tree.
-     *
-     * @return The phylogenetic tree.
-     */
-    public PhylogeneticTree getPT() {
-        return pt;
-    }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     /**
@@ -155,7 +116,7 @@ public class TreeController extends Controller<ScrollPane> {
                 applyColorUpwards(parentList, determineEdgeLinColor(META_DATA.get(name).getLineage()), 4.0);
                 applyColorOnCell(cell, determineSelectedLeafLinColor(META_DATA.get(name).getLineage()));
             } else if (name.contains("G")) {
-                applyColorUpwards(parentList, LineageColor.LIN4, 4.0);
+                applyColorUpwards(parentList, LIN4, 4.0);
                 applyColorOnCell(cell, SLIN4);
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
@@ -231,7 +192,7 @@ public class TreeController extends Controller<ScrollPane> {
                                         new BackgroundFill(
                                                 determineSelectedLeafLinColor(
                                                         META_DATA.get(
-                                                                (c.getName())).getLineage()
+                                                                c.getName()).getLineage()
                                                 ), null, null
                                         )
                                 )
@@ -239,8 +200,7 @@ public class TreeController extends Controller<ScrollPane> {
                     } else if (c.getName().contains("G")) {
                         c.setBackground(
                                 new Background(
-                                        new BackgroundFill(LineageColor.SLIN4, null, null
-                                        )
+                                        new BackgroundFill(SLIN4, null, null)
                                 )
                         );
                     }
@@ -261,7 +221,7 @@ public class TreeController extends Controller<ScrollPane> {
                                 new BackgroundFill(
                                         determineLeafLinColor(
                                                 META_DATA.get(
-                                                        (c.getName())).getLineage()
+                                                        c.getName()).getLineage()
                                         ), null, null
                                 )
                         )
@@ -269,8 +229,7 @@ public class TreeController extends Controller<ScrollPane> {
             } else if (c.getName().contains("G")) {
                 c.setBackground(
                         new Background(
-                                new BackgroundFill(LineageColor.GLIN4, null, null
-                                )
+                                new BackgroundFill(GLIN4, null, null)
                         )
                 );
             }
@@ -430,8 +389,6 @@ public class TreeController extends Controller<ScrollPane> {
         } else {
             MenuFactory.showOnlyThisStrain.setDisable(true);
             MenuFactory.showSelectedStrains.setDisable(false);
-
-
         }
     }
 
@@ -439,16 +396,17 @@ public class TreeController extends Controller<ScrollPane> {
      * Method that selects Cells by its name.
      *
      * @param name the name to search for.
+     * @return A matching cell.
      */
     public Cell getCellByName(String name) {
-        for (Object c : root.getChildren()
-                ) {
+        for (Object c : root.getChildren()) {
             if (c instanceof LeafCell) {
                 if (((LeafCell) c).getName().contains(name)) {
                     return (Cell) c;
                 }
             }
         }
+
         return null;
     }
 
@@ -462,16 +420,22 @@ public class TreeController extends Controller<ScrollPane> {
 
     }
 
+    /**
+     * Filters the phylogenetic tree.
+     *
+     * @param f A given filter
+     * @param state true/false state
+     */
     public void filterPhyloLineage(Filter f, boolean state) {
         switch (f) {
             case LIN1:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 1 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 1){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 1) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -480,11 +444,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN2:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 2 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 2){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 2) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -493,11 +457,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN3:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 3 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 3){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 3) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -506,11 +470,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN4:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 4 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 4){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 4) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -519,11 +483,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN5:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 5 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 5){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 5) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -532,11 +496,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN6:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 6 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 6){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 6) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -545,11 +509,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN7:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 7 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 7){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 7) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -558,11 +522,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN8:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 8 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 8){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 8) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -571,11 +535,11 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN9:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 9 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 9){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 9) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
@@ -584,15 +548,17 @@ public class TreeController extends Controller<ScrollPane> {
             case LIN10:
                 META_DATA.values().forEach(s -> {
                     if (s.getLineage() == 10 && state) {
-                        Cell cell = getCellByName((s.getName()));
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 10){
-                        Cell cell = getCellByName((s.getName()));
+                    } else if (s.getLineage() == 10) {
+                        Cell cell = getCellByName(s.getName());
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
                 });
+                break;
+            default:
                 break;
         }
         modifyGraphOptions();

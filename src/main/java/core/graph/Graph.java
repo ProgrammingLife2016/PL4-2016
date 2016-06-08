@@ -1,15 +1,11 @@
 package core.graph;
 
 import core.*;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.graph.cell.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static core.AnnotationParser.readCDSFilteredGFF;
 
@@ -67,17 +63,17 @@ public class Graph {
     /**
      * Read a node map from a gfa file on disk.
      *
+     * @param path The file path of the GFA file.
      * @return A node map read from file.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile(String s) {
+    public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             Parser parser = new Parser();
 
-            startMap = parser.readGFAAsString(s, annotations);
+            startMap = parser.readGFAAsString(path, annotations);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
