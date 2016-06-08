@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -200,14 +201,14 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
-    public void update(Object ref, int depth) {
+    public void update(ArrayList<String> ref, int depth) {
 
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
 
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
-                && (ref != graph.getCurrentRef() || depth != graph.getCurrentInt())) {
+                && (!(ref.equals(graph.getCurrentRef())) || depth != graph.getCurrentInt())) {
 
             root.getChildren().clear();
 

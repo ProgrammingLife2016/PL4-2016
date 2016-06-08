@@ -201,13 +201,8 @@ public class GraphReducerTest {
     }
 
     /**
-<<<<<<< HEAD
-     * Test whether the genomes that are in the deletion
-     * edge are added to the indel node when collapsed.
-=======
      * Test whether the genomes that are in the deletion edge
      * are added to the indel node when collapsed.
->>>>>>> master
      */
     @Test
     public void testGenomesInIndel() {

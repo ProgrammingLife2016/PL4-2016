@@ -11,6 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
@@ -45,6 +48,8 @@ public class MainController extends Controller<BorderPane> {
     private int count;
     private int secondCount;
     private int selectedIndex;
+    private LinkedList<String> mostRecentGFA;
+    private LinkedList<String> mostRecentNWK;
     private String lastAnnotationSearch;
 
     /**
@@ -56,6 +61,13 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
         this.secondCount = -1;
+        this.mostRecentGFA = new LinkedList<>();
+        this.mostRecentNWK = new LinkedList<>();
+
+        checkMostRecentGFAFile();
+        checkMostRecentNWKFile();
+
+        createMenu(false);
 
         ImageView imageView = new ImageView("/DART2N.png");
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
@@ -72,7 +84,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-        fillGraph(null, new ArrayList<>());
+
+        fillGraph(new ArrayList<>(), new ArrayList<>());
+
         graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
@@ -84,6 +98,7 @@ public class MainController extends Controller<BorderPane> {
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
+
     }
 
     /**
@@ -118,7 +133,128 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-        createMenu(false);
+
+    }
+
+    /**
+     * Method to check whether the file containing recently opened NWK files is empty or not
+     */
+    @SuppressFBWarnings
+    public void checkMostRecentNWKFile() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File x = new File(s + "/mostRecentNWK.txt");
+            Scanner sc = new Scanner(x);
+            while (sc.hasNextLine()) {
+                String string = sc.nextLine();
+                mostRecentNWK.addFirst(string);
+            }
+
+            sc.close();
+        } catch (IOException e) {
+        }
+    }
+
+
+    /**
+     * Method to check whether the file containing recently opened GFA files is empty or not
+     */
+    @SuppressFBWarnings
+    public void checkMostRecentGFAFile() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File x = new File(s + "/mostRecentGFA.txt");
+            Scanner sc = new Scanner(x);
+            while (sc.hasNextLine()) {
+                String string = sc.nextLine();
+                mostRecentGFA.addFirst(string);
+            }
+
+            sc.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * Write a recently chosen GFA file to the file
+     */
+    public void writeMostRecentGFA() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File file = new File(s + "/mostRecentGFA.txt");
+            file.createNewFile();
+
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+
+            for (int i = 0; i < mostRecentGFA.size(); i++) {
+                writer.println(mostRecentGFA.get(i));
+
+            }
+
+            writer.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * Write a recently chosen NWK file to the file
+     */
+    public void writeMostRecentNWK() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File file = new File(s + "/mostRecentNWK.txt");
+            file.createNewFile();
+
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+
+            for (int i = 0; i < mostRecentNWK.size(); i++) {
+                writer.println(mostRecentNWK.get(i));
+
+            }
+
+            writer.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * Get the list containing most recent GFA files
+     *
+     * @return the list
+     */
+    public LinkedList getMostRecentGFA() {
+        return mostRecentGFA;
+    }
+
+    /**
+     * Get the list containing most recent NWK files
+     *
+     * @return the list
+     */
+    public LinkedList getMostRecentNWK() {
+        return mostRecentNWK;
+    }
+
+    /**
+     * Add a file to the recent opened GFA files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentGFA(String s) {
+        mostRecentGFA.addFirst(s);
+        writeMostRecentGFA();
+    }
+
+    /**
+     * Add a file to the recent opened NWK files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentNWK(String s) {
+        mostRecentNWK.addFirst(s);
+        writeMostRecentNWK();
     }
 
     /**
@@ -144,7 +280,7 @@ public class MainController extends Controller<BorderPane> {
      * @param ref             the reference string.
      * @param selectedGenomes the genomes to display.
      */
-    public void fillGraph(Object ref, List<String> selectedGenomes) {
+    public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
@@ -162,7 +298,9 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        fillGraph(s.get(0), new ArrayList<>());
+        ArrayList<String> list2 = new ArrayList<>();
+        list2.add(s.get(0));
+        fillGraph(list2, new ArrayList<>());
         initGUI();
     }
 
@@ -174,7 +312,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(null, s);
+        fillGraph(new ArrayList<>(), s);
 
         initGUI();
         setListItems();
@@ -209,51 +347,47 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the genome search and deselect buttons.
      *
-     * @param searchButton The genome search button.
+     * @param searchButton   The genome search button.
      * @param deselectButton The deselect button.
      */
-   private void setSearchAndDeselectButtonActionListener(
-           Button searchButton, Button deselectButton) {
-       searchButton.setOnAction(e -> {
-           if (!genomeTextField.getText().isEmpty()) {
-               application.fxobjects.cell.Cell cell = treeController.getCellByName(
-                       genomeTextField.textProperty().get().trim());
-               treeController.applyCellHighlight(cell);
-               treeController.selectStrain(cell);
-               genomeTextField.setText("");
-               fillTree();
-           }
-       });
+    private void setSearchAndDeselectButtonActionListener(
+            Button searchButton, Button deselectButton) {
+        searchButton.setOnAction(e -> {
+            if (!genomeTextField.getText().isEmpty()) {
+                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().trim());
+                treeController.applyCellHighlight(cell);
+                treeController.selectStrain(cell);
+                genomeTextField.setText("");
+                fillTree();
+            }
+        });
 
-       deselectButton.setOnAction(e -> {
-           treeController.clearSelection();
-           fillTree();
-       });
-   }
+        deselectButton.setOnAction(e -> {
+            treeController.clearSelection();
+            fillTree();
+        });
+    }
 
     /**
      * Adds an action listener to the annotation highlight button.
      *
      * @param annotationTextField The annotation search field.
-     * @param highlightButton The annotation highlight button.
+     * @param highlightButton     The annotation highlight button.
      */
     private void setHighlightButtonActionListener(TextField annotationTextField,
                                                   Button highlightButton,
                                                   Button deselectAnnotationButton) {
-        highlightButton.setOnAction(e -> {
-            processAnnotationButtonPress(annotationTextField, e);
-        });
+        highlightButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
 
-        deselectAnnotationButton.setOnAction(e -> {
-            processAnnotationButtonPress(annotationTextField, e);
-        });
+        deselectAnnotationButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
     }
 
     /**
      * Performs the actions needed on Annotation highlight and deselect button presses.
      *
      * @param annotationTextField The annotation search box.
-     * @param e The ActionEvent that has been triggered.
+     * @param e                   The ActionEvent that has been triggered.
      */
     private void processAnnotationButtonPress(TextField annotationTextField, ActionEvent e) {
         if (currentView != 0) {
@@ -296,7 +430,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Deselects the old annotation.
      *
-     * @param cellMap Map of cells.
+     * @param cellMap     Map of cells.
      * @param annotations List of annotations.
      */
     private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
@@ -356,24 +490,15 @@ public class MainController extends Controller<BorderPane> {
         list = listFactory.getList();
 
         list.setOnMouseClicked(event -> listSelect());
-        
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                graphController.getGraph().reset();
-                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
-
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
-
-            }
-        });
-
-        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
 
         setListItems();
         this.getRoot().setRight(listVBox);
     }
 
+    /**
+     * All strains selected to highlight.
+     */
+    private ArrayList<String> highlights = new ArrayList<>();
 
     /**
      * Method to perform action upon listItem selection
@@ -382,7 +507,14 @@ public class MainController extends Controller<BorderPane> {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
-            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+
+            highlights.clear();
+
+            for (Object o : list.getSelectionModel().getSelectedItems()) {
+                highlights.add((String) o);
+            }
+
+            fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick());
@@ -467,7 +599,7 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Getter for the textfiel.d
+     * Getter for the textfield
      *
      * @return the textfield.
      */
