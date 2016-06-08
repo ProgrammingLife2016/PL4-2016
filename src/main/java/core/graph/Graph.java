@@ -339,6 +339,12 @@ public class Graph {
         return i;
     }
 
+    /**
+     * Method to get number of intersecting ints in a list.
+     * @param l1 first list.
+     * @param l2 second list.
+     * @return number of intersecting elements.
+     */
     public int intersectionInt(List<Integer> l1, List<Integer> l2) {
         int i = 0;
         for (Integer s : l1) {
