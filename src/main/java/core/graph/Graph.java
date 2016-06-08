@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static core.AnnotationParser.readCDSFilteredGFF;
 
 /**
  * Class representing a graph.
@@ -50,7 +49,6 @@ public class Graph {
      */
     private List<Annotation> annotations;
 
-
     /**
      * Class constructor.
      */
@@ -59,8 +57,7 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        annotations = readCDSFilteredGFF(
-                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
+        annotations = new ArrayList<>();
     }
 
     /**
@@ -73,8 +70,7 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             Parser parser = new Parser();
-
-            startMap = parser.readGFAAsString(path, annotations);
+            startMap = parser.readGFAAsString(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
@@ -441,6 +437,27 @@ public class Graph {
         this.levelMaps = levelMaps;
     }
 
+    /**
+     * Get the annotations.
+     *
+     * @return The annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Sets the annotations.
+     *
+     * @param annotations The annotations
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+
+        zoomIn.setAnnotations(annotations);
+        current.setAnnotations(annotations);
+        zoomOut.setAnnotations(annotations);
+    }
 
     /**
      * Method to reset the current view.
