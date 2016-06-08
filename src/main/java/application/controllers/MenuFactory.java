@@ -119,25 +119,25 @@ public class MenuFactory {
 
     private Menu initMostRecentGFAMenu() {
         LinkedList<String> mostRecent = mainController.getMostRecentGFA();
-        String recent01 = "";
-        String recent02 = "";
-        String recent03 = "";
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
 
         if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0).equals(""))) {
+            if (!(mostRecent.get(0).equals("Empty"))) {
                 recent01 = mostRecent.get(0);
             }
         }
 
         if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1).equals(""))) {
+            if (!(mostRecent.get(1).equals("Empty"))) {
                 recent02 = mostRecent.get(1);
             }
 
         }
 
         if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2).equals(""))) {
+            if (!(mostRecent.get(2).equals("Empty"))) {
                 recent03 = mostRecent.get(2);
             }
         }
@@ -172,27 +172,27 @@ public class MenuFactory {
 
     private Menu initMostRecentNWKMenu() {
         LinkedList<String> mostRecent = mainController.getMostRecentNWK();
-        String recent01 = "";
-        String recent02 = "";
-        String recent03 = "";
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
 
 
         if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0) == "")) {
+            if (!(mostRecent.get(0) == "Empty")) {
                 recent01 = mostRecent.get(0);
             }
         }
 
 
         if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1) == "")) {
+            if (!(mostRecent.get(1) == "Empty")) {
                 recent02 = mostRecent.get(1);
             }
 
         }
 
         if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2) == "")) {
+            if (!(mostRecent.get(2) == "Empty")) {
                 recent03 = mostRecent.get(2);
             }
         }
