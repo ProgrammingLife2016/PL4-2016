@@ -124,25 +124,25 @@ public class MenuFactory {
 
     private Menu initMostRecentGFAMenu() {
         LinkedList<String> mostRecent = mainController.getMostRecentGFA();
-        String recent01 = "";
-        String recent02 = "";
-        String recent03 = "";
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
 
         if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0).equals(""))) {
+            if (!(mostRecent.get(0).equals("Empty"))) {
                 recent01 = mostRecent.get(0);
             }
         }
 
         if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1).equals(""))) {
+            if (!(mostRecent.get(1).equals("Empty"))) {
                 recent02 = mostRecent.get(1);
             }
 
         }
 
         if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2).equals(""))) {
+            if (!(mostRecent.get(2).equals("Empty"))) {
                 recent03 = mostRecent.get(2);
             }
         }
@@ -152,18 +152,24 @@ public class MenuFactory {
         final String finalRecent3 = recent03;
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
-            mainController.initGraph();
+            if (finalRecent1 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
+                mainController.initGraph();
+            }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
-            mainController.initGraph();
+            if (finalRecent2 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
+                mainController.initGraph();
+            }
         });
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
-            mainController.initGraph();
+            if (finalRecent3 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
+                mainController.initGraph();
+            }
         });
 
         return initMenu("Load recently opened GFA file", recent1, recent2, recent3);
@@ -171,27 +177,27 @@ public class MenuFactory {
 
     private Menu initMostRecentNWKMenu() {
         LinkedList<String> mostRecent = mainController.getMostRecentNWK();
-        String recent01 = "";
-        String recent02 = "";
-        String recent03 = "";
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
 
 
         if (mostRecent.size() >= 1) {
-            if (!(mostRecent.get(0) == "")) {
+            if (!(mostRecent.get(0) == "Empty")) {
                 recent01 = mostRecent.get(0);
             }
         }
 
 
         if (mostRecent.size() >= 2) {
-            if (!(mostRecent.get(1) == "")) {
+            if (!(mostRecent.get(1) == "Empty")) {
                 recent02 = mostRecent.get(1);
             }
 
         }
 
         if (mostRecent.size() >= 3) {
-            if (!(mostRecent.get(2) == "")) {
+            if (!(mostRecent.get(2) == "Empty")) {
                 recent03 = mostRecent.get(2);
             }
         }
@@ -201,13 +207,27 @@ public class MenuFactory {
         final String finalRecent2 = recent02;
         final String finalRecent3 = recent03;
 
-        MenuItem recent1 = initMenuItem(recent01, null, event -> mainController.initTree(finalRecent1.toString()));
+        MenuItem recent1 = initMenuItem(recent01, null, event -> {
+            if (finalRecent1 != "") {
+                mainController.initTree(finalRecent1.toString());
+            }
+        });
 
-        MenuItem recent2 = initMenuItem(recent02, null, event -> mainController.initTree(finalRecent2.toString()));
+        MenuItem recent2 = initMenuItem(recent02, null, event -> {
+            if (finalRecent2.toString() != "") {
+                mainController.initTree(finalRecent2.toString());
+            }
+        });
 
-        MenuItem recent3 = initMenuItem(recent03, null, event -> mainController.initTree(finalRecent3.toString()));
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> {
+            if (finalRecent3.toString() != "") {
+                mainController.initTree(finalRecent3.toString());
+            }
+        });
 
         return initMenu("Load recently opened NWK file", recent1, recent2, recent3);
+
     }
 
 

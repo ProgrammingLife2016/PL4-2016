@@ -102,6 +102,7 @@ public class MainController extends Controller<BorderPane> {
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
+
     }
 
     /**
