@@ -45,6 +45,7 @@ public class MainController extends Controller<BorderPane> {
     private int count;
     private int secondCount;
     private int selectedIndex;
+    private String lastAnnotationSearch;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -263,19 +264,49 @@ public class MainController extends Controller<BorderPane> {
             List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
 
             try {
-                Annotation ann = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                Annotation newAnnotation = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                 Map<Integer, application.fxobjects.cell.Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
 
-                for (Node n : ann.getSpannedNodes()) {
+                if (e.getSource().toString().contains("Highlight")) {
+                    deselectPreviousHighLight(cellMap, annotations);
+                }
+
+                if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
+                    return;
+                }
+                for (Node n : newAnnotation.getSpannedNodes()) {
                     if (e.getSource().toString().contains("Highlight")) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                     } else if (e.getSource().toString().contains("Deselect")) {
                         ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
                     }
                 }
+
             } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                 e1.printStackTrace();
+            }
+
+            lastAnnotationSearch = annotationTextField.getText();
+        }
+    }
+
+    /**
+     * Deselects the old annotation.
+     *
+     * @param cellMap Map of cells.
+     * @param annotations List of annotations.
+     */
+    private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
+                                           List<Annotation> annotations) {
+        if (lastAnnotationSearch != null) {
+            try {
+                Annotation oldAnnotation = AnnotationProcessor.findAnnotation(annotations, lastAnnotationSearch);
+                for (Node oldAnnotationNode : oldAnnotation.getSpannedNodes()) {
+                    ((RectangleCell) cellMap.get(oldAnnotationNode.getId())).deselectHighLight();
+                }
+            } catch (AnnotationProcessor.TooManyAnnotationsFoundException e) {
+                e.printStackTrace();
             }
         }
     }
