@@ -1,9 +1,8 @@
 package core.graph;
 
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
 import core.*;
-import core.graph.cell.*;
+import core.graph.cell.CellType;
+import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import static core.AnnotationParser.readCDSFilteredGFF;
  * Class representing a graph.
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
-        "PMD.UnusedLocalVariable"})
+        "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
 public class Graph {
 
     private Model zoomIn;

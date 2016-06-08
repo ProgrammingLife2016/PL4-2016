@@ -61,7 +61,6 @@ public class GraphController extends Controller<ScrollPane> {
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
-            //@Todo Thread is dangerously.
             new Thread() {
                 public void start() {
                     update(graph.getCurrentRef(), graph.getCurrentInt());
@@ -202,9 +201,9 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      */
     public void update(Object ref, int depth) {
-        int size = graph.getLevelMaps().size();
-        int min = (int) (drawFrom - screenSize.getMaxX() * 0);
-        int max = (int) (drawFrom + screenSize.getMaxX() * 1.0);
+
+        int min = drawFrom;
+        int max = (int) (drawFrom + screenSize.getMaxX());
 
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
