@@ -8,7 +8,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 
 import static application.fxobjects.cell.LineageColor.*;
 
@@ -16,9 +15,7 @@ import static application.fxobjects.cell.LineageColor.*;
  * Class representing a Phylogenetic leave node.
  */
 public class LeafCell extends Cell {
-    private final CellType type = CellType.TREELEAF;
     private String name;
-    private Shape shape = null;
 
     /**
      * Phylogenetic leave cell constructor.
@@ -60,15 +57,8 @@ public class LeafCell extends Cell {
             this.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         }
         setView(pane);
-    }
 
-    /**
-     * Return the type of the Cell.
-     *
-     * @return the type of the Cell.
-     */
-    public CellType getType() {
-        return type;
+        type = CellType.TREELEAF;
     }
 
     /**
@@ -79,19 +69,4 @@ public class LeafCell extends Cell {
     public String getName() {
         return name;
     }
-
-    /**
-     * Setter method for the name of the strain.
-     *
-     * @param name the name of the strain.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the cellshape.
-     * @return the cellshape.
-     */
-    public Shape getCellShape() { return shape; }
 }

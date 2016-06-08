@@ -3,7 +3,6 @@ package application.fxobjects.cell;
 import core.graph.cell.CellType;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,8 @@ public abstract class Cell extends Pane {
     List<Cell> parents = new ArrayList<>();
 
     Node view;
+
+    public CellType type = null;
 
     /**
      * Class constructor.
@@ -105,9 +106,11 @@ public abstract class Cell extends Pane {
     /**
      * Return the type of the Cell.
      *
-     * @return The type of the Cell.
+     * @return the type of the Cell.
      */
-    public abstract CellType getType();
+    public CellType getType() {
+        return type;
+    }
 
     /**
      * Return whether a cell has been relocated.
@@ -135,21 +138,4 @@ public abstract class Cell extends Pane {
     public String toString() {
         return cellId + "";
     }
-
-    /**
-     * Returns the cellshape.
-     * @return the cellshape.
-     */
-    public abstract Shape getCellShape();
-
-    /**
-     * Abstract method.
-     */
-    public void focus() { }
-
-    /**
-     * Abstract method.
-     */
-    public void resetFocus() { }
-
 }
