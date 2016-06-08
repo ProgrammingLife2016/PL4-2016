@@ -301,26 +301,15 @@ public class MainController extends Controller<BorderPane> {
      * Method to perform action upon listItem selection
      */
     public void listSelect() {
-        System.out.println("hoi");
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
 
-//            if(highlights.contains(list.getSelectionModel().getSelectedItem())) {
-//                System.out.println("Remove item");
-//                highlights.remove(list.getSelectionModel().getSelectedItem());
-//            } else {
-//                System.out.println("Add item");
-//                highlights.add((String)list.getSelectionModel().getSelectedItem());
-//            }
             highlights.clear();
 
             for(Object o: list.getSelectionModel().getSelectedItems()) {
                 highlights.add((String)o);
             }
-           //highlights = list.getSelectionModel().getSelectedItems();
-            System.out.println("Hoi");
-            System.out.println(highlights.toString());
 
             fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
