@@ -400,10 +400,8 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public Cell getCellByName(String name) {
         for (Object c : root.getChildren()) {
-            if (c instanceof LeafCell) {
-                if (((LeafCell) c).getName().contains(name)) {
-                    return (Cell) c;
-                }
+            if (c instanceof LeafCell && ((LeafCell) c).getName().contains(name)) {
+                return (Cell) c;
             }
         }
 
@@ -421,6 +419,26 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
+     * Processes a lineage
+     *
+     * @param lineage The integer value of a lineage
+     * @param state true/false state
+     */
+    private void processLineage(int lineage, boolean state) {
+        META_DATA.values().forEach(s -> {
+            if (s.getLineage() == lineage && state) {
+                Cell cell = getCellByName(s.getName());
+                selectedStrains.add(cell);
+                applyCellHighlight(cell);
+            } else if (s.getLineage() == lineage) {
+                Cell cell = getCellByName(s.getName());
+                selectedStrains.remove(cell);
+                revertCellHighlight(cell);
+            }
+        });
+    }
+
+    /**
      * Filters the phylogenetic tree.
      *
      * @param f A given filter
@@ -429,134 +447,34 @@ public class TreeController extends Controller<ScrollPane> {
     public void filterPhyloLineage(Filter f, boolean state) {
         switch (f) {
             case LIN1:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 1 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 1) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(1, state);
                 break;
             case LIN2:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 2 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 2) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(2, state);
                 break;
             case LIN3:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 3 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 3) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(3, state);
                 break;
             case LIN4:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 4 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 4) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(4, state);
                 break;
             case LIN5:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 5 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 5) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(5, state);
                 break;
             case LIN6:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 6 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 6) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(6, state);
                 break;
             case LIN7:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 7 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 7) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(7, state);
                 break;
             case LIN8:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 8 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 8) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(8, state);
                 break;
             case LIN9:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 9 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 9) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(9, state);
                 break;
             case LIN10:
-                META_DATA.values().forEach(s -> {
-                    if (s.getLineage() == 10 && state) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.add(cell);
-                        applyCellHighlight(cell);
-                    } else if (s.getLineage() == 10) {
-                        Cell cell = getCellByName(s.getName());
-                        selectedStrains.remove(cell);
-                        revertCellHighlight(cell);
-                    }
-                });
+                processLineage(10, state);
                 break;
             default:
                 break;
