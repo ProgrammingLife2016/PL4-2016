@@ -264,17 +264,19 @@ public class MainController extends Controller<BorderPane> {
             List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
 
             try {
-                Annotation newAnnotation = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                Annotation newAnnotation
+                        = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                 Map<Integer, application.fxobjects.cell.Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
+
+                if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
+                    return;
+                }
 
                 if (e.getSource().toString().contains("Highlight")) {
                     deselectPreviousHighLight(cellMap, annotations);
                 }
 
-                if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
-                    return;
-                }
                 for (Node n : newAnnotation.getSpannedNodes()) {
                     if (e.getSource().toString().contains("Highlight")) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
