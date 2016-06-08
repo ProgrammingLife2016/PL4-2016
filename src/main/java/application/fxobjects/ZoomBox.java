@@ -66,6 +66,7 @@ public class ZoomBox extends ScrollPane {
         zoomRect.setFill(Color.TRANSPARENT);
         zoomRect.setStroke(Color.BLACK);
         zoomRect.setStrokeWidth(3);
+
     }
 
     /**
@@ -113,27 +114,29 @@ public class ZoomBox extends ScrollPane {
         double rightOffset = places[0];
         double shown = places[1];
 
+        if (shown > 1.0) {
+            shown = 1.0;
+        }
+
+        if (rightOffset > 1.0) {
+            rightOffset = 1.0;
+        }
+
         double right = rectX + rightOffset * zoomBoxWidth;
         double newWidth = shown * zoomBoxWidth;
-
-        double maxX = (rectX + zoomBoxWidth) - zoomRect.getWidth();
-
-        System.out.println("right: " + right);
-        System.out.println("maxX: " + maxX);
+        double maxX = (rectX + zoomBoxWidth) -  newWidth;
 
         if (right > maxX) {
-            System.out.println("too right");
             right = maxX;
-            System.out.println("new Right: " + right);
         }
 
-        if (newWidth > zoomBoxWidth) {
-            newWidth = zoomBoxWidth;
+        if (newWidth < 5) {
+            newWidth = 5;
         }
-
         zoomRect.setX(right);
         zoomRect.setWidth(newWidth);
     }
+
 
     /**
      * Return the zoom box.
@@ -144,80 +147,4 @@ public class ZoomBox extends ScrollPane {
         return right;
     }
 
-    /**
-     * Check the boundaries of the zoombox to see if a movement is allowed.
-     *
-     * @param offsetX The offset changed in the X direction.
-     * @param offsetY The offset changes in the Y direction.
-     * @return True/False depending on the movement.
-     */
-    public Boolean checkRectBoundaries(double offsetX, double offsetY) {
-        Boolean res = true;
-        if (offsetX < 0) {
-            res = (zoomRect.getX() + offsetX) >= zoomRectBorder.getX();
-        } else if (offsetX > 0) {
-            res = (zoomRect.getX() + zoomRect.getWidth() + offsetX)
-                    <= (zoomRectBorder.getX() + zoomRectBorder.getWidth());
-        }
-
-        if (res && offsetY < 0) {
-            res = (zoomRect.getY() + offsetY) >= zoomRectBorder.getY();
-        } else if (res && offsetY > 0) {
-            res = (zoomRect.getY() + zoomRect.getHeight() + offsetY)
-                    <= (zoomRectBorder.getY() + zoomRectBorder.getHeight());
-        }
-
-        return res;
-    }
-
-    /**
-     * zoom the view of zoombox in.
-     *
-     * @param delta Number of pixels to scale.
-     */
-    public void scaleZoomRectIn(double delta) {
-        if (zoomRect.getWidth() > 182.0) {
-            double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
-            zoomRect.setWidth(zoomRect.getWidth() + delta);
-            zoomRect.setHeight(zoomRect.getHeight() + adj);
-
-            zoomRect.setX(zoomRect.getX() - 0.5 * delta);
-            zoomRect.setY(zoomRect.getY() - 0.5 * adj);
-        }
-    }
-
-    /**
-     * zoom the view of zoombox out.
-     *
-     * @param delta Number of pixels to scale.
-     */
-    public void scaleZoomRectOut(double delta) {
-        double adj = delta * (zoomRect.getHeight() / zoomRect.getWidth());
-        zoomRect.setWidth(zoomRect.getWidth() + delta);
-        zoomRect.setHeight(zoomRect.getHeight() + adj);
-
-        zoomRect.setX(zoomRect.getX() - 0.5 * delta);
-        zoomRect.setY(zoomRect.getY() - 0.5 * adj);
-
-    }
-
-    /**
-     * Zoom the zoombox based on a given delta.
-     *
-     * @param delta Offset to change.
-     */
-    public void zoom(double delta) {
-        if (-delta > 0.0) {
-            if (checkRectBoundaries(delta, (zoomRect.getHeight() / zoomRect.getWidth()) * delta)
-                    && checkRectBoundaries(-delta, -(zoomRect.getHeight() / zoomRect.getWidth())
-                    * delta)) {
-                scaleZoomRectOut(-delta);
-            }
-        } else if (-delta < 0.0
-                && (zoomRect.getHeight() + delta) >= (zoomRectBorder.getHeight() * 0.05)
-                && zoomRect.getWidth() + delta * (zoomRect.getWidth()
-                * zoomRect.getHeight()) >= (zoomRectBorder.getWidth() * 0.05)) {
-            scaleZoomRectIn(-delta);
-        }
-    }
 }

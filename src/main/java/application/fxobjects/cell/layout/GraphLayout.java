@@ -24,8 +24,6 @@ public class GraphLayout extends CellLayout {
     private int centerY;
     private double maxWidth;
 
-    private static final int BASE_X = 100;
-
     /**
      * Class constructor.
      *
@@ -35,7 +33,6 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphLayout(Model model, int offset, int middle) {
-        this.currentX = BASE_X;
         this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
