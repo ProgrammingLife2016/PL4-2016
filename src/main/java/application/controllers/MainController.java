@@ -272,20 +272,21 @@ public class MainController extends Controller<BorderPane> {
         listVBox = listFactory.createInfoList("");
         list = listFactory.getList();
 
-        list.setOnMouseClicked(event -> listSelect());
+
         
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                graphController.getGraph().reset();
-
-                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
-
-                fillGraph(highlights, graphController.getGenomes());
-//                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
-
-            }
-        });
+//        list.setOnMouseClicked(event -> {
+//            if (!(list.getSelectionModel().getSelectedItem() == null)) {
+//                graphController.getGraph().reset();
+//
+//                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
+//
+//                fillGraph(highlights, graphController.getGenomes());
+////                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+//                graphController.takeSnapshot();
+//
+//            }
+//        });
+        list.setOnMouseClicked(event -> listSelect());
 
         setListItems();
         this.getRoot().setRight(listVBox);
@@ -300,15 +301,25 @@ public class MainController extends Controller<BorderPane> {
      * Method to perform action upon listItem selection
      */
     public void listSelect() {
+        System.out.println("hoi");
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
 
-            if(highlights.contains(list.getSelectionModel().getSelectedItem())) {
-                highlights.remove(list.getSelectionModel().getSelectedItem());
-            } else {
-                highlights.add((String)list.getSelectionModel().getSelectedItem());
+//            if(highlights.contains(list.getSelectionModel().getSelectedItem())) {
+//                System.out.println("Remove item");
+//                highlights.remove(list.getSelectionModel().getSelectedItem());
+//            } else {
+//                System.out.println("Add item");
+//                highlights.add((String)list.getSelectionModel().getSelectedItem());
+//            }
+            highlights.clear();
+
+            for(Object o: list.getSelectionModel().getSelectedItems()) {
+                highlights.add((String)o);
             }
+           //highlights = list.getSelectionModel().getSelectedItems();
+            System.out.println("Hoi");
             System.out.println(highlights.toString());
 
             fillGraph(highlights, graphController.getGenomes());

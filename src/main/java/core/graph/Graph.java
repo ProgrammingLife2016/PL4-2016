@@ -298,13 +298,13 @@ public class Graph {
                 / (double) Math.max(genomes.size(), 10))) + 1;
 
         ifStatement:
-        if (from.getGenomes().contains(ref) && to.getGenomes().contains(ref)) {
+        if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
             boolean edgePlaced = false;
             for (int child : from.getLinks()) {
                 if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
-                        && nodeMap.get(child).getGenomes().contains(ref)) {
+                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
-                    if (nodeMap.get(child).getGenomes().contains(ref)) {
+                    if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                         toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
                     }
                     edgePlaced = true;
@@ -350,6 +350,7 @@ public class Graph {
 
     /**
      * Method to get number of intersecting ints in a list.
+     *
      * @param l1 first list.
      * @param l2 second list.
      * @return number of intersecting elements.
@@ -366,6 +367,7 @@ public class Graph {
 
     /**
      * Method that returns a list of strings present in both lists.
+     *
      * @param l1 first list
      * @param l2 second list
      * @return result
@@ -530,6 +532,7 @@ public class Graph {
 
     /**
      * Adds the leftmost and rightmost cell to the Model.
+     *
      * @param m the Model to add cells to.
      * @return the new Model.
      */
