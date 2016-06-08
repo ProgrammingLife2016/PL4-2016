@@ -89,25 +89,6 @@ public class NodeTest {
     }
 
     /**
-     * Test the unionGenomes method with genome sets that do not overlap.
-     */
-    @Test
-    public void testUnionGenomesWithoutOverlap() {
-        Node n1 = new Node(1, "", 1);
-        Node n2 = new Node(2, "", 2);
-
-        n1.setGenomes(new ArrayList<>(Arrays.asList("1", "2")));
-        n2.setGenomes(new ArrayList<>(Arrays.asList("3", "4")));
-        n1.unionGenomes(n2);
-
-        assertEquals(4, n1.getGenomes().size());
-        assertEquals(2, n2.getGenomes().size());
-
-        assertEquals(new ArrayList<>(Arrays.asList("1", "2", "3", "4")), n1.getGenomes());
-        assertEquals(new ArrayList<>(Arrays.asList("3", "4")), n2.getGenomes());
-    }
-
-    /**
      * Test the addAllGenome with multiple genomes.
      */
     @Test
