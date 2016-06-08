@@ -37,6 +37,7 @@ public class PhylogeneticTree {
     public PhylogeneticTree(Model model) {
         this.model = model;
     }
+
     /**
      * Get the model of the PhylogeneticTree.
      *
@@ -76,7 +77,7 @@ public class PhylogeneticTree {
         char[] x = s.toCharArray();
         String temp = "";
         for (int i = s.length(); i > 0; i--) {
-            if (!(x[i - 1] == '\\'))  {
+            if (!(x[i - 1] == '\\')) {
                 temp += x[i - 1];
             } else {
                 break;

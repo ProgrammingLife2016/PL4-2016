@@ -100,6 +100,7 @@ public final class WindowFactory {
 
     /**
      * Method that creates a directoryChooser.
+     *
      * @return the directoryChooser
      */
     public static FileChooser createAnnotationChooser() {
