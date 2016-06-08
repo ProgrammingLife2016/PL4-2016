@@ -8,12 +8,14 @@ import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -64,12 +66,17 @@ public class GraphController extends Controller<ScrollPane> {
             drawFrom = -1 * (int) bounds.getMinX();
             //int right = drawFrom + (int) bounds.getWidth();
             //System.out.println(drawFrom);
-            update(graph.getCurrentRef(), graph.getCurrentInt());
+            //@Todo Thread is dangerously.
+            new Thread() {
+                public void start() {
+                    update(graph.getCurrentRef(), graph.getCurrentInt());
+                }
+            }.start();
+
         };
 
-        //this.getRoot().viewportBoundsProperty().addListener(changeListener);
+        this.getRoot().viewportBoundsProperty().addListener(changeListener);
         this.getRoot().hvalueProperty().addListener(changeListener);
-        //this.getRoot().vvalueProperty().addListener(changeListener);
 
         this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
@@ -177,8 +184,8 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void update(Object ref, int depth) {
         int size = graph.getLevelMaps().size();
-        int min = (int) (drawFrom - screenSize.getMaxX() * 1.5);
-        int max = (int) (drawFrom + screenSize.getMaxX() * 1.5);
+        int min = (int) (drawFrom - screenSize.getMaxX() * 0);
+        int max = (int) (drawFrom + screenSize.getMaxX() * 1.0);
 
         //We received a different reference of depth, so we need to redraw.
         if (depth <= size - 1 && depth >= 0
@@ -201,7 +208,7 @@ public class GraphController extends Controller<ScrollPane> {
                         && !(e.getSource().getType() == CellType.RECTANGLE))
                         || length > MAX_EDGE_LENGTH_LONG) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
-                    e.getLine().setOpacity(0.2d);
+                    //e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
                             + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
                             + ((e.getSource().getLayoutY()
