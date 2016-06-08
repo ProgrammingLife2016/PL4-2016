@@ -292,15 +292,14 @@ public class Graph {
         if (from.getGenomes().contains(ref) && to.getGenomes().contains(ref)) {
             for(int child : from.getLinks()) {
                 if((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
-                        && nodeMap.get(child).getLinks().contains(to.getId())
-                        && from.getLinks().contains(to.getId())) {
+                       ) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     if(nodeMap.get(child).getGenomes().contains(ref)) {
                         toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
-                    } else {
-                        toret.addEdge(from.getId(), child, width, EdgeType.GRAPH);
+
                     }
                     break ifStatement;
+
                 }
             }
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
