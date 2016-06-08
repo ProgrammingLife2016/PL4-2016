@@ -116,8 +116,8 @@ public class TreeController extends Controller<ScrollPane> {
                 applyColorUpwards(parentList, determineEdgeLinColor(META_DATA.get(name).getLineage()), 4.0);
                 applyColorOnCell(cell, determineSelectedLeafLinColor(META_DATA.get(name).getLineage()));
             } else if (name.contains("G")) {
-                applyColorUpwards(parentList, LIN4, 4.0);
-                applyColorOnCell(cell, SLIN4);
+                applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
+                applyColorOnCell(cell, determineSelectedLeafLinColor(4));
             } else {
                 applyColorUpwards(parentList, Color.YELLOW, 4.0);
             }
@@ -142,7 +142,7 @@ public class TreeController extends Controller<ScrollPane> {
                 applyColorOnCell(cell, determineLeafLinColor(META_DATA.get(name).getLineage()));
             } else if (name.contains("G")) {
                 applyColorUpwards(parentList, Color.BLACK, 1.0);
-                applyColorOnCell(cell, GLIN4);
+                applyColorOnCell(cell, determineLeafLinColor(4));
             } else {
                 applyColorUpwards(parentList, Color.BLACK, 1.0);
             }
@@ -200,7 +200,7 @@ public class TreeController extends Controller<ScrollPane> {
                     } else if (c.getName().contains("G")) {
                         c.setBackground(
                                 new Background(
-                                        new BackgroundFill(SLIN4, null, null)
+                                        new BackgroundFill(determineSelectedLeafLinColor(4), null, null)
                                 )
                         );
                     }
@@ -229,7 +229,7 @@ public class TreeController extends Controller<ScrollPane> {
             } else if (c.getName().contains("G")) {
                 c.setBackground(
                         new Background(
-                                new BackgroundFill(GLIN4, null, null)
+                                new BackgroundFill(determineLeafLinColor(4), null, null)
                         )
                 );
             }

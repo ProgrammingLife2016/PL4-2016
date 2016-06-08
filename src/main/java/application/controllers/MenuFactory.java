@@ -1,6 +1,8 @@
 package application.controllers;
 
+import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -10,8 +12,6 @@ import javafx.scene.input.KeyCombination;
 
 import static core.Filter.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -95,7 +95,6 @@ public class MenuFactory {
         return initMenu("View",
                 showGenomeSequence, showPhylogeneticTree, separatorOne,
                 showSelectedStrains, showOnlyThisStrain, separatorTwo, resetView);
-
     }
 
     private Menu initFileMenu() {
@@ -117,7 +116,8 @@ public class MenuFactory {
                     WindowFactory.createMenuWithSearch();
                 });
 
-        return initMenu("File", loadGenome, loadPhylogeneticTree, initMostRecentGFAMenu(), initMostRecentNWKMenu());
+        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree,
+                initMostRecentGFAMenu(), initMostRecentNWKMenu());
     }
 
     private Menu initMostRecentGFAMenu() {
@@ -172,23 +172,17 @@ public class MenuFactory {
         String recent02 = "Empty";
         String recent03 = "Empty";
 
-
         if (mostRecent.size() >= 1 && !(mostRecent.get(0) == "Empty")) {
             recent01 = mostRecent.get(0);
-
         }
-
 
         if (mostRecent.size() >= 2 && !(mostRecent.get(1) == "Empty")) {
             recent02 = mostRecent.get(1);
-
         }
 
         if (mostRecent.size() >= 3 && !(mostRecent.get(2) == "Empty")) {
             recent03 = mostRecent.get(2);
-
         }
-
 
         final String finalRecent1 = recent01;
         final String finalRecent2 = recent02;
@@ -214,7 +208,6 @@ public class MenuFactory {
         });
 
         return initMenu("Load recently opened NWK file", recent1, recent2, recent3);
-
     }
 
 
@@ -268,39 +261,22 @@ public class MenuFactory {
     }
 
     private void initLineageFilter() {
-        filterLineage = new Menu("Lineage");
-        CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
-        lin1.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN1, lin1.isSelected()));
-        CheckMenuItem lin2 = new CheckMenuItem("LIN 2");
-        lin2.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN2, lin2.isSelected()));
-        CheckMenuItem lin3 = new CheckMenuItem("LIN 3");
-        lin3.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN3, lin3.isSelected()));
-        CheckMenuItem lin4 = new CheckMenuItem("LIN 4");
-        lin4.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN4, lin4.isSelected()));
-        CheckMenuItem lin5 = new CheckMenuItem("LIN 5");
-        lin5.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN5, lin5.isSelected()));
-        CheckMenuItem lin6 = new CheckMenuItem("LIN 6");
-        lin6.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN6, lin6.isSelected()));
-        CheckMenuItem lin7 = new CheckMenuItem("LIN 7");
-        lin7.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN7, lin7.isSelected()));
-        CheckMenuItem lin8 = new CheckMenuItem("LIN animal");
-        lin8.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN8, lin8.isSelected()));
-        CheckMenuItem lin9 = new CheckMenuItem("LIN B");
-        lin9.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN9, lin9.isSelected()));
-        CheckMenuItem lin10 = new CheckMenuItem("LIN CANETTII");
-        lin10.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(LIN10, lin10.isSelected()));
+        List<String> lineageExtensions = new ArrayList<>(Arrays.asList(
+                "1", "2", "3", "4", "5", "6", "7", "animal", "B", "CANETTI"));
+        List<Filter> linFilters = new ArrayList<>(Arrays.asList(
+                LIN1, LIN2, LIN3, LIN4, LIN5, LIN6, LIN7, LIN8, LIN9, LIN10));
 
-        filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
+        filterLineage = new Menu("Lineage");
+        for (int idx = 0; idx < lineageExtensions.size(); idx++) {
+            CheckMenuItem lin = new CheckMenuItem("LIN " + lineageExtensions.get(idx));
+
+            int finalIdx = idx;
+            lin.setOnAction(event ->
+                    mainController.getTreeController().filterPhyloLineage(linFilters.get(finalIdx), lin.isSelected())
+            );
+
+            filterLineage.getItems().add(lin);
+        }
     }
 
     private void initHIVFilter() {
