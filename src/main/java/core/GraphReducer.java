@@ -55,6 +55,7 @@ public final class GraphReducer {
         startMapSize = startMap.size();
 
         for (int i = 1;; i++) {
+
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
@@ -77,7 +78,7 @@ public final class GraphReducer {
      * @return A copied node map.
      */
     @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
-    public static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map) {
+    public static HashMap<Integer, Node> copyNodeMap(HashMap<Integer, Node> map, int zoomLevel) {
         HashMap<Integer, Node> res = new HashMap<>();
         for (int i : map.keySet()) {
             Node n = map.get(i);
@@ -90,11 +91,27 @@ public final class GraphReducer {
             // Annotations should for now only be shown at the most zoomed in level.
             newNode.setAnnotations(new ArrayList<>());
             newNode.setNucleotides(n.getNucleotides());
-
+            newNode.initializeLevelNodeMap(zoomLevel + 1);
             res.put(i, newNode);
         }
 
         return res;
+    }
+
+    public static void updateNodeMaps(int ownNodeId, int otherNodeId, int zoomlevel, HashMap<Integer, Node> nodeMap) {
+        int gLevel = 0;
+//        try {
+            for (int level = 0; level <= zoomlevel; level++) {
+                gLevel = level;
+                Node ownNode = levelMaps.get(level).get(ownNodeId);
+                ownNode.addLevelNodeId(zoomlevel + 1, otherNodeId);
+            }
+//        } catch (NullPointerException e) {
+//            System.out.println(gLevel);
+//            System.out.println(levelMaps.size());
+//            System.exit(0);
+//        }
+
     }
 
     /**
@@ -105,22 +122,28 @@ public final class GraphReducer {
      * @return A collapsed map.
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map, int zoomLevel) {
-        HashMap<Integer, Node> nodeMap = copyNodeMap(map);
+        HashMap<Integer, Node> nodeMap = copyNodeMap(map, zoomLevel);
         determineParents(nodeMap);
+
 
         for (int idx = 1; idx < startMapSize; idx++) {
             Node parent = nodeMap.get(idx);
+
             if (parent == null) {
                 continue;
             }
 
-            collapseBubble(nodeMap, parent);
+            //Initially, all nodes are not collapsed at the next level
+            updateNodeMaps(idx, idx, zoomLevel, nodeMap);
+
+
+            collapseBubble(nodeMap, parent, zoomLevel);
             collapseIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 boolean collapsed = true;
                 int collapseCount = 0;
                 while (collapsed && collapseCount < 6) {
-                    collapsed = collapseNodeSequence(nodeMap, parent);
+                    collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
                     collapseCount++;
                 }
             }
@@ -136,7 +159,7 @@ public final class GraphReducer {
      * @param parent  A given parent node to be collapsed with its child.
      * @return Whether the horizontal collapse action has succeeded.
      */
-    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         // Links must be present from parent --> child
         if (parent == null) {
             return false;
@@ -182,6 +205,10 @@ public final class GraphReducer {
 
         //remove edge from child to grandchild.
         child.removeLink(grandChild.getId());
+
+        //Update the LevelNodeMaps of all nodes with this ID
+        //up to and including this zoomlevel
+        updateNodeMaps(child.getId(), parent.getId(), zoomLevel, nodeMap);
 
         //add node as new parent of the grandchild and remove the child as parent.
         grandChild.addParent(parent.getId());
@@ -259,7 +286,7 @@ public final class GraphReducer {
      * @param parent the parent of the to collapse bubble
      * @return Whether nodes have been collapsed.
      */
-    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         List<Integer> children = parent.getLinks(nodeMap);
         List<Node> bubbleChildren = new ArrayList<>();
         if (children.size() > 1) {
@@ -289,6 +316,11 @@ public final class GraphReducer {
                             child.addPreviousLevelNodesId(bubbleChild.getId());
                             parent.removeLink(bubbleChild.getId());
                             grandChild.removeParent(bubbleChild.getId());
+
+                            //Update the LevelNodeMaps of all nodes with this ID
+                            //up to and including this zoomlevel.
+                            updateNodeMaps(bubbleChild.getId(), child.getId(), zoomLevel, nodeMap);
+
                             nodeMap.remove(bubbleChild.getId());
                         }
                     }

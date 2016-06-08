@@ -18,6 +18,7 @@ class GraphMouseHandling {
     private MainController mainController;
     private GraphCell prevClick;
     private core.Node focusedNode;
+    private core.Node initiallyFocusedNode;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         GraphCell node = (GraphCell) event.getSource();
@@ -45,6 +46,7 @@ class GraphMouseHandling {
         if (prevClick == null) {
             prevClick = node;
             focusedNode = clicked;
+            initiallyFocusedNode = clicked;
             node.focus();
         } else if (prevClick.getCellId() != node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
@@ -52,10 +54,12 @@ class GraphMouseHandling {
             node.focus();
             prevClick = node;
             focusedNode = clicked;
+            initiallyFocusedNode = clicked;
         } else if (prevClick.getCellId() == node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
             prevClick.resetFocus();
             prevClick = null;
+            initiallyFocusedNode = null;
             focusedNode = null;
         }
     };
@@ -136,5 +140,13 @@ class GraphMouseHandling {
      */
     public void setFocusedNode(core.Node focusedNode) {
         this.focusedNode = focusedNode;
+    }
+
+    /**
+     * Getter for the initially focused Node
+     * @return the node that was focused by clicking on it.
+     */
+    public core.Node getInitiallyFocusedNode() {
+        return initiallyFocusedNode;
     }
 }

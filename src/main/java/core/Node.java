@@ -76,6 +76,11 @@ public class Node {
     private ArrayList<Integer> previousLevelNodesIds;
 
     /**
+     * The IDs of the nodes at all next levels that contain this node.
+     */
+    private HashMap<Integer, Integer> levelNodeMap;
+
+    /**
      * Node constructor.
      *
      * @param id  - Node identifier.
@@ -107,6 +112,7 @@ public class Node {
         this.nucleotides = seq.length();
         this.collapseLevel = 1;
         this.previousLevelNodesIds = new ArrayList<>();
+        this.levelNodeMap = new HashMap<Integer, Integer>();
     }
 
     /**
@@ -509,5 +515,36 @@ public class Node {
      */
     public void addPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
         this.previousLevelNodesIds.addAll(previousLevelNodesIds);
+    }
+
+
+    /**
+     * Method to initialize the LevelNodeMap list. All values for the
+     * levels below or at the same level as the node itself are set to its
+     * own ID.
+     * @param currentLevel the level at which the node is.
+     */
+    public void initializeLevelNodeMap(int currentLevel) {
+        for (int level = 0; level <= currentLevel; level++) {
+            levelNodeMap.put(level, id);
+        }
+    }
+
+    /**
+     * Adds a single node id to the LevelNodeMap
+     * @param level the collapseLevel at which the added node is.
+     * @param nodeId the nodeId to be added to the map.
+     */
+    public void addLevelNodeId(int level, int nodeId) {
+        levelNodeMap.put(level, nodeId);
+    }
+
+    /**
+     * Method the get the node in which this nodes
+     * resides at a given level.
+     * @param level the level at which the node is.
+     */
+    public void GetLevelNodeId(int level) {
+        levelNodeMap.get(level);
     }
 }

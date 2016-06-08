@@ -113,19 +113,25 @@ public class GraphController extends Controller<ScrollPane> {
      *               from the sideFocused nodes, reverse if false.
      */
     public void sideFocus(boolean enable) {
-        //Remove sideFocus of all underlying nodes.
+        System.out.println("====");
+        System.out.println("initially focused node: "+graphMouseHandling.getInitiallyFocusedNode().getId());
+        //Loop through all underlyingNodeIds
         for (int underlyingNodeId : graphMouseHandling.
                 getFocusedNode().getPreviousLevelNodesIds()) {
             GraphCell cell = (GraphCell) graph.getModel().getCellMap().get(underlyingNodeId);
             if (cell != null) {
                 if (enable) {
+                    //enable sideFocus on the underlying node.
                     cell.sideFocus();
+                    System.out.println("sidefocus on: "+underlyingNodeId );
                 } else {
+                    //Remove sideFocus of the underlying node.
                     cell.resetFocus();
                 }
 
             }
         }
+        System.out.println("====");
     }
 
     /**

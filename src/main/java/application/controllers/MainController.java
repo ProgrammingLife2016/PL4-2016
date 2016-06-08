@@ -310,13 +310,15 @@ public class MainController extends Controller<BorderPane> {
      * Switches the scene to the graph view.
      *
      * @param delta the diff in view to apply.
+     * @return the level we switched to.
      */
-    public void switchScene(int delta) {
+    public int switchScene(int delta) {
         currentView += delta;
         currentView = Math.max(0, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getGenomes());
+        return currentView;
     }
 
     /**
