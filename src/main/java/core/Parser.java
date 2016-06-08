@@ -4,7 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Skullyhoofd on 24/04/2016.
@@ -27,26 +26,21 @@ public class Parser {
     /**
      * Read the data from a .gfa file and put the nodes in a hashmap.
      *
-     * @param annotations A list of annotations.
      * @param input - filepath of .gfa file to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
-    public final HashMap<Integer, Node>
-
-    readGFA(final InputStream input, List<Annotation> annotations) {
+    public final HashMap<Integer, Node> readGFA(final InputStream input) {
         try {
-            BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
             String nextLine;
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
+
             while ((nextLine = bReader.readLine()) != null) {
                 processNextLine(nextLine);
             }
 
             bReader.close();
-
-            new AnnotationProcessor(nodeMap, annotations)
-                    .matchNodesAndAnnotations();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,16 +90,12 @@ public class Parser {
      * Read gfa file from a filepath.
      *
      * @param input the input
-     * @param a List of annotations
-     * @return - A HashMap containing the information from the .gfa file.
+     * @return A HashMap containing the information from the .gfa file.
      * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION")
-    public final HashMap<Integer, Node> readGFAAsString(final String input, List<Annotation> a)
-            throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(input);
-
-        return readGFA(fileInputStream, a);
+    public final HashMap<Integer, Node> readGFAAsString(final String input) throws IOException {
+        return readGFA(new FileInputStream(input));
     }
 
 }

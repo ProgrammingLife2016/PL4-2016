@@ -54,6 +54,14 @@ public class Model {
     }
 
     /**
+     * Match the nodes in levelMap 0 to the annotation data.
+     */
+    public void matchNodesAndAnnotations() {
+        if (levelMaps.size() > 0) {
+            new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
+        }
+    }
+    /**
      * Remove all cells and edges.
      */
     public void clear() {
@@ -182,10 +190,10 @@ public class Model {
     /**
      * Method to add a Cell (Node).
      *
-     * @param id   the id, which represents the sequence.
-     * @param text The text of a cell.
+     * @param id          the id, which represents the sequence.
+     * @param text        The text of a cell.
      * @param nucleotides The amount of nucleotides contained in this cell.
-     * @param type The type of cell.
+     * @param type        The type of cell.
      * @return True for testing purposes.
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
@@ -234,7 +242,6 @@ public class Model {
 
             return true;
         }
-
         return false;
     }
 
@@ -364,5 +371,32 @@ public class Model {
      */
     public double getMaxWidth() {
         return graphLayout.getMaxWidth();
+    }
+
+    /**
+     * Method that adds an edge to the model.
+     *
+     * @param e the edge to add.
+     */
+    public void addEdge(Edge e) {
+        addedEdges.add(e);
+    }
+
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
+    public Cell getLeftMost() {
+        return getGraphLayout().getLeftMost();
+    }
+
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
+    public Cell getRightMost() {
+        return getGraphLayout().getRightMost();
     }
 }

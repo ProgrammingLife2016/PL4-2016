@@ -27,7 +27,7 @@ public final class AnnotationParser {
      */
     @SuppressFBWarnings("I18N")
     @SuppressWarnings("CheckStyle.MethodLength")
-    public static List<Annotation> readGFF(final InputStream input) throws IOException {
+    public static List<Annotation> readGFF(InputStream input) throws IOException {
         List<Annotation> annotations = new ArrayList<Annotation>();
 
         String nextLine;
@@ -71,15 +71,17 @@ public final class AnnotationParser {
     /**
      * Gets a list of CDS filtered and sorted annotations from disk.
      *
-     * @param input The input stream containing the annotation data.
+     * @param path The path to the annotation data file.
      * @return A filtered and sorted list of annotations.
-     * @throws IOException Throw an exception on read failure.
+     * @throws FileNotFoundException Throw an exception on read failure.
      */
-    public static List<Annotation> readCDSFilteredGFF(InputStream input) {
+    public static List<Annotation> readCDSFilteredGFF(String path) throws FileNotFoundException {
+        FileInputStream fileInputStream = new FileInputStream(path);
+
         List<Annotation> annotations = new ArrayList<>();
 
         try {
-            annotations = readGFF(input).stream()
+            annotations = readGFF(fileInputStream).stream()
                     .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
