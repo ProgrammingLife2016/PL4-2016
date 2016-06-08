@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
 
@@ -45,6 +48,8 @@ public class MainController extends Controller<BorderPane> {
     private int count;
     private int secondCount;
     private int selectedIndex;
+    private LinkedList<String> mostRecentGFA;
+    private LinkedList<String> mostRecentNWK;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -55,6 +60,18 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
         this.secondCount = -1;
+        this.mostRecentGFA = new LinkedList<>();
+        this.mostRecentNWK = new LinkedList<>();
+
+        for (int i = 0; i < 3; i++) {
+            mostRecentGFA.add("");
+            mostRecentNWK.add("");
+        }
+
+        checkMostRecentGFAFile();
+        checkMostRecentNWKFile();
+
+        createMenu(false);
 
         ImageView imageView = new ImageView("/DART2N.png");
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
@@ -77,6 +94,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Initialize the tree (controller).
+     *
      * @param s The name of the tree.
      */
     public void initTree(String s) {
@@ -101,7 +119,93 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-        createMenu(false);
+
+    }
+
+    public void checkMostRecentNWKFile() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File x = new File(s + "/mostRecentNWK.txt");
+            Scanner sc = new Scanner(x);
+            while (sc.hasNextLine()) {
+                String string = sc.nextLine();
+                mostRecentNWK.addFirst(string);
+            }
+
+            sc.close();
+        } catch (IOException e) {
+        }
+    }
+
+
+    public void checkMostRecentGFAFile() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File x = new File(s + "/mostRecentGFA.txt");
+            Scanner sc = new Scanner(x);
+            while (sc.hasNextLine()) {
+                String string = sc.nextLine();
+                mostRecentGFA.addFirst(string);
+            }
+
+            sc.close();
+        } catch (IOException e) {
+        }
+    }
+
+    public void writeMostRecentGFA() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File file = new File(s + "/mostRecentGFA.txt");
+            file.createNewFile();
+
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+
+            for (int i = 0; i < mostRecentGFA.size(); i++) {
+                writer.write(mostRecentGFA.get(i));
+            }
+
+            writer.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public void writeMostRecentNWK() {
+        try {
+            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
+            File file = new File(s + "/mostRecentNWK.txt");
+            file.createNewFile();
+
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+
+            for (int i = 0; i < mostRecentNWK.size(); i++) {
+                writer.println(mostRecentNWK.get(i));
+            }
+
+            writer.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public LinkedList getMostRecentGFA() {
+        return mostRecentGFA;
+    }
+
+    public LinkedList getMostRecentNWK() {
+        return mostRecentNWK;
+    }
+
+
+    public void addRecentGFA(String s) {
+        mostRecentGFA.addFirst(s);
+        writeMostRecentGFA();
+    }
+
+    public void addRecentNWK(String s) {
+        mostRecentNWK.addFirst(s);
+        writeMostRecentNWK();
     }
 
     /**
@@ -271,7 +375,7 @@ public class MainController extends Controller<BorderPane> {
         list = listFactory.getList();
 
         list.setOnMouseClicked(event -> listSelect());
-        
+
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();

@@ -69,6 +69,7 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
+        mainController.addRecentGFA(selectedFile.toString());
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
 
         mainController.initGraph();
@@ -86,6 +87,7 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
+        mainController.addRecentNWK(selectedFile.toString());
         mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;

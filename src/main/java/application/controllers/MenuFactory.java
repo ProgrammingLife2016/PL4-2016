@@ -11,6 +11,9 @@ import javafx.scene.input.KeyCombination;
 import static core.Filter.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -24,6 +27,8 @@ public class MenuFactory {
     protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
+
+    private Menu fileMenu;
 
     /**
      * Constructor method for this class.
@@ -41,7 +46,7 @@ public class MenuFactory {
      * @return the completed MenuBar.
      */
     public MenuBar createMenu(MenuBar bar) {
-        Menu fileMenu = initFileMenu();
+        fileMenu = initFileMenu();
         Menu viewMenu = initViewMenu();
         Menu filterMenu = initFilterMenu();
         Menu helpMenu = initHelpMenu();
@@ -108,8 +113,84 @@ public class MenuFactory {
                     WindowFactory.createMenuWithSearch();
                 });
 
-        return initMenu("File", loadGenome, loadPhylogeneticTree);
+
+
+        return initMenu("File", loadGenome, loadPhylogeneticTree, initMostRecentGFAMenu(), initMostRecentNWKMenu());
     }
+
+    private Menu initMostRecentGFAMenu() {
+        LinkedList<String> mostRecent = mainController.getMostRecentGFA();
+        String recent01 = "";
+        String recent02 = "";
+        String recent03 = "";
+
+
+        if(!(mostRecent.get(0) == "")) {
+            recent01 = mostRecent.get(0);
+        }
+
+        if(!(mostRecent.get(1) == "")) {
+            recent02 = mostRecent.get(1);
+        }
+
+        if(!(mostRecent.get(2) == "")) {
+            recent03 = mostRecent.get(2);
+        }
+
+        final String finalRecent1 = recent01;
+        final String finalRecent2 = recent02;
+        final String finalRecent3 = recent03;
+
+        MenuItem recent1 = initMenuItem(recent01, null, event ->{
+            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
+            mainController.initGraph();
+        });
+
+        MenuItem recent2 = initMenuItem(recent02, null, event -> {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
+            mainController.initGraph();
+        });
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
+            mainController.initGraph();
+        });
+
+        return initMenu("Load recently opened GFA file", recent1, recent2, recent3);
+    }
+
+    private Menu initMostRecentNWKMenu() {
+        LinkedList<String> mostRecent = mainController.getMostRecentNWK();
+        String recent01 = "";
+        String recent02 = "";
+        String recent03 = "";
+
+
+        if(!(mostRecent.get(0) == "")) {
+            recent01 = mostRecent.get(0);
+        }
+
+        if(!(mostRecent.get(1) == "")) {
+            recent02 = mostRecent.get(1);
+        }
+
+        if(!(mostRecent.get(2) == "")) {
+            recent03 = mostRecent.get(2);
+        }
+
+        final String finalRecent1 = recent01;
+        final String finalRecent2 = recent02;
+        final String finalRecent3 = recent03;
+
+        MenuItem recent1 = initMenuItem(recent01, null, event -> mainController.initTree(finalRecent1.toString()));
+
+        MenuItem recent2 = initMenuItem(recent02, null, event -> mainController.initTree(finalRecent2.toString()));
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> mainController.initTree(finalRecent3.toString()));
+
+        return initMenu("Load recently opened NWK file", recent1, recent2, recent3);
+    }
+
 
     private Menu initFilterMenu() {
         initLineageFilter();
