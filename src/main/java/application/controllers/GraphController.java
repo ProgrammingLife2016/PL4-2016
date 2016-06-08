@@ -75,7 +75,11 @@ public class GraphController extends Controller<ScrollPane> {
 
                     }
 
-                    zoomBox.replaceZoomBox(updateZoomBox());
+                    new Thread() {
+                        public void start() {
+                            zoomBox.replaceZoomBox(updateZoomBox());
+                        }
+                    }.start();
                     event.consume();
                 }
                 if (event.getDeltaY() > 0) {
@@ -86,7 +90,11 @@ public class GraphController extends Controller<ScrollPane> {
 
                     }
 
-                    zoomBox.replaceZoomBox(updateZoomBox());
+                    new Thread() {
+                        public void start() {
+                            zoomBox.replaceZoomBox(updateZoomBox());
+                        }
+                    }.start();
                     event.consume();
                 }
             }
