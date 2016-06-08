@@ -30,6 +30,7 @@ public class Genome {
 
     /**
      * Construct the genome.
+     * @param name The name of the genome.
      */
     public Genome(String name) {
         this.name = name;

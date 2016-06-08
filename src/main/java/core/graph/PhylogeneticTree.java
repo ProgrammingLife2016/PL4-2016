@@ -19,6 +19,8 @@ public class PhylogeneticTree {
 
     /**
      * Class constructor.
+     *
+     * @param s The name of the tree.
      */
     public PhylogeneticTree(String s) {
         this.model = new Model();
@@ -56,6 +58,7 @@ public class PhylogeneticTree {
     /**
      * Set-up the tree model from a Newick data file.
      *
+     * @param s The name of the tree.
      * @return A Newick tree.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
