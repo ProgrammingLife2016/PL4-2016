@@ -8,9 +8,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-import static core.Filter.*;
-
 import java.util.ArrayList;
+
+import static core.Filter.*;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 @SuppressFBWarnings("MS_PKGPROTECT")
 public class MenuFactory {
     protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
-    filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
-    filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
-    filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
+            filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
+            filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
+            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
@@ -147,7 +147,7 @@ public class MenuFactory {
     }
 
     private CheckMenuItem initCheckMenuItem(String title, KeyCombination combination,
-                                  EventHandler<ActionEvent> handler) {
+                                            EventHandler<ActionEvent> handler) {
         CheckMenuItem newItem = new CheckMenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
@@ -211,6 +211,12 @@ public class MenuFactory {
         non.setToggleGroup(hiv);
 
         non.setSelected(true);
+
+        hiv.selectedToggleProperty().addListener(ob -> {
+            mainController.getTreeController().filterHIV(HIVP, pos.isSelected());
+            mainController.getTreeController().filterHIV(HIVN, neg.isSelected());
+            mainController.getTreeController().filterHIV(null, non.isSelected());
+        });
 
         filterHIV = initMenu("HIV", pos, neg, non);
     }

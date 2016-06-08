@@ -36,6 +36,7 @@ public enum Filter {
     CSF,
     PLEURA,
     PLEURAL_FLUID,
+    SPUTUM,
     SINGLE_COLONY,
     NON_SINGLE_COLONY,
     PHENO_MDR,

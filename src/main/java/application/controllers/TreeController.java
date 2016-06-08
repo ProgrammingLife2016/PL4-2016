@@ -11,7 +11,6 @@ import core.MetaData;
 import core.graph.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -20,10 +19,8 @@ import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
-        
+
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
     }
@@ -72,6 +69,7 @@ public class TreeController extends Controller<ScrollPane> {
 
         return tp.tokenize("340tree.rooted.TKK");
     }
+
     /**
      * Get the phylogenetic tree.
      *
@@ -124,6 +122,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Add a single strain to selection.
+     *
      * @param cell the strain to add.
      */
     public void selectStrain(Cell cell) {
@@ -470,7 +469,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 1){
+                    } else if (s.getLineage() == 1) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -483,7 +482,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 2){
+                    } else if (s.getLineage() == 2) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -496,7 +495,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 3){
+                    } else if (s.getLineage() == 3) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -509,7 +508,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 4){
+                    } else if (s.getLineage() == 4) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -522,7 +521,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 5){
+                    } else if (s.getLineage() == 5) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -535,7 +534,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 6){
+                    } else if (s.getLineage() == 6) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -548,7 +547,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 7){
+                    } else if (s.getLineage() == 7) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -561,7 +560,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 8){
+                    } else if (s.getLineage() == 8) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -574,7 +573,7 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 9){
+                    } else if (s.getLineage() == 9) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
@@ -587,13 +586,47 @@ public class TreeController extends Controller<ScrollPane> {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.add(cell);
                         applyCellHighlight(cell);
-                    } else if (s.getLineage() == 10){
+                    } else if (s.getLineage() == 10) {
                         Cell cell = getCellByName((s.getName()));
                         selectedStrains.remove(cell);
                         revertCellHighlight(cell);
                     }
                 });
                 break;
+        }
+        modifyGraphOptions();
+    }
+
+    public void filterHIV(Filter f, boolean state) {
+        if (f != null) {
+            switch (f) {
+                case HIVP:
+                    META_DATA.values().forEach(s -> {
+                        if(s.isHiv() && state) {
+                            Cell cell = getCellByName(s.getName());
+                            selectedStrains.add(cell);
+                        } else if(s.isHiv()) {
+                            Cell cell = getCellByName(s.getName());
+                            selectedStrains.remove(cell);
+                        }
+                    });
+                    colorSelectedStrains();
+                case HIVN:
+                    META_DATA.values().forEach(s -> {
+                        if(!s.isHiv() && state) {
+                            Cell cell = getCellByName(s.getName());
+                            selectedStrains.add(cell);
+                            applyCellHighlight(cell);
+                        } else if(!s.isHiv()) {
+                            Cell cell = getCellByName(s.getName());
+                            selectedStrains.remove(cell);
+                            revertCellHighlight(cell);
+                        }
+                    });
+            }
+        } else if(state) {
+            selectedStrains.clear();
+            revertColorOnCells();
         }
         modifyGraphOptions();
     }
