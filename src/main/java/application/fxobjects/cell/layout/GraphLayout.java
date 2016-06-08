@@ -1,6 +1,7 @@
 package application.fxobjects.cell.layout;
 
 import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.graph.GraphCell;
 import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -56,7 +57,8 @@ public class GraphLayout extends CellLayout {
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();
-        for (Cell cell : cells) {
+        for (Cell c : cells) {
+            GraphCell cell = (GraphCell) c;
             if (!cell.isRelocated()) {
                 currentX += offset;
                 if (currentX > maxWidth) {
@@ -97,7 +99,8 @@ public class GraphLayout extends CellLayout {
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
-        for (Cell child : cell.getCellChildren()) {
+        for (Cell c : cell.getCellChildren()) {
+            GraphCell child = (GraphCell) c;
             if (!child.isRelocated()) {
                 if (cellCount % 2 == 0) {
                     child.relocate(currentX
@@ -151,7 +154,8 @@ public class GraphLayout extends CellLayout {
                 }
             }
         }
-        for (Cell child : cell.getCellChildren()) {
+        for (Cell c : cell.getCellChildren()) {
+            GraphCell child = (GraphCell) c;
             if (child.getCellChildren().size() > 1) {
                 currentX += offset;
                 currentY = (int) (child.getLayoutY()
@@ -261,10 +265,20 @@ public class GraphLayout extends CellLayout {
         return maxWidth;
     }
 
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
     public Cell getLeftMost() {
         return leftMost;
     }
 
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
     public Cell getRightMost() {
         return rightMost;
     }

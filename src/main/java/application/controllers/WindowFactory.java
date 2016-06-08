@@ -69,13 +69,24 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
-        mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+        try {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+            mainController.initGraph();
+        }
+        catch (Exception e) {
+            System.out.println("You probably closed te windows before selecting.");
+            return null;
+        }
 
-        mainController.initGraph();
+
 
         return directoryChooser;
     }
 
+    /**
+     * Method that creates a directoryChooser.
+     * @return the directoryChooser
+     */
     public static FileChooser createTreeChooser() {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Tree File");
@@ -85,6 +96,13 @@ public final class WindowFactory {
         mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
+    }
+
+    /**
+     * Creates the menu including a searchBar.
+     */
+    public static void createMenuWithSearch() {
+        mainController.createMenu(true);
     }
 
 

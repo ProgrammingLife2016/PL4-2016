@@ -97,10 +97,16 @@ public class MenuFactory {
     private Menu initFileMenu() {
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createGraphChooser());
+                t -> {
+                    WindowFactory.createGraphChooser();
+                    WindowFactory.createMenuWithSearch();
+                });
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createTreeChooser());
+                t -> {
+                    WindowFactory.createTreeChooser();
+                    WindowFactory.createMenuWithSearch();
+                });
 
         return initMenu("File", loadGenome, loadPhylogeneticTree);
     }
@@ -158,44 +164,34 @@ public class MenuFactory {
         filterLineage = new Menu("Lineage");
         CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
         lin1.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN1, lin1.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN1, lin1.isSelected()));
         CheckMenuItem lin2 = new CheckMenuItem("LIN 2");
         lin2.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN2, lin2.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN2, lin2.isSelected()));
         CheckMenuItem lin3 = new CheckMenuItem("LIN 3");
         lin3.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN3, lin3.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN3, lin3.isSelected()));
         CheckMenuItem lin4 = new CheckMenuItem("LIN 4");
         lin4.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN4, lin4.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN4, lin4.isSelected()));
         CheckMenuItem lin5 = new CheckMenuItem("LIN 5");
         lin5.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN5, lin5.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN5, lin5.isSelected()));
         CheckMenuItem lin6 = new CheckMenuItem("LIN 6");
         lin6.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN6, lin6.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN6, lin6.isSelected()));
         CheckMenuItem lin7 = new CheckMenuItem("LIN 7");
         lin7.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN7, lin7.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN7, lin7.isSelected()));
         CheckMenuItem lin8 = new CheckMenuItem("LIN animal");
         lin8.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN8, lin8.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN8, lin8.isSelected()));
         CheckMenuItem lin9 = new CheckMenuItem("LIN B");
         lin9.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN9, lin9.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN9, lin9.isSelected()));
         CheckMenuItem lin10 = new CheckMenuItem("LIN CANETTII");
         lin10.setOnAction(event ->
-                mainController.getTreeController().filterPhyloLineage(
-                        LIN10, lin10.isSelected()));
+                mainController.getTreeController().filterPhyloLineage(LIN10, lin10.isSelected()));
 
         filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
     }

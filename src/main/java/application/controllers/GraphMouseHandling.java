@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.fxobjects.cell.Cell;
 
+import application.fxobjects.cell.graph.GraphCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -15,10 +16,11 @@ import static java.lang.String.format;
  */
 class GraphMouseHandling {
     private MainController mainController;
-    private Cell prevClick;
+    private GraphCell prevClick;
+    private core.Node focusedNode;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
-        Cell node = (Cell) event.getSource();
+        GraphCell node = (GraphCell) event.getSource();
 
         core.Node clicked = mainController.getGraphController().getGraph()
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
@@ -42,22 +44,29 @@ class GraphMouseHandling {
 
         if (prevClick == null) {
             prevClick = node;
+            focusedNode = clicked;
             node.focus();
         } else if (prevClick.getCellId() != node.getCellId()) {
+            mainController.getGraphController().sideFocus(false);
             prevClick.resetFocus();
             node.focus();
             prevClick = node;
+            focusedNode = clicked;
         } else if (prevClick.getCellId() == node.getCellId()) {
+            mainController.getGraphController().sideFocus(false);
             prevClick.resetFocus();
             prevClick = null;
+            focusedNode = null;
         }
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
-        Cell node = (Cell) event.getSource();
+        GraphCell node = (GraphCell) event.getSource();
 
-        double offsetX = event.getX() + node.getLayoutX() - node.getCellShape().getLayoutBounds().getWidth() / 2;
-        double offsetY = event.getY() + node.getLayoutY() - node.getCellShape().getLayoutBounds().getHeight() / 2;
+        double offsetX = event.getX() + node.getLayoutX()
+                - node.getCellShape().getLayoutBounds().getWidth() / 2;
+        double offsetY = event.getY() + node.getLayoutY()
+                - node.getCellShape().getLayoutBounds().getHeight() / 2;
 
         event.getSceneX();
         node.relocate(offsetX, offsetY);
@@ -80,6 +89,7 @@ class GraphMouseHandling {
     GraphMouseHandling(MainController m) {
         this.mainController = m;
         this.prevClick = null;
+        this.focusedNode = null;
     }
 
     /**
@@ -99,7 +109,7 @@ class GraphMouseHandling {
      *
      * @return the Cell that is last clicked.
      */
-    public Cell getPrevClick() {
+    public GraphCell getPrevClick() {
         return prevClick;
     }
 
@@ -108,7 +118,23 @@ class GraphMouseHandling {
      *
      * @param prevClick the cell to set to.
      */
-    public void setPrevClick(Cell prevClick) {
+    public void setPrevClick(GraphCell prevClick) {
         this.prevClick = prevClick;
+    }
+
+    /**
+     * Getter for the focused Node
+     * @return the node that is focused.
+     */
+    public core.Node getFocusedNode() {
+        return focusedNode;
+    }
+
+    /**
+     * Setter for the focused Node
+     * @param focusedNode the node that is to be focused.
+     */
+    public void setFocusedNode(core.Node focusedNode) {
+        this.focusedNode = focusedNode;
     }
 }

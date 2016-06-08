@@ -365,14 +365,29 @@ public class Model {
         return graphLayout.getMaxWidth();
     }
 
+    /**
+     * Method that adds an edge to the model.
+     *
+     * @param e the edge to add.
+     */
     public void addEdge(Edge e) {
         addedEdges.add(e);
     }
 
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
     public Cell getLeftMost() {
         return getGraphLayout().getLeftMost();
     }
 
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
     public Cell getRightMost() {
         return getGraphLayout().getRightMost();
     }

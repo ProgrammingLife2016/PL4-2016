@@ -3,8 +3,7 @@ package core.graph;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
 import core.*;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.graph.cell.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -68,17 +67,17 @@ public class Graph {
     /**
      * Read a node map from a gfa file on disk.
      *
+     * @param path The file path of the GFA file.
      * @return A node map read from file.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile(String s) {
+    public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             Parser parser = new Parser();
 
-            startMap = parser.readGFAAsString(s, annotations);
+            startMap = parser.readGFAAsString(path, annotations);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -296,13 +295,15 @@ public class Graph {
 
         if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
             int width = (int) Math.round(maxEdgeWidth
-                    * (double) intersection(from.getGenomes(), to.getGenomes())
-                    / (double) Math.max(genomes.size(), 10)) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                    intersectingStrings(to.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
         } else {
             int width = (int) Math.round(maxEdgeWidth
-                    * (double) intersection(from.getGenomes(), to.getGenomes())
-                    / (double) Math.max(genomes.size(), 10)) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                    intersectingStrings(to.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -333,6 +334,22 @@ public class Graph {
             }
         }
         return i;
+    }
+
+    /**
+     * Method that returns a list of strings present in both lists.
+     * @param l1 first list
+     * @param l2 second list
+     * @return result
+     */
+    public List<String> intersectingStrings(List<String> l1, List<String> l2) {
+        ArrayList<String> res = new ArrayList<String>();
+        for (String s : l1) {
+            if (l2.contains(s)) {
+                res.add(s);
+            }
+        }
+        return res;
     }
 
     /**
@@ -442,50 +459,52 @@ public class Graph {
         return current.getMaxWidth();
     }
 
+    /**
+     * Method to return a model with all nodes within the view.
+     *
+     * @param min left side of the view.
+     * @param max right side of the view.
+     * @return the model.
+     */
     public Model getModelAddedInView(int min, int max) {
         Model m = new Model();
 
-        for (Cell c : this.getModel().getAddedCells()) {
-            if (c.getLayoutX() > min && c.getLayoutX() <= max) {
-                m.addCell(c);
-            }
-        }
+        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+                .forEach(m::addCell);
 
-        for (Edge e : this.getModel().getAddedEdges()) {
-            if (!(
-                    (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                            || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
-
-                    ) {
-                m.addEdge(e);
-            }
-        }
+        this.getModel().getAddedEdges().stream().filter(e -> !(
+                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
+                .forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
 
+    /**
+     * Method to return a model with all nodes within the view.
+     *
+     * @param min left side of the view.
+     * @param max right side of the view.
+     * @return the model.
+     */
     public Model getModelAllInView(int min, int max) {
         Model m = new Model();
 
-        for (Cell c : this.getModel().getAllCells()) {
-            if (c.getLayoutX() > min && c.getLayoutX() <= max) {
-                m.addCell(c);
-            }
-        }
+        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+                .forEach(m::addCell);
 
-        for (Edge e : this.getModel().getAllEdges()) {
-            if (!(
-                    (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                            || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
-
-                    ) {
-                m.addEdge(e);
-            }
-        }
+        this.getModel().getAllEdges().stream().filter(e -> !(
+                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
 
+    /**
+     * Adds the leftmost and rightmost cell to the Model.
+     * @param m the Model to add cells to.
+     * @return the new Model.
+     */
     private Model addFirstAndLast(Model m) {
         if (current.getRightMost() != null) {
             if (!(m.getAllCells().contains(getModel().getLeftMost()))) {
