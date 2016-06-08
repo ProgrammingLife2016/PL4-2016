@@ -68,8 +68,13 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Graph File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
+        
+        if (selectedFile != null) {
+            mainController.addRecentGFA(selectedFile.toString());
+        }
 
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+
         mainController.initGraph();
 
         return directoryChooser;
@@ -85,6 +90,9 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Tree File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
+
+        mainController.addRecentNWK(selectedFile.toString());
+
         mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
@@ -92,6 +100,7 @@ public final class WindowFactory {
 
     /**
      * Method that creates a directoryChooser.
+     *
      * @return the directoryChooser
      */
     public static FileChooser createAnnotationChooser() {

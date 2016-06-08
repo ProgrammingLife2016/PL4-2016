@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCombination;
 import static core.Filter.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
@@ -18,13 +19,15 @@ import java.util.ArrayList;
 @SuppressFBWarnings("MS_PKGPROTECT")
 public class MenuFactory {
     protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
-    filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
-    filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
-    filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
+            filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
+            filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
+            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     protected static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains,
             showOnlyThisStrain;
     private MainController mainController;
+
+    private Menu fileMenu;
 
     /**
      * Constructor method for this class.
@@ -42,7 +45,7 @@ public class MenuFactory {
      * @return the completed MenuBar.
      */
     public MenuBar createMenu(MenuBar bar) {
-        Menu fileMenu = initFileMenu();
+        fileMenu = initFileMenu();
         Menu viewMenu = initViewMenu();
         Menu filterMenu = initFilterMenu();
         Menu helpMenu = initHelpMenu();
@@ -113,8 +116,107 @@ public class MenuFactory {
                     WindowFactory.createTreeChooser();
                     WindowFactory.createMenuWithSearch();
                 });
-        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree);
+
+        return initMenu("File", loadGenome, loadPhylogeneticTree, initMostRecentGFAMenu(), initMostRecentNWKMenu());
     }
+
+    private Menu initMostRecentGFAMenu() {
+        LinkedList<String> mostRecent = mainController.getMostRecentGFA();
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
+
+        if (mostRecent.size() >= 1 && !(mostRecent.get(0).equals("Empty"))) {
+            recent01 = mostRecent.get(0);
+        }
+
+        if (mostRecent.size() >= 2 && !(mostRecent.get(1).equals("Empty"))) {
+            recent02 = mostRecent.get(1);
+        }
+
+        if (mostRecent.size() >= 3 && !(mostRecent.get(2).equals("Empty"))) {
+            recent03 = mostRecent.get(2);
+        }
+
+        final String finalRecent1 = recent01;
+        final String finalRecent2 = recent02;
+        final String finalRecent3 = recent03;
+
+        MenuItem recent1 = initMenuItem(recent01, null, event -> {
+            if (finalRecent1 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
+                mainController.initGraph();
+            }
+        });
+
+        MenuItem recent2 = initMenuItem(recent02, null, event -> {
+            if (finalRecent2 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
+                mainController.initGraph();
+            }
+        });
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> {
+            if (finalRecent3 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
+                mainController.initGraph();
+            }
+        });
+
+        return initMenu("Load recently opened GFA file", recent1, recent2, recent3);
+    }
+
+    private Menu initMostRecentNWKMenu() {
+        LinkedList<String> mostRecent = mainController.getMostRecentNWK();
+        String recent01 = "Empty";
+        String recent02 = "Empty";
+        String recent03 = "Empty";
+
+
+        if (mostRecent.size() >= 1 && !(mostRecent.get(0) == "Empty")) {
+            recent01 = mostRecent.get(0);
+
+        }
+
+
+        if (mostRecent.size() >= 2 && !(mostRecent.get(1) == "Empty")) {
+            recent02 = mostRecent.get(1);
+
+        }
+
+        if (mostRecent.size() >= 3 && !(mostRecent.get(2) == "Empty")) {
+            recent03 = mostRecent.get(2);
+
+        }
+
+
+        final String finalRecent1 = recent01;
+        final String finalRecent2 = recent02;
+        final String finalRecent3 = recent03;
+
+        MenuItem recent1 = initMenuItem(recent01, null, event -> {
+            if (finalRecent1 != "") {
+                mainController.initTree(finalRecent1.toString());
+            }
+        });
+
+        MenuItem recent2 = initMenuItem(recent02, null, event -> {
+            if (finalRecent2.toString() != "") {
+                mainController.initTree(finalRecent2.toString());
+            }
+        });
+
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> {
+            if (finalRecent3.toString() != "") {
+                mainController.initTree(finalRecent3.toString());
+            }
+        });
+
+        return initMenu("Load recently opened NWK file", recent1, recent2, recent3);
+
+    }
+
 
     private Menu initFilterMenu() {
         initLineageFilter();
@@ -158,7 +260,7 @@ public class MenuFactory {
     }
 
     private CheckMenuItem initCheckMenuItem(String title, KeyCombination combination,
-                                  EventHandler<ActionEvent> handler) {
+                                            EventHandler<ActionEvent> handler) {
         CheckMenuItem newItem = new CheckMenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
