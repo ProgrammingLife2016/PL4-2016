@@ -71,7 +71,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
-        fillGraph(null, new ArrayList<>());
+        fillGraph(new ArrayList<>(), new ArrayList<>());
 
     }
 
@@ -127,7 +127,7 @@ public class MainController extends Controller<BorderPane> {
      * @param ref             the reference string.
      * @param selectedGenomes the genomes to display.
      */
-    public void fillGraph(Object ref, List<String> selectedGenomes) {
+    public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
@@ -145,7 +145,9 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        fillGraph(s.get(0), new ArrayList<>());
+        ArrayList<String> list2 = new ArrayList<>();
+        list2.add(s.get(0));
+        fillGraph(list2, new ArrayList<>());
         initGUI();
     }
 
@@ -157,7 +159,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(null, s);
+        fillGraph(new ArrayList<>(), s);
 
         initGUI();
         setListItems();
@@ -275,20 +277,24 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> {
             if (!(list.getSelectionModel().getSelectedItem() == null)) {
                 graphController.getGraph().reset();
+
                 getTextField().setText((String) list.getSelectionModel().getSelectedItem());
 
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+                fillGraph(highlights, graphController.getGenomes());
+//                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
                 graphController.takeSnapshot();
 
             }
         });
 
-        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
-
         setListItems();
         this.getRoot().setRight(listVBox);
     }
 
+    /**
+     * All strains selected to highlight.
+     */
+    private ArrayList<String> highlights = new ArrayList<>();
 
     /**
      * Method to perform action upon listItem selection
@@ -297,7 +303,15 @@ public class MainController extends Controller<BorderPane> {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
             selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
-            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+
+            if(highlights.contains(list.getSelectionModel().getSelectedItem())) {
+                highlights.remove(list.getSelectionModel().getSelectedItem());
+            } else {
+                highlights.add((String)list.getSelectionModel().getSelectedItem());
+            }
+            System.out.println(highlights.toString());
+
+            fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick());

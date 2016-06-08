@@ -23,7 +23,7 @@ public class Graph {
     private Model current;
     private Model zoomOut;
     private int currentInt = -1;
-    private Object currentRef = null;
+    private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
     /**
      * All the genomes that are in this graph.
@@ -92,7 +92,7 @@ public class Graph {
      * @return Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth) {
+    public Boolean addGraphComponents(ArrayList<String> ref, int depth) {
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
@@ -419,7 +419,7 @@ public class Graph {
      *
      * @return the current highlighted strain.
      */
-    public Object getCurrentRef() {
+    public ArrayList<String> getCurrentRef() {
         return currentRef;
     }
 
