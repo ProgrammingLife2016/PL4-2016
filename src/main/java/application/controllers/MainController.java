@@ -63,11 +63,6 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFA = new LinkedList<>();
         this.mostRecentNWK = new LinkedList<>();
 
-        for (int i = 0; i < 3; i++) {
-            mostRecentGFA.add("");
-            mostRecentNWK.add("");
-        }
-
         checkMostRecentGFAFile();
         checkMostRecentNWKFile();
 
@@ -162,7 +157,8 @@ public class MainController extends Controller<BorderPane> {
             PrintWriter writer = new PrintWriter(file, "UTF-8");
 
             for (int i = 0; i < mostRecentGFA.size(); i++) {
-                writer.write(mostRecentGFA.get(i));
+                writer.println(mostRecentGFA.get(i));
+
             }
 
             writer.close();
@@ -181,6 +177,7 @@ public class MainController extends Controller<BorderPane> {
 
             for (int i = 0; i < mostRecentNWK.size(); i++) {
                 writer.println(mostRecentNWK.get(i));
+
             }
 
             writer.close();
@@ -196,7 +193,6 @@ public class MainController extends Controller<BorderPane> {
     public LinkedList getMostRecentNWK() {
         return mostRecentNWK;
     }
-
 
     public void addRecentGFA(String s) {
         mostRecentGFA.addFirst(s);

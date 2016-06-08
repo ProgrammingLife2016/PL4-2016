@@ -63,11 +63,28 @@ public class PhylogeneticTree {
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile(String s) {
-        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(s);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader r = new BufferedReader(new InputStreamReader(fileInputStream));
         TreeParser tp = new TreeParser(r);
 
-        return tp.tokenize("340tree.rooted.TKK");
+        char[] x = s.toCharArray();
+        String temp = "";
+        for (int i = s.length(); i > 0; i--) {
+            if (!(x[i-1] == '\\' ))  {
+                temp += x[i-1];
+            } else {
+                break;
+            }
+        }
+
+        String f = new StringBuilder(temp).reverse().toString();
+        return tp.tokenize(f);
     }
 
     /**

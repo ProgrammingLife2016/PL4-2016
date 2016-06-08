@@ -21,9 +21,9 @@ import java.util.Queue;
 @SuppressFBWarnings("MS_PKGPROTECT")
 public class MenuFactory {
     protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
-    filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
-    filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
-    filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
+            filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
+            filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
+            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     protected static MenuItem loadPhylogeneticTree, loadGenome, resetView, shortcuts,
             showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
@@ -114,7 +114,6 @@ public class MenuFactory {
                 });
 
 
-
         return initMenu("File", loadGenome, loadPhylogeneticTree, initMostRecentGFAMenu(), initMostRecentNWKMenu());
     }
 
@@ -124,24 +123,30 @@ public class MenuFactory {
         String recent02 = "";
         String recent03 = "";
 
-
-        if(!(mostRecent.get(0) == "")) {
-            recent01 = mostRecent.get(0);
+        if (mostRecent.size() >= 1) {
+            if (!(mostRecent.get(0).equals(""))) {
+                recent01 = mostRecent.get(0);
+            }
         }
 
-        if(!(mostRecent.get(1) == "")) {
-            recent02 = mostRecent.get(1);
+        if (mostRecent.size() >= 2) {
+            if (!(mostRecent.get(1).equals(""))) {
+                recent02 = mostRecent.get(1);
+            }
+
         }
 
-        if(!(mostRecent.get(2) == "")) {
-            recent03 = mostRecent.get(2);
+        if (mostRecent.size() >= 3) {
+            if (!(mostRecent.get(2).equals(""))) {
+                recent03 = mostRecent.get(2);
+            }
         }
 
         final String finalRecent1 = recent01;
         final String finalRecent2 = recent02;
         final String finalRecent3 = recent03;
 
-        MenuItem recent1 = initMenuItem(recent01, null, event ->{
+        MenuItem recent1 = initMenuItem(recent01, null, event -> {
             mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
             mainController.initGraph();
         });
@@ -166,17 +171,26 @@ public class MenuFactory {
         String recent03 = "";
 
 
-        if(!(mostRecent.get(0) == "")) {
-            recent01 = mostRecent.get(0);
+        if (mostRecent.size() >= 1) {
+            if (!(mostRecent.get(0) == "")) {
+                recent01 = mostRecent.get(0);
+            }
         }
 
-        if(!(mostRecent.get(1) == "")) {
-            recent02 = mostRecent.get(1);
+
+        if (mostRecent.size() >= 2) {
+            if (!(mostRecent.get(1) == "")) {
+                recent02 = mostRecent.get(1);
+            }
+
         }
 
-        if(!(mostRecent.get(2) == "")) {
-            recent03 = mostRecent.get(2);
+        if (mostRecent.size() >= 3) {
+            if (!(mostRecent.get(2) == "")) {
+                recent03 = mostRecent.get(2);
+            }
         }
+
 
         final String finalRecent1 = recent01;
         final String finalRecent2 = recent02;
@@ -234,7 +248,7 @@ public class MenuFactory {
     }
 
     private CheckMenuItem initCheckMenuItem(String title, KeyCombination combination,
-                                  EventHandler<ActionEvent> handler) {
+                                            EventHandler<ActionEvent> handler) {
         CheckMenuItem newItem = new CheckMenuItem(title);
         newItem.setAccelerator(combination);
         newItem.setOnAction(handler);
