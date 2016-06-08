@@ -4,6 +4,7 @@ import application.fxobjects.cell.graph.RectangleCell;
 import core.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
@@ -235,35 +236,48 @@ public class MainController extends Controller<BorderPane> {
      * @param annotationTextField The annotation search field.
      * @param highlightButton The annotation highlight button.
      */
-    private void setHighlightButtonActionListener(
-            TextField annotationTextField, Button highlightButton, Button deselectAnnotationButton) {
+    private void setHighlightButtonActionListener(TextField annotationTextField,
+                                                  Button highlightButton,
+                                                  Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (currentView != 0) {
-                return;
-            }
-            if (!annotationTextField.getText().isEmpty()) {
-                List<Annotation> annotations
-                        = graphController.getGraph().getModel().getAnnotations();
+            processAnnotationButtonPress(annotationTextField, e);
+        });
 
-                try {
-                    Annotation ann = AnnotationProcessor
-                            .findAnnotation(annotations, annotationTextField.getText());
+        deselectAnnotationButton.setOnAction(e -> {
+            processAnnotationButtonPress(annotationTextField, e);
+        });
+    }
 
-                    Map<Integer, application.fxobjects.cell.Cell> cellMap
-                            = graphController.getGraph().getModel().getCellMap();
+    /**
+     * Performs the actions needed on Annotation highlight and deselect button presses.
+     *
+     * @param annotationTextField The annotation search box.
+     * @param e The ActionEvent that has been triggered.
+     */
+    private void processAnnotationButtonPress(TextField annotationTextField, ActionEvent e) {
+        if (currentView != 0) {
+            return;
+        }
 
-                    for (Node n : ann.getSpannedNodes()) {
+        if (!annotationTextField.getText().isEmpty()) {
+            List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+
+            try {
+                Annotation ann = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                        = graphController.getGraph().getModel().getCellMap();
+
+                for (Node n : ann.getSpannedNodes()) {
+                    if (e.getSource().toString().contains("Highlight")) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                    } else if (e.getSource().toString().contains("Deselect")) {
+                        ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
                     }
-                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-                    e1.printStackTrace();
                 }
+            } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                e1.printStackTrace();
             }
-        });
-
-        highlightButton.setOnAction(e -> {
-
-        });
+        }
     }
 
     /**
@@ -281,13 +295,13 @@ public class MainController extends Controller<BorderPane> {
 
         TextField annotationTextField = new TextField();
         Button highlightButton = new Button("Highlight annotation");
-        Button deselectAnnotationButton = new Button("Highlight annotation");
+        Button deselectAnnotationButton = new Button("Deselect annotation");
 
         setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton);
         setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
 
-        hBox.getChildren().addAll(genomeTextField, searchButton,
-                deselectSearchButton, annotationTextField, highlightButton);
+        hBox.getChildren().addAll(genomeTextField, searchButton, deselectSearchButton,
+                annotationTextField, highlightButton, deselectAnnotationButton);
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
