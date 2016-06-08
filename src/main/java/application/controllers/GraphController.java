@@ -208,6 +208,12 @@ public class GraphController extends Controller<ScrollPane> {
                         && !(e.getSource().getType() == CellType.RECTANGLE))
                         || length > MAX_EDGE_LENGTH_LONG) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
+                    if (e.getLine().getStroke() == Color.BLACK) {
+                        e.getLine().setStroke(Color.LIGHTGRAY);
+                    }
+                    else {
+                        e.getLine().setStroke(Color.ORANGE);
+                    }
                     //e.getLine().setOpacity(0.2d);
                     double newY = (e.getSource().getLayoutY()
                             + e.getSource().getCellShape().getLayoutBounds().getHeight() / 2)
