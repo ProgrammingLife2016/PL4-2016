@@ -147,18 +147,24 @@ public class MenuFactory {
         final String finalRecent3 = recent03;
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
-            mainController.initGraph();
+            if (finalRecent1 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
+                mainController.initGraph();
+            }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
-            mainController.initGraph();
+            if (finalRecent2 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
+                mainController.initGraph();
+            }
         });
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
-            mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
-            mainController.initGraph();
+            if (finalRecent3 != "") {
+                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
+                mainController.initGraph();
+            }
         });
 
         return initMenu("Load recently opened GFA file", recent1, recent2, recent3);
@@ -196,13 +202,27 @@ public class MenuFactory {
         final String finalRecent2 = recent02;
         final String finalRecent3 = recent03;
 
-        MenuItem recent1 = initMenuItem(recent01, null, event -> mainController.initTree(finalRecent1.toString()));
+        MenuItem recent1 = initMenuItem(recent01, null, event -> {
+            if (finalRecent1 != "") {
+                mainController.initTree(finalRecent1.toString());
+            }
+        });
 
-        MenuItem recent2 = initMenuItem(recent02, null, event -> mainController.initTree(finalRecent2.toString()));
+        MenuItem recent2 = initMenuItem(recent02, null, event -> {
+            if (finalRecent2.toString() != "") {
+                mainController.initTree(finalRecent2.toString());
+            }
+        });
 
-        MenuItem recent3 = initMenuItem(recent03, null, event -> mainController.initTree(finalRecent3.toString()));
+
+        MenuItem recent3 = initMenuItem(recent03, null, event -> {
+            if (finalRecent3.toString() != "") {
+                mainController.initTree(finalRecent3.toString());
+            }
+        });
 
         return initMenu("Load recently opened NWK file", recent1, recent2, recent3);
+
     }
 
 
