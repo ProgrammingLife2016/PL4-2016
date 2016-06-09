@@ -45,7 +45,8 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Class constructor.
      *
-     * @param m MainController.
+     * @param m      MainController.
+     * @param string String.
      */
     public TreeController(MainController m, String string) {
         super(new ScrollPane());
@@ -65,7 +66,7 @@ public class TreeController extends Controller<ScrollPane> {
      * @return A Newick tree.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public Tree getTreeFromFile(String s) {
+    public Tree getTreeFromFile() {
         InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         TreeParser tp = new TreeParser(r);
@@ -448,6 +449,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Method that selects Cells by its name.
      *
      * @param name the name to search for.
+     * @return a Cell gotten by its name.
      */
     public Cell getCellByName(String name) {
         for (Object c : root.getChildren()
@@ -471,6 +473,11 @@ public class TreeController extends Controller<ScrollPane> {
 
     }
 
+    /**
+     * Modify the filters applied to the tree.
+     * @param f Filter type.
+     * @param state true or false state.
+     */
     public void modifyFilter(Filter f, boolean state) {
         selectedStrains.forEach(this::revertCellHighlight);
 

@@ -15,7 +15,11 @@ import static core.Filter.*;
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
-@SuppressFBWarnings("MS_PKGPROTECT")
+@SuppressFBWarnings({
+        "MS_PKGPROTECT",
+        "checkstyle:methodlength",
+        "checkstyle:linelength"
+})
 public class MenuFactory {
     protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
