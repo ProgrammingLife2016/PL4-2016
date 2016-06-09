@@ -18,6 +18,8 @@ class GraphMouseHandling {
     private MainController mainController;
     private GraphCell prevClick;
     private core.Node focusedNode;
+    private core.Node originallyFocusedNode;
+    private int originalZoomLevel;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         GraphCell node = (GraphCell) event.getSource();
@@ -25,6 +27,8 @@ class GraphMouseHandling {
         core.Node clicked = mainController.getGraphController().getGraph()
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
                 .get(node.getCellId());
+
+        originalZoomLevel = mainController.getCurrentView();
 
         String info = "";
 
@@ -45,18 +49,25 @@ class GraphMouseHandling {
         if (prevClick == null) {
             prevClick = node;
             focusedNode = clicked;
-            node.focus();
+            originallyFocusedNode = clicked;
+            mainController.getGraphController().addNodeIdToZoomPath(clicked.getId());
+            node.originalFocus();
         } else if (prevClick.getCellId() != node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
+            mainController.getGraphController().clearZoomPath();
             prevClick.resetFocus();
-            node.focus();
+            node.originalFocus();
             prevClick = node;
-            focusedNode = clicked;
+            this.focusedNode = clicked;
+            this.originallyFocusedNode = clicked;
+            mainController.getGraphController().addNodeIdToZoomPath(clicked.getId());
         } else if (prevClick.getCellId() == node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
+            mainController.getGraphController().clearZoomPath();
             prevClick.resetFocus();
             prevClick = null;
             focusedNode = null;
+            originallyFocusedNode = null;
         }
     };
 
@@ -136,5 +147,22 @@ class GraphMouseHandling {
      */
     public void setFocusedNode(core.Node focusedNode) {
         this.focusedNode = focusedNode;
+    }
+
+    /**
+     * Getter for the originally focused Node
+     * @return the node that is focused originally.
+     */
+    public core.Node getOriginallyFocusedNode() {
+        return originallyFocusedNode;
+    }
+
+    /**
+     * Getter for the zoom level at which the
+     * originally focused node resides.
+     * @return the zoom level
+     */
+    public int getOriginalZoomLevel() {
+        return originalZoomLevel;
     }
 }

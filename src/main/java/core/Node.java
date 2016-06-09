@@ -75,6 +75,8 @@ public class Node {
      */
     private ArrayList<Integer> previousLevelNodesIds;
 
+    private int nextLevelNodeId;
+
     /**
      * Node constructor.
      *
@@ -107,6 +109,7 @@ public class Node {
         this.nucleotides = seq.length();
         this.collapseLevel = "1";
         this.previousLevelNodesIds = new ArrayList<>();
+        this.nextLevelNodeId = id;
     }
 
     /**
@@ -519,8 +522,26 @@ public class Node {
     }
 
     /**
+     * Getter for the ID of the node that
+     * contains this node in the higher levelMap
+     * @return the ID of the node
+     */
+    public int getNextLevelNodeId() {
+        return nextLevelNodeId;
+    }
+
+    /**
+     * Setter for the ID of the node that
+     * contains this node in the higher levelMap
+     * @param nextLevelNodeId the ID of the node
+     */
+    public void setNextLevelNodeId(int nextLevelNodeId) {
+        this.nextLevelNodeId = nextLevelNodeId;
+    }
+
+    /**
      * Method that returns the Text for a bubble.
-     * @return
+     * @return the collapseLevel of the node
      */
     public String getBubbleText() {
         return collapseLevel;

@@ -62,6 +62,22 @@ public abstract class GraphCell extends Cell {
     }
 
     /**
+     * Method to set the original focus.
+     */
+    public void originalFocus() {
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.ORANGERED);
+        borderGlow.setWidth(70);
+        borderGlow.setHeight(70);
+        this.setEffect(borderGlow);
+
+        shape.setStroke(Color.ORANGE);
+        shape.setStrokeWidth(4);
+    }
+
+    /**
      * Return the type of the Cell.
      *
      * @return the type of the Cell.

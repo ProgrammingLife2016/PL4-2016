@@ -57,16 +57,18 @@ public final class GraphReducer {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 
-        for (int i = 1; ; i++) {
+        for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
-            levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
-            int currentMapSize = levelMaps.get(i).size();
+            int currentMapSize = levelMap.size();
 
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= minDelta) {
+                levelMaps.set(i - 1, levelMap);
                 return levelMaps;
+            } else {
+                levelMaps.add(levelMap);
             }
         }
 
@@ -88,8 +90,8 @@ public final class GraphReducer {
             newNode.setLinks(new ArrayList<>(n.getLinks()));
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
+            newNode.setPreviousLevelNodesIds(new ArrayList<>(n.getPreviousLevelNodesIds()));
             newNode.setCollapseLevel(String.valueOf(n.getCollapseLevel()));
-            newNode.setPreviousLevelNodesIds(n.getPreviousLevelNodesIds());
             // Annotations should for now only be shown at the most zoomed in level.
             newNode.setAnnotations(new ArrayList<>());
             newNode.setNucleotides(n.getNucleotides());
@@ -117,13 +119,13 @@ public final class GraphReducer {
                 continue;
             }
 
-            collapseBubble(nodeMap, parent);
+            collapseBubble(nodeMap, parent, zoomLevel);
             collapseIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 boolean collapsed = true;
                 int collapseCount = 0;
                 while (collapsed && collapseCount < 6) {
-                    collapsed = collapseNodeSequence(nodeMap, parent);
+                    collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
                     collapseCount++;
                 }
             }
@@ -137,9 +139,10 @@ public final class GraphReducer {
      *
      * @param nodeMap A HashMap containing all nodes in the graph.
      * @param parent  A given parent node to be collapsed with its child.
+     * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether the horizontal collapse action has succeeded.
      */
-    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         // Links must be present from parent --> child
         if (parent == null) {
             return false;
@@ -172,7 +175,7 @@ public final class GraphReducer {
         parent.setSequence("");
         parent.setCollapseLevel(Integer.toString(totalCollapseLevel));
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
-        parent.addPreviousLevelNodesIds(child.getPreviousLevelNodesIds());
+        parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
 
         // Retrieve the single grandchild of the node.
@@ -184,6 +187,7 @@ public final class GraphReducer {
 
         //remove edge from child to grandchild.
         child.removeLink(grandChild.getId());
+        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
 
         //add node as new parent of the grandchild and remove the child as parent.
         grandChild.addParent(parent.getId());
@@ -227,7 +231,8 @@ public final class GraphReducer {
                     grandChild.getParents().stream().filter(grandchildParentId -> grandchildParentId != child.getId()
                             && grandchildParentId != parent.getId()).forEach(grandchildParentId -> {
                         Node other = nodeMap.get(grandchildParentId);
-                        other.getGenomes().stream().filter(genome -> allGenomes.contains(genome)).forEach(allGenomes::remove);
+                        other.getGenomes().stream().filter(
+                                genome -> allGenomes.contains(genome)).forEach(allGenomes::remove);
                     });
                     //Remove link from parent to the grandChild.
                     parent.removeLink(grandChildId);
@@ -252,9 +257,10 @@ public final class GraphReducer {
      *
      * @param nodeMap the nodeMap were currently at
      * @param parent  the parent of the to collapse bubble
+     * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether nodes have been collapsed.
      */
-    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         List<Integer> children = parent.getLinks(nodeMap);
         List<Node> bubbleChildren = new ArrayList<>();
         if (children.size() > 1) {
@@ -270,7 +276,8 @@ public final class GraphReducer {
                 Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
                 List<Node> bubble = new ArrayList<>();
                 bubble.add(child);
-                bubble.addAll(bubbleChildren.stream().filter(otherChild -> !otherChild.equals(child) && grandChild.equals(
+                bubble.addAll(bubbleChildren.stream().filter(
+                        otherChild -> !otherChild.equals(child) && grandChild.equals(
                         nodeMap.get(otherChild.getLinks(nodeMap).get(0)))).collect(Collectors.toList()));
                 if (bubble.size() > 1) {
                     StringBuffer buf = new StringBuffer();
@@ -278,7 +285,9 @@ public final class GraphReducer {
                         if (!bubbleChild.equals(child)) {
                             child.unionGenomes(bubbleChild);
                             child.setNucleotides(child.getNucleotides() + bubbleChild.getNucleotides());
+                            child.addPreviousLevelNodesIds(new ArrayList<>(bubbleChild.getPreviousLevelNodesIds()));
                             child.addPreviousLevelNodesId(bubbleChild.getId());
+                            levelMaps.get(zoomLevel).get(bubbleChild.getId()).setNextLevelNodeId(child.getId());
                             parent.removeLink(bubbleChild.getId());
                             grandChild.removeParent(bubbleChild.getId());
                             nodeMap.remove(bubbleChild.getId());

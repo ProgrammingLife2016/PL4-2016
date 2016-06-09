@@ -540,7 +540,7 @@ public class MainController extends Controller<BorderPane> {
             fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
-                        .getGraphMouseHandling().getPrevClick());
+                        .getGraphMouseHandling().getPrevClick().getCellId());
             }
         }
 
