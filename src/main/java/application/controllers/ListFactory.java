@@ -28,7 +28,6 @@ public class ListFactory {
         this.screenSize = Screen.getPrimary().getVisualBounds();
     }
 
-
     /**
      * Method to create the GUI aspects of the InfoList
      *
