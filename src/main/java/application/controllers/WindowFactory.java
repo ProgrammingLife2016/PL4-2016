@@ -74,7 +74,6 @@ public final class WindowFactory {
         }
 
         mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
-
         mainController.initGraph();
 
         return directoryChooser;
@@ -90,9 +89,7 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Tree File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
         mainController.addRecentNWK(selectedFile.toString());
-
         mainController.initTree(selectedFile.getAbsolutePath());
 
         return directoryChooser;
@@ -113,6 +110,20 @@ public final class WindowFactory {
         return directoryChooser;
     }
 
+    /**
+     * Method that creates a directoryChooser.
+     *
+     * @return the directoryChooser
+     */
+    public static FileChooser createMetadataChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Metadata File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+        mainController.initMetadata(selectedFile.getAbsolutePath());
+
+        return directoryChooser;
+    }
     /**
      * Creates the menu including a searchBar.
      */

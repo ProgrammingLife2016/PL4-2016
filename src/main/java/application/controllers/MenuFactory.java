@@ -22,9 +22,8 @@ public class MenuFactory {
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
-    protected static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
-            shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains,
-            showOnlyThisStrain;
+    protected static MenuItem loadPhylogeneticTree, loadGenome, loadMetadata, loadAnnotations, resetView,
+            shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
     private Menu fileMenu;
@@ -62,7 +61,6 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
             mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
@@ -103,6 +101,11 @@ public class MenuFactory {
                 t -> {
                     WindowFactory.createAnnotationChooser();
                 });
+        loadMetadata = initMenuItem("Load Meta Data",
+                new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN),
+                t -> {
+                    WindowFactory.createMetadataChooser();
+                });
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
@@ -116,7 +119,7 @@ public class MenuFactory {
                     WindowFactory.createMenuWithSearch();
                 });
 
-        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree,
+        return initMenu("File", loadAnnotations, loadMetadata, loadGenome, loadPhylogeneticTree,
                 initMostRecentGFAMenu(), initMostRecentNWKMenu());
     }
 

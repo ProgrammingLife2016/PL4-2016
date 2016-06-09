@@ -70,7 +70,7 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             Parser parser = new Parser();
-            startMap = parser.readGFAAsString(path);
+            startMap = parser.readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {

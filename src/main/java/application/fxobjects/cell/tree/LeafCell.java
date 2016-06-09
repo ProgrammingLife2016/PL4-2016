@@ -43,7 +43,7 @@ public class LeafCell extends Cell {
                     new Background(
                             new BackgroundFill(
                                     determineLeafLinColor(
-                                            MetaData.META_DATA.get(name).getLineage()
+                                            MetaData.getMetadata().get(name).getLineage()
                                     ), null, null
                             )
                     )

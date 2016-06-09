@@ -75,16 +75,17 @@ public final class AnnotationParser {
      * @return A filtered and sorted list of annotations.
      * @throws FileNotFoundException Throw an exception on read failure.
      */
-    public static List<Annotation> readCDSFilteredGFF(String path) throws FileNotFoundException {
-        FileInputStream fileInputStream = new FileInputStream(path);
-
+    public static List<Annotation> readGFFFromFile(String path) {
         List<Annotation> annotations = new ArrayList<>();
 
-        try {
-            annotations = readGFF(fileInputStream).stream()
-                    .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (path != null && new File(path).exists()) {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(path);
+                annotations = readGFF(fileInputStream).stream()
+                        .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         Collections.sort(annotations);

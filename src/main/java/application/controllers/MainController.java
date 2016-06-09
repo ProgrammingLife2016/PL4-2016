@@ -11,10 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -47,7 +44,6 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
-    private int selectedIndex;
     private LinkedList<String> mostRecentGFA;
     private LinkedList<String> mostRecentNWK;
     private String lastAnnotationSearch;
@@ -107,13 +103,19 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the annotation data file.
      */
     public void initAnnotations(String path) {
-        try {
-            List<Annotation> annotations = AnnotationParser.readCDSFilteredGFF(path);
-            graphController.getGraph().setAnnotations(annotations);
-            graphController.getGraph().getModel().matchNodesAndAnnotations();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
+
+        graphController.getGraph().setAnnotations(annotations);
+        graphController.getGraph().getModel().matchNodesAndAnnotations();
+    }
+
+    /**
+     * Initializes the meta data in the MetaData class.
+     *
+     * @param path Path to the meta data file.
+     */
+    public void initMetadata(String path) {
+        MetaData.readMetadataFromFile(path);
     }
 
     /**
@@ -139,7 +141,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to check whether the file containing recently opened NWK files is empty or not
      */
-    @SuppressFBWarnings
+    @SuppressWarnings("PMD.EmptyCatchBlock")
     public void checkMostRecentNWKFile() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -159,7 +161,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to check whether the file containing recently opened GFA files is empty or not
      */
-    @SuppressFBWarnings
+    @SuppressWarnings("PMD.EmptyCatchBlock")
     public void checkMostRecentGFAFile() {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -505,7 +507,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
 
             highlights.clear();
