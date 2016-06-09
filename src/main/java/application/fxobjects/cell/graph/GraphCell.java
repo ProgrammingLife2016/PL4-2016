@@ -61,6 +61,9 @@ public abstract class GraphCell extends Cell {
         shape.setStrokeWidth(4);
     }
 
+    /**
+     * Method to set the original focus.
+     */
     public void originalFocus() {
         DropShadow borderGlow = new DropShadow();
         borderGlow.setOffsetY(0f);

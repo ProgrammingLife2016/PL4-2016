@@ -111,20 +111,35 @@ public class GraphController extends Controller<ScrollPane> {
                 }
                 Bounds bounds = getRoot().getViewportBounds();
                 drawFrom = -1 * (int) bounds.getMinX();
-                update(graph.getCurrentRef(), graph.getCurrentInt(),getRoot().getHvalue());
+                update(graph.getCurrentRef(), graph.getCurrentInt(), getRoot().getHvalue());
 
             }
         });
     }
 
+    /**
+     * Add a node ID to the path along which we
+     * should zoom in to reach the originally
+     * focused node again.
+     * @param nodeId the ID of the node to be added
+     */
     public void addNodeIdToZoomPath(int nodeId) {
         zoomPath.push(nodeId);
     }
 
+    /**
+     * Returns the node ID of the node we
+     * should zoom in on.
+     * @return the ID of the node next in the path
+     */
     public int getNextNodeInZoomPath() {
         return zoomPath.pop();
     }
 
+    /**
+     * Clear the path of node IDs which
+     * we should follow while zooming in.
+     */
     public void clearZoomPath() {
         zoomPath = new Stack();
     }
@@ -171,6 +186,10 @@ public class GraphController extends Controller<ScrollPane> {
         }
     }
 
+    /**
+     * Method to focus on a cell while zooming out
+     * @param prevClick the previously focused cell
+     */
     public void zoomOutFocus(GraphCell prevClick) {
         //De-focus everything.
         sideFocus(false);
@@ -182,20 +201,28 @@ public class GraphController extends Controller<ScrollPane> {
         //Find the node in the next zoom level and add
         int nextLevelNodeId = graphMouseHandling.getFocusedNode().getNextLevelNodeId();
 
-        focus(prevClick, nextLevelNodeId);
+        focus(nextLevelNodeId);
     }
 
+    /**
+     * Method to focus on a cell while zooming in
+     * @param prevClick the previously focused cell
+     */
     public void zoomInFocus(GraphCell prevClick) {
         sideFocus(false);
         prevClick.resetFocus();
 
         int nextLevelNodeId = findNextInZoomPath();
 
-        focus(prevClick, nextLevelNodeId);
+        focus(nextLevelNodeId);
     }
 
-    public void focus(GraphCell prevClick, int nextLevelNodeId) {
-        prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
+    /**
+     * Method to focus on a cell.
+     * @param nextLevelNodeId the ID of the cell to focus on.
+     */
+    public void focus(int nextLevelNodeId) {
+        GraphCell prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
                 getCurrentView()).get(prevClick.getCellId()));
@@ -215,22 +242,6 @@ public class GraphController extends Controller<ScrollPane> {
         } else {
             return zoomPath.pop();
         }
-    }
-
-    /**
-     * Method to focus on a Cell.
-     *
-     * @param prevClick the cell to focus to.
-     */
-    public void focus(GraphCell prevClick) {
-        prevClick.resetFocus();
-        prevClick = (GraphCell) graph.getModel().getCellMap().get(prevClick.getCellId());
-        graphMouseHandling.setPrevClick(prevClick);
-        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
-                getCurrentView()).get(prevClick.getCellId()));
-        prevClick.focus();
-        sideFocus(true);
-        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
     /**

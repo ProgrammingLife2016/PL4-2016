@@ -157,6 +157,11 @@ class GraphMouseHandling {
         return originallyFocusedNode;
     }
 
+    /**
+     * Getter for the zoom level at which the
+     * originally focused node resides.
+     * @return the zoom level
+     */
     public int getOriginalZoomLevel() {
         return originalZoomLevel;
     }
