@@ -461,8 +461,13 @@ public class Node {
         return id == ((Node) o).id;
     }
 
+    /**
+     * Check whether the list of genomes of two nodes matches.
+     * @param otherNode The other node to compare with.
+     * @return true iff both lists contain exactly the same genomes.
+     */
     public boolean containsSameGenomes(Node otherNode) {
-        if(otherNode.getGenomes().size() == genomes.size()) {
+        if (otherNode.getGenomes().size() == genomes.size()) {
             Collections.sort(genomes);
             Collections.sort(otherNode.getGenomes());
             return genomes.equals(otherNode.getGenomes());

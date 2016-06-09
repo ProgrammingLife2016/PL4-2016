@@ -68,8 +68,7 @@ public final class GraphReducer {
             if ((previousMapSize - currentMapSize) <= minDelta) {
                 levelMaps.set(i - 1, levelMap);
                 int maxDepth = 20;
-                for (int j = i;maxDepth < 1001; j++) {
-                    System.out.println("j value = " +j);
+                for (int j = i; maxDepth < 1001; j++) {
                     HashMap<Integer, Node> levelMap2 = collapse2(levelMaps.get(j - 1), j - 1, maxDepth);
                     int previousMapSize2 = levelMaps.get(j - 1).size();
                     int currentMapSize2 = levelMap2.size();
@@ -94,6 +93,7 @@ public final class GraphReducer {
      *
      * @param map       A HashMap containing all nodes in the graph.
      * @param zoomLevel The current zoomLevel
+     * @param maxDepth The maximumDepth allowed for a complexNode
      * @return A collapsed map.
      */
     public static HashMap<Integer, Node> collapse2(HashMap<Integer, Node> map, int zoomLevel, int maxDepth) {
@@ -177,8 +177,21 @@ public final class GraphReducer {
         return nodeMap;
     }
 
-    public static Boolean collapseComplexPath(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel, int maxComplexity) {
+    /**
+     * Method to collapse the more complex paths. This is done through
+     * traversing the nodes in BFS manner, while also making sure every path
+     * leads to the same final node.
+     *
+     * @param nodeMap A HashMap containing all nodes in the graph.
+     * @param parent  A given parent node to be collapsed with its child.
+     * @param zoomLevel the zoom level of the previous levelMap.
+     * @param maxComplexity The maximum allowed number of nodes that should be collapsed.
+     * @return Whether the complex collapse action has succeeded.
+     */
+    public static Boolean collapseComplexPath(HashMap<Integer, Node> nodeMap, Node parent,
+                                              int zoomLevel, int maxComplexity) {
         // Links must be present from parent --> child
+
         if (parent == null) {
             return false;
         }
@@ -196,9 +209,6 @@ public final class GraphReducer {
             Node sourceNode = nonVisitedNodes.pop();
             if (sourceNode == null) {
                 continue;
-            }
-            if (parent.getId() == 2040) {
-                System.out.println("something on the stack, id: "+sourceNode.getId());
             }
 
             pathComplexity++;
@@ -409,6 +419,12 @@ public final class GraphReducer {
         return false;
     }
 
+    /**
+     * General method to collapse a node into another node
+     * @param parent The node that will be retained
+     * @param child The node that will be collapsed
+     * @param zoomLevel The previous zoom level
+     */
     public static void collapseNodeIntoParent(Node parent, Node child, int zoomLevel) {
         parent.unionGenomes(child);
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());

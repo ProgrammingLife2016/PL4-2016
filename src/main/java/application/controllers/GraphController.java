@@ -267,6 +267,7 @@ public class GraphController extends Controller<ScrollPane> {
      *
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param hValue the hValue.
      */
     public void update(ArrayList<String> ref, int depth, double hValue) {
 
