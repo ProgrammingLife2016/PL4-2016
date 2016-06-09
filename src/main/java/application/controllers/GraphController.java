@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 
 /**
@@ -36,7 +37,7 @@ public class GraphController extends Controller<ScrollPane> {
     private Rectangle2D screenSize;
     private MainController mainController;
     private ZoomBox zoomBox;
-
+    private Stack<Integer> zoomPath;
     private int drawFrom = 0;
 
 
@@ -54,6 +55,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.graphMouseHandling = new GraphMouseHandling(m);
         this.root = new AnchorPane();
         this.mainController = m;
+        this.zoomPath = new Stack();
 
         this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -86,7 +88,7 @@ public class GraphController extends Controller<ScrollPane> {
                     mainController.switchScene(+1);
 
                     if (graphMouseHandling.getPrevClick() != null) {
-                        focus(graphMouseHandling.getPrevClick());
+                        zoomOutFocus(graphMouseHandling.getPrevClick());
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -97,7 +99,7 @@ public class GraphController extends Controller<ScrollPane> {
                     mainController.switchScene(-1);
 
                     if (graphMouseHandling.getPrevClick() != null) {
-                        focus(graphMouseHandling.getPrevClick());
+                        zoomInFocus(graphMouseHandling.getPrevClick());
                     }
 
                     zoomBox.replaceZoomBox(updateZoomBox());
@@ -110,6 +112,18 @@ public class GraphController extends Controller<ScrollPane> {
 
             }
         });
+    }
+
+    public void addNodeIdToZoomPath(int nodeId) {
+        zoomPath.push(nodeId);
+    }
+
+    public int getNextNodeInZoomPath() {
+        return zoomPath.pop();
+    }
+
+    public void clearZoomPath() {
+        zoomPath = new Stack();
     }
 
     /**
@@ -140,16 +154,65 @@ public class GraphController extends Controller<ScrollPane> {
     public void sideFocus(boolean enable) {
         //Remove sideFocus of all underlying nodes.
         for (int underlyingNodeId : graphMouseHandling.
-                getFocusedNode().getPreviousLevelNodesIds()) {
+                getOriginallyFocusedNode().getPreviousLevelNodesIds()) {
             GraphCell cell = (GraphCell) graph.getModel().getCellMap().get(underlyingNodeId);
             if (cell != null) {
-                if (enable) {
+                if (enable && zoomPath.size() == 1) {
                     cell.sideFocus();
                 } else {
                     cell.resetFocus();
                 }
 
             }
+        }
+    }
+
+    public void zoomOutFocus(GraphCell prevClick) {
+        //De-focus everything.
+        sideFocus(false);
+        prevClick.resetFocus();
+
+        //Add the cellId to the zoomPath
+        addNodeIdToZoomPath(prevClick.getCellId());
+
+        //Find the node in the next zoom level and add
+        int nextLevelNodeId = graphMouseHandling.getFocusedNode().getNextLevelNodeId();
+        for (Cell c : graph.getModel().getAllCells()) {
+            if (c.getCellId() == nextLevelNodeId) {
+                prevClick = (GraphCell) c;
+            }
+        }
+        graphMouseHandling.setPrevClick(prevClick);
+        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
+                getCurrentView()).get(prevClick.getCellId()));
+        prevClick.focus();
+        sideFocus(true);
+        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
+    }
+
+    public void zoomInFocus(GraphCell prevClick) {
+        sideFocus(false);
+        prevClick.resetFocus();
+
+        int nextLevelNodeId = findNextInZoomPath();
+        for (Cell c : graph.getModel().getAllCells()) {
+            if (c.getCellId() == nextLevelNodeId) {
+                prevClick = (GraphCell) c;
+            }
+        }
+        graphMouseHandling.setPrevClick(prevClick);
+        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
+                getCurrentView()).get(prevClick.getCellId()));
+        prevClick.focus();
+        sideFocus(true);
+        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
+    }
+
+    private int findNextInZoomPath() {
+        if (zoomPath.size() == 1) {
+            return zoomPath.peek();
+        } else {
+            return zoomPath.pop();
         }
     }
 

@@ -75,6 +75,8 @@ public class Node {
      */
     private ArrayList<Integer> previousLevelNodesIds;
 
+    private int nextLevelNodeId;
+
     /**
      * Node constructor.
      *
@@ -107,6 +109,7 @@ public class Node {
         this.nucleotides = seq.length();
         this.collapseLevel = 1;
         this.previousLevelNodesIds = new ArrayList<>();
+        this.nextLevelNodeId = id;
     }
 
     /**
@@ -509,5 +512,13 @@ public class Node {
      */
     public void addPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
         this.previousLevelNodesIds.addAll(previousLevelNodesIds);
+    }
+
+    public int getNextLevelNodeId() {
+        return nextLevelNodeId;
+    }
+
+    public void setNextLevelNodeId(int nextLevelNodeId) {
+        this.nextLevelNodeId = nextLevelNodeId;
     }
 }
