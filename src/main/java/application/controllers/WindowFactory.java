@@ -101,7 +101,9 @@ public final class WindowFactory {
             }
         }
 
+        mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
+
             showGFApopup(candidates, selectedFile);
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
@@ -160,6 +162,7 @@ public final class WindowFactory {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             File f = new File(file.getText());
 
+            tempStage.hide();
             mainController.addRecentNWK(f.getAbsolutePath());
             mainController.initTree(f.getAbsolutePath());
             mainController.addRecentGFA(selectedFile.getAbsolutePath());
@@ -167,7 +170,7 @@ public final class WindowFactory {
             mainController.initGraph();
             createMenuWithSearch();
 
-            tempStage.hide();
+
         });
     }
 
@@ -204,7 +207,9 @@ public final class WindowFactory {
             }
         }
 
+        mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
+
             showNWKpopup(candidates, selectedFile);
         } else {
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
@@ -265,6 +270,7 @@ public final class WindowFactory {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             String f = file.getText();
 
+            tempStage.hide();
             mainController.getGraphController().getGraph().getNodeMapFromFile(f);
             mainController.initGraph();
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
@@ -272,7 +278,7 @@ public final class WindowFactory {
             mainController.addRecentGFA(f);
             createMenuWithSearch();
 
-            tempStage.hide();
+
         });
     }
 

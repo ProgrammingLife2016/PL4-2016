@@ -205,7 +205,7 @@ public class GraphController extends Controller<ScrollPane> {
 
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
-
+        
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (!(ref.equals(graph.getCurrentRef())) || depth != graph.getCurrentInt())) {
