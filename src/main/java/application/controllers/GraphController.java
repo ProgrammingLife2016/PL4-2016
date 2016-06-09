@@ -157,7 +157,7 @@ public class GraphController extends Controller<ScrollPane> {
                 getOriginallyFocusedNode().getPreviousLevelNodesIds()) {
             GraphCell cell = (GraphCell) graph.getModel().getCellMap().get(underlyingNodeId);
             if (cell != null) {
-                if (enable && zoomPath.size() == 1) {
+                if (enable) {
                     cell.sideFocus();
                 } else {
                     cell.resetFocus();
