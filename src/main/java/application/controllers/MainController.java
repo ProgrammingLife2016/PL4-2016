@@ -44,6 +44,8 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
+    private LinkedList<String> mostRecentGFF;
+    private LinkedList<String> mostRecentMetadata;
     private LinkedList<String> mostRecentGFA;
     private LinkedList<String> mostRecentNWK;
     private String lastAnnotationSearch;
@@ -57,11 +59,15 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
         this.secondCount = -1;
+        this.mostRecentGFF = new LinkedList<>();
+        this.mostRecentMetadata = new LinkedList<>();
         this.mostRecentGFA = new LinkedList<>();
         this.mostRecentNWK = new LinkedList<>();
 
-        checkMostRecentGFAFile();
-        checkMostRecentNWKFile();
+        checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false);
 
@@ -135,65 +141,25 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-
     }
 
     /**
-     * Method to check whether the file containing recently opened NWK files is empty or not
+     * Method to check whether the file containing recently opened files is empty or not
      */
-    @SuppressWarnings("PMD.EmptyCatchBlock")
-    public void checkMostRecentNWKFile() {
+    public void checkMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File x = new File(s + "/mostRecentNWK.txt");
+            File x = new File(s + fileName);
             Scanner sc = new Scanner(x);
             while (sc.hasNextLine()) {
                 String string = sc.nextLine();
-                mostRecentNWK.addFirst(string);
+                mostRecent.addFirst(string);
             }
 
+            /*
+             * Als je dit leest, plaats dan een comment bij de PR.
+             */
             sc.close();
-        } catch (IOException e) {
-        }
-    }
-
-
-    /**
-     * Method to check whether the file containing recently opened GFA files is empty or not
-     */
-    @SuppressWarnings("PMD.EmptyCatchBlock")
-    public void checkMostRecentGFAFile() {
-        try {
-            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File x = new File(s + "/mostRecentGFA.txt");
-            Scanner sc = new Scanner(x);
-            while (sc.hasNextLine()) {
-                String string = sc.nextLine();
-                mostRecentGFA.addFirst(string);
-            }
-
-            sc.close();
-        } catch (IOException e) {
-        }
-    }
-
-    /**
-     * Write a recently chosen GFA file to the file
-     */
-    public void writeMostRecentGFA() {
-        try {
-            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File file = new File(s + "/mostRecentGFA.txt");
-            file.createNewFile();
-
-            PrintWriter writer = new PrintWriter(file, "UTF-8");
-
-            for (int i = 0; i < mostRecentGFA.size(); i++) {
-                writer.println(mostRecentGFA.get(i));
-
-            }
-
-            writer.close();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -202,23 +168,40 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Write a recently chosen NWK file to the file
      */
-    public void writeMostRecentNWK() {
+    public void writeMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File file = new File(s + "/mostRecentNWK.txt");
+            File file = new File(s + fileName);
             file.createNewFile();
 
             PrintWriter writer = new PrintWriter(file, "UTF-8");
 
-            for (int i = 0; i < mostRecentNWK.size(); i++) {
-                writer.println(mostRecentNWK.get(i));
-
+            for (int i = 0; i < mostRecent.size(); i++) {
+                writer.println(mostRecent.get(i));
             }
 
             writer.close();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    /**
+     * Get the list containing most recent GFF files
+     *
+     * @return the list
+     */
+    public LinkedList getMostRecentGFF() {
+        return mostRecentGFF;
+    }
+
+    /**
+     * Get the list containing most recent GFA files
+     *
+     * @return the list
+     */
+    public LinkedList getMostRecentMetadata() {
+        return mostRecentMetadata;
     }
 
     /**
@@ -240,13 +223,33 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
+     * Add a file to the recent opened GFF files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentGFF(String s) {
+        mostRecentGFF.addFirst(s);
+        writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+    }
+
+    /**
+     * Add a file to the recent opened Metadata files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentMetadata(String s) {
+        mostRecentMetadata.addFirst(s);
+        writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+    }
+
+    /**
      * Add a file to the recent opened GFA files
      *
      * @param s the file to be added
      */
     public void addRecentGFA(String s) {
         mostRecentGFA.addFirst(s);
-        writeMostRecentGFA();
+        writeMostRecent("/mostRecentGFA.txt", mostRecentGFA);
     }
 
     /**
@@ -256,7 +259,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void addRecentNWK(String s) {
         mostRecentNWK.addFirst(s);
-        writeMostRecentNWK();
+        writeMostRecent("/mostRecentNWK.txt", mostRecentNWK);
     }
 
     /**
