@@ -85,6 +85,10 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
+    /**
+     * Method to set the background of the MainScreen
+     * @param s URL of the image to be set
+     */
     public void setBackground(String s) {
         ImageView imageView = new ImageView(s);
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());

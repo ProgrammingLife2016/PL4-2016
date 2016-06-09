@@ -105,11 +105,11 @@ public final class WindowFactory {
             }
         }
 
+        mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
-            mainController.setBackground("/background_images/loading.png");
+
             showGFApopup(candidates, selectedFile);
         } else {
-            mainController.setBackground("/background_images/loading.png");
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
         }
@@ -213,11 +213,11 @@ public final class WindowFactory {
             }
         }
 
+        mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
-            mainController.setBackground("/background_images/loading.png");
+
             showNWKpopup(candidates, selectedFile);
         } else {
-            mainController.setBackground("/background_images/loading.png");
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
         }
