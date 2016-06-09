@@ -56,14 +56,16 @@ public final class GraphReducer {
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
-            levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
-            int currentMapSize = levelMaps.get(i).size();
+            int currentMapSize = levelMap.size();
 
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= minDelta) {
+                levelMaps.set(i - 1, levelMap);
                 return levelMaps;
+            } else {
+                levelMaps.add(levelMap);
             }
         }
 

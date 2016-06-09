@@ -177,17 +177,8 @@ public class GraphController extends Controller<ScrollPane> {
 
         //Find the node in the next zoom level and add
         int nextLevelNodeId = graphMouseHandling.getFocusedNode().getNextLevelNodeId();
-        for (Cell c : graph.getModel().getAllCells()) {
-            if (c.getCellId() == nextLevelNodeId) {
-                prevClick = (GraphCell) c;
-            }
-        }
-        graphMouseHandling.setPrevClick(prevClick);
-        graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
-                getCurrentView()).get(prevClick.getCellId()));
-        prevClick.focus();
-        sideFocus(true);
-        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
+
+        focus(prevClick, nextLevelNodeId);
     }
 
     public void zoomInFocus(GraphCell prevClick) {
@@ -195,18 +186,24 @@ public class GraphController extends Controller<ScrollPane> {
         prevClick.resetFocus();
 
         int nextLevelNodeId = findNextInZoomPath();
-        for (Cell c : graph.getModel().getAllCells()) {
-            if (c.getCellId() == nextLevelNodeId) {
-                prevClick = (GraphCell) c;
-            }
-        }
+
+        focus(prevClick, nextLevelNodeId);
+    }
+
+    public void focus(GraphCell prevClick, int nextLevelNodeId) {
+        prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
                 getCurrentView()).get(prevClick.getCellId()));
-        prevClick.focus();
+        if (mainController.getCurrentView() == graphMouseHandling.getOriginalZoomLevel()) {
+            prevClick.originalFocus();
+        } else {
+            prevClick.focus();
+        }
         sideFocus(true);
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
+
 
     private int findNextInZoomPath() {
         if (zoomPath.size() == 1) {
@@ -222,15 +219,8 @@ public class GraphController extends Controller<ScrollPane> {
      * @param prevClick the cell to focus to.
      */
     public void focus(GraphCell prevClick) {
-        sideFocus(false);
         prevClick.resetFocus();
-        for (Cell c : graph.getModel().getAllCells()) {
-            if (c.getCellId() == prevClick.getCellId()
-                    || c.getCellId() > prevClick.getCellId()) {
-                prevClick = (GraphCell) c;
-                break;
-            }
-        }
+        prevClick = (GraphCell) graph.getModel().getCellMap().get(prevClick.getCellId());
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
                 getCurrentView()).get(prevClick.getCellId()));

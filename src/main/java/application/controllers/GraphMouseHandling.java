@@ -19,6 +19,7 @@ class GraphMouseHandling {
     private GraphCell prevClick;
     private core.Node focusedNode;
     private core.Node originallyFocusedNode;
+    private int originalZoomLevel;
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = event -> {
         GraphCell node = (GraphCell) event.getSource();
@@ -26,6 +27,8 @@ class GraphMouseHandling {
         core.Node clicked = mainController.getGraphController().getGraph()
                 .getModel().getLevelMaps().get(mainController.getCurrentView())
                 .get(node.getCellId());
+
+        originalZoomLevel = mainController.getCurrentView();
 
         String info = "";
 
@@ -48,12 +51,12 @@ class GraphMouseHandling {
             focusedNode = clicked;
             originallyFocusedNode = clicked;
             mainController.getGraphController().addNodeIdToZoomPath(clicked.getId());
-            node.focus();
+            node.originalFocus();
         } else if (prevClick.getCellId() != node.getCellId()) {
             mainController.getGraphController().sideFocus(false);
             mainController.getGraphController().clearZoomPath();
             prevClick.resetFocus();
-            node.focus();
+            node.originalFocus();
             prevClick = node;
             this.focusedNode = clicked;
             this.originallyFocusedNode = clicked;
@@ -154,11 +157,7 @@ class GraphMouseHandling {
         return originallyFocusedNode;
     }
 
-    /**
-     * Setter for the originally focused Node
-     * @param focusedNode the node that is to be focused originally.
-     */
-    public void setOriginallyFocusedNode(core.Node focusedNode) {
-        this.originallyFocusedNode = focusedNode;
+    public int getOriginalZoomLevel() {
+        return originalZoomLevel;
     }
 }
