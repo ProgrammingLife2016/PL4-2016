@@ -144,7 +144,10 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to check whether the file containing recently opened files is empty or not
+     * Method to check whether the file containing recently opened files is empty or not.
+     *
+     * @param fileName The name of the most recent file.
+     * @param mostRecent list of most recent files.
      */
     public void checkMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
@@ -166,6 +169,9 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Write a recently chosen NWK file to the file
+     *
+     * @param fileName The name of the most recent file.
+     * @param mostRecent list of most recent files.
      */
     public void writeMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {

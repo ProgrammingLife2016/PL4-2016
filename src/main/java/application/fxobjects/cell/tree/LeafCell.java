@@ -38,7 +38,7 @@ public class LeafCell extends Cell {
         super(id);
         this.name = name;
 
-        if (name.contains("TKK")) {
+        if (name.contains("TKK") && MetaData.getMetadata().get(name) != null) {
             this.setBackground(
                     new Background(
                             new BackgroundFill(
@@ -48,12 +48,10 @@ public class LeafCell extends Cell {
                             )
                     )
             );
-        }
-        else if (name.contains("G")) {
+        } else if (name.contains("G")) {
             this.setBackground(
                     new Background(new BackgroundFill(determineLeafLinColor(4), null, null)));
-        }
-        else {
+        } else {
             this.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         }
         setView(pane);

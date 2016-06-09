@@ -112,7 +112,7 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.clear();
             collectedStrains.add(cell);
 
-            if (name.contains("TKK")) {
+            if (name.contains("TKK") && MetaData.getMetadata().get(name) != null) {
                 applyColorUpwards(parentList, determineEdgeLinColor(MetaData.getMetadata().get(name).getLineage()), 4.0);
                 applyColorOnCell(cell, determineSelectedLeafLinColor(MetaData.getMetadata().get(name).getLineage()));
             } else if (name.contains("G")) {
@@ -137,7 +137,7 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.clear();
             collectedStrains.add(cell);
 
-            if (name.contains("TKK")) {
+            if (name.contains("TKK") && MetaData.getMetadata().get(name) != null) {
                 applyColorUpwards(parentList, Color.BLACK, 1.0);
                 applyColorOnCell(cell, determineLeafLinColor(MetaData.getMetadata().get(name).getLineage()));
             } else if (name.contains("G")) {
@@ -186,7 +186,7 @@ public class TreeController extends Controller<ScrollPane> {
     private void applyColorOnCells() {
         collectedStrains.forEach(s -> {
                     LeafCell c = (LeafCell) s;
-                    if (c.getName().contains("TKK")) {
+                    if (c.getName().contains("TKK") && MetaData.getMetadata().get(c.getName()) != null) {
                         c.setBackground(
                                 new Background(
                                         new BackgroundFill(
@@ -215,7 +215,7 @@ public class TreeController extends Controller<ScrollPane> {
     private void revertColorOnCells() {
         collectedStrains.forEach(s -> {
             LeafCell c = (LeafCell) s;
-            if (c.getName().contains("TKK")) {
+            if (c.getName().contains("TKK") && MetaData.getMetadata().get(c.getName()) != null) {
                 c.setBackground(
                         new Background(
                                 new BackgroundFill(

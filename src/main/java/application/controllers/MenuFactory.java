@@ -35,6 +35,9 @@ public class MenuFactory {
 
     private Menu fileMenu;
 
+    /**
+     * Enum for the recent menu dropdown types.
+     */
     private enum RecentMenuTypes {
         GFF,
         META_DATA,
@@ -180,9 +183,9 @@ public class MenuFactory {
     private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
         String fileTypeStr = "";
 
-        switch(type) {
+        switch (type) {
             case GFF:
-                fileTypeStr = "GFA";
+                fileTypeStr = "GFF";
                 break;
             case META_DATA:
                 fileTypeStr = "Metadata";
