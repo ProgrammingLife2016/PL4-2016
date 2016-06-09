@@ -294,6 +294,7 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initAnnotations(selectedFile.getAbsolutePath());
+        mainController.addRecentGFF(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }
@@ -309,6 +310,7 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initMetadata(selectedFile.getAbsolutePath());
+        mainController.addRecentMetadata(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }

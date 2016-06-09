@@ -210,10 +210,12 @@ public class MenuFactory {
 
             switch (type) {
                 case GFF:
-                    //WindowFactory.createGFFpopup(parentDir, file);
+                    mainController.initAnnotations(recentFile);
+                    mainController.addRecentGFF(recentFile);
                     break;
                 case META_DATA:
-                    //WindowFactory.createMetadatapopup(parentDir, file);
+                    mainController.initMetadata(recentFile);
+                    mainController.addRecentMetadata(recentFile);
                     break;
                 case GFA:
                     WindowFactory.createGFApopup(parentDir, file);
