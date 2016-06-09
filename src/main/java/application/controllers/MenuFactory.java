@@ -145,26 +145,26 @@ public class MenuFactory {
         final String finalRecent3 = recent03;
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            if (finalRecent1 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
-                mainController.initGraph();
-//                File file = new File(finalRecent1);
-//                File parentDir = file.getParentFile();
-//                WindowFactory.
+            if (finalRecent1 != "") {;
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
             if (finalRecent2 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
-                mainController.initGraph();
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
             if (finalRecent3 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
-                mainController.initGraph();
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
@@ -195,20 +195,26 @@ public class MenuFactory {
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
             if (finalRecent1 != "") {
-                mainController.initTree(finalRecent1.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
             if (finalRecent2.toString() != "") {
-                mainController.initTree(finalRecent2.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
             if (finalRecent3.toString() != "") {
-                mainController.initTree(finalRecent3.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
