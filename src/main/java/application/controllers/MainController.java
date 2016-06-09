@@ -68,12 +68,8 @@ public class MainController extends Controller<BorderPane> {
 
         createMenu(false);
 
-        ImageView imageView = new ImageView("/DART2N.png");
-        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
-        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
-
-        this.getRoot().setCenter(imageView);
-
+        setBackground("/DART2N.png");
+        
         // Create the new GraphController
         graphController = new GraphController(this);
     }
@@ -87,6 +83,13 @@ public class MainController extends Controller<BorderPane> {
         fillGraph(new ArrayList<>(), new ArrayList<>());
 
         graphController.getGraph().getModel().matchNodesAndAnnotations();
+    }
+
+    public void setBackground(String s) {
+        ImageView imageView = new ImageView(s);
+        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
+        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        this.getRoot().setCenter(imageView);
     }
 
     /**
