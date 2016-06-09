@@ -134,9 +134,10 @@ public class MenuFactory {
                     WindowFactory.createTreeChooser();
                 });
 
-        return initMenu("File", loadAnnotations, loadMetadata, loadGenome, loadPhylogeneticTree,
-                initMostRecentGFFMenu(), initMostRecentMetadataMenu(),
-                initMostRecentGFAMenu(), initMostRecentNWKMenu());
+        return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations, loadMetadata,
+                initMostRecentGFAMenu(), initMostRecentNWKMenu(),
+                initMostRecentGFFMenu(), initMostRecentMetadataMenu()
+        );
     }
 
     private Menu initMostRecentGFFMenu() {
@@ -290,7 +291,7 @@ public class MenuFactory {
 
             int finalIdx = idx;
             lin.setOnAction(event ->
-                    mainController.getTreeController().filterPhyloLineage(linFilters.get(finalIdx), lin.isSelected())
+                            mainController.getTreeController().filterPhyloLineage(linFilters.get(finalIdx), lin.isSelected())
             );
 
             filterLineage.getItems().add(lin);
