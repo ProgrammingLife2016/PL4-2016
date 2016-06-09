@@ -47,7 +47,6 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
-    private int selectedIndex;
     private LinkedList<String> mostRecentGFA;
     private LinkedList<String> mostRecentNWK;
     private String lastAnnotationSearch;
@@ -349,9 +348,10 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param searchButton   The genome search button.
      * @param deselectButton The deselect button.
+     * @param selectAllButton The select all button.
      */
     private void setSearchAndDeselectButtonActionListener(
-            Button searchButton, Button deselectButton) {
+            Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
                 application.fxobjects.cell.Cell cell = treeController.getCellByName(
@@ -365,6 +365,11 @@ public class MainController extends Controller<BorderPane> {
 
         deselectButton.setOnAction(e -> {
             treeController.clearSelection();
+            fillTree();
+        });
+
+        selectAllButton.setOnAction(e -> {
+            treeController.selectAll();
             fillTree();
         });
     }
@@ -458,16 +463,17 @@ public class MainController extends Controller<BorderPane> {
         genomeTextField = new TextField();
 
         Button searchButton = new Button("Search Genome (In Tree)");
+        Button selectAllButton = new Button("Select all");
         Button deselectSearchButton = new Button("Deselect All");
 
         TextField annotationTextField = new TextField();
         Button highlightButton = new Button("Highlight annotation");
         Button deselectAnnotationButton = new Button("Deselect annotation");
 
-        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton);
+        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
 
-        hBox.getChildren().addAll(genomeTextField, searchButton, deselectSearchButton,
+        hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton,
                 annotationTextField, highlightButton, deselectAnnotationButton);
 
         if (withSearch) {
@@ -505,7 +511,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
 
             highlights.clear();
