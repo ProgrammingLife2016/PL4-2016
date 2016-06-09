@@ -98,17 +98,16 @@ public final class WindowFactory {
         }
 
         if (!candidates.isEmpty()) {
-            showGFApopup(candidates);
+            showGFApopup(candidates, selectedFile.toString());
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
         }
 
-
         return directoryChooser;
     }
 
-    public static void showGFApopup(ArrayList<Text> candidates) {
+    public static void showGFApopup(ArrayList<Text> candidates, String selectedFile) {
         Stage tempStage = new Stage();
 
         ListView listView = new ListView();
@@ -118,7 +117,7 @@ public final class WindowFactory {
         listView.setPrefWidth(450);
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        Text text = new Text("Do you also want to load one of the following files? If not, press cancel");
+        Text text = new Text("Do you also want to load one of the following files? If not, exit.");
         text.setWrappingWidth(listView.getPrefWidth());
 
         for (Text t : candidates) {
@@ -136,8 +135,21 @@ public final class WindowFactory {
         tempStage.setScene(tempScene);
         tempStage.initModality(Modality.APPLICATION_MODAL);
         tempStage.setTitle("Load additional NWK file");
-        
+
         tempStage.show();
+
+        listView.setOnMouseClicked(event -> {
+            Text file = (Text) listView.getSelectionModel().getSelectedItem();
+            String f = file.getText();
+
+            mainController.addRecentNWK(f);
+            mainController.initTree(f);
+            mainController.addRecentGFA(selectedFile);
+            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile);
+            mainController.initGraph();
+
+            tempStage.hide();
+        });
 
     }
 
@@ -153,11 +165,73 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
 
-        mainController.addRecentNWK(selectedFile.toString());
+        File parentDir = selectedFile.getParentFile();
 
-        mainController.initTree(selectedFile.getAbsolutePath());
+        ArrayList<Text> candidates = new ArrayList<>();
+        if (parentDir.isDirectory()) {
+            for (File f : parentDir.listFiles()) {
+                String ext = FilenameUtils.getExtension(f.getName());
+                if (ext.equals("gfa")) {
+                    Text t = new Text(f.getAbsolutePath());
+                    candidates.add(t);
+                }
+            }
+        }
+
+        if (!candidates.isEmpty()) {
+            showNWKpopup(candidates, selectedFile.toString());
+        } else {
+            mainController.addRecentNWK(selectedFile.toString());
+            mainController.initTree(selectedFile.getAbsolutePath());
+        }
 
         return directoryChooser;
+    }
+
+    public static void showNWKpopup(ArrayList<Text> candidates, String selectedFile) {
+        Stage tempStage = new Stage();
+
+        ListView listView = new ListView();
+        ObservableList<Text> list = FXCollections.observableArrayList();
+
+        listView.setMinWidth(450);
+        listView.setPrefWidth(450);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        Text text = new Text("Do you also want to load one of the following files? If not, exit.");
+        text.setWrappingWidth(listView.getPrefWidth());
+
+        for (Text t : candidates) {
+            t.setWrappingWidth(listView.getPrefWidth());
+        }
+
+        list.addAll(candidates.stream().collect(Collectors.toList()));
+        listView.setItems(list);
+
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(text, listView);
+
+        Scene tempScene = new Scene(vBox);
+
+        tempStage.setScene(tempScene);
+        tempStage.initModality(Modality.APPLICATION_MODAL);
+        tempStage.setTitle("Load additional GFA file");
+
+        tempStage.show();
+
+        listView.setOnMouseClicked(event -> {
+            Text file = (Text) listView.getSelectionModel().getSelectedItem();
+            String f = file.getText();
+
+            mainController.getGraphController().getGraph().getNodeMapFromFile(f);
+            mainController.initGraph();
+            mainController.addRecentNWK(selectedFile);
+            mainController.initTree(selectedFile);
+            mainController.addRecentGFA(selectedFile);
+
+            tempStage.hide();
+        });
+
     }
 
     /**
