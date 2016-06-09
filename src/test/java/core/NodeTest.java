@@ -220,8 +220,8 @@ public class NodeTest {
      */
     @Test
     public void testSetCollapseLevel() {
-        n.setCollapseLevel(42);
-        assertEquals(n.getCollapseLevel(), 42);
+        n.setCollapseLevel("42");
+        assertEquals(n.getCollapseLevel(), "42");
     }
 
     /**

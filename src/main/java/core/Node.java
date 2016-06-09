@@ -36,7 +36,7 @@ public class Node {
     /**
      * The number of underlying collapses.
      */
-    private int collapseLevel;
+    private String collapseLevel;
 
     /**
      * 'Depth' of the node in the genome. This is represented as the n'th nucleotide.
@@ -105,7 +105,7 @@ public class Node {
         this.genomes = new ArrayList<>();
         this.annotations = new ArrayList<>();
         this.nucleotides = seq.length();
-        this.collapseLevel = 1;
+        this.collapseLevel = "1";
         this.previousLevelNodesIds = new ArrayList<>();
     }
 
@@ -295,7 +295,7 @@ public class Node {
      * @return The collapse level.
      */
     public int getCollapseLevel() {
-        return collapseLevel;
+        return previousLevelNodesIds.size();
     }
 
     /**
@@ -303,7 +303,7 @@ public class Node {
      *
      * @param collapseLevel The number to be added to the collapse level.
      */
-    public void setCollapseLevel(int collapseLevel) {
+    public void setCollapseLevel(String collapseLevel) {
         this.collapseLevel = collapseLevel;
     }
 

@@ -85,7 +85,7 @@ public final class GraphReducer {
             newNode.setLinks(new ArrayList<>(n.getLinks()));
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
-            newNode.setCollapseLevel(n.getCollapseLevel());
+            newNode.setCollapseLevel(String.valueOf(n.getCollapseLevel()));
             newNode.setPreviousLevelNodesIds(n.getPreviousLevelNodesIds());
             // Annotations should for now only be shown at the most zoomed in level.
             newNode.setAnnotations(new ArrayList<>());
@@ -168,7 +168,7 @@ public final class GraphReducer {
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
         parent.setType(CellType.COLLECTION);
         parent.setSequence("");
-        parent.setCollapseLevel(totalCollapseLevel);
+        parent.setCollapseLevel(Integer.toString(totalCollapseLevel));
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(child.getPreviousLevelNodesIds());
         parent.addPreviousLevelNodesId(child.getId());
@@ -282,6 +282,7 @@ public final class GraphReducer {
                     }
                 }
                 if (bubble.size() > 1) {
+                    String seq = "";
                     for (Node bubbleChild : bubble) {
                         if (!bubbleChild.equals(child)) {
                             child.unionGenomes(bubbleChild);
@@ -291,9 +292,19 @@ public final class GraphReducer {
                             grandChild.removeParent(bubbleChild.getId());
                             nodeMap.remove(bubbleChild.getId());
                         }
+
+                        seq+=bubbleChild.getSequence()+"\n";
                     }
                     child.setType(CellType.BUBBLE);
-                    child.setCollapseLevel(bubble.size());
+
+
+                    if(bubble.size()<4 && seq.length() <20) {
+                        child.setCollapseLevel("\n" + seq);
+                    }
+                    else {
+                        child.setCollapseLevel("Long Sequence");
+                    }
+
                     child.setSequence("");
                     return true;
                 }
