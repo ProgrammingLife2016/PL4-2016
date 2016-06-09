@@ -32,7 +32,7 @@ public class IndelCell extends GraphCell {
      */
     public IndelCell(int id, int nucleotides, StackPane pane, Text text) {
         super(id);
-        double sideSize = Math.min(10.0 + ((double) nucleotides) / 80000, 100);
+        double sideSize = Math.min(20.0 + ((double) nucleotides) / 80000, 100);
         shape = new Polygon(sideSize / 2, 0, sideSize, sideSize, 0, sideSize);
         shape.setStroke(Color.RED);
         shape.setStrokeWidth(1);

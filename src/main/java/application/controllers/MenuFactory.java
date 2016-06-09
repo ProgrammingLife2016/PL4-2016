@@ -11,10 +11,15 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import static core.Filter.*;
 import static java.lang.String.format;
@@ -70,7 +75,14 @@ public class MenuFactory {
     }
 
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
+        shortcuts = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            LegendFactory legendFactory = new LegendFactory();
+            Scene dialogScene = new Scene(legendFactory.createLegend(), 900, 500);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        });
 
         return initMenu("Help", shortcuts);
     }
@@ -124,7 +136,7 @@ public class MenuFactory {
                     WindowFactory.createMetadataChooser();
                 });
         loadGenome = initMenuItem("Load Genome Sequence",
-                new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
+                new KeyCodeCombination(KeyCode.G, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createGraphChooser();
                 });
