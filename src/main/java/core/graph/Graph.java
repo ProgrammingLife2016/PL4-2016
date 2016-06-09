@@ -277,7 +277,7 @@ public class Graph {
                     CellType.RECTANGLE);
         } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
-                    String.valueOf((to.getBubbleText())),
+                    to.getBubbleText(),
                     to.getNucleotides(), CellType.BUBBLE);
         } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),

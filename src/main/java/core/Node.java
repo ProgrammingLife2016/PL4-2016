@@ -295,7 +295,7 @@ public class Node {
      * @return The collapse level.
      */
     public int getCollapseLevel() {
-        return previousLevelNodesIds.size();
+        return previousLevelNodesIds.size()+1;
     }
 
     /**

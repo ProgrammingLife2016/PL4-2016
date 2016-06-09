@@ -219,9 +219,9 @@ public class NodeTest {
      * Test the setCollapseLevel method.
      */
     @Test
-    public void testSetCollapseLevel() {
+    public void testGetBubbleTest() {
         n.setCollapseLevel("42");
-        assertEquals(n.getCollapseLevel(), "42");
+        assertEquals(n.getBubbleText(), "42");
     }
 
     /**

@@ -4,6 +4,7 @@ import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -221,18 +222,11 @@ public final class GraphReducer {
                     Node grandChild = nodeMap.get(grandChildId);
                     //Find out which nodes should be in the inDel node
                     List<String> allGenomes = new ArrayList<>(grandChild.getGenomes());
-                    for (int grandchildParentId : grandChild.getParents()) {
-
-                        if (grandchildParentId != child.getId()
-                                && grandchildParentId != parent.getId()) {
-                            Node other = nodeMap.get(grandchildParentId);
-                            for (String genome : other.getGenomes()) {
-                                if (allGenomes.contains(genome)) {
-                                    allGenomes.remove(genome);
-                                }
-                            }
-                        }
-                    }
+                    grandChild.getParents().stream().filter(grandchildParentId -> grandchildParentId != child.getId()
+                            && grandchildParentId != parent.getId()).forEach(grandchildParentId -> {
+                        Node other = nodeMap.get(grandchildParentId);
+                        other.getGenomes().stream().filter(genome -> allGenomes.contains(genome)).forEach(allGenomes::remove);
+                    });
                     //Remove link from parent to the grandChild.
                     parent.removeLink(grandChildId);
                     //Change parent of the grandchild to the child node
@@ -272,14 +266,10 @@ public final class GraphReducer {
             }
             for (Node child : bubbleChildren) {
                 Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
-                List<Node> bubble = new ArrayList<Node>();
+                List<Node> bubble = new ArrayList<>();
                 bubble.add(child);
-                for (Node otherChild : bubbleChildren) {
-                    if (!otherChild.equals(child) && grandChild.equals(
-                            nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
-                        bubble.add(otherChild);
-                    }
-                }
+                bubble.addAll(bubbleChildren.stream().filter(otherChild -> !otherChild.equals(child) && grandChild.equals(
+                        nodeMap.get(otherChild.getLinks(nodeMap).get(0)))).collect(Collectors.toList()));
                 if (bubble.size() > 1) {
                     String seq = "";
                     for (Node bubbleChild : bubble) {
