@@ -54,7 +54,7 @@ public final class GraphReducer {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 
-        for (int i = 1;; i++) {
+        for (int i = 1; ; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             levelMaps.add(levelMap);
             int previousMapSize = levelMaps.get(i - 1).size();
@@ -100,7 +100,7 @@ public final class GraphReducer {
     /**
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
-     * @param map A HashMap containing all nodes in the graph.
+     * @param map       A HashMap containing all nodes in the graph.
      * @param zoomLevel The current zoomLevel
      * @return A collapsed map.
      */
@@ -154,7 +154,6 @@ public final class GraphReducer {
         Node child = nodeMap.get(childrenIds.get(0));
 
 
-
         // The child may only have one parent and child
         if (child.getLinks(nodeMap).size() != 1) {
             return false;
@@ -201,7 +200,7 @@ public final class GraphReducer {
      * Collapse a complex insertion or deletion
      *
      * @param nodeMap the NodeMap were currently at
-     * @param parent the parent of the inDel to collapse
+     * @param parent  the parent of the inDel to collapse
      * @return Whether nodes have been collapsed.
      */
     public static Boolean
@@ -256,7 +255,7 @@ public final class GraphReducer {
      * Collapse a complex bubble
      *
      * @param nodeMap the nodeMap were currently at
-     * @param parent the parent of the to collapse bubble
+     * @param parent  the parent of the to collapse bubble
      * @return Whether nodes have been collapsed.
      */
     public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
@@ -293,15 +292,13 @@ public final class GraphReducer {
                             nodeMap.remove(bubbleChild.getId());
                         }
 
-                        seq+=bubbleChild.getSequence()+"\n";
+                        seq += bubbleChild.getSequence() + "\n";
                     }
                     child.setType(CellType.BUBBLE);
 
-
-                    if(bubble.size()<4 && seq.length() <20) {
+                    if (bubble.size() < 4 && seq.length() < 20) {
                         child.setCollapseLevel("\n" + seq);
-                    }
-                    else {
+                    } else {
                         child.setCollapseLevel("Long Sequence");
                     }
 

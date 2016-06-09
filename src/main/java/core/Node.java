@@ -510,4 +510,8 @@ public class Node {
     public void addPreviousLevelNodesIds(ArrayList<Integer> previousLevelNodesIds) {
         this.previousLevelNodesIds.addAll(previousLevelNodesIds);
     }
+
+    public String getBubbleText() {
+        return collapseLevel;
+    }
 }
