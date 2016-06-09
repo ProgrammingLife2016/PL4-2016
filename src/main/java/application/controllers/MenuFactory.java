@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 import static core.Filter.*;
+import static java.lang.String.format;
 
 
 /**
@@ -27,6 +28,13 @@ public class MenuFactory {
     private MainController mainController;
 
     private Menu fileMenu;
+
+    private enum RecentMenuTypes {
+        GFF,
+        META_DATA,
+        GFA,
+        NWK
+    }
 
     /**
      * Constructor method for this class.
@@ -125,125 +133,22 @@ public class MenuFactory {
     }
 
     private Menu initMostRecentGFFMenu() {
-        LinkedList<String> mostRecent = mainController.getMostRecentGFF();
-        String recent01 = "Empty";
-        String recent02 = "Empty";
-        String recent03 = "Empty";
-
-        if (mostRecent.size() >= 1 && !(mostRecent.get(0).equals("Empty"))) {
-            recent01 = mostRecent.get(0);
-        }
-
-        if (mostRecent.size() >= 2 && !(mostRecent.get(1).equals("Empty"))) {
-            recent02 = mostRecent.get(1);
-        }
-
-        if (mostRecent.size() >= 3 && !(mostRecent.get(2).equals("Empty"))) {
-            recent03 = mostRecent.get(2);
-        }
-
-        final String finalRecent1 = recent01;
-        final String finalRecent2 = recent02;
-        final String finalRecent3 = recent03;
-
-        MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            if (!finalRecent1.isEmpty()) {
-                //
-            }
-        });
-
-        MenuItem recent2 = initMenuItem(recent02, null, event -> {
-            if (!finalRecent2.isEmpty()) {
-                //
-            }
-        });
-
-
-        MenuItem recent3 = initMenuItem(recent03, null, event -> {
-            if (!finalRecent3.isEmpty()) {
-                //
-            }
-        });
-
-        return initMenu("Load recently opened GFF file", recent1, recent2, recent3);
+        return initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
     }
 
     private Menu initMostRecentMetadataMenu() {
-        LinkedList<String> mostRecent = mainController.getMostRecentMetadata();
-        String recent01 = "Empty";
-        String recent02 = "Empty";
-        String recent03 = "Empty";
-
-        if (mostRecent.size() >= 1 && !(mostRecent.get(0).equals("Empty"))) {
-            recent01 = mostRecent.get(0);
-        }
-
-        if (mostRecent.size() >= 2 && !(mostRecent.get(1).equals("Empty"))) {
-            recent02 = mostRecent.get(1);
-        }
-
-        if (mostRecent.size() >= 3 && !(mostRecent.get(2).equals("Empty"))) {
-            recent03 = mostRecent.get(2);
-        }
-
-        final String finalRecent1 = recent01;
-        final String finalRecent2 = recent02;
-        final String finalRecent3 = recent03;
-
-        MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            if (!finalRecent1.isEmpty()) {
-                //
-            }
-        });
-
-        MenuItem recent2 = initMenuItem(recent02, null, event -> {
-            if (!finalRecent2.isEmpty()) {
-                //
-            }
-        });
-
-
-        MenuItem recent3 = initMenuItem(recent03, null, event -> {
-            if (!finalRecent3.isEmpty()) {
-                //
-            }
-        });
-
-        return initMenu("Load recently opened Metadata file", recent1, recent2, recent3);
+        return initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
     }
 
     private Menu initMostRecentGFAMenu() {
-        LinkedList<String> mostRecentFiles = mainController.getMostRecentGFA();
-        List<String> recents = new ArrayList<>(Arrays.asList("Empty", "Empty", "empty"));
-
-        for (int idx = 0; idx < 3; idx++) {
-            if (mostRecentFiles.size() >= (idx + 1) && !(mostRecentFiles.get(idx).equals("Empty"))) {
-                recents.set(idx, mostRecentFiles.get(idx));
-            }
-        }
-
-        Menu menu = new Menu("Load recently opened GFA file");
-        for (int idx = 0; idx < recents.size(); idx++) {
-            int finalIdx = idx;
-
-            MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
-                if (!recents.get(finalIdx).isEmpty()) {
-                    mainController.getGraphController().getGraph().getNodeMapFromFile(recents.get(finalIdx).toString());
-                    mainController.initGraph();
-                }
-            });
-
-            menu.getItems().add(recentMenuItem);
-        }
-
-        return menu;
+        return initMostRecentMenu(RecentMenuTypes.GFA, mainController.getMostRecentGFA());
     }
 
     private Menu initMostRecentNWKMenu() {
-        return initMostRecentMenu("Load recently opened NWK file", mainController.getMostRecentNWK());
+        return initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
     }
 
-    private Menu initMostRecentMenu(String title, LinkedList<String> mostRecentFileNames) {
+    private Menu initMostRecentMenu(RecentMenuTypes type, LinkedList<String> mostRecentFileNames) {
         List<String> recents = new ArrayList<>(Arrays.asList("Empty", "Empty", "empty"));
 
         for (int idx = 0; idx < 3; idx++) {
@@ -252,14 +157,14 @@ public class MenuFactory {
             }
         }
 
-        Menu menu = new Menu(title);
+        Menu menu = getMenuFromRecentMenuType(type);
+
         for (int idx = 0; idx < recents.size(); idx++) {
             int finalIdx = idx;
 
             MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
-                if (!recents.get(finalIdx).isEmpty()) {
-                    mainController.initTree(recents.get(finalIdx).toString());
-                }
+                String recentFile = recents.get(finalIdx);
+                setActionOnSelection(type, recentFile);
             });
 
             menu.getItems().add(recentMenuItem);
@@ -268,7 +173,49 @@ public class MenuFactory {
         return menu;
     }
 
+    private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
+        String fileTypeStr = "";
 
+        switch(type) {
+            case GFF:
+                fileTypeStr = "GFA";
+                break;
+            case META_DATA:
+                fileTypeStr = "Metadata";
+                break;
+            case GFA:
+                fileTypeStr = "GFA";
+                break;
+            case NWK:
+                fileTypeStr = "NWK";
+                break;
+            default:
+                break;
+        }
+
+        return new Menu(format("Load recently opened %s file", fileTypeStr));
+    }
+
+    private void setActionOnSelection(RecentMenuTypes type, String recentFile) {
+        if (recentFile.isEmpty()) {
+            return;
+        }
+        switch(type) {
+            case GFF:
+                break;
+            case META_DATA:
+                break;
+            case GFA:
+                mainController.getGraphController().getGraph().getNodeMapFromFile(recentFile);
+                mainController.initGraph();
+                break;
+            case NWK:
+                mainController.initTree(recentFile);
+                break;
+            default:
+                break;
+        }
+    }
 
     private Menu initFilterMenu() {
         initLineageFilter();
