@@ -483,18 +483,14 @@ public class TreeController extends Controller<ScrollPane> {
         modifyGraphOptions();
     }
 
-    public ArrayList<String> selectAll() {
-        ArrayList<String> toret = new ArrayList<>();
-
-        for (Object c : root.getChildren()) {
-            if (c instanceof LeafCell) {
-                selectedStrains.add(((LeafCell) c));
-                applyCellHighlight((Cell) c);
-            }
-        }
+    /**
+     * Method to select all genomes in the tree.
+     */
+    public void selectAll() {
+        root.getChildren().stream().filter(c -> c instanceof LeafCell).forEach(c -> {
+            selectedStrains.add(((LeafCell) c));
+            applyCellHighlight((Cell) c);
+        });
         modifyGraphOptions();
-
-
-        return toret;
     }
 }

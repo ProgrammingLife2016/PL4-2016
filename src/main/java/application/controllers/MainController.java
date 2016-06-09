@@ -349,6 +349,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param searchButton   The genome search button.
      * @param deselectButton The deselect button.
+     * @param selectAllButton The select all button.
      */
     private void setSearchAndDeselectButtonActionListener(
             Button searchButton, Button deselectButton, Button selectAllButton) {
@@ -369,7 +370,7 @@ public class MainController extends Controller<BorderPane> {
         });
 
         selectAllButton.setOnAction(e -> {
-            System.out.println((treeController.selectAll().size()));
+            treeController.selectAll();
             fillTree();
         });
     }
