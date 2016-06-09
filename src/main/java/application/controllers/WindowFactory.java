@@ -16,6 +16,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 /**
  * WindowFactory class.
  *
@@ -76,13 +78,9 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Graph File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
-        if (selectedFile != null) {
-            mainController.addRecentGFA(selectedFile.getAbsolutePath());
-        }
+        mainController.addRecentGFA(selectedFile.getAbsolutePath());
 
         File parentDir = selectedFile.getParentFile();
-
         createGFApopup(parentDir, selectedFile);
 
         return directoryChooser;
@@ -108,51 +106,11 @@ public final class WindowFactory {
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
 
-            showGFApopup(candidates, selectedFile);
+            showPopup(candidates, selectedFile, "GFA");
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
         }
-    }
-
-    /**
-     * Method to show the created GFA pop-up
-     * @param candidates all Files that can be selected next
-     * @param selectedFile the currently selected NWK File
-     */
-    public static void showGFApopup(ArrayList<Text> candidates, File selectedFile) {
-        Stage tempStage = new Stage();
-
-        ListView listView = new ListView();
-        ObservableList<Text> list = FXCollections.observableArrayList();
-
-        listView.setMinWidth(450);
-        listView.setPrefWidth(450);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        Text text = new Text("Do you also want to load one of the following files? If not, exit.");
-        text.setWrappingWidth(listView.getPrefWidth());
-
-        for (Text t : candidates) {
-            t.setWrappingWidth(listView.getPrefWidth());
-        }
-
-        list.addAll(candidates.stream().collect(Collectors.toList()));
-        listView.setItems(list);
-
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(text, listView);
-
-        Scene tempScene = new Scene(vBox);
-
-        tempStage.setScene(tempScene);
-        tempStage.initModality(Modality.APPLICATION_MODAL);
-        tempStage.setTitle("Load additional NWK file");
-
-        tempStage.show();
-
-        addGFAEventHandler(listView, selectedFile, tempStage);
-
     }
 
     /**
@@ -188,9 +146,7 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Tree File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
         File parentDir = selectedFile.getParentFile();
-
         createNWKpopup(parentDir, selectedFile);
 
         return directoryChooser;
@@ -216,7 +172,7 @@ public final class WindowFactory {
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
 
-            showNWKpopup(candidates, selectedFile);
+            showPopup(candidates, selectedFile, "NWK");
         } else {
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
@@ -228,8 +184,9 @@ public final class WindowFactory {
      * Method to show the created NWK pop-up
      * @param candidates all candidates which can be loaded next
      * @param selectedFile the currently selected GFA File
+     * @param type The type
      */
-    public static void showNWKpopup(ArrayList<Text> candidates, File selectedFile) {
+    public static void showPopup(ArrayList<Text> candidates, File selectedFile, String type) {
         Stage tempStage = new Stage();
 
         ListView listView = new ListView();
@@ -256,12 +213,15 @@ public final class WindowFactory {
 
         tempStage.setScene(tempScene);
         tempStage.initModality(Modality.APPLICATION_MODAL);
-        tempStage.setTitle("Load additional GFA file");
+        tempStage.setTitle(format("Load additional %s file", type));
 
         tempStage.show();
 
-        addNWKEventHandler(listView, selectedFile, tempStage);
-
+        if (type.toUpperCase().equals("NWK")) {
+            addNWKEventHandler(listView, selectedFile, tempStage);
+        } else if (type.toUpperCase().equals("GFA")) {
+            addGFAEventHandler(listView, selectedFile, tempStage);
+        }
     }
 
 
@@ -300,10 +260,26 @@ public final class WindowFactory {
 
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initAnnotations(selectedFile.getAbsolutePath());
+        mainController.addRecentGFF(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }
 
+    /**
+     * Method that creates a directoryChooser.
+     *
+     * @return the directoryChooser
+     */
+    public static FileChooser createMetadataChooser() {
+        FileChooser directoryChooser = new FileChooser();
+        directoryChooser.setTitle("Select Metadata File");
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+        mainController.initMetadata(selectedFile.getAbsolutePath());
+        mainController.addRecentMetadata(selectedFile.getAbsolutePath());
+
+        return directoryChooser;
+    }
     /**
      * Creates the menu including a searchBar.
      */
