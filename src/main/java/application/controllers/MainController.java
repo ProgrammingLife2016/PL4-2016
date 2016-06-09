@@ -68,7 +68,7 @@ public class MainController extends Controller<BorderPane> {
 
         createMenu(false);
 
-        setBackground("/DART2N.png");
+        setBackground("/background_images/DART2N.png");
         
         // Create the new GraphController
         graphController = new GraphController(this);
