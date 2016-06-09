@@ -228,7 +228,7 @@ public class GenomeTest {
     @Test
     public void testSetTf() {
         g.setTf("test");
-        assertEquals("test", g.getTf());
+        assertFalse(g.isTf());
     }
 
 }
