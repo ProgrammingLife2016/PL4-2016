@@ -187,7 +187,6 @@ public class MainController extends Controller<BorderPane> {
 
             for (int i = 0; i < mostRecentGFA.size(); i++) {
                 writer.println(mostRecentGFA.get(i));
-
             }
 
             writer.close();

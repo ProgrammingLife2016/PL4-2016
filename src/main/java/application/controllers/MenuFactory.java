@@ -2,7 +2,13 @@ package application.controllers;
 
 import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -107,17 +113,17 @@ public class MenuFactory {
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createGraphChooser();
-                    WindowFactory.createMenuWithSearch();
+
                 });
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createTreeChooser();
-                    WindowFactory.createMenuWithSearch();
+
                 });
 
-        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree,
-                initMostRecentGFAMenu(), initMostRecentNWKMenu());
+        return initMenu("File", loadGenome, loadPhylogeneticTree,
+                initMostRecentGFAMenu(), initMostRecentNWKMenu(), loadAnnotations);
     }
 
     private Menu initMostRecentGFAMenu() {
@@ -144,22 +150,25 @@ public class MenuFactory {
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
             if (finalRecent1 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
-                mainController.initGraph();
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
             if (finalRecent2 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent2.toString());
-                mainController.initGraph();
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
             if (finalRecent3 != "") {
-                mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent3.toString());
-                mainController.initGraph();
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createGFApopup(parentDir, file);
             }
         });
 
@@ -190,20 +199,26 @@ public class MenuFactory {
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
             if (finalRecent1 != "") {
-                mainController.initTree(finalRecent1.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
         MenuItem recent2 = initMenuItem(recent02, null, event -> {
             if (finalRecent2.toString() != "") {
-                mainController.initTree(finalRecent2.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
 
         MenuItem recent3 = initMenuItem(recent03, null, event -> {
             if (finalRecent3.toString() != "") {
-                mainController.initTree(finalRecent3.toString());
+                File file = new File(finalRecent1);
+                File parentDir = file.getParentFile();
+                WindowFactory.createNWKpopup(parentDir, file);
             }
         });
 
