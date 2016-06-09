@@ -3,10 +3,7 @@ package core;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -462,7 +459,15 @@ public class Node {
         }
 
         return id == ((Node) o).id;
+    }
 
+    public boolean containsSameGenomes(Node otherNode) {
+        if(otherNode.getGenomes().size() == genomes.size()) {
+            Collections.sort(genomes);
+            Collections.sort(otherNode.getGenomes());
+            return genomes.equals(otherNode.getGenomes());
+        }
+        return false;
     }
 
     /**

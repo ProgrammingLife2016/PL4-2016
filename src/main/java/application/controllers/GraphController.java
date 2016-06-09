@@ -235,7 +235,6 @@ public class GraphController extends Controller<ScrollPane> {
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
-
     private int findNextInZoomPath() {
         if (zoomPath.size() == 1) {
             return zoomPath.peek();
