@@ -116,8 +116,8 @@ public class MenuFactory {
                     WindowFactory.createMenuWithSearch();
                 });
 
-        return initMenu("File", loadAnnotations, loadGenome, loadPhylogeneticTree,
-                initMostRecentGFAMenu(), initMostRecentNWKMenu());
+        return initMenu("File", loadGenome, loadPhylogeneticTree,
+                initMostRecentGFAMenu(), initMostRecentNWKMenu(), loadAnnotations);
     }
 
     private Menu initMostRecentGFAMenu() {
