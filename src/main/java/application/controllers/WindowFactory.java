@@ -88,6 +88,11 @@ public final class WindowFactory {
         return directoryChooser;
     }
 
+    /**
+     * Method to create a pop-up when selecting a NWK File
+     * @param parentDir the current Directory
+     * @param selectedFile the selected File
+     */
     public static void createGFApopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {
@@ -108,6 +113,11 @@ public final class WindowFactory {
         }
     }
 
+    /**
+     * Method to show the created GFA pop-up
+     * @param candidates all Files that can be selected next
+     * @param selectedFile the currently selected NWK File
+     */
     public static void showGFApopup(ArrayList<Text> candidates, File selectedFile) {
         Stage tempStage = new Stage();
 
@@ -143,6 +153,12 @@ public final class WindowFactory {
 
     }
 
+    /**
+     * Method to add the needed EventHandler to the List of Files
+     * @param listView the List of Files
+     * @param selectedFile the Files which is selected
+     * @param tempStage the currently showed Stage
+     */
     public static void addGFAEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
@@ -177,6 +193,11 @@ public final class WindowFactory {
         return directoryChooser;
     }
 
+    /**
+     * Method the create a pop-up when choosing a GFA File
+     * @param parentDir the current Directory we're at
+     * @param selectedFile the selected File
+     */
     public static void createNWKpopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {
@@ -198,6 +219,11 @@ public final class WindowFactory {
     }
 
 
+    /**
+     * Method to show the created NWK pop-up
+     * @param candidates all candidates which can be loaded next
+     * @param selectedFile the currently selected GFA File
+     */
     public static void showNWKpopup(ArrayList<Text> candidates, File selectedFile) {
         Stage tempStage = new Stage();
 
@@ -233,6 +259,13 @@ public final class WindowFactory {
 
     }
 
+
+    /**
+     * Method to add the needed EventHandler to the List of Files
+     * @param listView the List of Files
+     * @param selectedFile the Files which is selected
+     * @param tempStage the currently showed Stage
+     */
     public static void addNWKEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();

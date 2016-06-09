@@ -145,7 +145,7 @@ public class MenuFactory {
         final String finalRecent3 = recent03;
 
         MenuItem recent1 = initMenuItem(recent01, null, event -> {
-            if (finalRecent1 != "") {;
+            if (finalRecent1 != "") {
                 File file = new File(finalRecent1);
                 File parentDir = file.getParentFile();
                 WindowFactory.createGFApopup(parentDir, file);
