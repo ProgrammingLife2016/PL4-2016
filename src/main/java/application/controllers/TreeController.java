@@ -29,7 +29,7 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Class constructor.
      *
-     * @param m MainController.
+     * @param m      MainController.
      * @param string The name of the tree.
      */
     public TreeController(MainController m, String string) {
@@ -38,7 +38,7 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
-        
+
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
     }
@@ -84,6 +84,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Add a single strain to selection.
+     *
      * @param cell the strain to add.
      */
     public void selectStrain(Cell cell) {
@@ -421,7 +422,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Processes a lineage
      *
      * @param lineage The integer value of a lineage
-     * @param state true/false state
+     * @param state   true/false state
      */
     private void processLineage(int lineage, boolean state) {
         MetaData.getMetadata().values().forEach(s -> {
@@ -440,7 +441,7 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Filters the phylogenetic tree.
      *
-     * @param f A given filter
+     * @param f     A given filter
      * @param state true/false state
      */
     public void filterPhyloLineage(Filter f, boolean state) {
@@ -478,6 +479,17 @@ public class TreeController extends Controller<ScrollPane> {
             default:
                 break;
         }
+        modifyGraphOptions();
+    }
+
+    /**
+     * Method to select all genomes in the tree.
+     */
+    public void selectAll() {
+        root.getChildren().stream().filter(c -> c instanceof LeafCell).forEach(c -> {
+            selectedStrains.add(((LeafCell) c));
+            applyCellHighlight((Cell) c);
+        });
         modifyGraphOptions();
     }
 }
