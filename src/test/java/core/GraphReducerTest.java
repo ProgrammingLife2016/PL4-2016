@@ -381,28 +381,4 @@ public class GraphReducerTest {
         assertEquals(1, nodeMap.get(5).getParents(nodeMap).size());
     }
 
-    /**
-     * Test the createLevelMaps method with superposed bubbles
-     */
-    @Test
-    public void testCreateLevelMapsWithSuperposedBubbles() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(7);
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 6)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3, 4)));
-        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(5)));
-        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
-
-        nodeMap.get(5).setLinks(new ArrayList<>(Arrays.asList(7)));
-        nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
-
-        GraphReducer.setLevelMaps(new ArrayList<>());
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap, 1);
-
-        assertNull(levelMaps.get(1).get(4));
-        assertNull(levelMaps.get(2).get(3));
-        assertNull(levelMaps.get(3).get(5));
-
-        assertNotNull(levelMaps.get(3).get(1));
-    }
-
 }

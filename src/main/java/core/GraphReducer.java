@@ -72,7 +72,6 @@ public final class GraphReducer {
                     HashMap<Integer, Node> levelMap2 = collapse2(levelMaps.get(j - 1), j - 1, maxDepth);
                     int previousMapSize2 = levelMaps.get(j - 1).size();
                     int currentMapSize2 = levelMap2.size();
-                    System.out.println(maxDepth);
                     if ((previousMapSize2 - currentMapSize2) == 0) {
                         levelMaps.set(j - 1, levelMap2);
                         maxDepth += 5;
@@ -430,7 +429,9 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
+        if (levelMaps.size() > 0) {
+            levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
+        }
     }
 
     /**
