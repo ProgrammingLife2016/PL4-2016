@@ -76,10 +76,7 @@ public final class WindowFactory {
         directoryChooser.setTitle("Select Graph File");
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-
-        if (selectedFile != null) {
-            mainController.addRecentGFA(selectedFile.getAbsolutePath());
-        }
+        mainController.addRecentGFA(selectedFile.getAbsolutePath());
 
         File parentDir = selectedFile.getParentFile();
         createGFApopup(parentDir, selectedFile);

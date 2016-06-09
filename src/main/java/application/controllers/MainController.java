@@ -149,17 +149,16 @@ public class MainController extends Controller<BorderPane> {
     public void checkMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File x = new File(s + fileName);
-            Scanner sc = new Scanner(x);
-            while (sc.hasNextLine()) {
-                String string = sc.nextLine();
-                mostRecent.addFirst(string);
-            }
+            File f = new File(s + fileName);
+            if (f.exists()) {
+                Scanner sc = new Scanner(f);
+                while (sc.hasNextLine()) {
+                    String string = sc.nextLine();
+                    mostRecent.addFirst(string);
+                }
 
-            /*
-             * Als je dit leest, plaats dan een comment bij de PR.
-             */
-            sc.close();
+                sc.close();
+            }
         } catch (IOException e1) {
             e1.printStackTrace();
         }
