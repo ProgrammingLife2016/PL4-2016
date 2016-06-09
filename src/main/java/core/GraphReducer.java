@@ -271,7 +271,7 @@ public final class GraphReducer {
                 bubble.addAll(bubbleChildren.stream().filter(otherChild -> !otherChild.equals(child) && grandChild.equals(
                         nodeMap.get(otherChild.getLinks(nodeMap).get(0)))).collect(Collectors.toList()));
                 if (bubble.size() > 1) {
-                    String seq = "";
+                    StringBuffer buf = new StringBuffer();
                     for (Node bubbleChild : bubble) {
                         if (!bubbleChild.equals(child)) {
                             child.unionGenomes(bubbleChild);
@@ -282,12 +282,13 @@ public final class GraphReducer {
                             nodeMap.remove(bubbleChild.getId());
                         }
 
-                        seq += bubbleChild.getSequence() + "\n";
+                        buf.append(bubbleChild.getSequence() + "\n");
                     }
                     child.setType(CellType.BUBBLE);
 
-                    if (bubble.size() < 4 && seq.length() < 20) {
-                        child.setCollapseLevel("\n" + seq);
+
+                    if (bubble.size() < 6 && buf.length() < 20) {
+                        child.setCollapseLevel("\n" + buf.toString());
                     } else {
                         child.setCollapseLevel("Long Sequence");
                     }

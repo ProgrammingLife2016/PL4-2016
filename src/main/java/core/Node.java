@@ -120,6 +120,7 @@ public class Node {
 
     /***
      * Remove a link between two nodes
+     *
      * @param link the link to be removed
      */
     public void removeLink(int link) {
@@ -295,7 +296,7 @@ public class Node {
      * @return The collapse level.
      */
     public int getCollapseLevel() {
-        return previousLevelNodesIds.size()+1;
+        return previousLevelNodesIds.size() + 1;
     }
 
     /**
@@ -463,6 +464,7 @@ public class Node {
 
     /**
      * Returns the amount of Nucleotides contained in the node
+     *
      * @return the amount of nucleotides
      */
     public int getNucleotides() {
@@ -471,6 +473,7 @@ public class Node {
 
     /**
      * Sets the amount of nucleotides in the Node.
+     *
      * @param nucleotides the amount of nucleotides to be set.
      */
     public void setNucleotides(int nucleotides) {
@@ -479,6 +482,7 @@ public class Node {
 
     /**
      * Getter for the PreviousLevelNodesIds
+     *
      * @return PreviousLevelNodesIds
      */
     public ArrayList<Integer> getPreviousLevelNodesIds() {
@@ -487,6 +491,7 @@ public class Node {
 
     /**
      * Method to set the previousLevelNodesIds
+     *
      * @param previousLevelNodesIds the list of Ids of all nodes collapsed
      *                              in the previous level.
      */
@@ -496,6 +501,7 @@ public class Node {
 
     /**
      * Adds a single nodeId to the previousLevelNodesIds
+     *
      * @param previousLevelNodeId the nodeId to be added to the list.
      */
     public void addPreviousLevelNodesId(int previousLevelNodeId) {
@@ -504,6 +510,7 @@ public class Node {
 
     /**
      * Adds a list of nodes to the previousLevelNodesIds
+     *
      * @param previousLevelNodesIds the list of Ids of all nodes collapsed
      *                              in the previous level.
      */
@@ -511,6 +518,10 @@ public class Node {
         this.previousLevelNodesIds.addAll(previousLevelNodesIds);
     }
 
+    /**
+     * Method that returns the Text for a bubble.
+     * @return
+     */
     public String getBubbleText() {
         return collapseLevel;
     }
