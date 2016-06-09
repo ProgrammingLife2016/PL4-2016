@@ -7,7 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.*;
@@ -88,7 +90,6 @@ public final class WindowFactory {
         if (parentDir.isDirectory()) {
             for (File f : parentDir.listFiles()) {
                 String ext = FilenameUtils.getExtension(f.getName());
-                System.out.println("extension: " + ext);
                 if (ext.equals("nwk")) {
                     Text t = new Text(f.getAbsolutePath());
                     candidates.add(t);
@@ -98,24 +99,24 @@ public final class WindowFactory {
 
         if (!candidates.isEmpty()) {
             showGFApopup(candidates);
+        } else {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
+            mainController.initGraph();
         }
 
-//        mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
-//        mainController.initGraph();
 
         return directoryChooser;
     }
 
     public static void showGFApopup(ArrayList<Text> candidates) {
         Stage tempStage = new Stage();
-        Popup popup = new Popup();
 
         ListView listView = new ListView();
         ObservableList<Text> list = FXCollections.observableArrayList();
 
         listView.setMinWidth(450);
         listView.setPrefWidth(450);
-
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         Text text = new Text("Do you also want to load one of the following files? If not, press cancel");
         text.setWrappingWidth(listView.getPrefWidth());
@@ -130,24 +131,13 @@ public final class WindowFactory {
         VBox vBox = new VBox();
         vBox.getChildren().addAll(text, listView);
 
-//        vBox.setMinWidth(listView.getPrefWidth());
-//        vBox.setPrefWidth(listView.getPrefHeight());
-
-        popup.setWidth(listView.getPrefWidth());
-        popup.setHeight(listView.getPrefHeight());
-
         Scene tempScene = new Scene(vBox);
-
-        popup.getContent().addAll(vBox);
-
-        popup.show(tempStage);
 
         tempStage.setScene(tempScene);
         tempStage.initModality(Modality.APPLICATION_MODAL);
         tempStage.setTitle("Load additional NWK file");
-
+        
         tempStage.show();
-
 
     }
 
