@@ -351,7 +351,7 @@ public class MainController extends Controller<BorderPane> {
      * @param deselectButton The deselect button.
      */
     private void setSearchAndDeselectButtonActionListener(
-            Button searchButton, Button deselectButton) {
+            Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
                 application.fxobjects.cell.Cell cell = treeController.getCellByName(
@@ -365,6 +365,11 @@ public class MainController extends Controller<BorderPane> {
 
         deselectButton.setOnAction(e -> {
             treeController.clearSelection();
+            fillTree();
+        });
+
+        selectAllButton.setOnAction(e -> {
+            System.out.println((treeController.selectAll().size()));
             fillTree();
         });
     }
@@ -458,16 +463,17 @@ public class MainController extends Controller<BorderPane> {
         genomeTextField = new TextField();
 
         Button searchButton = new Button("Search Genome (In Tree)");
+        Button selectAllButton = new Button("Select all");
         Button deselectSearchButton = new Button("Deselect All");
 
         TextField annotationTextField = new TextField();
         Button highlightButton = new Button("Highlight annotation");
         Button deselectAnnotationButton = new Button("Deselect annotation");
 
-        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton);
+        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
 
-        hBox.getChildren().addAll(genomeTextField, searchButton, deselectSearchButton,
+        hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton,
                 annotationTextField, highlightButton, deselectAnnotationButton);
 
         if (withSearch) {
