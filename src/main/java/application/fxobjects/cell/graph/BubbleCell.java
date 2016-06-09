@@ -1,14 +1,11 @@
 package application.fxobjects.cell.graph;
 
 import core.graph.cell.CellType;
-import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import javax.swing.*;
 
 
 /**
