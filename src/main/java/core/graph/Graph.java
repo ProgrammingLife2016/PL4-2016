@@ -58,6 +58,7 @@ public class Graph {
         zoomOut = new Model();
 
         annotations = new ArrayList<>();
+
     }
 
     /**

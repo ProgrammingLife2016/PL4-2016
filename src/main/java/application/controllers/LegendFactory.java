@@ -8,6 +8,7 @@ import application.fxobjects.cell.graph.RectangleCell;
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.EdgeType;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -66,6 +67,14 @@ public class LegendFactory {
         grid.add(new Text("  -    Contains N (horizontally collapsed) nodes"), 3, 4);
         grid.add(new Text("  -    A longer Edge typically crossing over other edges. "
                 + "Functionally identical to a normal Edge."), 3, 5);
+
+        grid.getStylesheets().add("/css/legend.css");
+        grid.getStyleClass().add("grid");
+        grid.getStyleClass().add("Text");
+
+        for (Node t : grid.getChildren()) {
+            t.getStyleClass().add("Text");
+        }
 
         HBox legend = new HBox();
         legend.getChildren().addAll(grid);

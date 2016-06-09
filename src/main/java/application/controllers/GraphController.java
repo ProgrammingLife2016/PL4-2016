@@ -115,6 +115,14 @@ public class GraphController extends Controller<ScrollPane> {
 
             }
         });
+
+        style();
+    }
+
+    public void style() {
+        this.getRoot().getStylesheets().add("/css/graphController.css");
+        this.getRoot().getStyleClass().add("scroll-pane");
+        root.getStyleClass().add("anchorPane");
     }
 
     /**
