@@ -47,7 +47,6 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
-    private int selectedIndex;
     private LinkedList<String> mostRecentGFA;
     private LinkedList<String> mostRecentNWK;
     private String lastAnnotationSearch;
@@ -188,7 +187,6 @@ public class MainController extends Controller<BorderPane> {
 
             for (int i = 0; i < mostRecentGFA.size(); i++) {
                 writer.println(mostRecentGFA.get(i));
-
             }
 
             writer.close();
@@ -505,7 +503,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
 
             highlights.clear();

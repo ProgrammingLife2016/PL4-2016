@@ -107,13 +107,13 @@ public class MenuFactory {
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createGraphChooser();
-                    WindowFactory.createMenuWithSearch();
+
                 });
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createTreeChooser();
-                    WindowFactory.createMenuWithSearch();
+
                 });
 
         return initMenu("File", loadGenome, loadPhylogeneticTree,

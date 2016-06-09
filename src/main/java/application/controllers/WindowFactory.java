@@ -5,11 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.*;
@@ -147,6 +144,7 @@ public final class WindowFactory {
             mainController.addRecentGFA(selectedFile);
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile);
             mainController.initGraph();
+            createMenuWithSearch();
 
             tempStage.hide();
         });
@@ -228,6 +226,7 @@ public final class WindowFactory {
             mainController.addRecentNWK(selectedFile);
             mainController.initTree(selectedFile);
             mainController.addRecentGFA(selectedFile);
+            createMenuWithSearch();
 
             tempStage.hide();
         });
