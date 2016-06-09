@@ -2,7 +2,13 @@ package application.controllers;
 
 import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -118,13 +124,11 @@ public class MenuFactory {
                 new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createGraphChooser();
-                    WindowFactory.createMenuWithSearch();
                 });
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createTreeChooser();
-                    WindowFactory.createMenuWithSearch();
                 });
 
         return initMenu("File", loadAnnotations, loadMetadata, loadGenome, loadPhylogeneticTree,
@@ -197,23 +201,26 @@ public class MenuFactory {
     }
 
     private void setActionOnSelection(RecentMenuTypes type, String recentFile) {
-        if (recentFile.isEmpty()) {
-            return;
-        }
-        switch(type) {
-            case GFF:
-                break;
-            case META_DATA:
-                break;
-            case GFA:
-                mainController.getGraphController().getGraph().getNodeMapFromFile(recentFile);
-                mainController.initGraph();
-                break;
-            case NWK:
-                mainController.initTree(recentFile);
-                break;
-            default:
-                break;
+        if (!recentFile.isEmpty()) {
+            File file = new File(recentFile);
+            File parentDir = file.getParentFile();
+
+            switch (type) {
+                case GFF:
+                    //WindowFactory.createGFFpopup(parentDir, file);
+                    break;
+                case META_DATA:
+                    //WindowFactory.createMetadatapopup(parentDir, file);
+                    break;
+                case GFA:
+                    WindowFactory.createGFApopup(parentDir, file);
+                    break;
+                case NWK:
+                    WindowFactory.createNWKpopup(parentDir, file);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
