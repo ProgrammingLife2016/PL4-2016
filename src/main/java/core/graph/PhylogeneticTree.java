@@ -75,16 +75,16 @@ public class PhylogeneticTree {
         TreeParser tp = new TreeParser(r);
 
         char[] x = s.toCharArray();
-        String temp = "";
+        StringBuffer buf = new StringBuffer();
         for (int i = s.length(); i > 0; i--) {
             if (!(x[i - 1] == '\\')) {
-                temp += x[i - 1];
+                buf.append(x[i - 1]);
             } else {
                 break;
             }
         }
 
-        String f = new StringBuilder(temp).reverse().toString();
+        String f = new StringBuilder(buf.toString()).reverse().toString();
         return tp.tokenize(f);
     }
 

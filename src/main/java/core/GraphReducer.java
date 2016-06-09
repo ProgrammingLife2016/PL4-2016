@@ -3,7 +3,10 @@ package core;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for the collapsing of nodes in the graph.
@@ -54,7 +57,7 @@ public final class GraphReducer {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 
-        for (int i = 1;; i++) {
+        for (int i = 1; ; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
@@ -87,8 +90,8 @@ public final class GraphReducer {
             newNode.setLinks(new ArrayList<>(n.getLinks()));
             newNode.setParents(new ArrayList<>(n.getParents()));
             newNode.setGenomes(new ArrayList<>(n.getGenomes()));
-            newNode.setCollapseLevel(n.getCollapseLevel());
             newNode.setPreviousLevelNodesIds(new ArrayList<>(n.getPreviousLevelNodesIds()));
+            newNode.setCollapseLevel(String.valueOf(n.getCollapseLevel()));
             // Annotations should for now only be shown at the most zoomed in level.
             newNode.setAnnotations(new ArrayList<>());
             newNode.setNucleotides(n.getNucleotides());
@@ -102,7 +105,7 @@ public final class GraphReducer {
     /**
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
-     * @param map A HashMap containing all nodes in the graph.
+     * @param map       A HashMap containing all nodes in the graph.
      * @param zoomLevel The current zoomLevel
      * @return A collapsed map.
      */
@@ -156,7 +159,6 @@ public final class GraphReducer {
         Node child = nodeMap.get(childrenIds.get(0));
 
 
-
         // The child may only have one parent and child
         if (child.getLinks(nodeMap).size() != 1) {
             return false;
@@ -170,7 +172,7 @@ public final class GraphReducer {
         int totalCollapseLevel = parent.getCollapseLevel() + child.getCollapseLevel();
         parent.setType(CellType.COLLECTION);
         parent.setSequence("");
-        parent.setCollapseLevel(totalCollapseLevel);
+        parent.setCollapseLevel(Integer.toString(totalCollapseLevel));
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
@@ -204,7 +206,7 @@ public final class GraphReducer {
      * Collapse a complex insertion or deletion
      *
      * @param nodeMap the NodeMap were currently at
-     * @param parent the parent of the inDel to collapse
+     * @param parent  the parent of the inDel to collapse
      * @return Whether nodes have been collapsed.
      */
     public static Boolean
@@ -225,18 +227,11 @@ public final class GraphReducer {
                     Node grandChild = nodeMap.get(grandChildId);
                     //Find out which nodes should be in the inDel node
                     List<String> allGenomes = new ArrayList<>(grandChild.getGenomes());
-                    for (int grandchildParentId : grandChild.getParents()) {
-
-                        if (grandchildParentId != child.getId()
-                                && grandchildParentId != parent.getId()) {
-                            Node other = nodeMap.get(grandchildParentId);
-                            for (String genome : other.getGenomes()) {
-                                if (allGenomes.contains(genome)) {
-                                    allGenomes.remove(genome);
-                                }
-                            }
-                        }
-                    }
+                    grandChild.getParents().stream().filter(grandchildParentId -> grandchildParentId != child.getId()
+                            && grandchildParentId != parent.getId()).forEach(grandchildParentId -> {
+                        Node other = nodeMap.get(grandchildParentId);
+                        other.getGenomes().stream().filter(genome -> allGenomes.contains(genome)).forEach(allGenomes::remove);
+                    });
                     //Remove link from parent to the grandChild.
                     parent.removeLink(grandChildId);
                     //Change parent of the grandchild to the child node
@@ -259,7 +254,7 @@ public final class GraphReducer {
      * Collapse a complex bubble
      *
      * @param nodeMap the nodeMap were currently at
-     * @param parent the parent of the to collapse bubble
+     * @param parent  the parent of the to collapse bubble
      * @return Whether nodes have been collapsed.
      */
     public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
@@ -276,15 +271,12 @@ public final class GraphReducer {
             }
             for (Node child : bubbleChildren) {
                 Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
-                List<Node> bubble = new ArrayList<Node>();
+                List<Node> bubble = new ArrayList<>();
                 bubble.add(child);
-                for (Node otherChild : bubbleChildren) {
-                    if (!otherChild.equals(child) && grandChild.equals(
-                            nodeMap.get(otherChild.getLinks(nodeMap).get(0)))) {
-                        bubble.add(otherChild);
-                    }
-                }
+                bubble.addAll(bubbleChildren.stream().filter(otherChild -> !otherChild.equals(child) && grandChild.equals(
+                        nodeMap.get(otherChild.getLinks(nodeMap).get(0)))).collect(Collectors.toList()));
                 if (bubble.size() > 1) {
+                    StringBuffer buf = new StringBuffer();
                     for (Node bubbleChild : bubble) {
                         if (!bubbleChild.equals(child)) {
                             child.unionGenomes(bubbleChild);
@@ -296,9 +288,18 @@ public final class GraphReducer {
                             grandChild.removeParent(bubbleChild.getId());
                             nodeMap.remove(bubbleChild.getId());
                         }
+
+                        buf.append(bubbleChild.getSequence() + "\n");
                     }
                     child.setType(CellType.BUBBLE);
-                    child.setCollapseLevel(bubble.size());
+
+
+                    if (bubble.size() < 6 && buf.length() < 20) {
+                        child.setCollapseLevel("\n" + buf.toString());
+                    } else {
+                        child.setCollapseLevel("Long Sequence");
+                    }
+
                     child.setSequence("");
                     return true;
                 }

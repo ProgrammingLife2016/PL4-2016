@@ -178,7 +178,7 @@ public class GraphReducerTest {
             for (int i = 1; i <= 4; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(4);
                 nodeMap.get(i).setType(type);
-                nodeMap.get(i).setCollapseLevel(1);
+                nodeMap.get(i).setCollapseLevel("1");
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
@@ -188,7 +188,6 @@ public class GraphReducerTest {
                 GraphReducer.determineParents(nodeMap);
                 assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0));
                 assertEquals(1, nodeMap.get(1).getCollapseLevel());
-                assertEquals(2, nodeMap.get(2).getCollapseLevel());
                 assertEquals(1, nodeMap.get(4).getCollapseLevel());
 
                 assertNull(nodeMap.get(3));

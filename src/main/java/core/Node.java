@@ -36,7 +36,7 @@ public class Node {
     /**
      * The number of underlying collapses.
      */
-    private int collapseLevel;
+    private String collapseLevel;
 
     /**
      * 'Depth' of the node in the genome. This is represented as the n'th nucleotide.
@@ -107,7 +107,7 @@ public class Node {
         this.genomes = new ArrayList<>();
         this.annotations = new ArrayList<>();
         this.nucleotides = seq.length();
-        this.collapseLevel = 1;
+        this.collapseLevel = "1";
         this.previousLevelNodesIds = new ArrayList<>();
         this.nextLevelNodeId = id;
     }
@@ -123,6 +123,7 @@ public class Node {
 
     /***
      * Remove a link between two nodes
+     *
      * @param link the link to be removed
      */
     public void removeLink(int link) {
@@ -298,7 +299,7 @@ public class Node {
      * @return The collapse level.
      */
     public int getCollapseLevel() {
-        return collapseLevel;
+        return previousLevelNodesIds.size() + 1;
     }
 
     /**
@@ -306,7 +307,7 @@ public class Node {
      *
      * @param collapseLevel The number to be added to the collapse level.
      */
-    public void setCollapseLevel(int collapseLevel) {
+    public void setCollapseLevel(String collapseLevel) {
         this.collapseLevel = collapseLevel;
     }
 
@@ -466,6 +467,7 @@ public class Node {
 
     /**
      * Returns the amount of Nucleotides contained in the node
+     *
      * @return the amount of nucleotides
      */
     public int getNucleotides() {
@@ -474,6 +476,7 @@ public class Node {
 
     /**
      * Sets the amount of nucleotides in the Node.
+     *
      * @param nucleotides the amount of nucleotides to be set.
      */
     public void setNucleotides(int nucleotides) {
@@ -482,6 +485,7 @@ public class Node {
 
     /**
      * Getter for the PreviousLevelNodesIds
+     *
      * @return PreviousLevelNodesIds
      */
     public ArrayList<Integer> getPreviousLevelNodesIds() {
@@ -490,6 +494,7 @@ public class Node {
 
     /**
      * Method to set the previousLevelNodesIds
+     *
      * @param previousLevelNodesIds the list of Ids of all nodes collapsed
      *                              in the previous level.
      */
@@ -499,6 +504,7 @@ public class Node {
 
     /**
      * Adds a single nodeId to the previousLevelNodesIds
+     *
      * @param previousLevelNodeId the nodeId to be added to the list.
      */
     public void addPreviousLevelNodesId(int previousLevelNodeId) {
@@ -507,6 +513,7 @@ public class Node {
 
     /**
      * Adds a list of nodes to the previousLevelNodesIds
+     *
      * @param previousLevelNodesIds the list of Ids of all nodes collapsed
      *                              in the previous level.
      */
@@ -520,5 +527,13 @@ public class Node {
 
     public void setNextLevelNodeId(int nextLevelNodeId) {
         this.nextLevelNodeId = nextLevelNodeId;
+    }
+
+    /**
+     * Method that returns the Text for a bubble.
+     * @return
+     */
+    public String getBubbleText() {
+        return collapseLevel;
     }
 }

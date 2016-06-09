@@ -68,12 +68,8 @@ public class MainController extends Controller<BorderPane> {
 
         createMenu(false);
 
-        ImageView imageView = new ImageView("/DART2N.png");
-        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
-        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
-
-        this.getRoot().setCenter(imageView);
-
+        setBackground("/background_images/DART2N.png");
+        
         // Create the new GraphController
         graphController = new GraphController(this);
     }
@@ -87,6 +83,17 @@ public class MainController extends Controller<BorderPane> {
         fillGraph(new ArrayList<>(), new ArrayList<>());
 
         graphController.getGraph().getModel().matchNodesAndAnnotations();
+    }
+
+    /**
+     * Method to set the background of the MainScreen
+     * @param s URL of the image to be set
+     */
+    public void setBackground(String s) {
+        ImageView imageView = new ImageView(s);
+        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
+        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        this.getRoot().setCenter(imageView);
     }
 
     /**
@@ -282,7 +289,7 @@ public class MainController extends Controller<BorderPane> {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
-        graphController.update(ref, currentView);
+        graphController.update(ref, currentView, 0.0);
 
         graphController.getZoomBox().fillZoomBox(count == -1);
         count++;
