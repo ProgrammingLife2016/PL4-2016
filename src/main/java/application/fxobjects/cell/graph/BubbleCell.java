@@ -5,6 +5,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -38,6 +39,7 @@ public class BubbleCell extends GraphCell {
         shape.setStrokeWidth(1);
         shape.setFill(Color.YELLOW);
         pane.getChildren().addAll(shape, text);
+        text.setTextAlignment(TextAlignment.CENTER);
         setView(pane);
 
         type = CellType.BUBBLE;
