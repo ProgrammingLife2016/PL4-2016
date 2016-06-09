@@ -38,6 +38,8 @@ public class GraphController extends Controller<ScrollPane> {
     private ZoomBox zoomBox;
 
     private int drawFrom = 0;
+    //@ToDo see issue #159
+    //private double lastDrawnHValue = 0;
 
 
     /**
@@ -62,11 +64,12 @@ public class GraphController extends Controller<ScrollPane> {
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
-            new Thread() {
-                public void start() {
-                    update(graph.getCurrentRef(), graph.getCurrentInt());
-                }
-            }.start();
+
+                new Thread() {
+                    public void start() {
+                        update(graph.getCurrentRef(), graph.getCurrentInt(), getRoot().getHvalue());
+                    }
+                }.start();
         };
 
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
@@ -106,7 +109,7 @@ public class GraphController extends Controller<ScrollPane> {
                 }
                 Bounds bounds = getRoot().getViewportBounds();
                 drawFrom = -1 * (int) bounds.getMinX();
-                update(graph.getCurrentRef(), graph.getCurrentInt());
+                update(graph.getCurrentRef(), graph.getCurrentInt(),getRoot().getHvalue());
 
             }
         });
@@ -134,6 +137,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to either enable or disable sideFocus on nodes.
+     *
      * @param enable if true then all sideFocus is removed
      *               from the sideFocused nodes, reverse if false.
      */
@@ -201,7 +205,8 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
-    public void update(ArrayList<String> ref, int depth) {
+    public void update(ArrayList<String> ref, int depth, double hValue) {
+
 
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
@@ -209,6 +214,7 @@ public class GraphController extends Controller<ScrollPane> {
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (!(ref.equals(graph.getCurrentRef())) || depth != graph.getCurrentInt())) {
+            //System.out.println("Redraw all: " + depth);
 
             root.getChildren().clear();
 
@@ -232,8 +238,7 @@ public class GraphController extends Controller<ScrollPane> {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     if (e.getLine().getStroke() == Color.BLACK) {
                         e.getLine().setStroke(Color.LIGHTGRAY);
-                    }
-                    else {
+                    } else {
                         e.getLine().setStroke(Color.ORANGE);
                     }
                     double newY = e.getSource().getLayoutY()
@@ -248,7 +253,11 @@ public class GraphController extends Controller<ScrollPane> {
             }
             initMouseHandler();
             graph.endUpdate();
+            //@ToDo See issue 156
         } else {
+            //if(hValue != lastDrawnHValue) {
+            //lastDrawnHValue = hValue;
+            //System.out.println("New elements: " + depth);
             addToPane(min, max);
         }
         graph.endUpdate();
