@@ -78,11 +78,17 @@ public final class WindowFactory {
         File selectedFile = directoryChooser.showOpenDialog(window);
 
         if (selectedFile != null) {
-            mainController.addRecentGFA(selectedFile.toString());
+            mainController.addRecentGFA(selectedFile.getAbsolutePath());
         }
 
         File parentDir = selectedFile.getParentFile();
 
+        createGFApopup(parentDir, selectedFile);
+
+        return directoryChooser;
+    }
+
+    public static void createGFApopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {
             for (File f : parentDir.listFiles()) {
@@ -95,16 +101,14 @@ public final class WindowFactory {
         }
 
         if (!candidates.isEmpty()) {
-            showGFApopup(candidates, selectedFile.toString());
+            showGFApopup(candidates, selectedFile);
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
         }
-
-        return directoryChooser;
     }
 
-    public static void showGFApopup(ArrayList<Text> candidates, String selectedFile) {
+    public static void showGFApopup(ArrayList<Text> candidates, File selectedFile) {
         Stage tempStage = new Stage();
 
         ListView listView = new ListView();
@@ -135,22 +139,25 @@ public final class WindowFactory {
 
         tempStage.show();
 
+        addGFAEventHandler(listView, selectedFile, tempStage);
+
+    }
+
+    public static void addGFAEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
-            String f = file.getText();
+            File f = new File(file.getText());
 
-            mainController.addRecentNWK(f);
-            mainController.initTree(f);
-            mainController.addRecentGFA(selectedFile);
-            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile);
+            mainController.addRecentNWK(f.getAbsolutePath());
+            mainController.initTree(f.getAbsolutePath());
+            mainController.addRecentGFA(selectedFile.getAbsolutePath());
+            mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.getAbsolutePath());
             mainController.initGraph();
             createMenuWithSearch();
 
             tempStage.hide();
         });
-
     }
-
 
     /**
      * Method that creates a directoryChooser.
@@ -165,6 +172,12 @@ public final class WindowFactory {
 
         File parentDir = selectedFile.getParentFile();
 
+        createNWKpopup(parentDir, selectedFile);
+
+        return directoryChooser;
+    }
+
+    public static void createNWKpopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {
             for (File f : parentDir.listFiles()) {
@@ -177,16 +190,15 @@ public final class WindowFactory {
         }
 
         if (!candidates.isEmpty()) {
-            showNWKpopup(candidates, selectedFile.toString());
+            showNWKpopup(candidates, selectedFile);
         } else {
-            mainController.addRecentNWK(selectedFile.toString());
+            mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
         }
-
-        return directoryChooser;
     }
 
-    public static void showNWKpopup(ArrayList<Text> candidates, String selectedFile) {
+
+    public static void showNWKpopup(ArrayList<Text> candidates, File selectedFile) {
         Stage tempStage = new Stage();
 
         ListView listView = new ListView();
@@ -217,21 +229,26 @@ public final class WindowFactory {
 
         tempStage.show();
 
+        addNWKEventHandler(listView, selectedFile, tempStage);
+
+    }
+
+    public static void addNWKEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             String f = file.getText();
 
             mainController.getGraphController().getGraph().getNodeMapFromFile(f);
             mainController.initGraph();
-            mainController.addRecentNWK(selectedFile);
-            mainController.initTree(selectedFile);
-            mainController.addRecentGFA(selectedFile);
+            mainController.addRecentNWK(selectedFile.getAbsolutePath());
+            mainController.initTree(selectedFile.getAbsolutePath());
+            mainController.addRecentGFA(f);
             createMenuWithSearch();
 
             tempStage.hide();
         });
-
     }
+
 
     /**
      * Method that creates a directoryChooser.

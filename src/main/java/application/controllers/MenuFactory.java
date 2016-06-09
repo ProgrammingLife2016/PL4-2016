@@ -2,6 +2,8 @@ package application.controllers;
 
 import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.File;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -146,6 +148,9 @@ public class MenuFactory {
             if (finalRecent1 != "") {
                 mainController.getGraphController().getGraph().getNodeMapFromFile(finalRecent1.toString());
                 mainController.initGraph();
+//                File file = new File(finalRecent1);
+//                File parentDir = file.getParentFile();
+//                WindowFactory.
             }
         });
 
