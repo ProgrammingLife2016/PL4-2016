@@ -8,6 +8,7 @@ public enum CellType {
     BUBBLE,
     COLLECTION,
     INDEL,
+    COMPLEX,
     TREELEAF,
     TREEMIDDLE
 }

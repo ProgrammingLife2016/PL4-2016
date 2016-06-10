@@ -2,12 +2,9 @@ package core;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
+import application.fxobjects.cell.graph.*;
 import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
-import application.fxobjects.cell.graph.RectangleCell;
 
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
@@ -213,6 +210,10 @@ public class Model {
             case COLLECTION:
                 CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
+                break;
+            case COMPLEX:
+                ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
+                addCell(complexCell);
                 break;
             case TREELEAF:
                 LeafCell leafCell = new LeafCell(id, text);
