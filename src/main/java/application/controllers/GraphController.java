@@ -116,7 +116,7 @@ public class GraphController extends Controller<ScrollPane> {
             }
         });
 
-        style();
+        //style();
     }
 
     public void style() {

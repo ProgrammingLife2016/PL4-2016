@@ -56,7 +56,7 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
-        style();
+        //style();
 
         this.count = -1;
         this.secondCount = -1;
@@ -577,7 +577,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         screen = treeController.getRoot();
-        screen.getStylesheets().add("/css/treeController.css");
+//        screen.getStylesheets().add("/css/treeController.css");
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
         hideListVBox();

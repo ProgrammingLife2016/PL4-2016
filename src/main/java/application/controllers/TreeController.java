@@ -52,8 +52,8 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void init() {
         root = new AnchorPane();
-        root.getStylesheets().add("/css/tree.css");
-        root.getStyleClass().add("anchor-pane");
+//        root.getStylesheets().add("/css/tree.css");
+//        root.getStyleClass().add("anchor-pane");
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();

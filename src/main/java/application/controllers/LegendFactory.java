@@ -68,13 +68,13 @@ public class LegendFactory {
         grid.add(new Text("  -    A longer Edge typically crossing over other edges. "
                 + "Functionally identical to a normal Edge."), 3, 5);
 
-        grid.getStylesheets().add("/css/legend.css");
-        grid.getStyleClass().add("grid");
-        grid.getStyleClass().add("Text");
-
-        for (Node t : grid.getChildren()) {
-            t.getStyleClass().add("Text");
-        }
+//        grid.getStylesheets().add("/css/legend.css");
+//        grid.getStyleClass().add("grid");
+//        grid.getStyleClass().add("Text");
+//
+//        for (Node t : grid.getChildren()) {
+//            t.getStyleClass().add("Text");
+//        }
 
         HBox legend = new HBox();
         legend.getChildren().addAll(grid);
