@@ -291,8 +291,8 @@ public class MenuFactory {
 
             int finalIdx = idx;
             lin.setOnAction(event ->
-                            mainController.getTreeController().
-                                    filterPhyloLineage(linFilters.get(finalIdx), lin.isSelected())
+                            mainController.getTreeController().filterPhyloLineage(
+                                    linFilters.get(finalIdx), lin.isSelected())
             );
 
             filterLineage.getItems().add(lin);

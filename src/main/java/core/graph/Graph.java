@@ -197,7 +197,7 @@ public class Graph {
         } else { // Draw all nodes.
             //Create a new genome list.
             toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), CellType.RECTANGLE);
+                    root.getNucleotides(), root.getType());
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
             for (int i = 1; i < nodeIds; i++) {
@@ -287,6 +287,9 @@ public class Graph {
         } else if (type == CellType.COLLECTION) {
             toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
+        } else if (type == CellType.COMPLEX) {
+            toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
+                    CellType.COMPLEX);
         }
 
         int width = (int) Math.round(maxEdgeWidth

@@ -246,7 +246,6 @@ public class GraphController extends Controller<ScrollPane> {
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
-
     private int findNextInZoomPath() {
         if (zoomPath.size() == 1) {
             return zoomPath.peek();
@@ -279,6 +278,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param hValue the current scrollbar position
      * @param ref   the reference string.
      * @param depth the depth to draw.
+     * @param hValue the hValue.
      */
     public void update(ArrayList<String> ref, int depth, double hValue) {
         int min = drawFrom;
