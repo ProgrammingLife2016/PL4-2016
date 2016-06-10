@@ -57,7 +57,7 @@ public class LegendFactory {
         grid.add(new Text("-    Bubble Node"), 2, 2);
         grid.add(new Text("-    Indel Node"), 2, 3);
         grid.add(new Text("-    Collection Node"), 2, 4);
-        grid.add(new Text("-    Complex Node"), 2, 5)   ;
+        grid.add(new Text("-    Complex Node"), 2, 5);
         grid.add(new Text("-     Dashed edge"), 2, 6);
         grid.add(new Text(""), 3, 1);
         grid.add(new Text("  -    Contains N other nodes"), 3, 2);
