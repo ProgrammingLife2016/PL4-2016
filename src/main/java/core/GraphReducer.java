@@ -69,7 +69,7 @@ public final class GraphReducer {
                 levelMaps.set(i - 1, levelMap);
                 int maxDepth = 20;
                 for (int j = i; maxDepth < 1001; j++) {
-                    HashMap<Integer, Node> levelMap2 = collapse2(levelMaps.get(j - 1), j - 1, maxDepth);
+                    HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
                     int previousMapSize2 = levelMaps.get(j - 1).size();
                     int currentMapSize2 = levelMap2.size();
                     if ((previousMapSize2 - currentMapSize2) == 0) {
@@ -95,7 +95,7 @@ public final class GraphReducer {
      * @param maxDepth The maximumDepth allowed for a complexNode
      * @return A collapsed map.
      */
-    public static HashMap<Integer, Node> collapse2(HashMap<Integer, Node> map, int zoomLevel, int maxDepth) {
+    public static HashMap<Integer, Node> secondStageCollapse(HashMap<Integer, Node> map, int zoomLevel, int maxDepth) {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
@@ -105,6 +105,8 @@ public final class GraphReducer {
                 continue;
             }
             collapseComplexPath(nodeMap, parent, zoomLevel, maxDepth);
+            //If the nodemap is still bigger than a desired top view,
+            //We can try and keep collapsing as we used to do.
             if (nodeMap.size() > 100) {
                 collapseNodeSequence(nodeMap, parent, zoomLevel);
                 collapseBubble(nodeMap, parent, zoomLevel);
