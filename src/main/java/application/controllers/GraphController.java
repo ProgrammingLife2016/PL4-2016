@@ -67,11 +67,11 @@ public class GraphController extends Controller<ScrollPane> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
 
-                new Thread() {
-                    public void start() {
-                        update(graph.getCurrentRef(), graph.getCurrentInt(), getRoot().getHvalue());
-                    }
-                }.start();
+            new Thread() {
+                public void start() {
+                    update(graph.getCurrentRef(), graph.getCurrentInt());
+                }
+            }.start();
         };
 
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
@@ -111,27 +111,17 @@ public class GraphController extends Controller<ScrollPane> {
                 }
                 Bounds bounds = getRoot().getViewportBounds();
                 drawFrom = -1 * (int) bounds.getMinX();
-                update(graph.getCurrentRef(), graph.getCurrentInt(), getRoot().getHvalue());
+                update(graph.getCurrentRef(), graph.getCurrentInt());
 
             }
         });
-
-        //style();
-    }
-
-    /**
-     * Method to style the application
-     */
-    public void style() {
-        this.getRoot().getStylesheets().add("/css/graphController.css");
-        this.getRoot().getStyleClass().add("scroll-pane");
-        root.getStyleClass().add("anchorPane");
     }
 
     /**
      * Add a node ID to the path along which we
      * should zoom in to reach the originally
      * focused node again.
+     *
      * @param nodeId the ID of the node to be added
      */
     public void addNodeIdToZoomPath(int nodeId) {
@@ -141,6 +131,7 @@ public class GraphController extends Controller<ScrollPane> {
     /**
      * Returns the node ID of the node we
      * should zoom in on.
+     *
      * @return the ID of the node next in the path
      */
     public int getNextNodeInZoomPath() {
@@ -199,6 +190,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to focus on a cell while zooming out
+     *
      * @param prevClick the previously focused cell
      */
     public void zoomOutFocus(GraphCell prevClick) {
@@ -217,6 +209,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to focus on a cell while zooming in
+     *
      * @param prevClick the previously focused cell
      */
     public void zoomInFocus(GraphCell prevClick) {
@@ -230,6 +223,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to focus on a cell.
+     *
      * @param nextLevelNodeId the ID of the cell to focus on.
      */
     public void focus(int nextLevelNodeId) {
@@ -275,18 +269,17 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Init method for this class.
-     * @param hValue the current scrollbar position
+     *
      * @param ref   the reference string.
      * @param depth the depth to draw.
-     * @param hValue the hValue.
      */
-    public void update(ArrayList<String> ref, int depth, double hValue) {
+    public void update(ArrayList<String> ref, int depth) {
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
-        
+
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
-                && ( ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
+                && (ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
 
             root.getChildren().clear();
 

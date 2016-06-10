@@ -56,7 +56,6 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
-        //style();
 
         this.count = -1;
         this.secondCount = -1;
@@ -73,16 +72,9 @@ public class MainController extends Controller<BorderPane> {
         createMenu(false);
 
         setBackground("/background_images/DART2N.png");
-        
+
         // Create the new GraphController
         graphController = new GraphController(this);
-    }
-
-    /**
-     * Method to style the application
-     */
-    public void style() {
-        this.getRoot().getStylesheets().add("/css/main.css");
     }
 
     /**
@@ -98,6 +90,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to set the background of the MainScreen
+     *
      * @param s URL of the image to be set
      */
     public void setBackground(String s) {
@@ -161,9 +154,10 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to check whether the file containing recently opened files is empty or not.
      *
-     * @param fileName The name of the most recent file.
+     * @param fileName   The name of the most recent file.
      * @param mostRecent list of most recent files.
      */
+    @SuppressFBWarnings
     public void checkMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -185,9 +179,10 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Write a recently chosen NWK file to the file
      *
-     * @param fileName The name of the most recent file.
+     * @param fileName   The name of the most recent file.
      * @param mostRecent list of most recent files.
      */
+    @SuppressFBWarnings
     public void writeMostRecent(String fileName, LinkedList<String> mostRecent) {
         try {
             String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
@@ -309,7 +304,7 @@ public class MainController extends Controller<BorderPane> {
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
-        graphController.update(ref, currentView, 0.0);
+        graphController.update(ref, currentView);
 
         graphController.getZoomBox().fillZoomBox(count == -1);
         count++;
@@ -372,8 +367,8 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the genome search and deselect buttons.
      *
-     * @param searchButton   The genome search button.
-     * @param deselectButton The deselect button.
+     * @param searchButton    The genome search button.
+     * @param deselectButton  The deselect button.
      * @param selectAllButton The select all button.
      */
     private void setSearchAndDeselectButtonActionListener(
