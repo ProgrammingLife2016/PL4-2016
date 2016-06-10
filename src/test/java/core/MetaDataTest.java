@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Test for the MetaData class.
@@ -47,7 +48,7 @@ public class MetaDataTest {
         assertEquals("w", g.getSpoligotype());
         assertEquals("y", g.getGenoDST());
         assertEquals(4, g.getLineage());
-        assertEquals("aa", g.getTf());
+        assertFalse(g.isTf());
     }
 
     /**

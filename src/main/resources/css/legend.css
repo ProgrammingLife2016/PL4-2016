@@ -1,0 +1,7 @@
+.grid {
+    -fx-background-color: rgb(32, 37, 86);
+}
+
+Text {
+    -fx-fill: white;
+}

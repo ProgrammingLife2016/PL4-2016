@@ -26,7 +26,7 @@ public class Genome {
     private String spoligotype;
     private String genoDST;
     private int lineage;
-    private String tf;
+    private boolean tf;
 
     /**
      * Construct the genome.
@@ -397,7 +397,7 @@ public class Genome {
      * Getter method for the Tugela Ferry value of the genome.
      * @return the Tugela Ferry value of the genome.
      */
-    public String getTf() {
+    public boolean isTf() {
         return tf;
     }
 
@@ -405,7 +405,20 @@ public class Genome {
      * Setter method for the Tugela Ferry value of the genome.
      * @param tf the Tugela Ferry value of the genome.
      */
-    public void setTf(String tf) {
+    public void setTf(boolean tf) {
         this.tf = tf;
+    }
+
+    /**
+     * Setter method for the Tugela Ferry value of the genome.
+     * @param tf the Tugela Ferry value of the genome.
+     */
+    public void setTf(String tf) {
+        if (tf.equals("Tugela Ferry XDR")) {
+            this.tf = true;
+        }
+        else if (tf.equals("non-Tugela Ferry XDR")) {
+            this.tf = false;
+        }
     }
 }
