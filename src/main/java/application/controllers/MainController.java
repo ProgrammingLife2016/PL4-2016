@@ -78,6 +78,9 @@ public class MainController extends Controller<BorderPane> {
         graphController = new GraphController(this);
     }
 
+    /**
+     * Method to style the application
+     */
     public void style() {
         this.getRoot().getStylesheets().add("/css/main.css");
     }

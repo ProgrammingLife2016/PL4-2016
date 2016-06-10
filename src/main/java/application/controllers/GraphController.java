@@ -119,6 +119,9 @@ public class GraphController extends Controller<ScrollPane> {
         //style();
     }
 
+    /**
+     * Method to style the application
+     */
     public void style() {
         this.getRoot().getStylesheets().add("/css/graphController.css");
         this.getRoot().getStyleClass().add("scroll-pane");
@@ -273,13 +276,11 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Init method for this class.
-     *
+     * @param hValue the current scrollbar position
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
     public void update(ArrayList<String> ref, int depth, double hValue) {
-
-
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
         
