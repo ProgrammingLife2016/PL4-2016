@@ -56,6 +56,7 @@ public class MainController extends Controller<BorderPane> {
     public MainController() {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
+        //style();
 
         this.count = -1;
         this.secondCount = -1;
@@ -75,6 +76,13 @@ public class MainController extends Controller<BorderPane> {
         
         // Create the new GraphController
         graphController = new GraphController(this);
+    }
+
+    /**
+     * Method to style the application
+     */
+    public void style() {
+        this.getRoot().getStylesheets().add("/css/main.css");
     }
 
     /**
@@ -480,6 +488,9 @@ public class MainController extends Controller<BorderPane> {
         HBox hBox = new HBox();
         genomeTextField = new TextField();
 
+        hBox.getStylesheets().add("/css/main.css");
+
+
         Button searchButton = new Button("Search Genome (In Tree)");
         Button selectAllButton = new Button("Select all");
         Button deselectSearchButton = new Button("Deselect All");
@@ -488,11 +499,13 @@ public class MainController extends Controller<BorderPane> {
         Button highlightButton = new Button("Highlight annotation");
         Button deselectAnnotationButton = new Button("Deselect annotation");
 
+
         setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
 
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton,
                 annotationTextField, highlightButton, deselectAnnotationButton);
+
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
@@ -516,6 +529,9 @@ public class MainController extends Controller<BorderPane> {
         list.setOnMouseClicked(event -> listSelect());
 
         setListItems();
+
+        listVBox.getStylesheets().add("/css/list.css");
+
         this.getRoot().setRight(listVBox);
     }
 
@@ -564,6 +580,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         screen = treeController.getRoot();
+//        screen.getStylesheets().add("/css/treeController.css");
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
         hideListVBox();

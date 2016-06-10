@@ -68,6 +68,9 @@ public class ListFactory {
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.prefHeightProperty().bind(listVBox.heightProperty());
         list.prefWidthProperty().bind(listVBox.widthProperty());
+
+//        list.getStylesheets().add("/css/list.css");
+//        list.getStyleClass().add("list-view");
     }
 
 
@@ -82,7 +85,14 @@ public class ListFactory {
         id = new Text();
         id.setText("Select Node to view info");
 
+//        infoList.getStylesheets().add("/css/list.css");
+//        infoList.getStyleClass().add("text-flow");
+
+//        id.getStyleClass().add("text");
+
         infoList.getChildren().addAll(id);
+
+
     }
 
     /**
