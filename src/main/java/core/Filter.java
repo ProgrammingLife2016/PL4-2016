@@ -36,6 +36,8 @@ public enum Filter {
     CSF,
     PLEURA,
     PLEURAL_FLUID,
+    PUS,
+    SPUTUM,
     SINGLE_COLONY,
     NON_SINGLE_COLONY,
     PHENO_MDR,
@@ -94,5 +96,6 @@ public enum Filter {
     GENO_MDR,
     GENO_SUSCEPTIBLE,
     GENO_XDR,
-    TF
+    TF,
+    NTF
 }

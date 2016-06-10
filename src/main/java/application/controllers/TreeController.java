@@ -4,12 +4,21 @@ import application.fxobjects.cell.*;
 import application.fxobjects.cell.layout.*;
 import application.fxobjects.cell.tree.LeafCell;
 import core.Filter;
+import core.Filtering;
 import core.MetaData;
 import core.graph.PhylogeneticTree;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
@@ -25,6 +34,7 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
+    private Filtering filtering;
 
     /**
      * Class constructor.
@@ -38,9 +48,33 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
+        this.filtering = new Filtering();
 
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
+    }
+
+    /**
+     * Set-up the tree model from a Newick data file.
+     *
+     * @return A Newick tree.
+     */
+    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
+    public Tree getTreeFromFile() {
+        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        TreeParser tp = new TreeParser(r);
+
+        return tp.tokenize("340tree.rooted.TKK");
+    }
+
+    /**
+     * Get the phylogenetic tree.
+     *
+     * @return The phylogenetic tree.
+     */
+    public PhylogeneticTree getPT() {
+        return pt;
     }
 
     @Override
@@ -97,6 +131,13 @@ public class TreeController extends Controller<ScrollPane> {
      * Colors the selected strains after un-hover.
      */
     public void colorSelectedStrains() {
+        selectedStrains.forEach(this::applyCellHighlight);
+    }
+
+    /**
+     * Revert color on all cells.
+     */
+    public void revertColorOnAllCells() {
         selectedStrains.forEach(this::applyCellHighlight);
     }
 
@@ -398,7 +439,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Method that selects Cells by its name.
      *
      * @param name the name to search for.
-     * @return A matching cell.
+     * @return a Cell gotten by its name.
      */
     public Cell getCellByName(String name) {
         for (Object c : root.getChildren()) {
@@ -421,66 +462,25 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
-     * Processes a lineage
-     *
-     * @param lineage The integer value of a lineage
-     * @param state   true/false state
+     * Modify the filters applied to the tree.
+     * @param f Filter type.
+     * @param state true or false state.
      */
-    private void processLineage(int lineage, boolean state) {
-        MetaData.getMetadata().values().forEach(s -> {
-            if (s.getLineage() == lineage && state) {
-                Cell cell = getCellByName(s.getName());
-                selectedStrains.add(cell);
-                applyCellHighlight(cell);
-            } else if (s.getLineage() == lineage) {
-                Cell cell = getCellByName(s.getName());
-                selectedStrains.remove(cell);
-                revertCellHighlight(cell);
-            }
-        });
-    }
+    public void modifyFilter(Filter f, boolean state) {
+        selectedStrains.forEach(this::revertCellHighlight);
 
-    /**
-     * Filters the phylogenetic tree.
-     *
-     * @param f     A given filter
-     * @param state true/false state
-     */
-    public void filterPhyloLineage(Filter f, boolean state) {
-        switch (f) {
-            case LIN1:
-                processLineage(1, state);
-                break;
-            case LIN2:
-                processLineage(2, state);
-                break;
-            case LIN3:
-                processLineage(3, state);
-                break;
-            case LIN4:
-                processLineage(4, state);
-                break;
-            case LIN5:
-                processLineage(5, state);
-                break;
-            case LIN6:
-                processLineage(6, state);
-                break;
-            case LIN7:
-                processLineage(7, state);
-                break;
-            case LIN8:
-                processLineage(8, state);
-                break;
-            case LIN9:
-                processLineage(9, state);
-                break;
-            case LIN10:
-                processLineage(10, state);
-                break;
-            default:
-                break;
+        if (state) {
+            filtering.applyFilter(f);
+        } else {
+            filtering.removeFilter(f);
         }
+
+        selectedStrains.clear();
+        filtering.getSelectedGenomes().forEach(g ->
+                        selectedStrains.add(getCellByName(g.getName()))
+        );
+
+        colorSelectedStrains();
         modifyGraphOptions();
     }
 
