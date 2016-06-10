@@ -107,7 +107,7 @@ public final class WindowFactory {
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
 
-            showPopup(candidates, selectedFile, "GFA");
+            showPopup(candidates, selectedFile, "NWK");
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
@@ -174,7 +174,7 @@ public final class WindowFactory {
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
 
-            showPopup(candidates, selectedFile, "NWK");
+            showPopup(candidates, selectedFile, "GFA");
         } else {
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
@@ -229,9 +229,9 @@ public final class WindowFactory {
         tempStage.show();
 
         if (type.toUpperCase().equals("NWK")) {
-            addNWKEventHandler(listView, selectedFile, tempStage);
-        } else if (type.toUpperCase().equals("GFA")) {
             addGFAEventHandler(listView, selectedFile, tempStage);
+        } else if (type.toUpperCase().equals("GFA")) {
+            addNWKEventHandler(listView, selectedFile, tempStage);
         }
     }
 
