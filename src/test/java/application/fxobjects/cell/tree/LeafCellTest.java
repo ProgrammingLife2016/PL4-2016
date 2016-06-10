@@ -21,7 +21,7 @@ public class LeafCellTest {
     @Before
     public void setUp() {
         StackPane pane = new StackPane();
-        c = new LeafCell(1, "", pane);
+        c = new LeafCell(1, "test", pane);
     }
 
     /**
@@ -37,7 +37,6 @@ public class LeafCellTest {
      */
     @Test
     public void testName() {
-        c.setName("test");
         assertEquals("test", c.getName());
     }
 

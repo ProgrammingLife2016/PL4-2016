@@ -83,8 +83,8 @@ public class GraphTest {
     public void testGenerateModel() {
         List<String> genomes = new ArrayList<>(Arrays.asList("1", "2"));
         g.setCurrentGenomes(genomes);
-        g.generateModel("", 1, mockedModel);
-        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(),
+        g.generateModel(new ArrayList<>(), 1, mockedModel);
+        verify(mockedModel, atLeast(0)).addCell(anyInt(), anyString(),
                 anyInt(), any(CellType.class));
     }
 
@@ -93,13 +93,13 @@ public class GraphTest {
      */
     @Test
     public void testAddCell() {
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 1, "", g.getLevelMaps().get(0).get(1),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 1, new ArrayList<>(), g.getLevelMaps().get(0).get(1),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 2, "", g.getLevelMaps().get(0).get(2),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 2, new ArrayList<>(), g.getLevelMaps().get(0).get(2),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 3, "", g.getLevelMaps().get(0).get(3),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 3, new ArrayList<>(), g.getLevelMaps().get(0).get(3),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 4, "", g.getLevelMaps().get(0).get(4),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 4, new ArrayList<>(), g.getLevelMaps().get(0).get(4),
                 g.getLevelMaps().get(0).get(5));
 
         g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1", "2")));

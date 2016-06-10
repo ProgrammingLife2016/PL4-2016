@@ -1,6 +1,7 @@
 package application.fxobjects.cell.layout;
 
 import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.graph.GraphCell;
 import core.Model;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -22,7 +23,11 @@ public class GraphLayout extends CellLayout {
     private CellType lastType;
     private int cellCount = 0;
     private int centerY;
+
     private double maxWidth;
+
+    private Cell leftMost;
+    private Cell rightMost;
 
     private static final int BASE_X = 100;
 
@@ -49,12 +54,20 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
+        int minWidth = Integer.MAX_VALUE;
+
         List<Cell> cells = model.getAddedCells();
-        for (Cell cell : cells) {
+        for (Cell c : cells) {
+            GraphCell cell = (GraphCell) c;
             if (!cell.isRelocated()) {
                 currentX += offset;
                 if (currentX > maxWidth) {
                     maxWidth = currentX;
+                    rightMost = cell;
+                }
+                if (currentX < minWidth) {
+                    minWidth = currentX;
+                    leftMost = cell;
                 }
                 currentY = centerY;
 
@@ -86,33 +99,9 @@ public class GraphLayout extends CellLayout {
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
-        for (Cell child : cell.getCellChildren()) {
-            if (!child.isRelocated()) {
-                if (cellCount % 2 == 0) {
-                    child.relocate(currentX
-                            - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY - evenChildOffset
-                                    - (child.getCellShape().getLayoutBounds().getHeight() / 2));
-                    evenChildOffset = (yOffset / 2) * modifier;
-                    child.setRelocated(true);
-                    modifier *= -1;
-                    if (modifier > 0) {
-                        modifier++;
-                    }
-                } else {
-                    child.relocate(currentX
-                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY + oddChildOffset
-                                    - (child.getCellShape().getLayoutBounds().getHeight() / 2));
-                    oddChildOffset = yOffset * modifier;
-                    child.setRelocated(true);
-
-                    modifier *= -1;
-                    if (modifier < 0) {
-                        modifier--;
-                    }
-                }
-            } else if (child.getLayoutX() < cell.getLayoutX()) {
+        for (Cell c : cell.getCellChildren()) {
+            GraphCell child = (GraphCell) c;
+            if (!child.isRelocated() || child.getLayoutX() < cell.getLayoutX()) {
                 if (cellCount % 2 == 0) {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
@@ -120,7 +109,6 @@ public class GraphLayout extends CellLayout {
                                     - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     evenChildOffset = (yOffset / 2) * modifier;
                     child.setRelocated(true);
-
                     modifier *= -1;
                     if (modifier > 0) {
                         modifier++;
@@ -140,7 +128,9 @@ public class GraphLayout extends CellLayout {
                 }
             }
         }
-        for (Cell child : cell.getCellChildren()) {
+
+        for (Cell c : cell.getCellChildren()) {
+            GraphCell child = (GraphCell) c;
             if (child.getCellChildren().size() > 1) {
                 currentX += offset;
                 currentY = (int) (child.getLayoutY()
@@ -248,5 +238,23 @@ public class GraphLayout extends CellLayout {
      */
     public double getMaxWidth() {
         return maxWidth;
+    }
+
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
+    public Cell getLeftMost() {
+        return leftMost;
+    }
+
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
+    public Cell getRightMost() {
+        return rightMost;
     }
 }

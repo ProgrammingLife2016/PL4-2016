@@ -6,25 +6,23 @@ import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static core.AnnotationParser.readCDSFilteredGFF;
 
 /**
  * Class representing a graph.
  */
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
-        "PMD.UnusedLocalVariable"})
+        "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
 public class Graph {
 
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
     private int currentInt = -1;
-    private Object currentRef = null;
+    private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
     /**
      * All the genomes that are in this graph.
@@ -51,7 +49,6 @@ public class Graph {
      */
     private List<Annotation> annotations;
 
-
     /**
      * Class constructor.
      */
@@ -60,24 +57,22 @@ public class Graph {
         current = new Model();
         zoomOut = new Model();
 
-        annotations = readCDSFilteredGFF(
-                getClass().getResourceAsStream("/decorationV5_20130412.gff"));
+        annotations = new ArrayList<>();
     }
 
     /**
      * Read a node map from a gfa file on disk.
      *
+     * @param path The file path of the GFA file.
      * @return A node map read from file.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public HashMap<Integer, Node> getNodeMapFromFile(String s) {
+    public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             Parser parser = new Parser();
-
-            startMap = parser.readGFAAsString(s, annotations);
+            startMap = parser.readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,7 +88,7 @@ public class Graph {
      * @return Boolean used for testing purposes.
      */
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
-    public Boolean addGraphComponents(Object ref, int depth) {
+    public Boolean addGraphComponents(ArrayList<String> ref, int depth) {
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
 
@@ -173,7 +168,7 @@ public class Graph {
      * @param depth the depth of the model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth) {
+    public Model generateModel(ArrayList<String> ref, int depth) {
         return generateModel(ref, depth, new Model());
     }
 
@@ -185,7 +180,7 @@ public class Graph {
      * @param toret a given model
      * @return the new model
      */
-    public Model generateModel(Object ref, int depth, Model toret) {
+    public Model generateModel(ArrayList<String> ref, int depth, Model toret) {
         //Apply the levelMaps and annotations
         toret.setLevelMaps(levelMaps);
         toret.setAnnotations(annotations);
@@ -201,12 +196,14 @@ public class Graph {
         } else { // Draw all nodes.
             //Create a new genome list.
             toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), CellType.RECTANGLE);
+                    root.getNucleotides(), root.getType());
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
             for (int i = 1; i < nodeIds; i++) {
                 Node from = nodeMap.get(i);
-                if (from == null) { continue; }
+                if (from == null) {
+                    continue;
+                }
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
                     to.getGenomes().stream().filter(s -> !genomes.contains(s)).
@@ -226,15 +223,16 @@ public class Graph {
      * Draws the selected genomes.
      *
      * @param nodeMap map of nodes.
-     * @param root Root of the graph.
-     * @param toret A given model.
-     * @param ref Reference object.
+     * @param root    Root of the graph.
+     * @param toret   A given model.
+     * @param ref     Reference object.
      */
     private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
-                                                 Model toret, Object ref) {
+                                                  Model toret, ArrayList<String> ref) {
         if (intersection(root.getGenomes(), currentGenomes) > 0) {
             toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), CellType.RECTANGLE); }
+                    root.getNucleotides(), CellType.RECTANGLE);
+        }
 
         // In this case we know that the genomes in the graph are only this ones.
         genomes = currentGenomes;
@@ -243,7 +241,9 @@ public class Graph {
         // want to draw.
         for (int i = 1; i < nodeIds; i++) {
             Node from = nodeMap.get(i);
-            if (from == null) { continue; }
+            if (from == null) {
+                continue;
+            }
             if (intersection(from.getGenomes(), currentGenomes) > 0) {
                 for (int j : from.getLinks(nodeMap)) {
                     Node to = nodeMap.get(j);
@@ -255,6 +255,7 @@ public class Graph {
             }
         }
     }
+
     /**
      * Method to add a new Cell to the graph
      *
@@ -266,7 +267,7 @@ public class Graph {
      * @param from    cell we are coming from
      */
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
-                        Object ref, Node to, Node from) {
+                        ArrayList<String> ref, Node to, Node from) {
         //Add next cell
         int maxEdgeWidth = 10;
         CellType type = nodeMap.get(j).getType();
@@ -276,28 +277,45 @@ public class Graph {
                     CellType.RECTANGLE);
         } else if (type == CellType.BUBBLE) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()),
+                    to.getBubbleText(),
                     to.getNucleotides(), CellType.BUBBLE);
         } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
-                    Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
+                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.INDEL);
         } else if (type == CellType.COLLECTION) {
-            toret.addCell(to.getId(), Integer.toString(to.getCollapseLevel()), to.getNucleotides(),
+            toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
+        } else if (type == CellType.COMPLEX) {
+            toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
+                    CellType.COMPLEX);
         }
 
-        if (to.getGenomes().contains(ref) && from.getGenomes().contains(ref)) {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
+        int width = (int) Math.round(maxEdgeWidth
+                * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                intersectingStrings(to.getGenomes(), genomes))
+                / (double) Math.max(genomes.size(), 10))) + 1;
+
+        ifStatement:
+        if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
+            boolean edgePlaced = false;
+            for (int child : from.getLinks()) {
+                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
+                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0
+                        && ref.size() < 2) {
+                    toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                    if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
+                        toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                    }
+                    edgePlaced = true;
+                }
+            }
+            if (edgePlaced) {
+                break ifStatement;
+            }
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+
         } else {
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
             toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
         }
     }
@@ -331,7 +349,25 @@ public class Graph {
     }
 
     /**
+     * Method to get number of intersecting ints in a list.
+     *
+     * @param l1 first list.
+     * @param l2 second list.
+     * @return number of intersecting elements.
+     */
+    public int intersectionInt(List<Integer> l1, List<Integer> l2) {
+        int i = 0;
+        for (Integer s : l1) {
+            if (l2.contains(s)) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    /**
      * Method that returns a list of strings present in both lists.
+     *
      * @param l1 first list
      * @param l2 second list
      * @return result
@@ -414,7 +450,7 @@ public class Graph {
      *
      * @return the current highlighted strain.
      */
-    public Object getCurrentRef() {
+    public ArrayList<String> getCurrentRef() {
         return currentRef;
     }
 
@@ -436,6 +472,27 @@ public class Graph {
         this.levelMaps = levelMaps;
     }
 
+    /**
+     * Get the annotations.
+     *
+     * @return The annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * Sets the annotations.
+     *
+     * @param annotations The annotations
+     */
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+
+        zoomIn.setAnnotations(annotations);
+        current.setAnnotations(annotations);
+        zoomOut.setAnnotations(annotations);
+    }
 
     /**
      * Method to reset the current view.
@@ -451,5 +508,65 @@ public class Graph {
      */
     public double getMaxWidth() {
         return current.getMaxWidth();
+    }
+
+    /**
+     * Method to return a model with all nodes within the view.
+     *
+     * @param min left side of the view.
+     * @param max right side of the view.
+     * @return the model.
+     */
+    public Model getModelAddedInView(int min, int max) {
+        Model m = new Model();
+
+        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+                .forEach(m::addCell);
+
+        this.getModel().getAddedEdges().stream().filter(e -> !(
+                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
+                .forEach(m::addEdge);
+
+        return addFirstAndLast(m);
+    }
+
+    /**
+     * Method to return a model with all nodes within the view.
+     *
+     * @param min left side of the view.
+     * @param max right side of the view.
+     * @return the model.
+     */
+    public Model getModelAllInView(int min, int max) {
+        Model m = new Model();
+
+        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+                .forEach(m::addCell);
+
+        this.getModel().getAllEdges().stream().filter(e -> !(
+                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
+
+        return addFirstAndLast(m);
+    }
+
+    /**
+     * Adds the leftmost and rightmost cell to the Model.
+     *
+     * @param m the Model to add cells to.
+     * @return the new Model.
+     */
+    private Model addFirstAndLast(Model m) {
+        if (current.getRightMost() != null) {
+            if (!(m.getAllCells().contains(getModel().getLeftMost()))) {
+                m.addCell(getModel().getLeftMost());
+            }
+
+            if (!m.getAllCells().contains(getModel().getRightMost())) {
+                m.addCell(getModel().getRightMost());
+            }
+        }
+        return m;
     }
 }

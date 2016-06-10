@@ -379,7 +379,7 @@ public class Filtering {
     private void filter() {
         selectedGenomes.clear();
         if (!filters.isEmpty()) {
-            MetaData.META_DATA.values().stream().filter(predicate).forEach(selectedGenomes::add);
+            MetaData.getMetadata().values().stream().filter(predicate).forEach(selectedGenomes::add);
         } else {
             selectedGenomes.clear();
         }

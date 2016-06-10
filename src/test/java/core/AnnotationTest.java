@@ -3,6 +3,8 @@ package core;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 /**
@@ -19,6 +21,7 @@ public class AnnotationTest {
     @Before
     public void setUp() {
         a = new Annotation();
+        a.setStart(1);
     }
 
     /**
@@ -129,4 +132,57 @@ public class AnnotationTest {
         assertEquals("h", a.getDisplayNameAttr());
     }
 
+    /**
+     * Tests the getSpannedNodes method.
+     */
+    @Test
+    public void testGetSpannedNodes() {
+        assertEquals(0, a.getSpannedNodes().size());
+
+        a.addSpannedNode(new Node(1, "", 1));
+        a.addSpannedNode(new Node(2, "", 2));
+
+        assertEquals(2, a.getSpannedNodes().size());
+    }
+
+    /**
+     * Tests the compareTo method.
+     */
+    @Test
+    public void testCompareTo() {
+        Annotation b = new Annotation();
+
+        b.setStart(0);
+        assertEquals(1, a.compareTo(b));
+
+        b.setStart(1);
+        assertEquals(1, a.compareTo(b));
+
+        b.setStart(2);
+        assertEquals(-1, a.compareTo(b));
+    }
+
+    /**
+     * Tests the detNodesSpannedByAnnotation method.
+     */
+    @Test
+    public void testDetNodesSpannedByAnnotation() {
+        Node n1 = new Node(1, "abc", 1);
+        Node n2 = new Node(2, "def", 4);
+        Node n3 = new Node(2, "xyz", 20);
+
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(0, n1);
+        nodeMap.put(1, n2);
+        nodeMap.put(2, n3);
+        nodeMap.put(3, null);
+
+        Annotation ann = new Annotation();
+        ann.setStart(2);
+        ann.setEnd(5);
+
+        assertEquals(0, ann.getSpannedNodes().size());
+        ann.detNodesSpannedByAnnotation(0, nodeMap, nodeMap.size());
+        assertEquals(2, ann.getSpannedNodes().size());
+    }
 }

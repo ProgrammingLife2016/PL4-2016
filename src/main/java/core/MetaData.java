@@ -4,7 +4,7 @@ import core.genome.Genome;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.TreeMap;
 
 /**
@@ -15,22 +15,40 @@ import java.util.TreeMap;
  * @since 23-05-2016.
  */
 public final class MetaData {
-    public static final TreeMap<String, Genome> META_DATA = parse();
+    public static String fileName = null;
+    private static TreeMap<String, Genome> metadata = new TreeMap<>();
 
     private MetaData() {
-        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Reads a meta data file from disk.
+     *
+     * @param path The path to the meta data file.
+     */
+    public static void readMetadataFromFile(String path) {
+        if (path != null && new File(path).exists()) {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(path);
+                metadata = parse(fileInputStream);
+                fileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
      * Parses MetaData into a Treemap.
      *
+     * @param stream an InputStream to read the xlsx sheet from.
      * @return a TreeMap with genomes sorted on their name.
      */
     @SuppressWarnings({"checkstyle:linelength", "checkstyle:methodlength"})
-    private static TreeMap<String, Genome> parse() {
+    public static TreeMap<String, Genome> parse(InputStream stream) {
         TreeMap<String, Genome> metaMap = new TreeMap<>();
+
         try {
-            InputStream stream = MetaData.class.getResourceAsStream("/metadata.xlsx");
             XSSFWorkbook book = new XSSFWorkbook(stream);
             XSSFSheet sheet = book.getSheetAt(0);
 
@@ -147,5 +165,15 @@ public final class MetaData {
         } else {
             return Integer.parseInt(s.replace("LIN ", ""));
         }
+    }
+
+
+    /**
+     * Gets the meta data.
+     *
+     * @return The meta data.
+     */
+    public static TreeMap<String, Genome> getMetadata() {
+        return metadata;
     }
 }

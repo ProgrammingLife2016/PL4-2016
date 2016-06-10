@@ -107,7 +107,7 @@ public class GraphReducerTest {
         nodeMap.get(2).addLink(3);
 
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
+        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1), 0));
 
         assertEquals(1, nodeMap.get(1).getLinks(nodeMap).size());
         assertEquals(nodeMap.get(3).getId(), (int) nodeMap.get(1).getLinks(nodeMap).get(0));
@@ -133,7 +133,7 @@ public class GraphReducerTest {
 
         // Collapse the bubble
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0));
 
         assertEquals(1, nodeMap.get(1).getLinks(nodeMap).size());
         assertEquals(2, (int) nodeMap.get(1).getLinks(nodeMap).get(0));
@@ -161,7 +161,7 @@ public class GraphReducerTest {
 
         // Collapse the bubble
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2)));
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2), 0));
         assertEquals(nodeMap.get(2).getLinks(nodeMap), new ArrayList<>(Arrays.asList(3)));
         assertEquals(nodeMap.get(5).getParents(), new ArrayList<>(Arrays.asList(3, 6)));
     }
@@ -178,7 +178,7 @@ public class GraphReducerTest {
             for (int i = 1; i <= 4; i++) {
                 HashMap<Integer, Node> nodeMap = createNodeMap(4);
                 nodeMap.get(i).setType(type);
-                nodeMap.get(i).setCollapseLevel(1);
+                nodeMap.get(i).setCollapseLevel("1");
 
                 nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 3)));
                 nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(4)));
@@ -186,9 +186,8 @@ public class GraphReducerTest {
 
                 // Collapse the bubble
                 GraphReducer.determineParents(nodeMap);
-                assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
+                assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0));
                 assertEquals(1, nodeMap.get(1).getCollapseLevel());
-                assertEquals(2, nodeMap.get(2).getCollapseLevel());
                 assertEquals(1, nodeMap.get(4).getCollapseLevel());
 
                 assertNull(nodeMap.get(3));
@@ -201,13 +200,8 @@ public class GraphReducerTest {
     }
 
     /**
-<<<<<<< HEAD
-     * Test whether the genomes that are in the deletion
-     * edge are added to the indel node when collapsed.
-=======
      * Test whether the genomes that are in the deletion edge
      * are added to the indel node when collapsed.
->>>>>>> master
      */
     @Test
     public void testGenomesInIndel() {
@@ -307,7 +301,7 @@ public class GraphReducerTest {
                 Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
 
         GraphReducer.determineParents(nodeMap);
-        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
+        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0);
 
         assertEquals(nodeMap.get(5).getGenomes(),
                 new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
@@ -385,30 +379,6 @@ public class GraphReducerTest {
         assertNotNull(nodeMap.get(3));
         assertEquals(1, nodeMap.get(4).getParents(nodeMap).size());
         assertEquals(1, nodeMap.get(5).getParents(nodeMap).size());
-    }
-
-    /**
-     * Test the createLevelMaps method with superposed bubbles
-     */
-    @Test
-    public void testCreateLevelMapsWithSuperposedBubbles() {
-        HashMap<Integer, Node> nodeMap = createNodeMap(7);
-        nodeMap.get(1).setLinks(new ArrayList<>(Arrays.asList(2, 6)));
-        nodeMap.get(2).setLinks(new ArrayList<>(Arrays.asList(3, 4)));
-        nodeMap.get(3).setLinks(new ArrayList<>(Arrays.asList(5)));
-        nodeMap.get(4).setLinks(new ArrayList<>(Arrays.asList(5)));
-
-        nodeMap.get(5).setLinks(new ArrayList<>(Arrays.asList(7)));
-        nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
-
-        GraphReducer.setLevelMaps(new ArrayList<>());
-        List<HashMap<Integer, Node>> levelMaps = GraphReducer.createLevelMaps(nodeMap, 0);
-
-        assertNull(levelMaps.get(1).get(4));
-        assertNull(levelMaps.get(2).get(3));
-        assertNull(levelMaps.get(3).get(5));
-
-        assertNotNull(levelMaps.get(3).get(1));
     }
 
 }

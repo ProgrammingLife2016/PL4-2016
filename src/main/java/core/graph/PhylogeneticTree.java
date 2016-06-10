@@ -19,6 +19,8 @@ public class PhylogeneticTree {
 
     /**
      * Class constructor.
+     *
+     * @param s The name of the tree.
      */
     public PhylogeneticTree(String s) {
         this.model = new Model();
@@ -35,6 +37,7 @@ public class PhylogeneticTree {
     public PhylogeneticTree(Model model) {
         this.model = model;
     }
+
     /**
      * Get the model of the PhylogeneticTree.
      *
@@ -56,15 +59,33 @@ public class PhylogeneticTree {
     /**
      * Set-up the tree model from a Newick data file.
      *
+     * @param s The name of the tree.
      * @return A Newick tree.
      */
     @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
     public Tree getTreeFromFile(String s) {
-        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(s);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader r = new BufferedReader(new InputStreamReader(fileInputStream));
         TreeParser tp = new TreeParser(r);
 
-        return tp.tokenize("340tree.rooted.TKK");
+        char[] x = s.toCharArray();
+        StringBuffer buf = new StringBuffer();
+        for (int i = s.length(); i > 0; i--) {
+            if (!(x[i - 1] == '\\')) {
+                buf.append(x[i - 1]);
+            } else {
+                break;
+            }
+        }
+
+        String f = new StringBuilder(buf.toString()).reverse().toString();
+        return tp.tokenize(f);
     }
 
     /**

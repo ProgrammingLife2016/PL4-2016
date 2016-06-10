@@ -2,12 +2,9 @@ package core;
 
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
+import application.fxobjects.cell.graph.*;
 import application.fxobjects.cell.layout.GraphLayout;
 import application.fxobjects.cell.tree.LeafCell;
-import application.fxobjects.cell.graph.RectangleCell;
 
 import application.fxobjects.cell.tree.MiddleCell;
 import core.graph.cell.CellType;
@@ -53,6 +50,14 @@ public class Model {
         clear();
     }
 
+    /**
+     * Match the nodes in levelMap 0 to the annotation data.
+     */
+    public void matchNodesAndAnnotations() {
+        if (levelMaps.size() > 0) {
+            new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
+        }
+    }
     /**
      * Remove all cells and edges.
      */
@@ -182,10 +187,10 @@ public class Model {
     /**
      * Method to add a Cell (Node).
      *
-     * @param id   the id, which represents the sequence.
-     * @param text The text of a cell.
+     * @param id          the id, which represents the sequence.
+     * @param text        The text of a cell.
      * @param nucleotides The amount of nucleotides contained in this cell.
-     * @param type The type of cell.
+     * @param type        The type of cell.
      * @return True for testing purposes.
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
@@ -205,6 +210,10 @@ public class Model {
             case COLLECTION:
                 CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
+                break;
+            case COMPLEX:
+                ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
+                addCell(complexCell);
                 break;
             case TREELEAF:
                 LeafCell leafCell = new LeafCell(id, text);
@@ -234,7 +243,6 @@ public class Model {
 
             return true;
         }
-
         return false;
     }
 
@@ -364,5 +372,32 @@ public class Model {
      */
     public double getMaxWidth() {
         return graphLayout.getMaxWidth();
+    }
+
+    /**
+     * Method that adds an edge to the model.
+     *
+     * @param e the edge to add.
+     */
+    public void addEdge(Edge e) {
+        addedEdges.add(e);
+    }
+
+    /**
+     * getter for the leftmost cell.
+     *
+     * @return the leftmost cell.
+     */
+    public Cell getLeftMost() {
+        return getGraphLayout().getLeftMost();
+    }
+
+    /**
+     * getter for the rightmost cell.
+     *
+     * @return the rightmost cell.
+     */
+    public Cell getRightMost() {
+        return getGraphLayout().getRightMost();
     }
 }
