@@ -9,12 +9,19 @@ import java.util.function.Predicate;
 /**
  * Created by Arthur on 6/6/16.
  */
+@SuppressWarnings({
+        "checkstyle:methodlength",
+        "checkstyle:linelength"
+})
 public class Filtering {
     private List<Filter> filters;
     private List<Genome> selectedGenomes;
     private Predicate<Genome> predicate;
     private List<Predicate<Genome>> predicates;
 
+    /**
+     * Constructor for filtering.
+     */
     public Filtering() {
         this.filters = new ArrayList<>();
         this.selectedGenomes = new ArrayList<>();
@@ -22,6 +29,10 @@ public class Filtering {
         this.predicate = g -> true;
     }
 
+    /**
+     * Apply filters on the strains.
+     * @param f the filter to apply.
+     */
     public void applyFilter(Filter f) {
         filters.add(f);
         collectPredicates();
@@ -29,6 +40,10 @@ public class Filtering {
         filter();
     }
 
+    /**
+     * Remove a filter from the strains.
+     * @param f the filter to remove.
+     */
     public void removeFilter(Filter f) {
         filters.remove(f);
         collectPredicates();
@@ -36,18 +51,33 @@ public class Filtering {
         filter();
     }
 
+    /**
+     * Getter method for the applied filters.
+     * @return the applied filters in a list.
+     */
     public List<Filter> getFilters() {
         return filters;
     }
 
+    /**
+     * Check whether filters are applied.
+     * @return true or false.
+     */
     public boolean isFiltering() {
         return !filters.isEmpty();
     }
 
+    /**
+     * Return the selected genomes after filtering.
+     * @return a list of selected genomes.
+     */
     public List<Genome> getSelectedGenomes() {
         return selectedGenomes;
     }
 
+    /**
+     * Collect all predicates for filtering.
+     */
     private void collectPredicates() {
         predicates.clear();
 
@@ -343,6 +373,9 @@ public class Filtering {
         predicate = predicates.stream().reduce(p -> true, Predicate::and);
     }
 
+    /**
+     * Make a selection of strains with filters applied.
+     */
     private void filter() {
         selectedGenomes.clear();
         if (!filters.isEmpty()) {

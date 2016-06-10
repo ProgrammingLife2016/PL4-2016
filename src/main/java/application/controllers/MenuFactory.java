@@ -15,8 +15,8 @@ import static core.Filter.*;
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
-@SuppressFBWarnings({
-        "MS_PKGPROTECT",
+@SuppressFBWarnings("MS_PKGPROTECT")
+@SuppressWarnings({
         "checkstyle:methodlength",
         "checkstyle:linelength"
 })
