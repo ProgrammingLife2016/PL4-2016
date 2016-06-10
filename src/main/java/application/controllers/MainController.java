@@ -7,11 +7,16 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
 
@@ -64,10 +69,19 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFA = new LinkedList<>();
         this.mostRecentNWK = new LinkedList<>();
 
-        checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-        checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-        checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        if (!mostRecentGFA.isEmpty()) {
+            checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        }
+        if (!mostRecentGFF.isEmpty()) {
+            checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
+        if (!mostRecentMetadata.isEmpty()) {
+            checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
+        if (!mostRecentNWK.isEmpty()) {
+            checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        }
+
 
         createMenu(false);
 
