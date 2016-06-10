@@ -1,5 +1,7 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.*;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.File;
@@ -91,27 +93,55 @@ public class MenuFactory {
 
             final GridPane grid = new GridPane();
             grid.setVgap(10);
-            grid.setPadding(new Insets(10, 10, 10, 10));
+            grid.setPadding(new Insets(10, 20, 10, 10));
 
-            Text title = new Text("More Information");
+            Text title = new Text("   Highlighting");
             title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-            grid.add(title, 0, 0);
+            content.getChildren().add(title);
 
-            grid.add(new Text("-   The box in the top right shows a "
-                    + "list of strains present in the graph."), 0, 1);
-            grid.add(new Text("-   The box below that gives info on "
+            CollectionCell originallyFocusedCell = new CollectionCell(0, 1, "N");
+            originallyFocusedCell.originalFocus();
+            grid.add(originallyFocusedCell, 0, 1);
+            grid.add(new Text("   -    When you click a cell, it becomes highlighted like this.\n "
+                    + "This means you will keep focus on this node, until deselection or selection "
+                    + "of another node."), 1, 1);
+
+            RectangleCell node1 = new RectangleCell(0, 1);
+            node1.sideFocus();
+            grid.add(node1, 0, 2);
+            grid.add(new Text("   -    When zooming in on the originally focused node, nodes that \n"
+                    + "were previously collapsed under the selected node will light up."), 1, 2);
+
+            CollectionCell focusedCell = new CollectionCell(0, 1, "N");
+            focusedCell.focus();
+            grid.add(focusedCell, 0, 3);
+
+            grid.add(new Text("   -    When zooming out, your originally focused node may collapse. "
+                    + "The node that contains \n your originally focused node, will now be marked as the "
+                    + "new focus. Zooming in will bring you back to your originally focused node."), 1, 3);
+
+            Text moreInfo = new Text("   More Information");
+            moreInfo.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+            GridPane grid2 = new GridPane();
+            grid2.setVgap(10);
+            grid2.setPadding(new Insets(10, 10, 10, 10));
+            grid2.add(new Text("-   The box in the top right shows a "
+                    + "list of strains present in the graph."), 1, 0);
+            grid2.add(new Text("-   The box below that gives info on "
                     + "a selected node, like which strains\n"
                     + "the node is in, its sequence and "
-                    + "annotation information."), 0, 2);
-            grid.add(new Text(" "), 0, 3);
-            grid.add(new Text("-   The number inside a node indicates "
+                    + "annotation information."), 1, 1);
+            grid2.add(new Text(" "), 1, 2);
+            grid2.add(new Text("-   The number inside a node indicates "
                     + "how many other nodes are collapsed into it.\n"
                     + "The size of a node is based on the total sequence "
-                    + "length inside it."), 0, 4);
+                    + "length inside it."), 1, 3);
 
-            content.getChildren().add(grid);
 
-            Scene dialogScene = new Scene(content, 900, 500);
+            content.getChildren().addAll(grid, moreInfo, grid2);
+
+            Scene dialogScene = new Scene(content, 900, 600);
             dialog.setScene(dialogScene);
             dialog.show();
         });
