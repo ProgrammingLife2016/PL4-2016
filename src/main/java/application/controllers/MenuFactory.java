@@ -1,10 +1,5 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
-import application.fxobjects.cell.graph.RectangleCell;
-import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.File;
@@ -102,17 +97,17 @@ public class MenuFactory {
             title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
             grid.add(title, 0, 0);
 
-            grid.add(new Text("-   The box in the top right shows a " +
-                    "list of strains present in the graph."), 0, 1);
-            grid.add(new Text("-   The box below that gives info on " +
-                    "a selected node, like which strains\n" +
-                    "the node is in, its sequence and " +
-                    "annotation information."), 0, 2);
+            grid.add(new Text("-   The box in the top right shows a "
+                    + "list of strains present in the graph."), 0, 1);
+            grid.add(new Text("-   The box below that gives info on "
+                    + "a selected node, like which strains\n"
+                    + "the node is in, its sequence and "
+                    + "annotation information."), 0, 2);
             grid.add(new Text(" "), 0, 3);
-            grid.add(new Text("-   The number inside a node indicates " +
-                    "how many other nodes are collapsed into it.\n" +
-                    "The size of a node is based on the total sequence " +
-                    "length inside it."), 0, 4);
+            grid.add(new Text("-   The number inside a node indicates "
+                    + "how many other nodes are collapsed into it.\n"
+                    + "The size of a node is based on the total sequence "
+                    + "length inside it."), 0, 4);
 
             content.getChildren().add(grid);
 
@@ -125,9 +120,7 @@ public class MenuFactory {
     }
 
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Show Graph", null, event -> {
-            mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-        });
+        showGenomeSequence = initMenuItem("Show Graph", null, event -> mainController.fillGraph(new ArrayList<>(), new ArrayList<>()));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
@@ -320,20 +313,7 @@ public class MenuFactory {
         return newItem;
     }
 
-    private CheckMenuItem initCheckMenuItem(String title, KeyCombination combination,
-                                            EventHandler<ActionEvent> handler) {
-        CheckMenuItem newItem = new CheckMenuItem(title);
-        newItem.setAccelerator(combination);
-        newItem.setOnAction(handler);
-        return newItem;
-    }
-
     private void initLineageFilter() {
-        List<String> lineageExtensions = new ArrayList<>(Arrays.asList(
-                "1", "2", "3", "4", "5", "6", "7", "animal", "B", "CANETTI"));
-        List<Filter> linFilters = new ArrayList<>(Arrays.asList(
-                LIN1, LIN2, LIN3, LIN4, LIN5, LIN6, LIN7, LIN8, LIN9, LIN10));
-
         filterLineage = new Menu("Lineage");
         CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
         lin1.setOnAction(event ->
@@ -461,22 +441,22 @@ public class MenuFactory {
 
     private void initSpecimenFilter() {
         CheckMenuItem spec1 = new CheckMenuItem("blood");
-                spec1.setOnAction(event ->
+        spec1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(BLOOD, spec1.isSelected()));
         CheckMenuItem spec2 = new CheckMenuItem("CSF");
-                spec2.setOnAction(event ->
+        spec2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(CSF, spec2.isSelected()));
         CheckMenuItem spec3 = new CheckMenuItem("pleura");
-                spec3.setOnAction(event ->
+        spec3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PLEURA, spec3.isSelected()));
         CheckMenuItem spec4 = new CheckMenuItem("pleural fluid");
-                spec4.setOnAction(event ->
+        spec4.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PLEURAL_FLUID, spec4.isSelected()));
         CheckMenuItem spec5 = new CheckMenuItem("pus");
-                spec5.setOnAction(event ->
+        spec5.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PUS, spec5.isSelected()));
         CheckMenuItem spec6 = new CheckMenuItem("sputum");
-                spec6.setOnAction(event ->
+        spec6.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPUTUM, spec6.isSelected()));
 
         filterSpecimenType = initMenu("Specimen type", spec1, spec2, spec3, spec4, spec5, spec6);
@@ -484,10 +464,10 @@ public class MenuFactory {
 
     private void initIsolationFilter() {
         CheckMenuItem iso1 = new CheckMenuItem("single colony");
-                iso1.setOnAction(event ->
+        iso1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SINGLE_COLONY, iso1.isSelected()));
         CheckMenuItem iso2 = new CheckMenuItem("non-single colony");
-                iso2.setOnAction(event ->
+        iso2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(NON_SINGLE_COLONY, iso2.isSelected()));
 
         filterIsolation = initMenu("DNA isolation", iso1, iso2);
@@ -495,19 +475,19 @@ public class MenuFactory {
 
     private void initPhenoDSTfilter() {
         CheckMenuItem dst1 = new CheckMenuItem("MDR");
-                dst1.setOnAction(event ->
+        dst1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PHENO_MDR, dst1.isSelected()));
         CheckMenuItem dst2 = new CheckMenuItem("mono");
-                dst2.setOnAction(event ->
+        dst2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PHENO_MONO, dst2.isSelected()));
         CheckMenuItem dst3 = new CheckMenuItem("poly");
-                dst3.setOnAction(event ->
+        dst3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PHENO_POLY, dst3.isSelected()));
         CheckMenuItem dst4 = new CheckMenuItem("susceptible");
-                dst4.setOnAction(event ->
+        dst4.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PHENO_SUSCEPTIBLE, dst4.isSelected()));
         CheckMenuItem dst5 = new CheckMenuItem("XDR");
-                dst5.setOnAction(event ->
+        dst5.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PHENO_XDR, dst5.isSelected()));
 
         filterPhenoDST = initMenu("Phenotypic DST", dst1, dst2, dst3, dst4, dst5);
@@ -515,13 +495,13 @@ public class MenuFactory {
 
     private void initCapreomycinFilter() {
         CheckMenuItem cap1 = new CheckMenuItem("R");
-                cap1.setOnAction(event ->
+        cap1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(CAPREOMYCIN_R, cap1.isSelected()));
         CheckMenuItem cap2 = new CheckMenuItem("S");
-                cap2.setOnAction(event ->
+        cap2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(CAPREOMYCIN_S, cap2.isSelected()));
         CheckMenuItem cap3 = new CheckMenuItem("U");
-                cap3.setOnAction(event ->
+        cap3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(CAPREOMYCIN_U, cap3.isSelected()));
 
         filterCapreomycin = initMenu("Capreomycin", cap1, cap2, cap3);
@@ -529,13 +509,13 @@ public class MenuFactory {
 
     private void initEthambutolFilter() {
         CheckMenuItem eth1 = new CheckMenuItem("R");
-                eth1.setOnAction(event ->
+        eth1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHAMBUTOL_R, eth1.isSelected()));
         CheckMenuItem eth2 = new CheckMenuItem("S");
-                eth2.setOnAction(event ->
+        eth2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHAMBUTOL_S, eth2.isSelected()));
         CheckMenuItem eth3 = new CheckMenuItem("U");
-                eth3.setOnAction(event ->
+        eth3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHAMBUTOL_R, eth3.isSelected()));
 
         filterEthambutol = initMenu("Ethambutol", eth1, eth2, eth3);
@@ -543,13 +523,13 @@ public class MenuFactory {
 
     private void initEthionamideFilter() {
         CheckMenuItem eth1 = new CheckMenuItem("R");
-                eth1.setOnAction(event ->
+        eth1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHIONAMIDE_R, eth1.isSelected()));
         CheckMenuItem eth2 = new CheckMenuItem("S");
-                eth2.setOnAction(event ->
+        eth2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHIONAMIDE_S, eth2.isSelected()));
         CheckMenuItem eth3 = new CheckMenuItem("U");
-                eth3.setOnAction(event ->
+        eth3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ETHIONAMIDE_U, eth3.isSelected()));
 
         filterEthionAmide = initMenu("Ethionamide", eth1, eth2, eth3);
@@ -557,13 +537,13 @@ public class MenuFactory {
 
     private void initIsoniazidFilter() {
         CheckMenuItem iso1 = new CheckMenuItem("R");
-                iso1.setOnAction(event ->
-                        mainController.getTreeController().modifyFilter(ISONIAZID_R, iso1.isSelected()));
+        iso1.setOnAction(event ->
+                mainController.getTreeController().modifyFilter(ISONIAZID_R, iso1.isSelected()));
         CheckMenuItem iso2 = new CheckMenuItem("S");
-                iso2.setOnAction(event ->
+        iso2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ISONIAZID_S, iso2.isSelected()));
         CheckMenuItem iso3 = new CheckMenuItem("U");
-                iso3.setOnAction(event ->
+        iso3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(ISONIAZID_U, iso3.isSelected()));
 
         filterIsoniazid = initMenu("Isoniazid", iso1, iso2, iso3);
@@ -571,13 +551,13 @@ public class MenuFactory {
 
     private void initKanamycinFilter() {
         CheckMenuItem kan1 = new CheckMenuItem("R");
-                kan1.setOnAction(event ->
+        kan1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(KANAMYCIN_R, kan1.isSelected()));
         CheckMenuItem kan2 = new CheckMenuItem("S");
-                kan2.setOnAction(event ->
+        kan2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(KANAMYCIN_S, kan2.isSelected()));
         CheckMenuItem kan3 = new CheckMenuItem("U");
-                kan3.setOnAction(event ->
+        kan3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(KANAMYCIN_U, kan3.isSelected()));
 
         filterKanamycin = initMenu("Kanamycin", kan1, kan2, kan3);
@@ -585,13 +565,13 @@ public class MenuFactory {
 
     private void initPyrazinamideFilter() {
         CheckMenuItem pyr1 = new CheckMenuItem("R");
-                pyr1.setOnAction(event ->
+        pyr1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PYRAZINAMIDE_R, pyr1.isSelected()));
         CheckMenuItem pyr2 = new CheckMenuItem("S");
-                pyr2.setOnAction(event ->
+        pyr2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PYRAZINAMIDE_S, pyr2.isSelected()));
         CheckMenuItem pyr3 = new CheckMenuItem("U");
-                pyr3.setOnAction(event ->
+        pyr3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(PYRAZINAMIDE_U, pyr3.isSelected()));
 
         filterPyrazinamide = initMenu("Pyrazinamide", pyr1, pyr2, pyr3);
@@ -599,13 +579,13 @@ public class MenuFactory {
 
     private void initOfloxacinFilter() {
         CheckMenuItem ofl1 = new CheckMenuItem("R");
-                ofl1.setOnAction(event ->
+        ofl1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(OFLOXACIN_R, ofl1.isSelected()));
         CheckMenuItem ofl2 = new CheckMenuItem("S");
-                ofl2.setOnAction(event ->
+        ofl2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(OFLOXACIN_S, ofl2.isSelected()));
         CheckMenuItem ofl3 = new CheckMenuItem("U");
-                ofl3.setOnAction(event ->
+        ofl3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(OFLOXACIN_U, ofl3.isSelected()));
 
         filterOfloxacin = initMenu("Ofloxacin", ofl1, ofl2, ofl3);
@@ -613,13 +593,13 @@ public class MenuFactory {
 
     private void initRifampinFilter() {
         CheckMenuItem rif1 = new CheckMenuItem("R");
-                rif1.setOnAction(event ->
+        rif1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(RIFAMPIN_R, rif1.isSelected()));
         CheckMenuItem rif2 = new CheckMenuItem("S");
-                rif2.setOnAction(event ->
+        rif2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(RIFAMPIN_S, rif2.isSelected()));
         CheckMenuItem rif3 = new CheckMenuItem("U");
-                rif3.setOnAction(event ->
+        rif3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(RIFAMPIN_U, rif3.isSelected()));
 
         filterRifampin = initMenu("Rifampin", rif1, rif2, rif3);
@@ -627,13 +607,13 @@ public class MenuFactory {
 
     private void initStreptomycinFilter() {
         CheckMenuItem str1 = new CheckMenuItem("R");
-                str1.setOnAction(event ->
-                        mainController.getTreeController().modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
+        str1.setOnAction(event ->
+                mainController.getTreeController().modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
         CheckMenuItem str2 = new CheckMenuItem("S");
-                str2.setOnAction(event ->
+        str2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(STREPTOMYCIN_S, str2.isSelected()));
         CheckMenuItem str3 = new CheckMenuItem("U");
-                str3.setOnAction(event ->
+        str3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(STREPTOMYCIN_U, str3.isSelected()));
 
         filterStreptomycin = initMenu("Streptomycin", str1, str2, str3);
@@ -641,64 +621,64 @@ public class MenuFactory {
 
     private void initSpoligotypeFilter() {
         CheckMenuItem spo1 = new CheckMenuItem("Bejing");
-                spo1.setOnAction(event ->
+        spo1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_BEJING, spo1.isSelected()));
         CheckMenuItem spo2 = new CheckMenuItem("CAS");
-                spo2.setOnAction(event ->
+        spo2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_CAS, spo2.isSelected()));
         CheckMenuItem spo3 = new CheckMenuItem("CAS1-Delhi");
-                spo3.setOnAction(event ->
+        spo3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_CAS1_DELHI, spo3.isSelected()));
         CheckMenuItem spo4 = new CheckMenuItem("CAS1-Kili");
-                spo4.setOnAction(event ->
+        spo4.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_CAS1_KILI, spo4.isSelected()));
         CheckMenuItem spo5 = new CheckMenuItem("EAI1-SOM");
-                spo5.setOnAction(event ->
+        spo5.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_EAI1_SOM, spo5.isSelected()));
         CheckMenuItem spo6 = new CheckMenuItem("H1");
-                spo6.setOnAction(event ->
+        spo6.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_H1, spo6.isSelected()));
         CheckMenuItem spo7 = new CheckMenuItem("H37Rv");
-                spo7.setOnAction(event ->
+        spo7.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_H37RV, spo7.isSelected()));
         CheckMenuItem spo8 = new CheckMenuItem("LAM11-ZWE");
-                spo8.setOnAction(event ->
+        spo8.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM11_ZWE, spo8.isSelected()));
         CheckMenuItem spo9 = new CheckMenuItem("LAM3");
-                spo9.setOnAction(event ->
+        spo9.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM3, spo9.isSelected()));
         CheckMenuItem spo11 = new CheckMenuItem("LAM4");
-                spo11.setOnAction(event ->
+        spo11.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM4, spo11.isSelected()));
         CheckMenuItem spo12 = new CheckMenuItem("LAM5");
-                spo12.setOnAction(event ->
+        spo12.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM5, spo12.isSelected()));
         CheckMenuItem spo13 = new CheckMenuItem("LAM6");
-                spo13.setOnAction(event ->
+        spo13.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM6, spo13.isSelected()));
         CheckMenuItem spo14 = new CheckMenuItem("LAM9");
-                spo14.setOnAction(event ->
+        spo14.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM9, spo14.isSelected()));
         CheckMenuItem spo15 = new CheckMenuItem("S");
-                spo15.setOnAction(event ->
+        spo15.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_S, spo15.isSelected()));
         CheckMenuItem spo16 = new CheckMenuItem("T1");
-                spo16.setOnAction(event ->
+        spo16.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T1, spo16.isSelected()));
         CheckMenuItem spo17 = new CheckMenuItem("T2");
-                spo17.setOnAction(event ->
+        spo17.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T2, spo17.isSelected()));
         CheckMenuItem spo18 = new CheckMenuItem("T3");
-                spo18.setOnAction(event ->
+        spo18.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T3, spo18.isSelected()));
         CheckMenuItem spo19 = new CheckMenuItem("T5-RUS1");
-                spo19.setOnAction(event ->
+        spo19.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T5_RUS1, spo19.isSelected()));
         CheckMenuItem spo20 = new CheckMenuItem("X2");
-                spo20.setOnAction(event ->
+        spo20.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X2, spo20.isSelected()));
         CheckMenuItem spo21 = new CheckMenuItem("X3");
-                spo21.setOnAction(event ->
+        spo21.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X3, spo21.isSelected()));
 
         filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5,
@@ -710,16 +690,16 @@ public class MenuFactory {
 
     private void initGenoDSTFilter() {
         CheckMenuItem gen1 = new CheckMenuItem("Drug-resistant (other)");
-                gen1.setOnAction(event ->
+        gen1.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(GENO_DRUG_RESIST, gen1.isSelected()));
         CheckMenuItem gen2 = new CheckMenuItem("MDR");
-                gen2.setOnAction(event ->
+        gen2.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(GENO_MDR, gen2.isSelected()));
         CheckMenuItem gen3 = new CheckMenuItem("susceptible");
-                gen3.setOnAction(event ->
+        gen3.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(GENO_SUSCEPTIBLE, gen3.isSelected()));
         CheckMenuItem gen4 = new CheckMenuItem("XDR");
-                gen4.setOnAction(event ->
+        gen4.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(GENO_XDR, gen4.isSelected()));
 
         filterGenoDST = initMenu("Genotypic DST", gen1, gen2, gen3, gen4);

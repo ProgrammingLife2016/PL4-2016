@@ -62,7 +62,7 @@ public class PhylogeneticTree {
      * @param s The name of the tree.
      * @return A Newick tree.
      */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
+    @SuppressFBWarnings()
     public Tree getTreeFromFile(String s) {
         FileInputStream fileInputStream = null;
         try {

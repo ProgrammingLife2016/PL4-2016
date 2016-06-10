@@ -1,5 +1,6 @@
 package application.controllers;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
@@ -92,6 +93,7 @@ public final class WindowFactory {
      * @param parentDir    the current Directory
      * @param selectedFile the selected File
      */
+    @SuppressFBWarnings
     public static void createGFApopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {
@@ -159,6 +161,7 @@ public final class WindowFactory {
      * @param parentDir    the current Directory we're at
      * @param selectedFile the selected File
      */
+    @SuppressFBWarnings
     public static void createNWKpopup(File parentDir, File selectedFile) {
         ArrayList<Text> candidates = new ArrayList<>();
         if (parentDir.isDirectory()) {

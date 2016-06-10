@@ -463,7 +463,8 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Modify the filters applied to the tree.
-     * @param f Filter type.
+     *
+     * @param f     Filter type.
      * @param state true or false state.
      */
     public void modifyFilter(Filter f, boolean state) {

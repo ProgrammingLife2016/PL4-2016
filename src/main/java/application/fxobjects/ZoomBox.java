@@ -1,6 +1,7 @@
 package application.fxobjects;
 
 import application.controllers.GraphController;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
@@ -85,6 +86,7 @@ public class ZoomBox extends ScrollPane {
      *
      * @param snap boolean to indicate if we need to refresh the snapshot
      */
+    @SuppressFBWarnings
     public void fillZoomBox(boolean snap) {
         Image snapshot = graphController.takeSnapshot();
         if (snap) {

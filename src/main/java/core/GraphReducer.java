@@ -72,7 +72,7 @@ public final class GraphReducer {
                     HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
                     int previousMapSize2 = levelMaps.get(j - 1).size();
                     int currentMapSize2 = levelMap2.size();
-                    if ((previousMapSize2 - currentMapSize2) == 0) {
+                    if (previousMapSize2 - currentMapSize2 == 0) {
                         levelMaps.set(j - 1, levelMap2);
                         maxDepth += 5;
                         j--;
@@ -92,7 +92,7 @@ public final class GraphReducer {
      *
      * @param map       A HashMap containing all nodes in the graph.
      * @param zoomLevel The current zoomLevel
-     * @param maxDepth The maximumDepth allowed for a complexNode
+     * @param maxDepth  The maximumDepth allowed for a complexNode
      * @return A collapsed map.
      */
     public static HashMap<Integer, Node> secondStageCollapse(HashMap<Integer, Node> map, int zoomLevel, int maxDepth) {
@@ -113,7 +113,6 @@ public final class GraphReducer {
                 collapseIndel(nodeMap, parent);
             }
         }
-
 
 
         return nodeMap;
@@ -183,9 +182,9 @@ public final class GraphReducer {
      * traversing the nodes in BFS manner, while also making sure every path
      * leads to the same final node.
      *
-     * @param nodeMap A HashMap containing all nodes in the graph.
-     * @param parent  A given parent node to be collapsed with its child.
-     * @param zoomLevel the zoom level of the previous levelMap.
+     * @param nodeMap       A HashMap containing all nodes in the graph.
+     * @param parent        A given parent node to be collapsed with its child.
+     * @param zoomLevel     the zoom level of the previous levelMap.
      * @param maxComplexity The maximum allowed number of nodes that should be collapsed.
      * @return Whether the complex collapse action has succeeded.
      */
@@ -255,8 +254,8 @@ public final class GraphReducer {
     /**
      * Collapse a parent and its child horizontally.
      *
-     * @param nodeMap A HashMap containing all nodes in the graph.
-     * @param parent  A given parent node to be collapsed with its child.
+     * @param nodeMap   A HashMap containing all nodes in the graph.
+     * @param parent    A given parent node to be collapsed with its child.
      * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether the horizontal collapse action has succeeded.
      */
@@ -367,8 +366,8 @@ public final class GraphReducer {
     /**
      * Collapse a complex bubble
      *
-     * @param nodeMap the nodeMap were currently at
-     * @param parent  the parent of the to collapse bubble
+     * @param nodeMap   the nodeMap were currently at
+     * @param parent    the parent of the to collapse bubble
      * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether nodes have been collapsed.
      */
@@ -422,8 +421,9 @@ public final class GraphReducer {
 
     /**
      * General method to collapse a node into another node
-     * @param parent The node that will be retained
-     * @param child The node that will be collapsed
+     *
+     * @param parent    The node that will be retained
+     * @param child     The node that will be collapsed
      * @param zoomLevel The previous zoom level
      */
     public static void collapseNodeIntoParent(Node parent, Node child, int zoomLevel) {
