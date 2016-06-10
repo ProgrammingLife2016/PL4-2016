@@ -1,5 +1,9 @@
 package application.controllers;
 
+import application.fxobjects.cell.graph.BubbleCell;
+import application.fxobjects.cell.graph.CollectionCell;
+import application.fxobjects.cell.graph.IndelCell;
+import application.fxobjects.cell.graph.RectangleCell;
 import core.Filter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -11,10 +15,19 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import static core.Filter.*;
 import static java.lang.String.format;
@@ -70,7 +83,40 @@ public class MenuFactory {
     }
 
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("Shortcuts", new KeyCodeCombination(KeyCode.TAB), null);
+        shortcuts = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            LegendFactory legendFactory = new LegendFactory();
+            VBox content = new VBox();
+            content.getChildren().add(legendFactory.createLegend());
+
+            final GridPane grid = new GridPane();
+            grid.setVgap(10);
+            grid.setPadding(new Insets(10, 10, 10, 10));
+
+            Text title = new Text("More Information");
+            title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+            grid.add(title, 0, 0);
+
+            grid.add(new Text("-   The box in the top right shows a " +
+                    "list of strains present in the graph."), 0, 1);
+            grid.add(new Text("-   The box below that gives info on " +
+                    "a selected node, like which strains\n" +
+                    "the node is in, its sequence and " +
+                    "annotation information."), 0, 2);
+            grid.add(new Text(" "), 0, 3);
+            grid.add(new Text("-   The number inside a node indicates " +
+                    "how many other nodes are collapsed into it.\n" +
+                    "The size of a node is based on the total sequence " +
+                    "length inside it."), 0, 4);
+
+            content.getChildren().add(grid);
+
+            Scene dialogScene = new Scene(content, 900, 500);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        });
 
         return initMenu("Help", shortcuts);
     }
@@ -124,7 +170,7 @@ public class MenuFactory {
                     WindowFactory.createMetadataChooser();
                 });
         loadGenome = initMenuItem("Load Genome Sequence",
-                new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN),
+                new KeyCodeCombination(KeyCode.G, KeyCodeCombination.CONTROL_DOWN),
                 t -> {
                     WindowFactory.createGraphChooser();
                 });
