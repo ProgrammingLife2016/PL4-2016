@@ -287,7 +287,6 @@ public class GraphController extends Controller<ScrollPane> {
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && ( ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
-            //System.out.println("Redraw all: " + depth);
 
             root.getChildren().clear();
 
@@ -330,7 +329,6 @@ public class GraphController extends Controller<ScrollPane> {
         } else {
             //if(hValue != lastDrawnHValue) {
             //lastDrawnHValue = hValue;
-            //System.out.println("New elements: " + depth);
             addToPane(min, max);
         }
         graph.endUpdate();
