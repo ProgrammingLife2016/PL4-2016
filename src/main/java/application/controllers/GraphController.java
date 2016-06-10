@@ -270,14 +270,12 @@ public class GraphController extends Controller<ScrollPane> {
      * @param depth the depth to draw.
      */
     public void update(ArrayList<String> ref, int depth, double hValue) {
-
-
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
         
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
-                && (!(ref.equals(graph.getCurrentRef())) || depth != graph.getCurrentInt())) {
+                && ( ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
             //System.out.println("Redraw all: " + depth);
 
             root.getChildren().clear();
