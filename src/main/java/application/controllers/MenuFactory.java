@@ -1,10 +1,9 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.BubbleCell;
-import application.fxobjects.cell.graph.CollectionCell;
-import application.fxobjects.cell.graph.IndelCell;
-import application.fxobjects.cell.graph.RectangleCell;
+import application.fxobjects.cell.Edge;
+import application.fxobjects.cell.graph.*;
 import core.Filter;
+import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.File;
@@ -100,16 +99,39 @@ public class MenuFactory {
             grid.add(title, 0, 0);
 
             grid.add(new Text("-   The box in the top right shows a " +
-                    "list of strains present in the graph."), 0, 1);
+                    "list of strains present in the graph."), 1, 1);
             grid.add(new Text("-   The box below that gives info on " +
                     "a selected node, like which strains\n" +
                     "the node is in, its sequence and " +
-                    "annotation information."), 0, 2);
-            grid.add(new Text(" "), 0, 3);
+                    "annotation information."), 1, 2);
+            grid.add(new Text(" "), 1, 3);
             grid.add(new Text("-   The number inside a node indicates " +
                     "how many other nodes are collapsed into it.\n" +
                     "The size of a node is based on the total sequence " +
-                    "length inside it."), 0, 4);
+                    "length inside it."), 1, 4);
+
+            CollectionCell originallyFocusedCell = new CollectionCell(0, 1, "N");
+            originallyFocusedCell.originalFocus();
+            grid.add(originallyFocusedCell, 0, 5);
+
+            grid.add(new Text("-    When you click a cell, it becomes highlighted like this.\n " +
+                    "This means you will keep focus on this node, until deselection or selection of another node."), 1, 5);
+
+            RectangleCell node1 = new RectangleCell(0, 1);
+            node1.sideFocus();
+            grid.add(node1, 0, 6);
+
+            grid.add(new Text("-    When zooming in on the originally focused node, nodes that were previously collapsed \n" +
+                    "under the selected node will light up."), 1, 6);
+
+            ComplexCell focusedCell = new ComplexCell(0, 1, "N");
+            focusedCell.focus();
+            grid.add(focusedCell, 0, 7);
+
+            grid.add(new Text("-    When zooming out, your originally focused node may collapse. The node that contains your" +
+                    "originally focused node, will now be marked as the new focus. Zooming in will bring you back to your" +
+                    "originally focused node."), 1, 7);
+
 
             content.getChildren().add(grid);
 
