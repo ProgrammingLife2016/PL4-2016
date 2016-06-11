@@ -1,4 +1,4 @@
-package core;
+package core.parsers;
 
 import core.annotation.Annotation;
 import core.parsers.AnnotationParser;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by user on 18-5-2016.
  */
-public class AnnotationGraphParserTest {
+public class AnnotationParserTest {
 
     /**
      * Test the readGFA method.

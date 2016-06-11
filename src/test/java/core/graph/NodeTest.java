@@ -1,4 +1,4 @@
-package core;
+package core.graph;
 
 import core.graph.Node;
 import org.junit.Before;

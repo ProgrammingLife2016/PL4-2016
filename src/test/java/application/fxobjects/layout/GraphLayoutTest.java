@@ -1,4 +1,4 @@
-package application.fxobjects.cell;
+package application.fxobjects.layout;
 
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;

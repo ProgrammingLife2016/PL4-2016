@@ -1,4 +1,4 @@
-package application.fxobjects.cell;
+package application.fxobjects;
 
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;

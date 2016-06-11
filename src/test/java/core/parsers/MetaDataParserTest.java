@@ -1,4 +1,4 @@
-package core;
+package core.parsers;
 
 import core.genome.Genome;
 import core.parsers.MetaDataParser;

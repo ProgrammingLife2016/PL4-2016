@@ -1,4 +1,4 @@
-package core;
+package core.model;
 
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;

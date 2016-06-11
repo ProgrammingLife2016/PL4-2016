@@ -1,4 +1,4 @@
-package core;
+package core.annotation;
 
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;

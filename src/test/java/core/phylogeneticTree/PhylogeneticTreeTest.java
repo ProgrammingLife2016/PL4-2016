@@ -1,4 +1,4 @@
-package core.graph;
+package core.phylogeneticTree;
 
 import core.model.Model;
 import core.phylogeneticTree.PhylogeneticTree;
