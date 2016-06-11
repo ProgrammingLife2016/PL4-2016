@@ -1,7 +1,9 @@
 package application.fxobjects.cell;
 
-import application.fxobjects.cell.graph.RectangleCell;
-import core.graph.cell.EdgeType;
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
+import application.fxobjects.graphCells.RectangleCell;
+import core.typeEnums.EdgeType;
 import javafx.scene.shape.Line;
 import org.junit.Before;
 import org.junit.Test;

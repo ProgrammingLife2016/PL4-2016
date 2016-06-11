@@ -1,10 +1,11 @@
 package application.fxobjects.cell;
 
-import application.fxobjects.cell.graph.RectangleCell;
-import application.fxobjects.cell.layout.GraphLayout;
-import core.Model;
+import application.fxobjects.Cell;
+import application.fxobjects.graphCells.RectangleCell;
+import application.fxobjects.layout.GraphLayout;
+import core.model.Model;
 import core.graph.Graph;
-import core.graph.cell.CellType;
+import core.typeEnums.CellType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

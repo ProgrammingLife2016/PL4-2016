@@ -1,7 +1,8 @@
 package core.graph;
 
-import core.Model;
-import core.graph.cell.CellType;
+import core.model.Model;
+import core.phylogeneticTree.PhylogeneticTree;
+import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.*;
 import static org.junit.Assert.*;

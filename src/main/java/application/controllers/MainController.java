@@ -1,7 +1,15 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.RectangleCell;
-import core.*;
+import application.factories.LegendFactory;
+import application.factories.ListFactory;
+import application.factories.MenuFactory;
+import application.fxobjects.Cell;
+import application.fxobjects.graphCells.RectangleCell;
+import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
+import core.graph.Node;
+import core.parsers.AnnotationParser;
+import core.parsers.MetaDataParser;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -143,7 +151,7 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the meta data file.
      */
     public void initMetadata(String path) {
-        MetaData.readMetadataFromFile(path);
+        MetaDataParser.readMetadataFromFile(path);
     }
 
     /**
@@ -389,7 +397,7 @@ public class MainController extends Controller<BorderPane> {
             Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                application.fxobjects.Cell cell = treeController.getCellByName(
                         genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
@@ -440,7 +448,7 @@ public class MainController extends Controller<BorderPane> {
             try {
                 Annotation newAnnotation
                         = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
-                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                Map<Integer, Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
 
                 if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
@@ -473,7 +481,7 @@ public class MainController extends Controller<BorderPane> {
      * @param cellMap     Map of cells.
      * @param annotations List of annotations.
      */
-    private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
+    private void deselectPreviousHighLight(Map<Integer, Cell> cellMap,
                                            List<Annotation> annotations) {
         if (lastAnnotationSearch != null) {
             try {

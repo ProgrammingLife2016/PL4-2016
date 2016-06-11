@@ -1,9 +1,11 @@
 package core;
 
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
+import core.graph.Node;
+import core.model.Model;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Test;
 

@@ -1,11 +1,12 @@
 package application.controllers;
 
+import application.mouseHandlers.GraphMouseHandling;
 import application.fxobjects.ZoomBox;
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
-import application.fxobjects.cell.graph.GraphCell;
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
+import application.fxobjects.graphCells.GraphCell;
 import core.graph.Graph;
-import core.graph.cell.CellType;
+import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;

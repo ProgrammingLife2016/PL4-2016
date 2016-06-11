@@ -2,7 +2,9 @@ package core;
 
 import java.util.*;
 
-import core.graph.cell.CellType;
+import core.graph.GraphReducer;
+import core.graph.Node;
+import core.typeEnums.CellType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

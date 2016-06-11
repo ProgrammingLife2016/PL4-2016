@@ -1,5 +1,8 @@
 package core;
 
+import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
+import core.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 

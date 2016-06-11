@@ -1,9 +1,8 @@
 package core.graph;
 
-import core.Model;
-import core.Node;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.model.Model;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
