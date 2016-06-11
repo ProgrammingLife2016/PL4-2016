@@ -2,7 +2,6 @@ package application.mouseHandlers;
 
 import application.controllers.MainController;
 import application.fxobjects.Cell;
-
 import application.fxobjects.graphCells.GraphCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;

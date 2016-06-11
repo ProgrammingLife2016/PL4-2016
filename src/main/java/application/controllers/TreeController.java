@@ -1,11 +1,12 @@
 package application.controllers;
 
+import application.factories.MenuFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
-import application.mouseHandlers.TreeMouseHandling;
-import application.factories.MenuFactory;
-import application.fxobjects.layout.*;
+import application.fxobjects.layout.CellLayout;
+import application.fxobjects.layout.TreeLayout;
 import application.fxobjects.treeCells.LeafCell;
+import application.mouseHandlers.TreeMouseHandling;
 import core.filtering.Filter;
 import core.filtering.Filtering;
 import core.parsers.MetaDataParser;
@@ -23,7 +24,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import static application.fxobjects.LineageColor.*;
 

@@ -1,7 +1,6 @@
 package core.parsers;
 
 import core.annotation.Annotation;
-import core.parsers.AnnotationParser;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Test;
 

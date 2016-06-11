@@ -1,11 +1,12 @@
 package core.graph;
 
-import java.util.*;
-
-import core.graph.GraphReducer;
-import core.graph.Node;
 import core.typeEnums.CellType;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 

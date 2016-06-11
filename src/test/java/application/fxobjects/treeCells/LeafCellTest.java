@@ -5,7 +5,7 @@ import javafx.scene.layout.StackPane;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test suite for the LeafCell class.

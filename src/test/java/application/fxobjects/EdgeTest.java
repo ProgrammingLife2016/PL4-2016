@@ -1,7 +1,5 @@
 package application.fxobjects;
 
-import application.fxobjects.Cell;
-import application.fxobjects.Edge;
 import application.fxobjects.graphCells.RectangleCell;
 import core.typeEnums.EdgeType;
 import javafx.scene.shape.Line;
@@ -9,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 /**

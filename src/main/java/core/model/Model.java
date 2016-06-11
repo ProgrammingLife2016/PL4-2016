@@ -5,7 +5,6 @@ import application.fxobjects.Edge;
 import application.fxobjects.graphCells.*;
 import application.fxobjects.layout.GraphLayout;
 import application.fxobjects.treeCells.LeafCell;
-
 import application.fxobjects.treeCells.MiddleCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
@@ -16,7 +15,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

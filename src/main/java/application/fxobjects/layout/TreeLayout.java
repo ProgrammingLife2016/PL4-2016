@@ -3,7 +3,6 @@ package application.fxobjects.layout;
 import application.fxobjects.Cell;
 import application.fxobjects.treeCells.MiddleCell;
 import core.model.Model;
-
 import core.typeEnums.EdgeType;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;

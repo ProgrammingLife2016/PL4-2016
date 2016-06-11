@@ -3,7 +3,6 @@ package core.model;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import core.graph.Node;
-import core.model.Model;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
@@ -13,9 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**

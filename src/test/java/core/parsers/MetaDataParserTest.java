@@ -1,7 +1,6 @@
 package core.parsers;
 
 import core.genome.Genome;
-import core.parsers.MetaDataParser;
 import org.junit.Test;
 
 import java.io.InputStream;

@@ -1,13 +1,12 @@
 package core.annotation;
 
-import core.annotation.Annotation;
 import core.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test suite for the Annotation class.

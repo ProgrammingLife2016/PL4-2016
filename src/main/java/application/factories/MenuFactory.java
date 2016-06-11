@@ -1,16 +1,9 @@
 package application.factories;
 
 import application.controllers.MainController;
-import application.fxobjects.graphCells.*;
-
+import application.fxobjects.graphCells.CollectionCell;
+import application.fxobjects.graphCells.RectangleCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,13 +20,19 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import static core.filtering.Filter.*;
 import static java.lang.String.format;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
-@SuppressFBWarnings("MS_PKGPROTECT")
+@SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
 @SuppressWarnings({
         "checkstyle:methodlength",
         "checkstyle:linelength"

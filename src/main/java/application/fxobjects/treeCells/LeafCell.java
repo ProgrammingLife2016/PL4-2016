@@ -9,7 +9,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-import static application.fxobjects.LineageColor.*;
+import static application.fxobjects.LineageColor.determineLeafLinColor;
 
 /**
  * Class representing a Phylogenetic leave node.

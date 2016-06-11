@@ -1,10 +1,10 @@
 package application.controllers;
 
-import application.mouseHandlers.GraphMouseHandling;
-import application.fxobjects.ZoomBox;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
+import application.fxobjects.ZoomBox;
 import application.fxobjects.graphCells.GraphCell;
+import application.mouseHandlers.GraphMouseHandling;
 import core.graph.Graph;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

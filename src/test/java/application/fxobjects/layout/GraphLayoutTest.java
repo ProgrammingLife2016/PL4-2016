@@ -2,9 +2,8 @@ package application.fxobjects.layout;
 
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
-import application.fxobjects.layout.GraphLayout;
-import core.model.Model;
 import core.graph.Graph;
+import core.model.Model;
 import core.typeEnums.CellType;
 import org.junit.Before;
 import org.junit.Test;

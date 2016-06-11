@@ -1,6 +1,5 @@
 package core.annotation;
 
-import core.annotation.Annotation;
 import core.graph.Node;
 
 import java.util.HashMap;

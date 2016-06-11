@@ -397,7 +397,7 @@ public class MainController extends Controller<BorderPane> {
             Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                application.fxobjects.Cell cell = treeController.getCellByName(
+                Cell cell = treeController.getCellByName(
                         genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
