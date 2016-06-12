@@ -1,7 +1,7 @@
 package application;
 
 import application.controllers.MainController;
-import application.controllers.WindowFactory;
+import application.factories.WindowFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

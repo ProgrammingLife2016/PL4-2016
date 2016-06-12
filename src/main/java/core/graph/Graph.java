@@ -1,8 +1,10 @@
 package core.graph;
 
-import core.*;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.annotation.Annotation;
+import core.model.Model;
+import core.parsers.GraphParser;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -70,7 +72,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
-            Parser parser = new Parser();
+            GraphParser parser = new GraphParser();
             startMap = parser.readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
