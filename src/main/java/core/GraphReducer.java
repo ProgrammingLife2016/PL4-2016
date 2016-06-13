@@ -245,6 +245,7 @@ public final class GraphReducer {
             }
             complexNode.setLinks(new ArrayList<>());
             complexNode.addLink(targetNode.getId());
+            targetNode.addParent(complexNode.getId());
             return true;
         }
 

@@ -60,7 +60,6 @@ public class GraphLayout extends CellLayout {
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();
-        System.out.println("all added cells size: " + cells.size());
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
             if (!cell.isRelocated()) {

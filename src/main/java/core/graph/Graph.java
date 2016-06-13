@@ -200,9 +200,7 @@ public class Graph {
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
 
-            System.out.println("nodemap size: " + nodeMap.size());
             List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-            System.out.println("sortedNodes size: " + sortedNodeIds.size());
             for (int nodeId : sortedNodeIds) {
                 Node node= nodeMap.get(nodeId);
                 if (node == null) {
@@ -242,6 +240,9 @@ public class Graph {
                     CellType.COMPLEX);
         }
 
+        if (node.getId() == 2020) {
+            System.out.println(node.getParents().toString());
+        }
         for (int parentId : node.getParents()) {
             Node parent = nodeMap.get(parentId);
             int width = (int) Math.round(maxEdgeWidth
@@ -263,7 +264,6 @@ public class Graph {
 
         //while S is non-empty do
         while (!S.isEmpty()) {
-            System.out.println("pop from stack");
             //remove a node n from S
             Node n = S.iterator().next();
             S.remove(n);
@@ -280,8 +280,6 @@ public class Graph {
                 //if m has no other incoming edges then insert m into S
                 if (m.getParents().size() == 0) {
                     S.add(m);
-                } else {
-                    System.out.println(m.getParents().toString());
                 }
             }
         }
