@@ -1,9 +1,10 @@
 package core.graph;
 
-import application.fxobjects.cell.Edge;
-import core.*;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.annotation.Annotation;
+import core.model.Model;
+import core.parsers.GraphParser;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
-            Parser parser = new Parser();
+            GraphParser parser = new GraphParser();
             startMap = parser.readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
@@ -100,8 +101,7 @@ public class Graph {
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
-                loadOneUp(depth);
-                loadOneDown(depth);
+                loadBoth(depth);
             } else { //Second time. All models are loaded
                 if (depth < currentInt) {
                     zoomOut = current;
@@ -119,14 +119,21 @@ public class Graph {
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
-                    loadOneUp(depth);
-                    loadOneDown(depth);
+                    loadBoth(depth);
                 }
             }
         }
-
         currentInt = depth;
         return true;
+    }
+
+    /**
+     * Load both.
+     * @param depth depth
+     */
+    private void loadBoth(int depth) {
+        loadOneUp(depth);
+        loadOneDown(depth);
     }
 
     /**
@@ -335,20 +342,15 @@ public class Graph {
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
                         ArrayList<String> ref, Node to, Node from) {
         //Add next cell
-        int maxEdgeWidth = 10;
         CellType type = nodeMap.get(j).getType();
 
         if (type == CellType.RECTANGLE) {
-            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
-                    CellType.RECTANGLE);
+            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(), CellType.RECTANGLE);
         } else if (type == CellType.BUBBLE) {
-            toret.addCell(to.getId(),
-                    to.getBubbleText(),
-                    to.getNucleotides(), CellType.BUBBLE);
+            toret.addCell(to.getId(), to.getBubbleText(), to.getNucleotides(), CellType.BUBBLE);
         } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
-                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
-                    CellType.INDEL);
+                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(), CellType.INDEL);
         } else if (type == CellType.COLLECTION) {
             toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
@@ -357,6 +359,13 @@ public class Graph {
                     CellType.COMPLEX);
         }
 
+        addEdgesToCell(to, from, nodeMap, toret, ref);
+
+    }
+
+    private void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
+                                ArrayList<String> ref) {
+        int maxEdgeWidth = 10;
         int width = (int) Math.round(maxEdgeWidth
                 * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
                 intersectingStrings(to.getGenomes(), genomes))
