@@ -134,41 +134,27 @@ public final class MetaDataParser {
                     gen.setAge((int) row.getCell(1).getNumericCellValue());
                 }
                 break;
-            case 2:
-                gen.setSex(row.getCell(2).getStringCellValue());
+            case 2: gen.setSex(row.getCell(2).getStringCellValue());
                 break;
-            case 3:
-                gen.setHiv(row.getCell(3).getStringCellValue());
+            case 3: gen.setHiv(row.getCell(3).getStringCellValue());
                 break;
-            case 4:
-                gen.setCohort(row.getCell(4).getStringCellValue());
+            case 4: gen.setCohort(row.getCell(4).getStringCellValue());
                 break;
-            case 6:
-                gen.setStudyDistrict(row.getCell(6).getStringCellValue());
+            case 6: gen.setStudyDistrict(row.getCell(6).getStringCellValue());
                 break;
-            case 7:
-                gen.setSpecimenType(row.getCell(7).getStringCellValue());
+            case 7: gen.setSpecimenType(row.getCell(7).getStringCellValue());
                 break;
-            case 8:
-                gen.setSmearStatus(row.getCell(8).getStringCellValue());
+            case 8: gen.setSmearStatus(row.getCell(8).getStringCellValue());
                 break;
-            case 10:
-                gen.setIsolation(row.getCell(10).getStringCellValue());
+            case 10: gen.setIsolation(row.getCell(10).getStringCellValue());
                 break;
-            case 11:
-                gen.setPhenoDST(row.getCell(11).getStringCellValue());
+            case 11: gen.setPhenoDST(row.getCell(11).getStringCellValue());
                 break;
-            case 12:
-                gen.setCapreomycin(row.getCell(12).getStringCellValue());
+            case 12: gen.setCapreomycin(row.getCell(12).getStringCellValue());
                 break;
-            case 13:
-                gen.setEthambutol(row.getCell(13).getStringCellValue());
+            case 13: gen.setEthambutol(row.getCell(13).getStringCellValue());
                 break;
-            case 14:
-                gen.setEthionamide(row.getCell(14).getStringCellValue());
-                break;
-            default:
-                break;
+            default: break;
         }
     }
 
@@ -180,38 +166,29 @@ public final class MetaDataParser {
      */
     private static void switchRow2(int i, Row row, Genome gen) {
         switch (i) {
-            case 16:
-                gen.setIsoniazid(row.getCell(15).getStringCellValue());
+            case 14: gen.setEthionamide(row.getCell(14).getStringCellValue());
                 break;
-            case 17:
-                gen.setKanamycin(row.getCell(16).getStringCellValue());
+            case 16: gen.setIsoniazid(row.getCell(15).getStringCellValue());
                 break;
-            case 18:
-                gen.setPyrazinamide(row.getCell(18).getStringCellValue());
+            case 17: gen.setKanamycin(row.getCell(16).getStringCellValue());
                 break;
-            case 19:
-                gen.setOfloxacin(row.getCell(19).getStringCellValue());
+            case 18: gen.setPyrazinamide(row.getCell(18).getStringCellValue());
                 break;
-            case 20:
-                gen.setRifampin(row.getCell(20).getStringCellValue());
+            case 19: gen.setOfloxacin(row.getCell(19).getStringCellValue());
                 break;
-            case 21:
-                gen.setStreptomycin(row.getCell(21).getStringCellValue());
+            case 20: gen.setRifampin(row.getCell(20).getStringCellValue());
                 break;
-            case 22:
-                gen.setSpoligotype(row.getCell(22).getStringCellValue());
+            case 21: gen.setStreptomycin(row.getCell(21).getStringCellValue());
                 break;
-            case 23:
-                gen.setLineage(detLineage(row.getCell(23).getStringCellValue()));
+            case 22: gen.setSpoligotype(row.getCell(22).getStringCellValue());
                 break;
-            case 24:
-                gen.setGenoDST(row.getCell(24).getStringCellValue());
+            case 23: gen.setLineage(detLineage(row.getCell(23).getStringCellValue()));
                 break;
-            case 26:
-                gen.setTf(row.getCell(26).getStringCellValue());
+            case 24: gen.setGenoDST(row.getCell(24).getStringCellValue());
                 break;
-            default:
+            case 26: gen.setTf(row.getCell(26).getStringCellValue());
                 break;
+            default: break;
         }
     }
 }

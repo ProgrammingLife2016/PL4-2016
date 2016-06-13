@@ -85,53 +85,16 @@ public class MenuFactory {
             VBox content = new VBox();
             content.getChildren().add(legendFactory.createLegend());
 
-            final GridPane grid = new GridPane();
-            grid.setVgap(10);
-            grid.setPadding(new Insets(10, 20, 10, 10));
-
             Text title = new Text("   Highlighting");
             title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
             content.getChildren().add(title);
 
-            CollectionCell originallyFocusedCell = new CollectionCell(0, 1, "N");
-            originallyFocusedCell.originalFocus();
-            grid.add(originallyFocusedCell, 0, 1);
-            grid.add(new Text("   -    When you click a cell, it becomes highlighted like this.\n "
-                    + "This means you will keep focus on this node, until deselection or selection "
-                    + "of another node."), 1, 1);
-
-            RectangleCell node1 = new RectangleCell(0, 1);
-            node1.sideFocus();
-            grid.add(node1, 0, 2);
-            grid.add(new Text("   -    When zooming in on the originally focused node, nodes that \n"
-                    + "were previously collapsed under the selected node will light up."), 1, 2);
-
-            CollectionCell focusedCell = new CollectionCell(0, 1, "N");
-            focusedCell.focus();
-            grid.add(focusedCell, 0, 3);
-
-            grid.add(new Text("   -    When zooming out, your originally focused node may collapse. "
-                    + "The node that contains \n your originally focused node, will now be marked as the "
-                    + "new focus. Zooming in will bring you back to your originally focused node."), 1, 3);
+            GridPane grid = buildHelpGridPane();
 
             Text moreInfo = new Text("   More Information");
             moreInfo.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
-            GridPane grid2 = new GridPane();
-            grid2.setVgap(10);
-            grid2.setPadding(new Insets(10, 10, 10, 10));
-            grid2.add(new Text("-   The box in the top right shows a "
-                    + "list of strains present in the graph."), 1, 0);
-            grid2.add(new Text("-   The box below that gives info on "
-                    + "a selected node, like which strains\n"
-                    + "the node is in, its sequence and "
-                    + "annotation information."), 1, 1);
-            grid2.add(new Text(" "), 1, 2);
-            grid2.add(new Text("-   The number inside a node indicates "
-                    + "how many other nodes are collapsed into it.\n"
-                    + "The size of a node is based on the total sequence "
-                    + "length inside it."), 1, 3);
-
+            GridPane grid2 = buildHelpGridPane2();
 
             content.getChildren().addAll(grid, moreInfo, grid2);
 
@@ -143,8 +106,56 @@ public class MenuFactory {
         return initMenu("Help", shortcuts);
     }
 
+    private GridPane buildHelpGridPane2() {
+        GridPane grid2 = new GridPane();
+        grid2.setVgap(10);
+        grid2.setPadding(new Insets(10, 10, 10, 10));
+        grid2.add(new Text("-   The box in the top right shows a "
+                + "list of strains present in the graph."), 1, 0);
+        grid2.add(new Text("-   The box below that gives info on "
+                + "a selected node, like which strains\n"
+                + "the node is in, its sequence and "
+                + "annotation information."), 1, 1);
+        grid2.add(new Text(" "), 1, 2);
+        grid2.add(new Text("-   The number inside a node indicates "
+                + "how many other nodes are collapsed into it.\n"
+                + "The size of a node is based on the total sequence "
+                + "length inside it."), 1, 3);
+        return grid2;
+    }
+
+    private GridPane buildHelpGridPane() {
+        final GridPane grid = new GridPane();
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 20, 10, 10));
+
+        CollectionCell originallyFocusedCell = new CollectionCell(0, 1, "N");
+        originallyFocusedCell.originalFocus();
+        grid.add(originallyFocusedCell, 0, 1);
+        grid.add(new Text("   -    When you click a cell, it becomes highlighted like this.\n "
+                + "This means you will keep focus on this node, until deselection or selection "
+                + "of another node."), 1, 1);
+
+        RectangleCell node1 = new RectangleCell(0, 1);
+        node1.sideFocus();
+        grid.add(node1, 0, 2);
+        grid.add(new Text("   -    When zooming in on the originally focused node, nodes that \n"
+                + "were previously collapsed under the selected node will light up."), 1, 2);
+
+        CollectionCell focusedCell = new CollectionCell(0, 1, "N");
+        focusedCell.focus();
+        grid.add(focusedCell, 0, 3);
+
+        grid.add(new Text("   -    When zooming out, your originally focused node may collapse. "
+                + "The node that contains \n your originally focused node, will now be marked as the "
+                + "new focus. Zooming in will bring you back to your originally focused node."), 1, 3);
+
+        return grid;
+    }
+
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Show Graph", null, event -> mainController.fillGraph(new ArrayList<>(), new ArrayList<>()));
+        showGenomeSequence = initMenuItem("Show Graph", null,
+                event -> mainController.fillGraph(new ArrayList<>(), new ArrayList<>()));
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
                 mainController.fillTree());
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
@@ -155,8 +166,7 @@ public class MenuFactory {
                 });
 
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
-                mainController.strainSelection(mainController.getTreeController().
-                        getSelectedGenomes()));
+                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
@@ -340,46 +350,25 @@ public class MenuFactory {
     private void initLineageFilter() {
         filterLineage = new Menu("Lineage");
         CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
-        lin1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN1, lin1.isSelected()));
+        lin1.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN1, lin1.isSelected()));
         CheckMenuItem lin2 = new CheckMenuItem("LIN 2");
-        lin2.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN2, lin2.isSelected()));
+        lin2.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN2, lin2.isSelected()));
         CheckMenuItem lin3 = new CheckMenuItem("LIN 3");
-        lin3.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN3, lin3.isSelected()));
+        lin3.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN3, lin3.isSelected()));
         CheckMenuItem lin4 = new CheckMenuItem("LIN 4");
-        lin4.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN4, lin4.isSelected()));
+        lin4.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN4, lin4.isSelected()));
         CheckMenuItem lin5 = new CheckMenuItem("LIN 5");
-        lin5.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN5, lin5.isSelected()));
+        lin5.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN5, lin5.isSelected()));
         CheckMenuItem lin6 = new CheckMenuItem("LIN 6");
-        lin6.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN6, lin6.isSelected()));
+        lin6.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN6, lin6.isSelected()));
         CheckMenuItem lin7 = new CheckMenuItem("LIN 7");
-        lin7.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN7, lin7.isSelected()));
+        lin7.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN7, lin7.isSelected()));
         CheckMenuItem lin8 = new CheckMenuItem("LIN animal");
-        lin8.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN8, lin8.isSelected()));
+        lin8.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN8, lin8.isSelected()));
         CheckMenuItem lin9 = new CheckMenuItem("LIN B");
-        lin9.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN9, lin9.isSelected()));
+        lin9.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN9, lin9.isSelected()));
         CheckMenuItem lin10 = new CheckMenuItem("LIN CANETTII");
-        lin10.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(
-                        LIN10, lin10.isSelected()));
-
+        lin10.setOnAction(event -> mainController.getTreeController().modifyFilter(LIN10, lin10.isSelected()));
         filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
     }
 
@@ -426,38 +415,27 @@ public class MenuFactory {
 
     private void initDistrictFilter() {
         CheckMenuItem dist1 = new CheckMenuItem("Amajuba");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(AMAJUBA, dist1.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(AMAJUBA, dist1.isSelected()));
         CheckMenuItem dist2 = new CheckMenuItem("eThekwini");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(ETHEKWINI, dist2.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(ETHEKWINI, dist2.isSelected()));
         CheckMenuItem dist3 = new CheckMenuItem("iLembe");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(ILEMBE, dist3.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(ILEMBE, dist3.isSelected()));
         CheckMenuItem dist4 = new CheckMenuItem("Sisonke");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SISONKE, dist4.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(SISONKE, dist4.isSelected()));
         CheckMenuItem dist5 = new CheckMenuItem("Ugu");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UGU, dist5.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UGU, dist5.isSelected()));
         CheckMenuItem dist6 = new CheckMenuItem("uMgungundlovu");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UMGUNGUNDLOVU, dist6.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UMGUNGUNDLOVU, dist6.isSelected()));
         CheckMenuItem dist7 = new CheckMenuItem("uMkhanyakude");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UMKHANYAKUDE, dist7.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UMKHANYAKUDE, dist7.isSelected()));
         CheckMenuItem dist8 = new CheckMenuItem("uMzinyathi");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UMZINYATHI, dist8.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UMZINYATHI, dist8.isSelected()));
         CheckMenuItem dist9 = new CheckMenuItem("Uthukela");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UTHUKELA, dist9.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UTHUKELA, dist9.isSelected()));
         CheckMenuItem dist10 = new CheckMenuItem("uThungulu");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(UTHUNGULU, dist10.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(UTHUNGULU, dist10.isSelected()));
         CheckMenuItem dist11 = new CheckMenuItem("Zululand");
-        dist1.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(ZULULAND, dist11.isSelected()));
+        dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(ZULULAND, dist11.isSelected()));
 
         filterStudyDistrict = initMenu("Study District", dist1, dist2, dist3, dist4, dist5,
                 dist6, dist7, dist8, dist9, dist10, dist11);
@@ -668,55 +646,37 @@ public class MenuFactory {
         initSpoligotypeFilter2(spo1, spo2, spo3, spo4, spo5, spo6, spo7);
     }
 
-    private void initSpoligotypeFilter2(CheckMenuItem spo1, CheckMenuItem spo2,
-                                        CheckMenuItem spo3, CheckMenuItem spo4,
-                                        CheckMenuItem spo5, CheckMenuItem spo6,
-                                        CheckMenuItem spo7) {
-        CheckMenuItem spo8 = new CheckMenuItem("LAM11-ZWE");
-        spo8.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM11_ZWE, spo8.isSelected()));
-        CheckMenuItem spo9 = new CheckMenuItem("LAM3");
-        spo9.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM3, spo9.isSelected()));
-        CheckMenuItem spo11 = new CheckMenuItem("LAM4");
-        spo11.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM4, spo11.isSelected()));
-        CheckMenuItem spo12 = new CheckMenuItem("LAM5");
-        spo12.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM5, spo12.isSelected()));
-        CheckMenuItem spo13 = new CheckMenuItem("LAM6");
-        spo13.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM6, spo13.isSelected()));
-        CheckMenuItem spo14 = new CheckMenuItem("LAM9");
-        spo14.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM9, spo14.isSelected()));
-        CheckMenuItem spo15 = new CheckMenuItem("S");
-        spo15.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_S, spo15.isSelected()));
-        CheckMenuItem spo16 = new CheckMenuItem("T1");
-        spo16.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T1, spo16.isSelected()));
-        CheckMenuItem spo17 = new CheckMenuItem("T2");
-        spo17.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T2, spo17.isSelected()));
-        CheckMenuItem spo18 = new CheckMenuItem("T3");
-        spo18.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T3, spo18.isSelected()));
-        CheckMenuItem spo19 = new CheckMenuItem("T5-RUS1");
-        spo19.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T5_RUS1, spo19.isSelected()));
-        CheckMenuItem spo20 = new CheckMenuItem("X2");
-        spo20.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X2, spo20.isSelected()));
-        CheckMenuItem spo21 = new CheckMenuItem("X3");
-        spo21.setOnAction(event ->
-                mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X3, spo21.isSelected()));
+    private void initSpoligotypeFilter2(CheckMenuItem spo1, CheckMenuItem spo2, CheckMenuItem spo3,
+                                        CheckMenuItem spo4, CheckMenuItem spo5, CheckMenuItem spo6, CheckMenuItem sp7) {
+        CheckMenuItem s = new CheckMenuItem("LAM11-ZWE");
+        s.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM11_ZWE, s.isSelected()));
+        CheckMenuItem s9 = new CheckMenuItem("LAM3");
+        s9.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM3, s9.isSelected()));
+        CheckMenuItem s11 = new CheckMenuItem("LAM4");
+        s11.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM4, s11.isSelected()));
+        CheckMenuItem s12 = new CheckMenuItem("LAM5");
+        s12.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM5, s12.isSelected()));
+        CheckMenuItem s13 = new CheckMenuItem("LAM6");
+        s13.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM6, s13.isSelected()));
+        CheckMenuItem s14 = new CheckMenuItem("LAM9");
+        s14.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM9, s14.isSelected()));
+        CheckMenuItem s15 = new CheckMenuItem("S");
+        s15.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_S, s15.isSelected()));
+        CheckMenuItem s16 = new CheckMenuItem("T1");
+        s16.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T1, s16.isSelected()));
+        CheckMenuItem s17 = new CheckMenuItem("T2");
+        s17.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T2, s17.isSelected()));
+        CheckMenuItem s18 = new CheckMenuItem("T3");
+        s18.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T3, s18.isSelected()));
+        CheckMenuItem sn = new CheckMenuItem("T5-RUS1");
+        sn.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_T5_RUS1, sn.isSelected()));
+        CheckMenuItem s20 = new CheckMenuItem("X2");
+        s20.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X2, s20.isSelected()));
+        CheckMenuItem s21 = new CheckMenuItem("X3");
+        s21.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X3, s21.isSelected()));
 
-        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4,
-                spo5, spo6, spo7, spo8, spo9,
-                spo11, spo12, spo13, spo14, spo15,
-                spo16, spo17, spo18, spo19, spo20,
-                spo21);
+        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5, spo6, sp7, s, s9,
+                s11, s12, s13, s14, s15, s16, s17, s18, sn, s20, s21);
     }
 
     private void initGenoDSTFilter() {

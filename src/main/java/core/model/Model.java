@@ -209,38 +209,29 @@ public class Model {
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
         switch (type) {
-            case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
+            case RECTANGLE: RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
                 addCell(rectangleCell);
                 break;
-            case BUBBLE:
-                BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
+            case BUBBLE: BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
                 addCell(bubbleCell);
                 break;
-            case INDEL:
-                IndelCell indelCell = new IndelCell(id, nucleotides, text);
+            case INDEL: IndelCell indelCell = new IndelCell(id, nucleotides, text);
                 addCell(indelCell);
                 break;
-            case COLLECTION:
-                CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
+            case COLLECTION: CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
                 break;
-            case COMPLEX:
-                ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
+            case COMPLEX: ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
                 addCell(complexCell);
                 break;
-            case TREELEAF:
-                LeafCell leafCell = new LeafCell(id, text);
+            case TREELEAF: LeafCell leafCell = new LeafCell(id, text);
                 addCell(leafCell);
                 break;
-            case TREEMIDDLE:
-                MiddleCell middleCell = new MiddleCell(id);
+            case TREEMIDDLE: MiddleCell middleCell = new MiddleCell(id);
                 addCell(middleCell);
                 break;
-            default:
-                throw new UnsupportedOperationException("Unsupported type: " + type);
+            default: throw new UnsupportedOperationException("Unsupported type: " + type);
         }
-
         return false;
     }
 
