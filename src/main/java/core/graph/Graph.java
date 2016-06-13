@@ -1,14 +1,13 @@
 package core.graph;
 
+import application.fxobjects.cell.Edge;
 import core.*;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -200,23 +199,93 @@ public class Graph {
                     root.getNucleotides(), root.getType());
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
-            for (int i = 1; i < nodeIds; i++) {
-                Node from = nodeMap.get(i);
-                if (from == null) {
+
+            System.out.println("nodemap size: " + nodeMap.size());
+            List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+            System.out.println("sortedNodes size: " + sortedNodeIds.size());
+            for (int nodeId : sortedNodeIds) {
+                Node node= nodeMap.get(nodeId);
+                if (node == null) {
                     continue;
                 }
-                for (int j : from.getLinks(nodeMap)) {
-                    Node to = nodeMap.get(j);
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).
-                            forEach(genomes::add);
-                    //Add next cell
-                    addCell(nodeMap, toret, j, ref, to, from);
+                node.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                        forEach(genomes::add);
+                newAddCell(nodeMap, ref, toret, node);
+            }
+        }
+        toret.setLayout();
+        return toret;
+    }
+
+    public void newAddCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
+
+        //Add next cell
+        int maxEdgeWidth = 10;
+        CellType type = node.getType();
+
+        if (type == CellType.RECTANGLE) {
+            toret.addCell(node.getId(), node.getSequence(), node.getNucleotides(),
+                    CellType.RECTANGLE);
+        } else if (type == CellType.BUBBLE) {
+            toret.addCell(node.getId(),
+                    node.getBubbleText(),
+                    node.getNucleotides(), CellType.BUBBLE);
+        } else if (type == CellType.INDEL) {
+            toret.addCell(node.getId(),
+                    String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.INDEL);
+        } else if (type == CellType.COLLECTION) {
+            toret.addCell(node.getId(), String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.COLLECTION);
+        } else if (type == CellType.COMPLEX) {
+            toret.addCell(node.getId(), String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.COMPLEX);
+        }
+
+        for (int parentId : node.getParents()) {
+            Node parent = nodeMap.get(parentId);
+            int width = (int) Math.round(maxEdgeWidth
+                    * ((double) intersection(intersectingStrings(parent.getGenomes(), genomes),
+                    intersectingStrings(node.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
+
+            toret.addEdge(parentId, node.getId(), width, EdgeType.GRAPH);
+        }
+    }
+
+    public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
+        //S <- Set of all nodes with no incoming edges
+        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        HashSet<Node> S = new HashSet<>();
+        List<Integer> L = new ArrayList<>();
+        S.add(copyNodeMap.get(1));
+
+        //while S is non-empty do
+        while (!S.isEmpty()) {
+            System.out.println("pop from stack");
+            //remove a node n from S
+            Node n = S.iterator().next();
+            S.remove(n);
+
+            //insert n into L
+            L.add(n.getId());
+
+            //for each node m with an edge e from n to m do
+            for (int childId : n.getLinks()) {
+                //remove edge e from the graph
+                Node m = copyNodeMap.get(childId);
+                System.out.println("child of node " + n.getId() + " = " + childId);
+                m.removeParent(m.getId()); //Remove edge from m
+
+                //if m has no other incoming edges then insert m into S
+                if (m.getParents().size() == 0) {
+                    System.out.println("no more parents");
+                    S.add(m);
                 }
             }
         }
 
-        toret.setLayout();
-        return toret;
+        return L;
     }
 
 
@@ -250,7 +319,7 @@ public class Graph {
                     Node to = nodeMap.get(j);
                     if (intersection(to.getGenomes(), currentGenomes) > 0) {
                         //Add next cell
-                        addCell(nodeMap, toret, j, ref, to, from);
+                        newAddCell(nodeMap, ref, toret, from);
                     }
                 }
             }

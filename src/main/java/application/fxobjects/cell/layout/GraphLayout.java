@@ -3,9 +3,12 @@ package application.fxobjects.cell.layout;
 import application.fxobjects.cell.Cell;
 import application.fxobjects.cell.graph.GraphCell;
 import core.Model;
+import core.Node;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -57,6 +60,7 @@ public class GraphLayout extends CellLayout {
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();
+        System.out.println("all added cells size: " + cells.size());
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
             if (!cell.isRelocated()) {
@@ -87,6 +91,8 @@ public class GraphLayout extends CellLayout {
             }
         }
     }
+
+
 
     /**
      * A method to place a Node's children and if need be, recursively their children.
