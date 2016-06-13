@@ -39,12 +39,16 @@ public class Model {
 
     private Rectangle2D screenSize;
 
+    private ArrayList<ArrayList<Cell>> tileCellList;
+    private ArrayList<Edge> longEdges = new ArrayList<>();
+
     /**
      * Class constructor.
      */
     public Model() {
         graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
+        tileCellList = new ArrayList<>();
 
         // clearSelection model, create lists
         clear();
@@ -399,5 +403,20 @@ public class Model {
      */
     public Cell getRightMost() {
         return getGraphLayout().getRightMost();
+    }
+
+    public void addLongEdge(Edge e) {
+        longEdges.add(e);
+    }
+
+    public void addCellInTile(int tile, Cell c) {
+        if(tileCellList.get(tile) == null) {
+            tileCellList.set(tile, new ArrayList<>());
+        }
+        tileCellList.get(tile).add(c);
+    }
+
+    public ArrayList<Cell> getTile(int i) {
+        return tileCellList.get(i);
     }
 }

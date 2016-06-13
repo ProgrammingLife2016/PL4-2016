@@ -290,6 +290,7 @@ public class GraphController extends Controller<ScrollPane> {
             double maxEdgeLength = screenSize.getWidth() / 6.4;
             double maxEdgeLengthLong = screenSize.getWidth();
 
+            //@Todo : Do not iterate over all edges, just over the once just added. See addToPane(min, max)!
             for (Edge e : graph.getModel().getAddedEdges()) {
                 double xLength = e.getLine().endXProperty().get()
                         - e.getLine().startXProperty().get();
@@ -332,7 +333,6 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method that gets the nodes that are in the view, and adds it to the model.
-     *
      * @param min left side of the view.
      * @param max right side of the view.
      */

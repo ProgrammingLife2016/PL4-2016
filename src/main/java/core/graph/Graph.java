@@ -1,9 +1,13 @@
 package core.graph;
 
+import application.fxobjects.cell.Cell;
+import application.fxobjects.cell.Edge;
 import core.*;
 import core.graph.cell.CellType;
 import core.graph.cell.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ import java.util.List;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
         "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
 public class Graph {
+
+    private Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
 
     private Model zoomIn;
     private Model current;
@@ -216,6 +222,18 @@ public class Graph {
         }
 
         toret.setLayout();
+        double width = screenSize.getWidth();
+        for (Edge e : toret.getAllEdges()) {
+            if (e.getLength() > width) {
+                toret.addLongEdge(e);
+            }
+        }
+        for (Cell c : toret.getAddedCells()) {
+            int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % width)) / width);
+            System.out.println(tile + " " + c.toString());
+            toret.addCellInTile(tile, c);
+        }
+
         return toret;
     }
 
@@ -542,8 +560,18 @@ public class Graph {
     public Model getModelAllInView(int min, int max) {
         Model m = new Model();
 
-        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
+        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth())-1),0);
+
+        for (int i = startTile; i < startTile + 3; i++) {
+            for(Cell c : getModel().getTile(i)) {
+                if(c.getLayoutX() > min && c.getLayoutX() <= max) {
+                    m.addCell(c);
+                }
+            }
+        }
+
+//        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+//                .forEach(m::addCell);
 
         this.getModel().getAllEdges().stream().filter(e -> !(
                 (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
