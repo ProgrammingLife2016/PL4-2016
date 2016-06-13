@@ -53,6 +53,14 @@ public class LegendFactory {
         grid.add(e, 0, 4);
         grid.add(mc2, 1, 3);
 
+        fillGrid(grid);
+
+        HBox legend = new HBox();
+        legend.getChildren().addAll(grid);
+        return legend;
+    }
+
+    private void fillGrid(GridPane grid) {
         grid.add(new Text("-    Basic Node"), 2, 1);
         grid.add(new Text("-    Bubble Node"), 2, 2);
         grid.add(new Text("-    Indel Node"), 2, 3);
@@ -66,18 +74,6 @@ public class LegendFactory {
         grid.add(new Text("  -    Contains N nodes that are structured in a more complex manner"), 3, 5);
         grid.add(new Text("  -    A longer Edge typically crossing over other edges. "
                 + "Functionally identical to a normal Edge."), 3, 6);
-
-//        grid.getStylesheets().add("/css/legend.css");
-//        grid.getStyleClass().add("grid");
-//        grid.getStyleClass().add("Text");
-//
-//        for (Node t : grid.getChildren()) {
-//            t.getStyleClass().add("Text");
-//        }
-
-        HBox legend = new HBox();
-        legend.getChildren().addAll(grid);
-        return legend;
     }
 
 }
