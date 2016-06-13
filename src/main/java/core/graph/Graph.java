@@ -536,17 +536,21 @@ public class Graph {
 
         for (int i = startTile; i <= startTile + 2; i++) {
             if (getModel().getCellTile(i) != null) {
+
                 for (Cell c : getModel().getCellTile(i)) {
-                    // if (c.getLayoutX() > min && c.getLayoutX() <= max) {
+                    //System.out.println(c.getCellId());
                     m.addCell(c);
-                    //}
+                    for(Edge e : c.getEdges()) {
+                        m.addEdge(e);
+                    }
+
                 }
             }
-            if (getModel().getEdgeTile(i) != null) {
-                for (Edge e : getModel().getEdgeTile(i)) {
-                    m.addEdge(e);
-                }
-            }
+//            if (getModel().getEdgeTile(i) != null) {
+//                for (Edge e : getModel().getEdgeTile(i)) {
+//                    m.addEdge(e);
+//                }
+//            }
         }
 
 
@@ -575,15 +579,19 @@ public class Graph {
                 for (Cell c : getModel().getCellTile(i)) {
                     if (c.getLayoutX() > min && c.getLayoutX() <= max) {
                         m.addCell(c);
+                        for(Edge e : c.getEdges()) {
+                            m.addEdge(e);
+                        }
                     }
                 }
             }
-            if (getModel().getEdgeTile(i) != null) {
-                for (Edge e : getModel().getEdgeTile(i)) {
-                    m.addEdge(e);
-                }
-            }
         }
+//            if (getModel().getEdgeTile(i) != null) {
+//                for (Edge e : getModel().getEdgeTile(i)) {
+//                    m.addEdge(e);
+//                }
+//            }
+//        }
 
 //        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
 //                .forEach(m::addCell);

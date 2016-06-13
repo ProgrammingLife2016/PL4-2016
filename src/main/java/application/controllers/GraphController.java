@@ -6,6 +6,7 @@ import application.fxobjects.ZoomBox;
 import application.fxobjects.graphCells.GraphCell;
 import application.mouseHandlers.GraphMouseHandling;
 import core.graph.Graph;
+import core.model.Model;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.value.ChangeListener;
@@ -288,36 +289,36 @@ public class GraphController extends Controller<ScrollPane> {
             // add components to graph pane
             addToPane(min, max);
 
-            double maxEdgeLength = screenSize.getWidth() / 6.4;
-            double maxEdgeLengthLong = screenSize.getWidth();
+//            double maxEdgeLength = screenSize.getWidth() / 6.4;
+//            double maxEdgeLengthLong = screenSize.getWidth();
 
-            //@Todo : Do not iterate over all edges, just over the once just added. See addToPane(min, max)!
-            for (Edge e : graph.getModel().getAddedEdges()) {
-                double xLength = e.getLine().endXProperty().get()
-                        - e.getLine().startXProperty().get();
-                double yLength = e.getLine().endYProperty().get()
-                        - e.getLine().startYProperty().get();
-                double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-
-                if (length > maxEdgeLength
-                        && !(e.getSource().getType() == CellType.RECTANGLE)
-                        || length > maxEdgeLengthLong) {
-                    e.getLine().getStrokeDashArray().addAll(3d, 17d);
-                    if (e.getLine().getStroke() == Color.BLACK) {
-                        e.getLine().setStroke(Color.LIGHTGRAY);
-                    } else {
-                        e.getLine().setStroke(Color.ORANGE);
-                    }
-                    double newY = e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                            + (e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                            - (screenSize.getHeight() - 100) / 2) * 2.5;
-                    newY = Math.max(newY, 10);
-                    newY = Math.min(newY, screenSize.getHeight() * 0.67);
-                    e.getSource().relocate(e.getSource().getLayoutX(), newY);
-                }
-            }
+//            //@Todo : Do not iterate over all edges, just over the once just added. See addToPane(min, max)!
+//            for (Edge e : graph.getModel().getAddedEdges()) {
+//                double xLength = e.getLine().endXProperty().get()
+//                        - e.getLine().startXProperty().get();
+//                double yLength = e.getLine().endYProperty().get()
+//                        - e.getLine().startYProperty().get();
+//                double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+//
+//                if (length > maxEdgeLength
+//                        && !(e.getSource().getType() == CellType.RECTANGLE)
+//                        || length > maxEdgeLengthLong) {
+//                    e.getLine().getStrokeDashArray().addAll(3d, 17d);
+//                    if (e.getLine().getStroke() == Color.BLACK) {
+//                        e.getLine().setStroke(Color.LIGHTGRAY);
+//                    } else {
+//                        e.getLine().setStroke(Color.ORANGE);
+//                    }
+//                    double newY = e.getSource().getLayoutY()
+//                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
+//                            + (e.getSource().getLayoutY()
+//                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
+//                            - (screenSize.getHeight() - 100) / 2) * 2.5;
+//                    newY = Math.max(newY, 10);
+//                    newY = Math.min(newY, screenSize.getHeight() * 0.67);
+//                    e.getSource().relocate(e.getSource().getLayoutX(), newY);
+//                }
+//            }
             initMouseHandler();
             graph.endUpdate();
             //@ToDo See issue 156
@@ -340,11 +341,15 @@ public class GraphController extends Controller<ScrollPane> {
     private void addToPane(int min, int max) {
         root.getChildren().clear();
         if (graph.getModel().getAllCells().size() > 0) {
-            root.getChildren().addAll(graph.getModelAllInView(min, max).getAddedEdges());
-            root.getChildren().addAll(graph.getModelAllInView(min, max).getAddedCells());
+            //@Todo dont load getmodel two times.
+            Model model = graph.getModelAllInView(min, max);
+            root.getChildren().addAll(model.getAddedEdges());
+            root.getChildren().addAll(model.getAddedCells());
+            System.out.println(graph.getModelAllInView(min, max).getAddedCells().size());
         } else {
-            root.getChildren().addAll(graph.getModelAddedInView(min, max).getAddedEdges());
-            root.getChildren().addAll(graph.getModelAddedInView(min, max).getAddedCells());
+            Model model = graph.getModelAddedInView(min, max);
+            root.getChildren().addAll(model.getAddedEdges());
+            root.getChildren().addAll(model.getAddedCells());
         }
     }
 

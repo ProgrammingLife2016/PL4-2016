@@ -290,14 +290,8 @@ public class Model {
         if (sourceCell != null && targetCell != null) {
             Edge edge = new Edge(sourceCell, targetCell, width, type);
             addedEdges.add(edge);
-            if (edge != null && edge.getLength() > screenSize.getWidth()) {
-                addLongEdge(edge);
-            } else {
-                int tileWidth = (int) screenSize.getWidth();
-                int tile = (int) ((edge.getSource().getLayoutX() - (edge.getSource().getLayoutX() % tileWidth)) / tileWidth);
-                tileEdgeMap.putIfAbsent(tile, new ArrayList<>());
-                tileEdgeMap.get(tile).add(edge);
-            }
+            sourceCell.addEdge(edge);
+            targetCell.addEdge(edge);
         }
 
         return true;
@@ -397,6 +391,7 @@ public class Model {
      * @param e the edge to add.
      */
     public void addEdge(Edge e) {
+        if(!addedEdges.contains(e))
         addedEdges.add(e);
     }
 
