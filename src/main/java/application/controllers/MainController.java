@@ -16,6 +16,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -28,6 +32,7 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 /**
  * MainController for GUI.
@@ -60,6 +65,11 @@ public class MainController extends Controller<BorderPane> {
     private int count;
     private int secondCount;
 
+    private Button searchButton;
+    private Button selectAllButton;
+    private Button deselectSearchButton;
+    private HBox hBox;
+
     private Stack<String> mostRecentGFF;
     private Stack<String> mostRecentMetadata;
     private Stack<String> mostRecentGFA;
@@ -80,11 +90,8 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentNWK = new Stack<>();
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-
         checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false, false);
@@ -269,8 +276,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentGFF(String s) {
-        mostRecentGFF.push(s);
-        writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        if (!mostRecentGFF.contains(s)) {
+            mostRecentGFF.push(s);
+            writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
     }
 
     /**
@@ -279,8 +288,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentMetadata(String s) {
-        mostRecentMetadata.push(s);
-        writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        if (!mostRecentMetadata.contains(s)) {
+            mostRecentMetadata.push(s);
+            writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
     }
 
     /**
@@ -315,6 +326,11 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
+        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleFilters(true);
+        MenuFactory.toggleFileMenu(true);
+        MenuFactory.toggleMostRecent(true);
+
         this.getRoot().setCenter(graphController.getRoot());
         if (secondCount == -1) {
             createList();
@@ -322,7 +338,6 @@ public class MainController extends Controller<BorderPane> {
             secondCount++;
         }
 
-        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -490,14 +505,15 @@ public class MainController extends Controller<BorderPane> {
      */
     public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
         VBox vBox = new VBox();
-        HBox hBox = new HBox();
+        hBox = new HBox();
         genomeTextField = new TextField();
+
 
         hBox.getStylesheets().add("/css/main.css");
 
-        Button searchButton = new Button("Search Genome (In Tree)");
-        Button selectAllButton = new Button("Select all");
-        Button deselectSearchButton = new Button("Deselect All");
+        searchButton = new Button("Search Genome (In Tree)");
+        selectAllButton = new Button("Select all");
+        deselectSearchButton = new Button("Deselect All");
         setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
@@ -512,13 +528,23 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
+            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
+            MenuFactory.toggleFilters(true);
+            MenuFactory.toggleViewMenu(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    public void toggleGenomeSearchBar(boolean x) {
+        searchButton.setDisable(x);
+        selectAllButton.setDisable(x);
+        deselectSearchButton.setDisable(x);
+        genomeTextField.setDisable(x);
     }
 
     /**

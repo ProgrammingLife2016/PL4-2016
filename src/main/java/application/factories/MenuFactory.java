@@ -40,7 +40,7 @@ public class MenuFactory {
             shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
-    private Menu fileMenu;
+    private static Menu fileMenu, mostRecentGFA, mostRecentNWK, mostRecentGFF, mostRecentMeta;
 
     /**
      * Enum for the recent menu dropdown types.
@@ -75,6 +75,52 @@ public class MenuFactory {
         bar.getMenus().addAll(fileMenu, viewMenu, filterMenu, helpMenu);
         return bar;
     }
+
+    public static void toggleFilters(boolean x) {
+        filterLineage.setDisable(x);
+        filterHIV.setDisable(x);
+        filterCohort.setDisable(x);
+        filterStudyDistrict.setDisable(x);
+        filterSpecimenType.setDisable(x);
+        filterIsolation.setDisable(x);
+        filterPhenoDST.setDisable(x);
+        filterCapreomycin.setDisable(x);
+        filterEthambutol.setDisable(x);
+        filterEthionAmide.setDisable(x);
+        filterIsoniazid.setDisable(x);
+        filterKanamycin.setDisable(x);
+        filterPyrazinamide.setDisable(x);
+        filterOfloxacin.setDisable(x);
+        filterRifampin.setDisable(x);
+        filterStreptomycin.setDisable(x);
+        filterSpoligotype.setDisable(x);
+        filterGenoDST.setDisable(x);
+        filterTF.setDisable(x);
+    }
+
+    public static void toggleViewMenu(boolean x) {
+        showGenomeSequence.setDisable(x);
+        showOnlyThisStrain.setDisable(x);
+        showPhylogeneticTree.setDisable(x);
+        showSelectedStrains.setDisable(x);
+        resetView.setDisable(x);
+
+    }
+
+    public static void toggleFileMenu(boolean x) {
+        loadAnnotations.setDisable(x);
+        loadGenome.setDisable(x);
+        loadMetadata.setDisable(x);
+        loadPhylogeneticTree.setDisable(x);
+    }
+
+    public static void toggleMostRecent(boolean x) {
+        mostRecentNWK.setDisable(x);
+        mostRecentMeta.setDisable(x);
+        mostRecentGFA.setDisable(x);
+        mostRecentGFF.setDisable(x);
+    }
+
 
     private Menu initHelpMenu() {
         about = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
@@ -240,19 +286,23 @@ public class MenuFactory {
     }
 
     private Menu initMostRecentGFFMenu() {
-        return initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
+        mostRecentGFF = initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
+        return mostRecentGFF;
     }
 
     private Menu initMostRecentMetadataMenu() {
-        return initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
+        mostRecentMeta = initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
+        return mostRecentMeta;
     }
 
     private Menu initMostRecentGFAMenu() {
-        return initMostRecentMenu(RecentMenuTypes.GFA, mainController.getMostRecentGFA());
+        mostRecentGFA = initMostRecentMenu(RecentMenuTypes.GFA, mainController.getMostRecentGFA());
+        return mostRecentGFA;
     }
 
     private Menu initMostRecentNWKMenu() {
-        return initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
+        mostRecentNWK = initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
+        return mostRecentNWK;
     }
 
     private Menu initMostRecentMenu(RecentMenuTypes type, Stack<String> mostRecentFileNames) {
