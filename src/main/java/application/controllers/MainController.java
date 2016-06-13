@@ -433,7 +433,8 @@ public class MainController extends Controller<BorderPane> {
                 List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
 
                 try {
-                    Annotation newAnnotation = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                    Annotation newAnnotation
+                            = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                     Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
                     if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) { return; }
 
