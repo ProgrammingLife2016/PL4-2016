@@ -50,11 +50,13 @@ public class RectangleCell extends GraphCell {
     }
 
     /**
-     * deselect the highlight on the rectangle cell.
+     * Deselect the highlight on the rectangle cell.
      */
     public void deselectHighLight() {
-        shape.setStroke(Color.DODGERBLUE);
-        shape.setStrokeWidth(1);
+        if (shape.getStroke().equals(Color.YELLOW) && shape.getStrokeWidth() == 4) {
+            shape.setStroke(Color.DODGERBLUE);
+            shape.setStrokeWidth(1);
+        }
     }
     /**
      * Method to reset the focus.

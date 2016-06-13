@@ -10,9 +10,9 @@ import core.annotation.AnnotationProcessor;
 import core.graph.Node;
 import core.parsers.AnnotationParser;
 import core.parsers.MetaDataParser;
+import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -54,6 +54,7 @@ public class MainController extends Controller<BorderPane> {
     private int currentView;
     private ListFactory listFactory;
     private TextField genomeTextField;
+    private TextField annotationTextField;
     private StackPane box;
     private int count;
     private int secondCount;
@@ -61,7 +62,6 @@ public class MainController extends Controller<BorderPane> {
     private LinkedList<String> mostRecentMetadata;
     private LinkedList<String> mostRecentGFA;
     private LinkedList<String> mostRecentNWK;
-    private String lastAnnotationSearch;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -393,8 +393,7 @@ public class MainController extends Controller<BorderPane> {
      * @param deselectButton  The deselect button.
      * @param selectAllButton The select all button.
      */
-    private void setSearchAndDeselectButtonActionListener(
-            Button searchButton, Button deselectButton, Button selectAllButton) {
+    private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
                 Cell cell = treeController.getCellByName(
@@ -408,11 +407,13 @@ public class MainController extends Controller<BorderPane> {
 
         deselectButton.setOnAction(e -> {
             treeController.clearSelection();
+            genomeTextField.setText("");
             fillTree();
         });
 
         selectAllButton.setOnAction(e -> {
             treeController.selectAll();
+            genomeTextField.setText("");
             fillTree();
         });
     }
@@ -420,77 +421,51 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the annotation highlight button.
      *
-     * @param annotationTextField The annotation search field.
      * @param highlightButton     The annotation highlight button.
+     * @param deselectAnnotationButton     The annotation deselect button.
      */
-    private void setHighlightButtonActionListener(TextField annotationTextField,
-                                                  Button highlightButton,
-                                                  Button deselectAnnotationButton) {
-        highlightButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
+    private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
+        highlightButton.setOnAction(e -> {
+            if (currentView != 0) { return; }
 
-        deselectAnnotationButton.setOnAction(e -> processAnnotationButtonPress(annotationTextField, e));
-    }
+            if (!annotationTextField.getText().isEmpty()) {
+                List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
 
-    /**
-     * Performs the actions needed on Annotation highlight and deselect button presses.
-     *
-     * @param annotationTextField The annotation search box.
-     * @param e                   The ActionEvent that has been triggered.
-     */
-    private void processAnnotationButtonPress(TextField annotationTextField, ActionEvent e) {
-        if (currentView != 0) {
-            return;
-        }
+                try {
+                    Annotation newAnnotation = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                    Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) { return; }
 
-        if (!annotationTextField.getText().isEmpty()) {
-            List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
-
-            try {
-                Annotation newAnnotation
-                        = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
-                Map<Integer, Cell> cellMap
-                        = graphController.getGraph().getModel().getCellMap();
-
-                if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
-                    return;
-                }
-
-                if (e.getSource().toString().contains("Highlight")) {
-                    deselectPreviousHighLight(cellMap, annotations);
-                }
-
-                for (Node n : newAnnotation.getSpannedNodes()) {
-                    if (e.getSource().toString().contains("Highlight")) {
+                    // Deselect the previously highlighted annotation as only one should be highlighted at a time.
+                    deselectAllAnnotations();
+                    for (Node n : newAnnotation.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-                    } else if (e.getSource().toString().contains("Deselect")) {
-                        ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
                     }
+                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                    System.out.println("[DEBUG] Found too many matching annotations");
                 }
 
-            } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-                e1.printStackTrace();
+                annotationTextField.setText("");
             }
+        });
 
-            lastAnnotationSearch = annotationTextField.getText();
-        }
+        deselectAnnotationButton.setOnAction(e -> {
+            deselectAllAnnotations();
+            annotationTextField.setText("");
+        });
     }
 
     /**
-     * Deselects the old annotation.
-     *
-     * @param cellMap     Map of cells.
-     * @param annotations List of annotations.
+     * Deselects all annotations
      */
-    private void deselectPreviousHighLight(Map<Integer, Cell> cellMap,
-                                           List<Annotation> annotations) {
-        if (lastAnnotationSearch != null) {
-            try {
-                Annotation oldAnnotation = AnnotationProcessor.findAnnotation(annotations, lastAnnotationSearch);
-                for (Node oldAnnotationNode : oldAnnotation.getSpannedNodes()) {
-                    ((RectangleCell) cellMap.get(oldAnnotationNode.getId())).deselectHighLight();
-                }
-            } catch (AnnotationProcessor.TooManyAnnotationsFoundException e) {
-                e.printStackTrace();
+    private void deselectAllAnnotations() {
+        if (currentView != 0) { return; }
+        Map<Integer, Node> nodeMap = graphController.getGraph().getModel().getLevelMaps().get(0);
+        Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+
+        for (Node n : nodeMap.values()) {
+            if (n.getType().equals(CellType.RECTANGLE)) {
+                ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
             }
         }
     }
@@ -504,6 +479,7 @@ public class MainController extends Controller<BorderPane> {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
         genomeTextField = new TextField();
+        annotationTextField = new TextField();
 
         hBox.getStylesheets().add("/css/main.css");
 
@@ -512,13 +488,12 @@ public class MainController extends Controller<BorderPane> {
         Button selectAllButton = new Button("Select all");
         Button deselectSearchButton = new Button("Deselect All");
 
-        TextField annotationTextField = new TextField();
         Button highlightButton = new Button("Highlight annotation");
         Button deselectAnnotationButton = new Button("Deselect annotation");
 
 
-        setSearchAndDeselectButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
-        setHighlightButtonActionListener(annotationTextField, highlightButton, deselectAnnotationButton);
+        setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
+        setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
 
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton,
                 annotationTextField, highlightButton, deselectAnnotationButton);
