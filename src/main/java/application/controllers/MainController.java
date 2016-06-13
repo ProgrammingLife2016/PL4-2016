@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -58,10 +59,11 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
-    private LinkedList<String> mostRecentGFF;
-    private LinkedList<String> mostRecentMetadata;
-    private LinkedList<String> mostRecentGFA;
-    private LinkedList<String> mostRecentNWK;
+
+    private Stack<String> mostRecentGFF;
+    private Stack<String> mostRecentMetadata;
+    private Stack<String> mostRecentGFA;
+    private Stack<String> mostRecentNWK;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -72,24 +74,18 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
         this.secondCount = -1;
-        this.mostRecentGFF = new LinkedList<>();
-        this.mostRecentMetadata = new LinkedList<>();
-        this.mostRecentGFA = new LinkedList<>();
-        this.mostRecentNWK = new LinkedList<>();
+        this.mostRecentGFF = new Stack<>();
+        this.mostRecentMetadata = new Stack<>();
+        this.mostRecentGFA = new Stack<>();
+        this.mostRecentNWK = new Stack<>();
 
-        if (!mostRecentGFA.isEmpty()) {
-            checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-        }
-        if (!mostRecentGFF.isEmpty()) {
-            checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-        }
-        if (!mostRecentMetadata.isEmpty()) {
-            checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-        }
-        if (!mostRecentNWK.isEmpty()) {
-            checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
-        }
+        checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
 
+        checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+
+        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+
+        checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false, false);
 
@@ -180,21 +176,25 @@ public class MainController extends Controller<BorderPane> {
      * @param mostRecent list of most recent files.
      */
     @SuppressFBWarnings
-    public void checkMostRecent(String fileName, LinkedList<String> mostRecent) {
+    public void checkMostRecent(String fileName, Stack<String> mostRecent) {
         try {
-            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File f = new File(s + fileName);
-            if (f.exists()) {
-                Scanner sc = new Scanner(f);
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
+            File current = new File(file.getParentFile() + fileName);
+
+            if (current.exists()) {
+                Scanner sc = new Scanner(current);
                 while (sc.hasNextLine()) {
                     String string = sc.nextLine();
-                    mostRecent.addFirst(string);
+                    mostRecent.add(string);
                 }
 
                 sc.close();
             }
         } catch (IOException e1) {
             e1.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
@@ -205,13 +205,15 @@ public class MainController extends Controller<BorderPane> {
      * @param mostRecent list of most recent files.
      */
     @SuppressFBWarnings
-    public void writeMostRecent(String fileName, LinkedList<String> mostRecent) {
+    public void writeMostRecent(String fileName, Stack<String> mostRecent) {
         try {
-            String s = ClassLoader.getSystemClassLoader().getResource(".").getPath().replaceAll("%20", " ");
-            File file = new File(s + fileName);
-            file.createNewFile();
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
+            File current = new File(file.getParentFile() + fileName);
 
-            PrintWriter writer = new PrintWriter(file, "UTF-8");
+            current.createNewFile();
+
+            PrintWriter writer = new PrintWriter(current, "UTF-8");
 
             for (int i = 0; i < mostRecent.size(); i++) {
                 writer.println(mostRecent.get(i));
@@ -220,6 +222,8 @@ public class MainController extends Controller<BorderPane> {
             writer.close();
         } catch (IOException e1) {
             e1.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
@@ -228,7 +232,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public LinkedList getMostRecentGFF() {
+    public Stack getMostRecentGFF() {
         return mostRecentGFF;
     }
 
@@ -237,7 +241,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public LinkedList getMostRecentMetadata() {
+    public Stack getMostRecentMetadata() {
         return mostRecentMetadata;
     }
 
@@ -246,7 +250,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public LinkedList getMostRecentGFA() {
+    public Stack getMostRecentGFA() {
         return mostRecentGFA;
     }
 
@@ -255,7 +259,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public LinkedList getMostRecentNWK() {
+    public Stack getMostRecentNWK() {
         return mostRecentNWK;
     }
 
@@ -265,7 +269,7 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentGFF(String s) {
-        mostRecentGFF.addFirst(s);
+        mostRecentGFF.push(s);
         writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
     }
 
@@ -275,7 +279,7 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentMetadata(String s) {
-        mostRecentMetadata.addFirst(s);
+        mostRecentMetadata.push(s);
         writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
     }
 
@@ -285,8 +289,11 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentGFA(String s) {
-        mostRecentGFA.addFirst(s);
-        writeMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        if (!mostRecentGFA.contains(s)) {
+            mostRecentGFA.push(s);
+            writeMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        }
+
     }
 
     /**
@@ -295,8 +302,11 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentNWK(String s) {
-        mostRecentNWK.addFirst(s);
-        writeMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        if (!mostRecentNWK.contains(s)) {
+            mostRecentNWK.push(s);
+            writeMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        }
+
     }
 
     /**

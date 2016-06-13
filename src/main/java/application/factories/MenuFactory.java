@@ -21,10 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static core.filtering.Filter.*;
 import static java.lang.String.format;
@@ -225,7 +222,7 @@ public class MenuFactory {
         return initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
     }
 
-    private Menu initMostRecentMenu(RecentMenuTypes type, LinkedList<String> mostRecentFileNames) {
+    private Menu initMostRecentMenu(RecentMenuTypes type, Stack<String> mostRecentFileNames) {
         List<String> recents = new ArrayList<>(Arrays.asList("Empty", "Empty", "Empty"));
 
         for (int idx = 0; idx < 3; idx++) {
