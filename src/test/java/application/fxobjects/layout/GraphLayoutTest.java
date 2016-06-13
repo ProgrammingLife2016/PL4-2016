@@ -114,9 +114,11 @@ public class GraphLayoutTest {
 
         graphLayout = new GraphLayout(model, 20, 500);
 
-        assertFalse(cell.isRelocated());
+        assertFalse(cell.isRelocatedX());
+        assertFalse(cell.isRelocatedY());
         graphLayout.execute();
-        assertTrue(cell.isRelocated());
+        assertTrue(cell.isRelocatedY());
+        assertTrue(cell.isRelocatedX());
     }
 
 }

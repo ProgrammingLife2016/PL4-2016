@@ -62,7 +62,7 @@ public class GraphLayout extends CellLayout {
         List<Cell> cells = model.getAddedCells();
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
-            if (!cell.isRelocated()) {
+            if (!cell.isRelocatedX()) {
                 currentX += offset;
                 if (currentX > maxWidth) {
                     maxWidth = currentX;
@@ -72,11 +72,16 @@ public class GraphLayout extends CellLayout {
                     minWidth = currentX;
                     leftMost = cell;
                 }
-                currentY = centerY;
 
-                cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
-                        currentY - (cell.getCellShape().getLayoutBounds().getHeight() / 2));
-                cell.setRelocated(true);
+                if (cell.isRelocatedY()) {
+                    cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
+                            cell.getLayoutY());
+                } else {
+                    cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
+                            currentY - (cell.getCellShape().getLayoutBounds().getWidth() / 2));
+                }
+                cell.setRelocatedX(true);
+                cell.setRelocatedY(true);
 
                 currentX += offset + cell.getCellShape().getLayoutBounds().getWidth() / 2;
 
@@ -84,7 +89,7 @@ public class GraphLayout extends CellLayout {
 
                 for (Cell child : cell.getCellChildren()) {
                     for (Cell childParent : child.getCellParents()) {
-                        if (!childParent.isRelocated()) {
+                        if (!childParent.isRelocatedX()) {
                             childrenToDraw.remove(child);
                         }
                     }
@@ -115,36 +120,40 @@ public class GraphLayout extends CellLayout {
         int modifier = -1; //alternate between above and below for the same x-level
         for (Cell c : cell.getCellChildren()) {
             GraphCell child = (GraphCell) c;
-            if (!child.isRelocated() || child.getLayoutX() < cell.getLayoutX()) {
                 if (cellCount % 2 == 0) {
-                    child.relocate(currentX
-                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY - evenChildOffset
-                                    - (child.getCellShape().getLayoutBounds().getHeight() / 2));
-                    evenChildOffset = (yOffset / 2) * modifier;
-                    if (childrenToDraw.contains(child)) {
-                        child.setRelocated(true);
+                    double yCoordinate = currentY - evenChildOffset
+                            - (child.getCellShape().getLayoutBounds().getHeight() / 2);
+                    if (child.isRelocatedY()) {
+                        yCoordinate = child.getLayoutY();
                     }
+                    child.relocate(currentX
+                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
+                    evenChildOffset = (yOffset / 2) * modifier;
                     modifier *= -1;
                     if (modifier > 0) {
                         modifier++;
                     }
                 } else {
+                    double yCoordinate = currentY + oddChildOffset
+                            - (child.getCellShape().getLayoutBounds().getHeight() / 2);
+                    if (child.isRelocatedY()) {
+                        yCoordinate = child.getLayoutY();
+                    }
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY + oddChildOffset
-                                    - (child.getCellShape().getLayoutBounds().getHeight() / 2));
+                            yCoordinate);
                     oddChildOffset = yOffset * modifier;
-                    if (childrenToDraw.contains(child)) {
-                        child.setRelocated(true);
-                    }
+
 
                     modifier *= -1;
                     if (modifier < 0) {
                         modifier--;
                     }
                 }
+            if (childrenToDraw.contains(child)) {
+                child.setRelocatedX(true);
             }
+            child.setRelocatedY(true);
         }
     }
 

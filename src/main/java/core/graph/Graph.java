@@ -263,12 +263,20 @@ public class Graph {
         copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
         HashSet<Node> S = new HashSet<>();
         List<Integer> L = new ArrayList<>();
-        S.add(copyNodeMap.get(1));
+        for (int key : nodeMap.keySet()) {
+            Node node = nodeMap.get(key);
+            //Check whether the node has no parents
+            if (node.getParents().size() == 0) {
+                //Add the node to the stack of nodes without parent
+                S.add(node);
+            }
+        }
 
         //while S is non-empty do
         while (!S.isEmpty()) {
             //remove a node n from S
             Node n = S.iterator().next();
+
             S.remove(n);
 
             //insert n into L
