@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 
 /**
- * Class representing a Rectangle shape. *
+ * Class representing a Rectangle shape.
  */
 public class RectangleCell extends GraphCell {
 
@@ -50,7 +50,7 @@ public class RectangleCell extends GraphCell {
     public void setHighLight() {
         highlighted = true;
 
-        if (!shape.getStroke().equals(Color.YELLOW) && shape.getStrokeWidth() != 4) {
+        if (shape.getStrokeWidth() != 4) {
             shape.setStroke(Color.YELLOW);
             shape.setStrokeWidth(4);
         }
