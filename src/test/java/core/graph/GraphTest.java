@@ -1,15 +1,17 @@
 package core.graph;
 
-import core.Model;
-import core.Node;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.model.Model;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;

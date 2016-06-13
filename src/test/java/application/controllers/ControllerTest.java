@@ -1,14 +1,15 @@
 package application.controllers;
 
-        import javafx.scene.Parent;
-        import org.junit.After;
-        import org.junit.Before;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-        import org.mockito.Mock;
-        import org.mockito.Mockito;
-        import org.mockito.runners.MockitoJUnitRunner;
-        import java.util.Observer;
+import javafx.scene.Parent;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Observer;
 
 /**
  * Created by Niek on 5/18/2016.

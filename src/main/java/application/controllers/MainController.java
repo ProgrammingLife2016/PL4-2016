@@ -1,17 +1,30 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.RectangleCell;
-import core.*;
+import application.factories.LegendFactory;
+import application.factories.ListFactory;
+import application.factories.MenuFactory;
+import application.fxobjects.Cell;
+import application.fxobjects.graphCells.RectangleCell;
+import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
+import core.graph.Node;
+import core.parsers.AnnotationParser;
+import core.parsers.MetaDataParser;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
 
@@ -64,10 +77,19 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFA = new LinkedList<>();
         this.mostRecentNWK = new LinkedList<>();
 
-        checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-        checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-        checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        if (!mostRecentGFA.isEmpty()) {
+            checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        }
+        if (!mostRecentGFF.isEmpty()) {
+            checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
+        if (!mostRecentMetadata.isEmpty()) {
+            checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
+        if (!mostRecentNWK.isEmpty()) {
+            checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        }
+
 
         createMenu(false);
 
@@ -129,7 +151,7 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the meta data file.
      */
     public void initMetadata(String path) {
-        MetaData.readMetadataFromFile(path);
+        MetaDataParser.readMetadataFromFile(path);
     }
 
     /**
@@ -375,7 +397,7 @@ public class MainController extends Controller<BorderPane> {
             Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                application.fxobjects.cell.Cell cell = treeController.getCellByName(
+                Cell cell = treeController.getCellByName(
                         genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
@@ -426,7 +448,7 @@ public class MainController extends Controller<BorderPane> {
             try {
                 Annotation newAnnotation
                         = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
-                Map<Integer, application.fxobjects.cell.Cell> cellMap
+                Map<Integer, Cell> cellMap
                         = graphController.getGraph().getModel().getCellMap();
 
                 if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
@@ -459,7 +481,7 @@ public class MainController extends Controller<BorderPane> {
      * @param cellMap     Map of cells.
      * @param annotations List of annotations.
      */
-    private void deselectPreviousHighLight(Map<Integer, application.fxobjects.cell.Cell> cellMap,
+    private void deselectPreviousHighLight(Map<Integer, Cell> cellMap,
                                            List<Annotation> annotations) {
         if (lastAnnotationSearch != null) {
             try {

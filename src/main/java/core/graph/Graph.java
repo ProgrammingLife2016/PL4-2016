@@ -1,10 +1,12 @@
 package core.graph;
 
-import application.fxobjects.cell.Cell;
-import application.fxobjects.cell.Edge;
-import core.*;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
+import core.annotation.Annotation;
+import core.model.Model;
+import core.parsers.GraphParser;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -76,7 +78,7 @@ public class Graph {
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
-            Parser parser = new Parser();
+            GraphParser parser = new GraphParser();
             startMap = parser.readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);

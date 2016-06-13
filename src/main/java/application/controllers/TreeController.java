@@ -1,12 +1,16 @@
 package application.controllers;
 
-import application.fxobjects.cell.*;
-import application.fxobjects.cell.layout.*;
-import application.fxobjects.cell.tree.LeafCell;
-import core.Filter;
-import core.Filtering;
-import core.MetaData;
-import core.graph.PhylogeneticTree;
+import application.factories.MenuFactory;
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
+import application.fxobjects.layout.CellLayout;
+import application.fxobjects.layout.TreeLayout;
+import application.fxobjects.treeCells.LeafCell;
+import application.mouseHandlers.TreeMouseHandling;
+import core.filtering.Filter;
+import core.filtering.Filtering;
+import core.parsers.MetaDataParser;
+import core.phylogeneticTree.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -20,9 +24,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-import static application.fxobjects.cell.LineageColor.*;
+import static application.fxobjects.LineageColor.*;
 
 /**
  * Class responsible for setting up the scroll pane containing the phylogenetic tree.
@@ -155,9 +161,9 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.clear();
             collectedStrains.add(cell);
 
-            if (name.contains("TKK") && MetaData.getMetadata().get(name) != null) {
-                applyColorUpwards(parentList, determineEdgeLinColor(MetaData.getMetadata().get(name).getLineage()), 4.0);
-                applyColorOnCell(cell, determineSelectedLeafLinColor(MetaData.getMetadata().get(name).getLineage()));
+            if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
+                applyColorUpwards(parentList, determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
+                applyColorOnCell(cell, determineSelectedLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
             } else if (name.contains("G")) {
                 applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
                 applyColorOnCell(cell, determineSelectedLeafLinColor(4));
@@ -180,9 +186,9 @@ public class TreeController extends Controller<ScrollPane> {
             collectedStrains.clear();
             collectedStrains.add(cell);
 
-            if (name.contains("TKK") && MetaData.getMetadata().get(name) != null) {
+            if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
                 applyColorUpwards(parentList, Color.BLACK, 1.0);
-                applyColorOnCell(cell, determineLeafLinColor(MetaData.getMetadata().get(name).getLineage()));
+                applyColorOnCell(cell, determineLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
             } else if (name.contains("G")) {
                 applyColorUpwards(parentList, Color.BLACK, 1.0);
                 applyColorOnCell(cell, determineLeafLinColor(4));
@@ -229,12 +235,12 @@ public class TreeController extends Controller<ScrollPane> {
     private void applyColorOnCells() {
         collectedStrains.forEach(s -> {
                     LeafCell c = (LeafCell) s;
-                    if (c.getName().contains("TKK") && MetaData.getMetadata().get(c.getName()) != null) {
+                    if (c.getName().contains("TKK") && MetaDataParser.getMetadata().get(c.getName()) != null) {
                         c.setBackground(
                                 new Background(
                                         new BackgroundFill(
                                                 determineSelectedLeafLinColor(
-                                                        MetaData.getMetadata().get(
+                                                        MetaDataParser.getMetadata().get(
                                                                 c.getName()).getLineage()
                                                 ), null, null
                                         )
@@ -258,12 +264,12 @@ public class TreeController extends Controller<ScrollPane> {
     private void revertColorOnCells() {
         collectedStrains.forEach(s -> {
             LeafCell c = (LeafCell) s;
-            if (c.getName().contains("TKK") && MetaData.getMetadata().get(c.getName()) != null) {
+            if (c.getName().contains("TKK") && MetaDataParser.getMetadata().get(c.getName()) != null) {
                 c.setBackground(
                         new Background(
                                 new BackgroundFill(
                                         determineLeafLinColor(
-                                                MetaData.getMetadata().get(
+                                                MetaDataParser.getMetadata().get(
                                                         c.getName()).getLineage()
                                         ), null, null
                                 )
@@ -382,8 +388,8 @@ public class TreeController extends Controller<ScrollPane> {
         for (int i = 0; i < 10; i++) {
             int tempCount = 0;
             for (Cell c : collectedStrains) {
-                if (MetaData.getMetadata().containsKey(((LeafCell) c).getName())
-                        && MetaData.getMetadata().get(((LeafCell) c).getName()).getLineage() == i) {
+                if (MetaDataParser.getMetadata().containsKey(((LeafCell) c).getName())
+                        && MetaDataParser.getMetadata().get(((LeafCell) c).getName()).getLineage() == i) {
                     tempCount++;
                 }
             }
