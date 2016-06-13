@@ -177,7 +177,8 @@ public class MainController extends Controller<BorderPane> {
     @SuppressFBWarnings
     public void checkMostRecent(String fileName, Stack<String> mostRecent) {
         try {
-            File file = new File(MainController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
             File current = new File(file.getParentFile() + fileName);
 
             if (current.exists()) {
@@ -205,7 +206,8 @@ public class MainController extends Controller<BorderPane> {
     @SuppressFBWarnings
     public void writeMostRecent(String fileName, Stack<String> mostRecent) {
         try {
-            File file = new File(MainController.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
             File current = new File(file.getParentFile() + fileName);
 
             current.createNewFile();
