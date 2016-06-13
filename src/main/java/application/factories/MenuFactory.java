@@ -31,14 +31,11 @@ import static java.lang.String.format;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
+ *
  */
 @SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
-@SuppressWarnings({
-        "checkstyle:methodlength",
-        "checkstyle:linelength"
-})
 public class MenuFactory {
-    protected static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
+    private static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
@@ -671,6 +668,13 @@ public class MenuFactory {
         CheckMenuItem spo7 = new CheckMenuItem("H37Rv");
         spo7.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_H37RV, spo7.isSelected()));
+        initSpoligotypeFilter2(spo1, spo2, spo3, spo4, spo5, spo6, spo7);
+    }
+
+    private void initSpoligotypeFilter2(CheckMenuItem spo1, CheckMenuItem spo2,
+                                        CheckMenuItem spo3, CheckMenuItem spo4,
+                                        CheckMenuItem spo5, CheckMenuItem spo6,
+                                        CheckMenuItem spo7) {
         CheckMenuItem spo8 = new CheckMenuItem("LAM11-ZWE");
         spo8.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_LAM11_ZWE, spo8.isSelected()));
@@ -711,8 +715,8 @@ public class MenuFactory {
         spo21.setOnAction(event ->
                 mainController.getTreeController().modifyFilter(SPOLIGOTYPE_X3, spo21.isSelected()));
 
-        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5,
-                spo6, spo7, spo8, spo9,
+        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4,
+                spo5, spo6, spo7, spo8, spo9,
                 spo11, spo12, spo13, spo14, spo15,
                 spo16, spo17, spo18, spo19, spo20,
                 spo21);
