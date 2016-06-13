@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class RectangleCell extends GraphCell {
 
+    private Boolean highlighted;
+
     /**
      * Rectangle cell constructor.
      * @param id The ID of a cell.
@@ -39,20 +41,27 @@ public class RectangleCell extends GraphCell {
         setView(pane);
 
         type = CellType.RECTANGLE;
+        highlighted = false;
     }
 
     /**
      * Highlight the rectangle cell.
      */
     public void setHighLight() {
-        shape.setStroke(Color.YELLOW);
-        shape.setStrokeWidth(4);
+        highlighted = true;
+
+        if (!shape.getStroke().equals(Color.YELLOW) && shape.getStrokeWidth() != 4) {
+            shape.setStroke(Color.YELLOW);
+            shape.setStrokeWidth(4);
+        }
     }
 
     /**
      * Deselect the highlight on the rectangle cell.
      */
     public void deselectHighLight() {
+        highlighted = false;
+
         if (shape.getStroke().equals(Color.YELLOW) && shape.getStrokeWidth() == 4) {
             shape.setStroke(Color.DODGERBLUE);
             shape.setStrokeWidth(1);
@@ -65,5 +74,10 @@ public class RectangleCell extends GraphCell {
         this.setEffect(null);
         shape.setStroke(Color.DODGERBLUE);
         shape.setStrokeWidth(1);
+
+        if (highlighted) {
+            shape.setStroke(Color.YELLOW);
+            shape.setStrokeWidth(4);
+        }
     }
 }
