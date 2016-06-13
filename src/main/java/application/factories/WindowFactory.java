@@ -261,8 +261,7 @@ public final class WindowFactory {
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
             mainController.addRecentGFA(f);
-            createMenuWithSearch();
-
+            createMenuWithSearchWithoutAnnotation();
         });
     }
 
@@ -300,11 +299,16 @@ public final class WindowFactory {
     }
 
     /**
-     * Creates the menu including a searchBar.
+     * Creates the menu including a search bar with the annotations search box.
      */
     public static void createMenuWithSearch() {
-        mainController.createMenu(true);
+        mainController.createMenu(true, true);
     }
 
-
+    /**
+     * Creates the menu including a search bar without the annotations search box.
+     */
+    public static void createMenuWithSearchWithoutAnnotation() {
+        mainController.createMenu(true, false);
+    }
 }

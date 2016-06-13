@@ -50,7 +50,6 @@ public class GraphController extends Controller<ScrollPane> {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-
     public GraphController(MainController m) {
         super(new ScrollPane());
         this.graph = new Graph();
@@ -78,42 +77,37 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
         this.getRoot().hvalueProperty().addListener(changeListener);
 
-        this.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
+        setScrolling(this);
+
+    }
+
+    private void setScrolling(GraphController gc) {
+        gc.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
                 sideFocus(false);
             }
-
             if (event.getDeltaY() != 0) {
                 if (graphMouseHandling.getPrevClick() != null) {
                     graphMouseHandling.getPrevClick().resetFocus();
                 }
                 if (event.getDeltaY() < 0) {
                     mainController.switchScene(+1);
-
                     if (graphMouseHandling.getPrevClick() != null) {
                         zoomOutFocus(graphMouseHandling.getPrevClick());
                     }
-
                     zoomBox.replaceZoomBox(updateZoomBox());
-
                     event.consume();
-                }
-                if (event.getDeltaY() > 0) {
+                } else if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
-
                     if (graphMouseHandling.getPrevClick() != null) {
                         zoomInFocus(graphMouseHandling.getPrevClick());
                     }
-
                     zoomBox.replaceZoomBox(updateZoomBox());
-
                     event.consume();
                 }
-                Bounds bounds = getRoot().getViewportBounds();
-                drawFrom = -1 * (int) bounds.getMinX();
+                drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
                 update(graph.getCurrentRef(), graph.getCurrentInt());
-
             }
         });
     }
@@ -292,30 +286,7 @@ public class GraphController extends Controller<ScrollPane> {
             double maxEdgeLengthLong = screenSize.getWidth();
 
             for (Edge e : graph.getModel().getAddedEdges()) {
-                double xLength = e.getLine().endXProperty().get()
-                        - e.getLine().startXProperty().get();
-                double yLength = e.getLine().endYProperty().get()
-                        - e.getLine().startYProperty().get();
-                double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
-
-                if (length > maxEdgeLength
-                        && !(e.getSource().getType() == CellType.RECTANGLE)
-                        || length > maxEdgeLengthLong) {
-                    e.getLine().getStrokeDashArray().addAll(3d, 17d);
-                    if (e.getLine().getStroke() == Color.BLACK) {
-                        e.getLine().setStroke(Color.LIGHTGRAY);
-                    } else {
-                        e.getLine().setStroke(Color.ORANGE);
-                    }
-                    double newY = e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                            + (e.getSource().getLayoutY()
-                            + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                            - (screenSize.getHeight() - 100) / 2) * 2.5;
-                    newY = Math.max(newY, 10);
-                    newY = Math.min(newY, screenSize.getHeight() * 0.67);
-                    e.getSource().relocate(e.getSource().getLayoutX(), newY);
-                }
+                checkEdgeLength(e, maxEdgeLength, maxEdgeLengthLong);
             }
             initMouseHandler();
             graph.endUpdate();
@@ -329,6 +300,31 @@ public class GraphController extends Controller<ScrollPane> {
 
         //Set Graph as center.
         this.getRoot().setContent(root);
+    }
+
+    private void checkEdgeLength(Edge e, double maxEdgeLength, double maxEdgeLengthLong) {
+        double xLength = e.getLine().endXProperty().get()
+                - e.getLine().startXProperty().get();
+        double yLength = e.getLine().endYProperty().get()
+                - e.getLine().startYProperty().get();
+        double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+
+        if (length > maxEdgeLength || length > maxEdgeLengthLong) {
+            e.getLine().getStrokeDashArray().addAll(3d, 17d);
+            if (e.getLine().getStroke() == Color.BLACK) {
+                e.getLine().setStroke(Color.LIGHTGRAY);
+            } else {
+                e.getLine().setStroke(Color.ORANGE);
+            }
+            double newY = e.getSource().getLayoutY()
+                    + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
+                    + (e.getSource().getLayoutY()
+                    + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
+                    - (screenSize.getHeight() - 100) / 2) * 2.5;
+            newY = Math.max(newY, 10);
+            newY = Math.min(newY, screenSize.getHeight() * 0.67);
+            e.getSource().relocate(e.getSource().getLayoutX(), newY);
+        }
     }
 
     /**
