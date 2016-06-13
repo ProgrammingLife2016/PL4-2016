@@ -15,10 +15,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +41,8 @@ public class Model {
 
     private Rectangle2D screenSize;
 
-    private ArrayList<ArrayList<Cell>> tileCellList;
+    private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
+    private TreeMap<Integer, ArrayList<Edge>> tileEdgeMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 
     /**
@@ -53,7 +51,8 @@ public class Model {
     public Model() {
         graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
-        tileCellList = new ArrayList<>();
+        tileCellMap = new TreeMap<>();
+        tileEdgeMap = new TreeMap<>();
 
         // clearSelection model, create lists
         clear();
@@ -67,6 +66,7 @@ public class Model {
             new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
         }
     }
+
     /**
      * Remove all cells and edges.
      */
@@ -290,6 +290,14 @@ public class Model {
         if (sourceCell != null && targetCell != null) {
             Edge edge = new Edge(sourceCell, targetCell, width, type);
             addedEdges.add(edge);
+            if (edge != null && edge.getLength() > screenSize.getWidth()) {
+                addLongEdge(edge);
+            } else {
+                int tileWidth = (int) screenSize.getWidth();
+                int tile = (int) ((edge.getSource().getLayoutX() - (edge.getSource().getLayoutX() % tileWidth)) / tileWidth);
+                tileEdgeMap.putIfAbsent(tile, new ArrayList<>());
+                tileEdgeMap.get(tile).add(edge);
+            }
         }
 
         return true;
@@ -415,13 +423,20 @@ public class Model {
     }
 
     public void addCellInTile(int tile, Cell c) {
-        if(tileCellList.get(tile) == null) {
-            tileCellList.set(tile, new ArrayList<>());
-        }
-        tileCellList.get(tile).add(c);
+        tileCellMap.putIfAbsent(tile, new ArrayList<>());
+
+        tileCellMap.get(tile).add(c);
     }
 
-    public ArrayList<Cell> getTile(int i) {
-        return tileCellList.get(i);
+    public ArrayList<Cell> getCellTile(int i) {
+        return tileCellMap.get(i);
+    }
+
+    public ArrayList<Edge> getEdgeTile(int i) {
+        return tileEdgeMap.get(i);
+    }
+
+    public ArrayList<Edge> getLongEdges() {
+        return longEdges;
     }
 }

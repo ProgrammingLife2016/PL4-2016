@@ -231,7 +231,7 @@ public class GraphController extends Controller<ScrollPane> {
         GraphCell prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
-                getCurrentView()).get(prevClick.getCellId()));
+                    getCurrentView()).get(prevClick.getCellId()));
         if (mainController.getCurrentView() == graphMouseHandling.getOriginalZoomLevel()) {
             prevClick.originalFocus();
         } else {

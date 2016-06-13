@@ -224,17 +224,6 @@ public class Graph {
         }
 
         toret.setLayout();
-        double width = screenSize.getWidth();
-        for (Edge e : toret.getAllEdges()) {
-            if (e.getLength() > width) {
-                toret.addLongEdge(e);
-            }
-        }
-        for (Cell c : toret.getAddedCells()) {
-            int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % width)) / width);
-            System.out.println(tile + " " + c.toString());
-            toret.addCellInTile(tile, c);
-        }
 
         return toret;
     }
@@ -541,13 +530,30 @@ public class Graph {
     public Model getModelAddedInView(int min, int max) {
         Model m = new Model();
 
-        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
+//        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
+//                .forEach(m::addCell);
+        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
 
-        this.getModel().getAddedEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
-                .forEach(m::addEdge);
+        for (int i = startTile; i <= startTile + 2; i++) {
+            if (getModel().getCellTile(i) != null) {
+                for (Cell c : getModel().getCellTile(i)) {
+                    // if (c.getLayoutX() > min && c.getLayoutX() <= max) {
+                    m.addCell(c);
+                    //}
+                }
+            }
+            if (getModel().getEdgeTile(i) != null) {
+                for (Edge e : getModel().getEdgeTile(i)) {
+                    m.addEdge(e);
+                }
+            }
+        }
+
+
+//        this.getModel().getAddedEdges().stream().filter(e -> !(
+//                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+//                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
+//                .forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
@@ -562,12 +568,19 @@ public class Graph {
     public Model getModelAllInView(int min, int max) {
         Model m = new Model();
 
-        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth())-1),0);
+        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
 
         for (int i = startTile; i < startTile + 3; i++) {
-            for(Cell c : getModel().getTile(i)) {
-                if(c.getLayoutX() > min && c.getLayoutX() <= max) {
-                    m.addCell(c);
+            if (getModel().getCellTile(i) != null) {
+                for (Cell c : getModel().getCellTile(i)) {
+                    if (c.getLayoutX() > min && c.getLayoutX() <= max) {
+                        m.addCell(c);
+                    }
+                }
+            }
+            if (getModel().getEdgeTile(i) != null) {
+                for (Edge e : getModel().getEdgeTile(i)) {
+                    m.addEdge(e);
                 }
             }
         }
@@ -575,9 +588,9 @@ public class Graph {
 //        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
 //                .forEach(m::addCell);
 
-        this.getModel().getAllEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
+//        this.getModel().getAllEdges().stream().filter(e -> !(
+//                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
+//                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
