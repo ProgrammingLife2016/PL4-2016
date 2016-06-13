@@ -64,4 +64,12 @@ public class MetaDataParserTest {
         assertEquals(1, MetaDataParser.detLineage("LIN 1"));
     }
 
+    /**
+     * Tests the readMetadataFromFile method.
+     */
+    @Test
+    public void testReadMetadataFromFile() {
+        MetaDataParser.readMetadataFromFile("src/main/resources/TestFiles/metadataTestFile.xlsx");
+        assertEquals(1, MetaDataParser.getMetadata().size());
+    }
 }
