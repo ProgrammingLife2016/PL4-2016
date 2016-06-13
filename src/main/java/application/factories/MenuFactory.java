@@ -103,7 +103,37 @@ public class MenuFactory {
             dialog.show();
         });
 
-        return initMenu("Help", about);
+        shortcuts = initMenuItem("Shortcuts", null, event -> {
+                    final Stage dialog = new Stage();
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+
+                    VBox content = new VBox();
+
+                    GridPane grid = new GridPane();
+                    grid.setVgap(5);
+                    grid.setHgap(10);
+                    grid.setPadding(new Insets(10, 10, 10, 10));
+
+                    grid.add(new Text("Ctrl + G"), 0, 0);
+                    grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
+                    grid.add(new Text("Ctrl + O"), 0, 1);
+                    grid.add(new Text("Load a NWK file (Phylogenetic Tree"), 1, 1);
+                    grid.add(new Text("Ctrl + A"), 0, 2);
+                    grid.add(new Text("Load a GFF file (Annotation data)"), 1, 2);
+                    grid.add(new Text("Ctrl + M"), 0, 3);
+                    grid.add(new Text("Load a MetaData file"), 1, 3);
+                    grid.add(new Text("Tab"), 0, 4);
+                    grid.add(new Text("Open about-information"), 1, 4);
+
+                    content.getChildren().addAll(grid);
+
+                    Scene dialogScene = new Scene(content, 300, 150);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                }
+        );
+
+        return initMenu("Help", shortcuts, about);
     }
 
     private GridPane buildHelpGridPane2() {
@@ -191,24 +221,16 @@ public class MenuFactory {
     private Menu initFileMenu() {
         loadAnnotations = initMenuItem("Load Annotation data",
                 new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
-                t -> {
-                    WindowFactory.createAnnotationChooser();
-                });
+                t -> WindowFactory.createAnnotationChooser());
         loadMetadata = initMenuItem("Load Meta Data",
                 new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN),
-                t -> {
-                    WindowFactory.createMetadataChooser();
-                });
+                t -> WindowFactory.createMetadataChooser());
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.G, KeyCodeCombination.CONTROL_DOWN),
-                t -> {
-                    WindowFactory.createGraphChooser();
-                });
+                t -> WindowFactory.createGraphChooser());
         loadPhylogeneticTree = initMenuItem("Load Phylogenetic Tree",
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
-                t -> {
-                    WindowFactory.createTreeChooser();
-                });
+                t -> WindowFactory.createTreeChooser());
 
         return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations, loadMetadata,
                 initMostRecentGFAMenu(), initMostRecentNWKMenu(),
