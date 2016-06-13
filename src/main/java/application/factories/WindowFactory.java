@@ -303,8 +303,7 @@ public final class WindowFactory {
      * Creates the menu including a searchBar.
      */
     public static void createMenuWithSearch() {
-        mainController.createMenu(true);
+        mainController.createMenu(true, true);
     }
-
 
 }

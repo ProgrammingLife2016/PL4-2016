@@ -91,7 +91,7 @@ public class MainController extends Controller<BorderPane> {
         }
 
 
-        createMenu(false);
+        createMenu(false, false);
 
         setBackground("/background_images/DART2N.png");
 
@@ -323,6 +323,8 @@ public class MainController extends Controller<BorderPane> {
      * @param selectedGenomes the genomes to display.
      */
     public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
+        createMenu(true, true);
+
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
@@ -396,8 +398,7 @@ public class MainController extends Controller<BorderPane> {
     private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                Cell cell = treeController.getCellByName(
-                        genomeTextField.textProperty().get().trim());
+                Cell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
@@ -473,31 +474,30 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the menu bar.
      *
-     * @param withSearch Which part of the menu to show.
+     * @param withSearch Whether to add the search bar.
+     * @param withAnnotationSearch Whether to add the annotation seach box to the search bar.
      */
-    public void createMenu(boolean withSearch) {
+    public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
         VBox vBox = new VBox();
         HBox hBox = new HBox();
         genomeTextField = new TextField();
-        annotationTextField = new TextField();
 
         hBox.getStylesheets().add("/css/main.css");
-
 
         Button searchButton = new Button("Search Genome (In Tree)");
         Button selectAllButton = new Button("Select all");
         Button deselectSearchButton = new Button("Deselect All");
-
-        Button highlightButton = new Button("Highlight annotation");
-        Button deselectAnnotationButton = new Button("Deselect annotation");
-
-
         setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
-        setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+        hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
-        hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton,
-                annotationTextField, highlightButton, deselectAnnotationButton);
-
+        // Dont add the annotation search box in the tree view
+        if (withAnnotationSearch) {
+            annotationTextField = new TextField();
+            Button highlightButton = new Button("Highlight annotation");
+            Button deselectAnnotationButton = new Button("Deselect annotation");
+            setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+            hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
+        }
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
@@ -571,8 +571,8 @@ public class MainController extends Controller<BorderPane> {
      * Method to fill the phylogenetic tree.
      */
     public void fillTree() {
+        createMenu(true, false);
         screen = treeController.getRoot();
-//        screen.getStylesheets().add("/css/treeController.css");
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
         hideListVBox();
