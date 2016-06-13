@@ -9,6 +9,7 @@ import application.fxobjects.treeCells.LeafCell;
 import application.mouseHandlers.TreeMouseHandling;
 import core.filtering.Filter;
 import core.filtering.Filtering;
+import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -41,6 +42,7 @@ public class TreeController extends Controller<ScrollPane> {
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
     private Filtering filtering;
+    private MainController mainController;
 
     /**
      * Class constructor.
@@ -55,6 +57,7 @@ public class TreeController extends Controller<ScrollPane> {
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
         this.filtering = new Filtering();
+        this.mainController = m;
 
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
@@ -156,6 +159,7 @@ public class TreeController extends Controller<ScrollPane> {
     public void applyCellHighlight(Cell cell) {
         if (cell instanceof LeafCell) {
             String name = ((LeafCell) cell).getName();
+            updateMetaInfo((LeafCell) cell);
             List<Cell> parentList = new ArrayList<>();
             parentList.add(cell);
             collectedStrains.clear();
@@ -500,5 +504,36 @@ public class TreeController extends Controller<ScrollPane> {
             applyCellHighlight((Cell) c);
         });
         modifyGraphOptions();
+    }
+
+    private void updateMetaInfo(LeafCell cell) {
+        StringBuilder builder = new StringBuilder();
+        Genome genome = MetaDataParser.getMetadata().get(cell.getName());
+
+        builder.append(genome.getName()).append("\n");
+        builder.append("Lineage: ").append(genome.getLineage()).append("\n");
+        builder.append("Age: ").append(genome.getAge()).append("\n");
+        builder.append("Sex: ").append(genome.getSex()).append("\n");
+        builder.append("HIV: ").append(genome.isHiv()).append("\n");
+        builder.append("Cohort: ").append(genome.getCohort()).append("\n");
+        builder.append("Study district: ").append(genome.getStudyDistrict()).append("\n");
+        builder.append("Specimen type: ").append(genome.getSpecimenType()).append("\n");
+        builder.append("Microscopic smear: ").append(genome.getSmearStatus()).append("\n");
+        builder.append("DNA Isolation: ").append(genome.getIsolation()).append("\n");
+        builder.append("Phenotypic DST: ").append(genome.getPhenoDST()).append("\n");
+        builder.append("Capreomycin: ").append(genome.getCapreomycin()).append("\n");
+        builder.append("Ethambutol: ").append(genome.getEthambutol()).append("\n");
+        builder.append("Ethionamide: ").append(genome.getEthionamide()).append("\n");
+        builder.append("Isoniazid: ").append(genome.getIsoniazid()).append("\n");
+        builder.append("Kanamycin: ").append(genome.getKanamycin()).append("\n");
+        builder.append("Pyrazinamide: ").append(genome.getPyrazinamide()).append("\n");
+        builder.append("Ofloxacin: ").append(genome.getOfloxacin()).append("\n");
+        builder.append("Rifampin: ").append(genome.getRifampin()).append("\n");
+        builder.append("Streptomycin: ").append(genome.getStreptomycin()).append("\n");
+        builder.append("Spoligotype: ").append(genome.getSpoligotype()).append("\n");
+        builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n");
+        builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
+
+        mainController.getListFactory().modifyNodeInfo(builder.toString());
     }
 }

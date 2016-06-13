@@ -600,7 +600,6 @@ public class MainController extends Controller<BorderPane> {
 //        screen.getStylesheets().add("/css/treeController.css");
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
-        hideListVBox();
     }
 
     /**
