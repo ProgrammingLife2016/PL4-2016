@@ -50,7 +50,6 @@ public class GraphController extends Controller<ScrollPane> {
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-
     public GraphController(MainController m) {
         super(new ScrollPane());
         this.graph = new Graph();
