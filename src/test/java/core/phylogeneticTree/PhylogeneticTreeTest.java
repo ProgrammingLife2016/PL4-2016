@@ -51,7 +51,7 @@ public class PhylogeneticTreeTest {
      */
     @Test
     public void testGetTreeFromFile() {
-        Tree tree = pt.getTreeFromFile("src\\main\\resources\\TestFiles\\TestFile.nwk");
+        Tree tree = pt.getTreeFromFile("src/main/resources/TestFiles/TestFile.nwk");
         assertEquals(4, tree.getLeafCount());
     }
 
@@ -60,7 +60,7 @@ public class PhylogeneticTreeTest {
      */
     @Test
     public void testSetup() {
-        Tree tree = pt.getTreeFromFile("src\\main\\resources\\TestFiles\\TestFile.nwk");
+        Tree tree = pt.getTreeFromFile("src/main/resources/TestFiles/TestFile.nwk");
         pt.setup(tree);
 
         verify(model, times(6)).addCell(anyInt(), anyString(), anyInt(), any(CellType.class));
