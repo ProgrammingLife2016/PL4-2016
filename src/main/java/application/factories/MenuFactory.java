@@ -37,7 +37,7 @@ public class MenuFactory {
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     public static MenuItem loadPhylogeneticTree, loadGenome, loadMetadata, loadAnnotations, resetView,
-            shortcuts,about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
     private Menu fileMenu;
@@ -103,35 +103,7 @@ public class MenuFactory {
             dialog.show();
         });
 
-        shortcuts = initMenuItem("Shortcuts", null, event -> {
-                    final Stage dialog = new Stage();
-                    dialog.initModality(Modality.APPLICATION_MODAL);
-
-                    VBox content = new VBox();
-
-                    GridPane grid = new GridPane();
-                    grid.setVgap(5);
-                    grid.setHgap(10);
-                    grid.setPadding(new Insets(10, 10, 10, 10));
-
-                    grid.add(new Text("Ctrl + G"), 0, 0);
-                    grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
-                    grid.add(new Text("Ctrl + O"), 0, 1);
-                    grid.add(new Text("Load a NWK file (Phylogenetic Tree"), 1, 1);
-                    grid.add(new Text("Ctrl + A"), 0, 2);
-                    grid.add(new Text("Load a GFF file (Annotation data)"), 1, 2);
-                    grid.add(new Text("Ctrl + M"), 0, 3);
-                    grid.add(new Text("Load a MetaData file"), 1, 3);
-                    grid.add(new Text("Tab"), 0, 4);
-                    grid.add(new Text("Open about-information"), 1, 4);
-
-                    content.getChildren().addAll(grid);
-
-                    Scene dialogScene = new Scene(content, 300, 150);
-                    dialog.setScene(dialogScene);
-                    dialog.show();
-                }
-        );
+        shortcuts = initMenuItem("Shortcuts", null, event -> showShortCutMenu());
 
         return initMenu("Help", shortcuts, about);
     }
@@ -152,6 +124,35 @@ public class MenuFactory {
                 + "The size of a node is based on the total sequence "
                 + "length inside it."), 1, 3);
         return grid2;
+    }
+
+    private void showShortCutMenu() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        VBox content = new VBox();
+
+        GridPane grid = new GridPane();
+        grid.setVgap(5);
+        grid.setHgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
+        grid.add(new Text("Ctrl + G"), 0, 0);
+        grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
+        grid.add(new Text("Ctrl + O"), 0, 1);
+        grid.add(new Text("Load a NWK file (Phylogenetic Tree"), 1, 1);
+        grid.add(new Text("Ctrl + A"), 0, 2);
+        grid.add(new Text("Load a GFF file (Annotation data)"), 1, 2);
+        grid.add(new Text("Ctrl + M"), 0, 3);
+        grid.add(new Text("Load a MetaData file"), 1, 3);
+        grid.add(new Text("Tab"), 0, 4);
+        grid.add(new Text("Open about-information"), 1, 4);
+
+        content.getChildren().addAll(grid);
+
+        Scene dialogScene = new Scene(content, 300, 150);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     private GridPane buildHelpGridPane() {

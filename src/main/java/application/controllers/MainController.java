@@ -589,13 +589,6 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Hide the info panel.
-     */
-    private void hideListVBox() {
-        this.getRoot().getChildren().remove(listVBox);
-    }
-
-    /**
      * Method to add items to the Info-List
      */
     private void setListItems() {
