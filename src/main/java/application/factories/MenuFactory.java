@@ -37,7 +37,7 @@ public class MenuFactory {
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     public static MenuItem loadPhylogeneticTree, loadGenome, loadMetadata, loadAnnotations, resetView,
-            shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+            shortcuts,about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
     private Menu fileMenu;
@@ -77,7 +77,7 @@ public class MenuFactory {
     }
 
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
+        about = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
 
@@ -103,7 +103,7 @@ public class MenuFactory {
             dialog.show();
         });
 
-        return initMenu("Help", shortcuts);
+        return initMenu("Help", about);
     }
 
     private GridPane buildHelpGridPane2() {
