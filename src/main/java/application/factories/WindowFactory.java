@@ -208,10 +208,6 @@ public final class WindowFactory {
         listView.setPrefWidth(450);
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        Text text = new Text("Do you also want to load one of the following files? If not, exit.");
-        text.setWrappingWidth(listView.getPrefWidth());
-        text.getStyleClass().add("title");
-
         for (Text t : candidates) {
             t.setWrappingWidth(listView.getPrefWidth());
             t.getStyleClass().add("text");
@@ -219,6 +215,20 @@ public final class WindowFactory {
 
         list.addAll(candidates.stream().collect(Collectors.toList()));
         listView.setItems(list);
+
+        handleTempStage(tempStage, type, listView);
+
+        if (type.toUpperCase().equals("NWK")) {
+            addGFAEventHandler(listView, selectedFile, tempStage);
+        } else if (type.toUpperCase().equals("GFA")) {
+            addNWKEventHandler(listView, selectedFile, tempStage);
+        }
+    }
+
+    private static void handleTempStage(Stage tempStage, String type, ListView listView) {
+        Text text = new Text("Do you also want to load one of the following files? If not, exit.");
+        text.setWrappingWidth(listView.getPrefWidth());
+        text.getStyleClass().add("title");
 
         VBox vBox = new VBox();
         vBox.getChildren().addAll(text, listView);
@@ -234,12 +244,6 @@ public final class WindowFactory {
 
         tempStage.setResizable(false);
         tempStage.show();
-
-        if (type.toUpperCase().equals("NWK")) {
-            addGFAEventHandler(listView, selectedFile, tempStage);
-        } else if (type.toUpperCase().equals("GFA")) {
-            addNWKEventHandler(listView, selectedFile, tempStage);
-        }
     }
 
 
