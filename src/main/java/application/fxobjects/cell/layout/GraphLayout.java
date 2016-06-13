@@ -82,6 +82,7 @@ public class GraphLayout extends CellLayout {
                 currentX += offset + cell.getCellShape().getLayoutBounds().getWidth() / 2;
 
                 List<Cell> childrenToDraw = new ArrayList<>(cell.getCellChildren());
+
                 for (Cell child : cell.getCellChildren()) {
                     for (Cell childParent : child.getCellParents()) {
                         if (!childParent.isRelocated()) {
@@ -89,6 +90,7 @@ public class GraphLayout extends CellLayout {
                         }
                     }
                 }
+
                 //only continue when there is more than 1 child to draw
                 cellCount = cell.getCellChildren().size();
                 if (cellCount > 1) {
@@ -115,7 +117,7 @@ public class GraphLayout extends CellLayout {
         for (Cell c : cell.getCellChildren()) {
             GraphCell child = (GraphCell) c;
             if (!child.isRelocated() || child.getLayoutX() < cell.getLayoutX()) {
-                if (childrenToDraw.size() % 2 == 0) {
+                if (cellCount % 2 == 0) {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
                             currentY - evenChildOffset
