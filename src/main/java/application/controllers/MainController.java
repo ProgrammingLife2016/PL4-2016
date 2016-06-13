@@ -610,6 +610,8 @@ public class MainController extends Controller<BorderPane> {
     public void fillTree() {
         createMenu(true, false);
         screen = treeController.getRoot();
+        toggleGenomeSearchBar(false);
+        MenuFactory.toggleFilters(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }

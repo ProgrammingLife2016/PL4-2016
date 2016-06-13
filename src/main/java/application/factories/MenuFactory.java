@@ -28,7 +28,6 @@ import static java.lang.String.format;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
- *
  */
 @SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
 public class MenuFactory {
@@ -233,8 +232,10 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null,
                 event -> mainController.fillGraph(new ArrayList<>(), new ArrayList<>()));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event ->
-                mainController.fillTree());
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> {
+            mainController.fillTree();
+        });
+
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain",
                 null, event -> {
                     mainController.getGraphController().getGraph().reset();
@@ -242,8 +243,11 @@ public class MenuFactory {
                             getSelectedGenomes());
                 });
 
-        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
+        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
+            mainController.toggleGenomeSearchBar(true);
+            mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
+        });
+
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
