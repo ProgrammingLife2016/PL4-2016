@@ -55,6 +55,7 @@ public final class GraphReducer {
      */
     public static List<HashMap<Integer, Node>>
     createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
+        determineParents(startMap);
         levelMaps.add(startMap);
         startMapSize = startMap.size();
 

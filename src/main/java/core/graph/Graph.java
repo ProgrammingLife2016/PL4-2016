@@ -240,8 +240,8 @@ public class Graph {
                     CellType.COMPLEX);
         }
 
-        if (node.getId() == 2020) {
-            System.out.println(node.getParents().toString());
+        if (node.getId() == 2) {
+            System.out.println(node.getParents());
         }
         for (int parentId : node.getParents()) {
             Node parent = nodeMap.get(parentId);
@@ -250,6 +250,10 @@ public class Graph {
                     intersectingStrings(node.getGenomes(), genomes))
                     / (double) Math.max(genomes.size(), 10))) + 1;
 
+            if (node.getId() == 2) {
+                System.out.println("edge added");
+                System.out.println("parent id = " + parentId);
+            }
             toret.addEdge(parentId, node.getId(), width, EdgeType.GRAPH);
         }
     }
