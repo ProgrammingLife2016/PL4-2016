@@ -83,11 +83,6 @@ public class GraphLayout extends CellLayout {
 
                 //only continue when there is more than 1 child
                 cellCount = cell.getCellChildren().size();
-                if (cellCount < 2) {
-                    continue;
-                }
-
-                breadthFirstPlacing(cell);
             }
         }
     }

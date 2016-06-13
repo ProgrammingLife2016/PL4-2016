@@ -255,7 +255,8 @@ public class Graph {
 
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
         //S <- Set of all nodes with no incoming edges
-        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        HashMap<Integer, Node> copyNodeMap = new HashMap<>();
+        copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
         HashSet<Node> S = new HashSet<>();
         List<Integer> L = new ArrayList<>();
         S.add(copyNodeMap.get(1));
@@ -274,13 +275,13 @@ public class Graph {
             for (int childId : n.getLinks()) {
                 //remove edge e from the graph
                 Node m = copyNodeMap.get(childId);
-                System.out.println("child of node " + n.getId() + " = " + childId);
-                m.removeParent(m.getId()); //Remove edge from m
+                m.removeParent(n.getId()); //Remove edge from m
 
                 //if m has no other incoming edges then insert m into S
                 if (m.getParents().size() == 0) {
-                    System.out.println("no more parents");
                     S.add(m);
+                } else {
+                    System.out.println(m.getParents().toString());
                 }
             }
         }
