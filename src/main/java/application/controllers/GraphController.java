@@ -298,7 +298,6 @@ public class GraphController extends Controller<ScrollPane> {
                 double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
 
                 if (length > maxEdgeLength
-                        && !(e.getSource().getType() == CellType.RECTANGLE)
                         || length > maxEdgeLengthLong) {
                     e.getLine().getStrokeDashArray().addAll(3d, 17d);
                     if (e.getLine().getStroke() == Color.BLACK) {

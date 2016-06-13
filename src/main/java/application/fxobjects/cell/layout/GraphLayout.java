@@ -7,6 +7,7 @@ import core.Node;
 import core.graph.cell.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -78,10 +79,22 @@ public class GraphLayout extends CellLayout {
                         currentY - (cell.getCellShape().getLayoutBounds().getHeight() / 2));
                 cell.setRelocated(true);
 
-                currentX += offset;
+                currentX += offset + cell.getCellShape().getLayoutBounds().getWidth() / 2;
 
-                //only continue when there is more than 1 child
+                List<Cell> childrenToDraw = new ArrayList<>(cell.getCellChildren());
+                for (Cell child : cell.getCellChildren()) {
+                    for (Cell childParent : child.getCellParents()) {
+                        if (!childParent.isRelocated()) {
+                            childrenToDraw.remove(child);
+                        }
+                    }
+                }
+                //only continue when there is more than 1 child to draw
                 cellCount = cell.getCellChildren().size();
+                if (cellCount > 1) {
+                    breadthFirstPlacing(cell, childrenToDraw);
+                }
+
             }
         }
     }
@@ -94,7 +107,7 @@ public class GraphLayout extends CellLayout {
      * @param cell - The parent node.
      */
     @SuppressWarnings("checkstyle:methodlength")
-    public void breadthFirstPlacing(Cell cell) {
+    public void breadthFirstPlacing(Cell cell, List<Cell> childrenToDraw) {
         int yOffset = 2 * offset; //y-offset between nodes on the same x-level
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
@@ -102,13 +115,15 @@ public class GraphLayout extends CellLayout {
         for (Cell c : cell.getCellChildren()) {
             GraphCell child = (GraphCell) c;
             if (!child.isRelocated() || child.getLayoutX() < cell.getLayoutX()) {
-                if (cellCount % 2 == 0) {
+                if (childrenToDraw.size() % 2 == 0) {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
                             currentY - evenChildOffset
                                     - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     evenChildOffset = (yOffset / 2) * modifier;
-                    child.setRelocated(true);
+                    if (childrenToDraw.contains(child)) {
+                        child.setRelocated(true);
+                    }
                     modifier *= -1;
                     if (modifier > 0) {
                         modifier++;
@@ -119,24 +134,15 @@ public class GraphLayout extends CellLayout {
                             currentY + oddChildOffset
                                     - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     oddChildOffset = yOffset * modifier;
-                    child.setRelocated(true);
+                    if (childrenToDraw.contains(child)) {
+                        child.setRelocated(true);
+                    }
 
                     modifier *= -1;
                     if (modifier < 0) {
                         modifier--;
                     }
                 }
-            }
-        }
-
-        for (Cell c : cell.getCellChildren()) {
-            GraphCell child = (GraphCell) c;
-            if (child.getCellChildren().size() > 1) {
-                currentX += offset;
-                currentY = (int) (child.getLayoutY()
-                        + (child.getCellShape().getLayoutBounds().getHeight() / 2));
-                cellCount = child.getCellChildren().size() - 1;
-                breadthFirstPlacing(child);
             }
         }
     }
