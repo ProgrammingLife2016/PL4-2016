@@ -3,10 +3,12 @@ package core.phylogeneticTree;
 import core.model.Model;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
@@ -43,25 +45,25 @@ public class PhylogeneticTreeTest {
         pt.setModel(model);
         assertEquals(model, pt.getModel());
     }
-//
-//    /**
-//     * Test for the getTreeFromFile method.
-//     */
-//    @Test
-//    public void testGetTreeFromFile() {
-//        Tree tree = pt.getTreeFromFile();
-//        assertNotEquals(0, tree.getLeafCount());
-//    }
+
+    /**
+     * Test for the getTreeFromFile method.
+     */
+    @Test
+    public void testGetTreeFromFile() {
+        Tree tree = pt.getTreeFromFile("src\\main\\resources\\TestFiles\\TestFile.nwk");
+        assertEquals(4, tree.getLeafCount());
+    }
 
     /**
      * Test for the setup method.
      */
-//    @Test
-//    public void testSetup() {
-//        Tree tree = pt.getTreeFromFile();
-//        pt.setup(tree);
-//
-//        verify(model, atLeast(1)).addCell(anyInt(), anyString(), anyInt(), any(CellType.class));
-//    }
+    @Test
+    public void testSetup() {
+        Tree tree = pt.getTreeFromFile("src\\main\\resources\\TestFiles\\TestFile.nwk");
+        pt.setup(tree);
+
+        verify(model, times(6)).addCell(anyInt(), anyString(), anyInt(), any(CellType.class));
+    }
 
 }
