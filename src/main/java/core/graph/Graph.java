@@ -29,6 +29,7 @@ public class Graph {
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
+
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
@@ -112,6 +113,7 @@ public class Graph {
                 loadOneUp(depth);
                 loadOneDown(depth);
             } else { //Second time. All models are loaded
+
                 if (depth < currentInt) {
                     zoomOut = current;
                     current = zoomIn;
@@ -143,6 +145,8 @@ public class Graph {
      * @param depth Depth to be loaded
      */
     private void loadOneUp(int depth) {
+        System.out.println("Start Load one up on depth: " + (depth + 1));
+        long time = System.currentTimeMillis();
         int finalDepth = depth;
         new Thread("Load one up") {
             public void start() {
@@ -151,6 +155,7 @@ public class Graph {
                 }
             }
         }.start();
+        System.out.println("Loading level " + (depth + 1) + " took " + (System.currentTimeMillis() - time) + " milis");
     }
 
     /**
@@ -159,6 +164,8 @@ public class Graph {
      * @param depth Depth to be loaded
      */
     private void loadOneDown(int depth) {
+        System.out.println("Start Load one down on depth: " + (depth - 1));
+        long time = System.currentTimeMillis();
         int finalDepth = depth;
         new Thread("Load one down") {
             public void start() {
@@ -168,6 +175,7 @@ public class Graph {
                 }
             }
         }.start();
+        System.out.println("Loading level " + (depth - 1) + " took " + (System.currentTimeMillis() - time) + " milis");
     }
 
     /**
@@ -196,6 +204,7 @@ public class Graph {
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
+
 
         //Root Node
         Node root = nodeMap.get(1);
@@ -541,7 +550,7 @@ public class Graph {
                 for (Cell c : getModel().getCellTile(i)) {
                     if (c.getLayoutX() > min && c.getLayoutX() <= max) {
                         m.addCell(c);
-                        for(Edge e : c.getEdges()) {
+                        for (Edge e : c.getEdges()) {
                             m.addEdge(e);
                         }
                         runs++;
@@ -583,7 +592,7 @@ public class Graph {
                 for (Cell c : getModel().getCellTile(i)) {
                     if (c.getLayoutX() > min && c.getLayoutX() <= max) {
                         m.addCell(c);
-                        for(Edge e : c.getEdges()) {
+                        for (Edge e : c.getEdges()) {
                             m.addEdge(e);
                         }
                         runs++;
@@ -597,7 +606,7 @@ public class Graph {
 //            }
 //        }
 
-        System.out.println("Runs: " + runs);
+        // System.out.println("Runs: " + runs);
 
 //        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
 //                .forEach(m::addCell);
