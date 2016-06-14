@@ -93,11 +93,11 @@ public class GraphLayout extends CellLayout {
                 breadthFirstPlacing(cell);
             }
 
-//            for (Edge e : toret.getAllEdges()) {
-//                if (e.getLength() > width) {
-//                    toret.addLongEdge(e);
-//                }
-//            }
+            for (Edge e : cell.getEdges()) {
+                if (e.getLength() > Screen.getPrimary().getBounds().getWidth()) {
+                    model.addLongEdge(e);
+                }
+            }
 
         }
     }

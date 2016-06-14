@@ -278,6 +278,7 @@ public class GraphController extends Controller<ScrollPane> {
     public void update(ArrayList<String> ref, int depth) {
         int min = drawFrom;
         int max = (int) (drawFrom + screenSize.getMaxX());
+        System.out.println("Update: " + depth);
 
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
@@ -340,17 +341,15 @@ public class GraphController extends Controller<ScrollPane> {
      */
     private void addToPane(int min, int max) {
         root.getChildren().clear();
-        if (graph.getModel().getAllCells().size() > 0) {
-            //@Todo dont load getmodel two times.
+        //if (graph.getModel().getAllCells().size() > 0) {
             Model model = graph.getModelAllInView(min, max);
             root.getChildren().addAll(model.getAddedEdges());
             root.getChildren().addAll(model.getAddedCells());
-            System.out.println(graph.getModelAllInView(min, max).getAddedCells().size());
-        } else {
-            Model model = graph.getModelAddedInView(min, max);
-            root.getChildren().addAll(model.getAddedEdges());
-            root.getChildren().addAll(model.getAddedCells());
-        }
+//        } else {
+//            Model model = graph.getModelAddedInView(min, max);
+//            root.getChildren().addAll(model.getAddedEdges());
+//            root.getChildren().addAll(model.getAddedCells());
+//        }
     }
 
     /**

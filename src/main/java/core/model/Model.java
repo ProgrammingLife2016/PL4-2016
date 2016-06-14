@@ -42,7 +42,6 @@ public class Model {
     private Rectangle2D screenSize;
 
     private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
-    private TreeMap<Integer, ArrayList<Edge>> tileEdgeMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 
     /**
@@ -52,7 +51,6 @@ public class Model {
         graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
         tileCellMap = new TreeMap<>();
-        tileEdgeMap = new TreeMap<>();
 
         // clearSelection model, create lists
         clear();
@@ -425,10 +423,6 @@ public class Model {
 
     public ArrayList<Cell> getCellTile(int i) {
         return tileCellMap.get(i);
-    }
-
-    public ArrayList<Edge> getEdgeTile(int i) {
-        return tileEdgeMap.get(i);
     }
 
     public ArrayList<Edge> getLongEdges() {
