@@ -1,7 +1,6 @@
 package core.graph;
 
 import core.annotation.Annotation;
-import core.genome.Genome;
 import org.junit.Before;
 import org.junit.Test;
 

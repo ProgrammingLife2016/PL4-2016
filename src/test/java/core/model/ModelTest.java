@@ -8,7 +8,6 @@ import core.annotation.Annotation;
 import core.graph.Node;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
-import javafx.scene.layout.StackPane;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 import org.junit.Test;
 
@@ -18,12 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class for the model class
@@ -165,6 +159,9 @@ public class ModelTest {
         assertEquals(1, m.getCellMap().size());
     }
 
+    /**
+     * Tests the set/getAnnotations methods.
+     */
     @Test
     public void testAnnotations() {
         Model m = new Model();
@@ -241,29 +238,6 @@ public class ModelTest {
 
         m.merge();
         assertNull(m.getEdgeFromChild(c2));
-    }
-
-    /**
-     * Tests the getEdgeFromParent method.
-     */
-    @Test
-    public void testGetEdgeFromParent() {
-        Model m = new Model();
-        RectangleCell c1 = spy(new RectangleCell(1, 1));
-        RectangleCell c2 = spy(new RectangleCell(2, 2));
-        RectangleCell c3 = spy(new RectangleCell(3, 3));
-
-        m.addCell(c1);
-        m.addCell(c2);
-        m.addCell(c3);
-
-        Edge e1 = new Edge(c1, c2, 1, EdgeType.GRAPH);
-        Edge e2 = new Edge(c2, c3, 1, EdgeType.GRAPH);
-
-        m.addEdge(e1);
-        m.addEdge(e2);
-
-        m.merge();
         assertEquals(0, m.getEdgeFromParent(c2).size());
     }
 
@@ -272,7 +246,6 @@ public class ModelTest {
      */
     @Test
     public void testGetMaxWidth() {
-        Cell c = mock(Cell.class);
         GraphLayout gl = mock(GraphLayout.class);
         when(gl.getMaxWidth()).thenReturn(new Double(42));
 

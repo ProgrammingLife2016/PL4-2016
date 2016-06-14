@@ -212,6 +212,9 @@
                     <instrumentation>
                         <ignores>
                             <ignore>application.factories.*</ignore>
+							<ignore>application.fxobjects.*</ignore>
+							<ignore>application.fxobjects.treeCells.*</ignore>
+                            <ignore>application.fxobjects.graphCells.*</ignore>
                         </ignores>
                     </instrumentation>
                 </configuration>

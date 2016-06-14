@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -67,6 +66,7 @@ public class PhylogeneticTree {
      * @param path The path to the newick file
      * @return A Newick tree.
      */
+    @SuppressFBWarnings({"NP_NULL_PARAM_DEREF", "DM_DEFAULT_ENCODING", "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"})
     public Tree getTreeFromFile(String path) {
         FileInputStream fileInputStream = null;
         try {

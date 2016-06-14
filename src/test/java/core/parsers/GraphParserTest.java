@@ -1,12 +1,9 @@
 package core.parsers;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 
 import core.graph.Node;
@@ -45,7 +42,9 @@ public class GraphParserTest {
                 assertEquals(i, n.getzIndex());
                 assertEquals("GENOME_1", n.getGenomes().get(0));
                 assertEquals(Integer.valueOf(i + 1), n.getLinks().get(0));
-            }        } catch (IOException e) {
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

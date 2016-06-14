@@ -32,7 +32,7 @@ public class GraphParser {
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
-    private final HashMap<Integer, Node> readGFA(final InputStream input) {
+    private HashMap<Integer, Node> readGFA(final InputStream input) {
         try {
             String nextLine;
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
