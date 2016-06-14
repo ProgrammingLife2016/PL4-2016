@@ -208,16 +208,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
-				<configuration>
-                    <instrumentation>
-                        <ignores>
-                            <ignore>application.factories.*</ignore>
-							<ignore>application.fxobjects.*</ignore>
-							<ignore>application.fxobjects.treeCells.*</ignore>
-                            <ignore>application.fxobjects.graphCells.*</ignore>
-                        </ignores>
-                    </instrumentation>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

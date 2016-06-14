@@ -5,7 +5,6 @@ import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,8 +15,7 @@ import java.util.List;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
-        "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
+@SuppressWarnings("PMD.UselessParentheses")
 public class Graph {
 
     private Model zoomIn;
@@ -69,7 +67,6 @@ public class Graph {
      * @param path The file path of the GFA file.
      * @return A node map read from file.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             GraphParser parser = new GraphParser();
@@ -90,7 +87,6 @@ public class Graph {
      * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(ArrayList<String> ref, int depth) {
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
