@@ -6,7 +6,6 @@ import application.fxobjects.ZoomBox;
 import application.fxobjects.graphCells.GraphCell;
 import application.mouseHandlers.GraphMouseHandling;
 import core.graph.Graph;
-import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
