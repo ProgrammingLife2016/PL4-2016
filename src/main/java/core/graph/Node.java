@@ -129,6 +129,15 @@ public class Node {
     }
 
     /**
+     * Add a parent node's Id which links this node.
+     *
+     * @param parent - A parent node.
+     */
+    public void addParent(int parent) {
+        this.parents.add(parent);
+    }
+
+    /**
      * Add a genome to the node
      *
      * @param node the node of which genomes should be unioned.
@@ -156,7 +165,7 @@ public class Node {
      *
      * @param parentId parent to be removed
      */
-    public void removeParent(int parentId) {
+    public void removeParent(Integer parentId) {
         parents.remove(parentId);
     }
 
@@ -165,7 +174,7 @@ public class Node {
      *
      * @param parentId parent to be added
      */
-    public void addParent(int parentId) {
+    public void addParent(Integer parentId) {
         parents.add(parentId);
     }
 
