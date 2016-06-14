@@ -417,7 +417,10 @@ public class MainController extends Controller<BorderPane> {
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
+
                 fillTree();
+                if (cell != null)
+                    treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
             }
         });
 
@@ -678,7 +681,7 @@ public class MainController extends Controller<BorderPane> {
 
         treeController.clearSelectedStrains();
         filtering.getSelectedGenomes().forEach(g ->
-                        treeController.addSelectedStrain(treeController.getCellByName(g.getName()))
+                treeController.addSelectedStrain(treeController.getCellByName(g.getName()))
         );
 
         if (inGraph) {
@@ -703,6 +706,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter for the Filtering class.
+     *
      * @return the Filtering class.
      */
     public Filtering getFiltering() {
