@@ -36,7 +36,7 @@ public class GraphParserTest {
         HashMap<Integer, Node> map = new HashMap<>();
 
         try {
-            InputStream is = new FileInputStream("src/main/resources/TestFiles/TBTestFile.gfa");
+            InputStream is = getClass().getResourceAsStream("/TestFiles/TBTestFile.gfa");
             map = p.readGFA(is);
             is.close();
         } catch (IOException e) {
@@ -55,14 +55,14 @@ public class GraphParserTest {
         }
     }
 
-//    /**
-//     * Tests the readGFAFromFile class.
-//     */
-//    @Test
-//    public void testReadGFAFromFile() {
-//        try {
-//            assertEquals(4, p.readGFAFromFile("src/main/resources/TestFiles/TBTestFile.gfa").size());
-//        } catch (IOException e) {
-//        }
-//    }
+    /**
+     * Tests the readGFAFromFile class.
+     */
+    @Test
+    public void testReadGFAFromFile() {
+        try {
+            assertEquals(4, p.readGFAFromFile("src/main/resources/TestFiles/TBTestFile.gfa").size());
+        } catch (IOException e) {
+        }
+    }
 }
