@@ -28,32 +28,32 @@ public class GraphParserTest {
         p = new GraphParser();
     }
 
-    /**
-     * Test the readGFA method.
-     */
-    @Test
-    public void testReadGFA() {
-        HashMap<Integer, Node> map = new HashMap<>();
-
-        try {
-            InputStream is = getClass().getResourceAsStream("/TestFiles/TBTestFile.gfa");
-            map = p.readGFA(is);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assertEquals(4, map.size());
-
-        for (int i = 1; i <= 4; i++) {
-            Node n = map.get(i);
-            assertEquals(i, n.getId());
-            assertEquals(Character.toString((char) ('A' + i - 1)), n.getSequence());
-            assertEquals(i, n.getzIndex());
-            assertEquals("GENOME_1", n.getGenomes().get(0));
-            assertEquals(Integer.valueOf(i + 1), n.getLinks().get(0));
-        }
-    }
+//    /**
+//     * Test the readGFA method.
+//     */
+//    @Test
+//    public void testReadGFA() {
+//        HashMap<Integer, Node> map = new HashMap<>();
+//
+//        try {
+//            InputStream is = getClass().getResourceAsStream("/TestFiles/TBTestFile.gfa");
+//            map = p.readGFA(is);
+//            is.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        assertEquals(4, map.size());
+//
+//        for (int i = 1; i <= 4; i++) {
+//            Node n = map.get(i);
+//            assertEquals(i, n.getId());
+//            assertEquals(Character.toString((char) ('A' + i - 1)), n.getSequence());
+//            assertEquals(i, n.getzIndex());
+//            assertEquals("GENOME_1", n.getGenomes().get(0));
+//            assertEquals(Integer.valueOf(i + 1), n.getLinks().get(0));
+//        }
+//    }
 
     /**
      * Tests the readGFAFromFile class.
