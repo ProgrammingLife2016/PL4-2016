@@ -58,14 +58,6 @@ public class Filtering {
     }
 
     /**
-     * Check whether filters are applied.
-     * @return true or false.
-     */
-    public boolean isFiltering() {
-        return !filters.isEmpty();
-    }
-
-    /**
      * Return the selected genomes after filtering.
      * @return a list of selected genomes.
      */
