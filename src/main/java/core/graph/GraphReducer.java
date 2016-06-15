@@ -305,13 +305,10 @@ public final class GraphReducer {
      * @param parent  the parent of the inDel to collapse
      * @return Whether nodes have been collapsed.
      */
-    public static Boolean
-    collapseIndel(HashMap<Integer, Node> nodeMap, Node parent) {
+    public static Boolean collapseIndel(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Integer> children = parent.getLinks(nodeMap);
 
-        if (children.size() < 2) {
-            return false;
-        }
+        if (children.size() < 2) { return false; }
         // Loop through all children of the parent.
         for (int i = 0; i < children.size(); i++) {
             Node child = nodeMap.get(children.get(i));
@@ -326,8 +323,8 @@ public final class GraphReducer {
                     grandChild.getParents().stream().filter(grandchildParentId -> grandchildParentId != child.getId()
                             && grandchildParentId != parent.getId()).forEach(grandchildParentId -> {
                         Node other = nodeMap.get(grandchildParentId);
-                        other.getGenomes().stream().filter(
-                                genome -> allGenomes.contains(genome)).forEach(allGenomes::remove);
+                        other.getGenomes().stream().filter(genome ->
+                                allGenomes.contains(genome)).forEach(allGenomes::remove);
                     });
                     //Remove link from parent to the grandChild.
                     parent.removeLink(grandChildId);
@@ -339,8 +336,6 @@ public final class GraphReducer {
                     child.setSequence("");
                     child.setGenomes(allGenomes);
                     return true;
-
-
                 }
             }
         }

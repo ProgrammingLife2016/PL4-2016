@@ -457,30 +457,22 @@ public class MainController extends Controller<BorderPane> {
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (currentView != 0) {
-                return;
-            }
-
+            if (currentView != 0) { return; }
             if (!annotationTextField.getText().isEmpty()) {
                 List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
-
                 try {
-                    Annotation newAnnotation
-                            = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                    Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                     Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
-                        return;
-                    }
+                    if (newAnn == null || newAnn.getSpannedNodes() == null) { return; }
 
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
-                    for (Node n : newAnnotation.getSpannedNodes()) {
+                    for (Node n : newAnn.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                     }
                 } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                     System.out.println("[DEBUG] Found too many matching annotations");
                 }
-
                 annotationTextField.setText("");
             }
         });
