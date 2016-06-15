@@ -87,9 +87,7 @@ public class MenuFactory {
      */
     public static void toggleViewMenu(boolean x) {
         showGenomeSequence.setDisable(x);
-        showOnlyThisStrain.setDisable(x);
         showPhylogeneticTree.setDisable(x);
-        showSelectedStrains.setDisable(x);
         resetView.setDisable(x);
 
     }
@@ -269,7 +267,6 @@ public class MenuFactory {
                 });
 
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
-            mainController.toggleGenomeSearchBar(true);
             mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
         });
 
