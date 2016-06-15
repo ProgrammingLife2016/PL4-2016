@@ -123,4 +123,17 @@ public class Edge extends Group {
     public String toString() {
         return ("(" + source.getCellId() + "," + target.getCellId() + ")");
     }
+
+    /**
+     * Returns the length of this Edge.
+     *
+     * @return the Edge.
+     */
+    public double getLength() {
+        double xLength = getLine().endXProperty().get()
+                - getLine().startXProperty().get();
+        double yLength = getLine().endYProperty().get()
+                - getLine().startYProperty().get();
+        return Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
+    }
 }

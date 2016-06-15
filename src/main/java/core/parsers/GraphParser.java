@@ -32,7 +32,7 @@ public class GraphParser {
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
-    public final HashMap<Integer, Node> readGFA(final InputStream input) {
+    private HashMap<Integer, Node> readGFA(final InputStream input) {
         try {
             String nextLine;
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
@@ -73,7 +73,7 @@ public class GraphParser {
      * Method to parse sequence lines.
      * @param content - the line
      */
-    private void parseS (String[] content) {
+    private void parseS(String[] content) {
         int id = Integer.parseInt(content[1]);
         String sequence = content[2];
         int z = Integer.parseInt(content[content.length - 1].split(":")[2]);

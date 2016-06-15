@@ -1,13 +1,15 @@
 package core.graph;
 
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
 import core.annotation.Annotation;
 import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,17 +20,21 @@ import java.util.stream.Collectors;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedFormalParameter",
-        "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
 public class Graph {
+
+    private Rectangle2D screenSize;
+    private Boolean debugScreenShouldBeInitialized;
 
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
+
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
+
     private boolean filtering;
+
     /**
      * All the genomes that are in this graph.
      */
@@ -58,12 +64,13 @@ public class Graph {
      * Class constructor.
      */
     public Graph() {
+        debugScreenShouldBeInitialized = true;
+
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
 
         annotations = new ArrayList<>();
-
     }
 
     /**
@@ -72,11 +79,9 @@ public class Graph {
      * @param path The file path of the GFA file.
      * @return A node map read from file.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
-            GraphParser parser = new GraphParser();
-            startMap = parser.readGFAFromFile(path);
+            startMap = new GraphParser().readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
@@ -93,7 +98,6 @@ public class Graph {
      * @param depth the depth to draw.
      * @return Boolean used for testing purposes.
      */
-    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE")
     public Boolean addGraphComponents(ArrayList<String> ref, int depth) {
         currentRef = ref;
         if (depth <= levelMaps.size() - 1 && depth >= 0) {
@@ -226,7 +230,10 @@ public class Graph {
             }
         }
 
-        toret.setLayout();
+        if (debugScreenShouldBeInitialized) {
+            toret.setLayout();
+        }
+
         return toret;
     }
 
@@ -322,9 +329,8 @@ public class Graph {
         if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
             boolean edgePlaced = false;
             for (int child : from.getLinks()) {
-                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
-                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0
-                        && ref.size() < 2) {
+                if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
+                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                         toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
@@ -536,39 +542,22 @@ public class Graph {
      * Method to return a model with all nodes within the view.
      *
      * @param min left side of the view.
-     * @param max right side of the view.
      * @return the model.
      */
-    public Model getModelAddedInView(int min, int max) {
+    public Model getModelAllInView(int min) {
         Model m = new Model();
-
-        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
-
-        this.getModel().getAddedEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
-                .forEach(m::addEdge);
-
-        return addFirstAndLast(m);
-    }
-
-    /**
-     * Method to return a model with all nodes within the view.
-     *
-     * @param min left side of the view.
-     * @param max right side of the view.
-     * @return the model.
-     */
-    public Model getModelAllInView(int min, int max) {
-        Model m = new Model();
-
-        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
-
-        this.getModel().getAllEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
+        screenSize = Screen.getPrimary().getVisualBounds();
+        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
+        for (int i = startTile; i < startTile + 3; i++) {
+            if (getModel().getCellTile(i) != null) {
+                for (Cell c : getModel().getCellTile(i)) {
+                    m.addCell(c);
+                    for (Edge e : c.getEdges()) {
+                        m.addEdge(e);
+                    }
+                }
+            }
+        }
 
         return addFirstAndLast(m);
     }
@@ -594,6 +583,7 @@ public class Graph {
 
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
+     *
      * @param genomes selected genomes.
      * @param filtering whether filters are applied.
      * @return the reduced list of genomes.
@@ -605,4 +595,23 @@ public class Graph {
         return selectedGenomeNames.stream().filter(
                 this.genomes::contains).collect(Collectors.toList());
     }
+
+    /**
+     * Gets whether screen elements should be initialized.
+     *
+     * @return Whether screen elements should be initialized.
+     */
+    public Boolean getDebugScreenShouldBeInitialized() {
+        return debugScreenShouldBeInitialized;
+    }
+
+    /**
+     * Sets whether screen elements should be initialized.
+     *
+     * @param debugScreenShouldBeInitialized Whether screen elements should be initialized.
+     */
+    public void setDebugScreenShouldBeInitialized(Boolean debugScreenShouldBeInitialized) {
+        this.debugScreenShouldBeInitialized = debugScreenShouldBeInitialized;
+    }
+
 }
