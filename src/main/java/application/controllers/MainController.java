@@ -64,6 +64,7 @@ public class MainController extends Controller<BorderPane> {
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
+    private boolean metaDataLoaded;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -89,6 +90,7 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
         this.filtering = new Filtering();
+        this.metaDataLoaded = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -156,6 +158,14 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initMetadata(String path) {
         MetaDataParser.readMetadataFromFile(path);
+    }
+
+    /**
+     * Method to check whether the MetaData is loaded or not
+     * @return boolean
+     */
+    public boolean isMetaDataLoaded() {
+        return metaDataLoaded;
     }
 
     /**
