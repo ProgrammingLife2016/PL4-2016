@@ -104,12 +104,4 @@ public class ListFactory {
         return list;
     }
 
-    /**
-     * Getter method for the InfoScroller
-     *
-     * @return the InfoScroller
-     */
-    public ScrollPane getInfoScroller() {
-        return infoScroller;
-    }
 }

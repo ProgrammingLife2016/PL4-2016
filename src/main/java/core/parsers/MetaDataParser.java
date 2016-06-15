@@ -21,6 +21,9 @@ import java.util.TreeMap;
 public final class MetaDataParser {
     private static TreeMap<String, Genome> metadata = new TreeMap<>();
 
+    /**
+     * Class constructor
+     */
     private MetaDataParser() {
     }
 

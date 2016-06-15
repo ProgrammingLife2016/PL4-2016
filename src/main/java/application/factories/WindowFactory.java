@@ -225,6 +225,12 @@ public final class WindowFactory {
         }
     }
 
+    /**
+     * Method to create the popup
+     * @param tempStage the Stage to show it on
+     * @param type the type of File we want to load
+     * @param listView the ListView to add the information to
+     */
     private static void handleTempStage(Stage tempStage, String type, ListView listView) {
         Text text = new Text("Do you also want to load one of the following files? If not, exit.");
         text.setWrappingWidth(listView.getPrefWidth());
