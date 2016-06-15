@@ -5,6 +5,7 @@ import application.factories.ListFactory;
 import application.factories.MenuFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
+import application.fxobjects.treeCells.LeafCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
 import core.filtering.Filter;
@@ -329,6 +330,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleViewMenu(false);
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
+        MenuFactory.toggleFilters(false);
 
         this.getRoot().setCenter(graphController.getRoot());
 
@@ -423,12 +425,15 @@ public class MainController extends Controller<BorderPane> {
     private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                Cell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
+                LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
 
-                fillTree();
+                if (inGraph) {
+                    fillTree();
+                }
+
                 if (cell != null) {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
@@ -473,8 +478,16 @@ public class MainController extends Controller<BorderPane> {
 
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
+
+                    if(newAnnotation.getSpannedNodes().get(0) != null) {
+                        int i = newAnnotation.getSpannedNodes().get(0).getId();
+                        graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
+                                / getGraphController().getGraph().getModel().getMaxWidth());
+                    }
+
                     for (Node n : newAnnotation.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+
                     }
                 } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                     System.out.println("[DEBUG] Found too many matching annotations");
@@ -538,27 +551,15 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
-            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
+            MenuFactory.toggleFilters(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
-    }
-
-    /**
-     * Method to disable and enable the buttons in the SearchBar
-     *
-     * @param x boolean indicating whether something is disabled or enabled
-     */
-    public void toggleGenomeSearchBar(boolean x) {
-        searchButton.setDisable(x);
-        selectAllButton.setDisable(x);
-        deselectSearchButton.setDisable(x);
-        genomeTextField.setDisable(x);
     }
 
     /**
@@ -625,7 +626,6 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
-        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }

@@ -60,6 +60,10 @@ public class LegendFactory {
         return legend;
     }
 
+    /**
+     * Add info to the legend
+     * @param grid the current grid-structure of the legend
+     */
     private void fillGrid(GridPane grid) {
         grid.add(new Text("-    Basic Node"), 2, 1);
         grid.add(new Text("-    Bubble Node"), 2, 2);

@@ -1,10 +1,12 @@
 package application.fxobjects.layout;
 
 import application.fxobjects.Cell;
+import application.fxobjects.Edge;
 import application.fxobjects.graphCells.GraphCell;
 import core.model.Model;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.stage.Screen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +30,13 @@ public class GraphLayout extends CellLayout {
     private int centerY;
 
     private double maxWidth;
+    private double maxHeight;
 
     private Cell leftMost;
     private Cell rightMost;
+
+    private double tileWidth;
+
 
     private static final int BASE_X = 100;
 
@@ -43,13 +49,14 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphLayout(Model model, int offset, int middle) {
-        this.currentX = BASE_X;
         this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
         this.maxWidth = 0;
+
+        this.maxHeight = 0;
     }
 
     /**
@@ -57,6 +64,7 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
+        tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();
@@ -102,6 +110,16 @@ public class GraphLayout extends CellLayout {
                 }
 
             }
+
+            int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
+            model.addCellInTile(tile, c);
+
+            for (Edge e : cell.getEdges()) {
+                if (e.getLength() > Screen.getPrimary().getBounds().getWidth()) {
+                    model.addLongEdge(e);
+                }
+            }
+
         }
     }
 
@@ -143,8 +161,6 @@ public class GraphLayout extends CellLayout {
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
                             yCoordinate);
                     oddChildOffset = yOffset * modifier;
-
-
                     modifier *= -1;
                     if (modifier < 0) {
                         modifier--;
@@ -256,6 +272,11 @@ public class GraphLayout extends CellLayout {
         return maxWidth;
     }
 
+    /**
+     * Get the max height
+     * @return the max height
+     */
+    public double getMaxHeight() { return maxHeight; }
     /**
      * getter for the leftmost cell.
      *

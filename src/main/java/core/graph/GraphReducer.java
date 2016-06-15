@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
  */
 public final class GraphReducer {
 
+    /**
+     * Class constructor
+     */
     private GraphReducer() {
     }
 
@@ -276,7 +279,6 @@ public final class GraphReducer {
             targetNode.addParent(complexNode.getId());
             return true;
         }
-
         return false;
     }
 

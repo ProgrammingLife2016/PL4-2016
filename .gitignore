@@ -30,4 +30,5 @@ hs_err_pid*
 .classpath
 .project
 .settings/
-*.gfa
+TB328.gfa
+src/main/resources/TB328.gfa

@@ -15,10 +15,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +31,7 @@ public class Model {
     private List<Edge> allEdges;
     private List<Edge> addedEdges;
 
-    private Map<Integer, Cell> cellMap; // <id,cell>
+    private Map<Integer, Cell> cellMap;
 
     private List<HashMap<Integer, Node>> levelMaps;
 
@@ -44,12 +41,16 @@ public class Model {
 
     private Rectangle2D screenSize;
 
+    private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
+    private ArrayList<Edge> longEdges = new ArrayList<>();
+
     /**
      * Class constructor.
      */
     public Model() {
         graphParent = new RectangleCell(1, 1);
         graphLayout = new GraphLayout(null, 0, 0);
+        tileCellMap = new TreeMap<>();
 
         // clearSelection model, create lists
         clear();
@@ -63,6 +64,7 @@ public class Model {
             new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
         }
     }
+
     /**
      * Remove all cells and edges.
      */
@@ -97,6 +99,15 @@ public class Model {
      */
     public GraphLayout getGraphLayout() {
         return graphLayout;
+    }
+
+    /**
+     * Method to set the layout of the graph.
+     *
+     * @param graphLayout the layout
+     */
+    public void setGraphLayout(GraphLayout graphLayout) {
+        this.graphLayout = graphLayout;
     }
 
     /**
@@ -200,28 +211,36 @@ public class Model {
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
         switch (type) {
-            case RECTANGLE: RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
+            case RECTANGLE:
+                RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
                 addCell(rectangleCell);
                 break;
-            case BUBBLE: BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
+            case BUBBLE:
+                BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
                 addCell(bubbleCell);
                 break;
-            case INDEL: IndelCell indelCell = new IndelCell(id, nucleotides, text);
+            case INDEL:
+                IndelCell indelCell = new IndelCell(id, nucleotides, text);
                 addCell(indelCell);
                 break;
-            case COLLECTION: CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
+            case COLLECTION:
+                CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
                 break;
-            case COMPLEX: ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
+            case COMPLEX:
+                ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
                 addCell(complexCell);
                 break;
-            case TREELEAF: LeafCell leafCell = new LeafCell(id, text);
+            case TREELEAF:
+                LeafCell leafCell = new LeafCell(id, text);
                 addCell(leafCell);
                 break;
-            case TREEMIDDLE: MiddleCell middleCell = new MiddleCell(id);
+            case TREEMIDDLE:
+                MiddleCell middleCell = new MiddleCell(id);
                 addCell(middleCell);
                 break;
-            default: throw new UnsupportedOperationException("Unsupported type: " + type);
+            default:
+                throw new UnsupportedOperationException("Unsupported type: " + type);
         }
         return false;
     }
@@ -277,6 +296,8 @@ public class Model {
         if (sourceCell != null && targetCell != null) {
             Edge edge = new Edge(sourceCell, targetCell, width, type);
             addedEdges.add(edge);
+            sourceCell.addEdge(edge);
+            targetCell.addEdge(edge);
         }
 
         return true;
@@ -288,25 +309,12 @@ public class Model {
      * @param cellList List of cells without a parent.
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
-
         for (Cell cell : cellList) {
             if (cell.getCellParents().size() == 0) {
                 graphParent.addCellChild(cell);
             }
         }
 
-    }
-
-    /**
-     * Remove the graphParent reference if it is set
-     *
-     * @param cellList List of cells to be removed from the graph
-     */
-    public void disconnectFromGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
-            graphParent.removeCellChild(cell);
-        }
     }
 
     /**
@@ -376,7 +384,9 @@ public class Model {
      * @param e the edge to add.
      */
     public void addEdge(Edge e) {
-        addedEdges.add(e);
+        if (!addedEdges.contains(e)) {
+            addedEdges.add(e);
+        }
     }
 
     /**
@@ -395,5 +405,35 @@ public class Model {
      */
     public Cell getRightMost() {
         return getGraphLayout().getRightMost();
+    }
+
+    /**
+     * Method to add a long Edge.
+     *
+     * @param e the Edge to add.
+     */
+    public void addLongEdge(Edge e) {
+        longEdges.add(e);
+    }
+
+    /**
+     * Method to add a cell to a Tile
+     *
+     * @param tile to the to add to.
+     * @param c the Cell to add.
+     */
+    public void addCellInTile(int tile, Cell c) {
+        tileCellMap.putIfAbsent(tile, new ArrayList<>());
+        tileCellMap.get(tile).add(c);
+    }
+
+    /**
+     * Method to get a Tile.
+     *
+     * @param i the tile to get.
+     * @return the Tile.
+     */
+    public ArrayList<Cell> getCellTile(int i) {
+        return tileCellMap.get(i);
     }
 }

@@ -10,15 +10,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static core.parsers.AnnotationParser.readGFFFromFile;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by user on 18-5-2016.
+ * Test class for the AnnotationParser class
+ *
+ * @author Niels Warnars
  */
 public class AnnotationParserTest {
 
     /**
-     * Test the readGFA method.
+     * Tests the readGFA method.
      *
      * @throws FileNotFoundException Throw exception on read error.
      */
@@ -50,6 +53,15 @@ public class AnnotationParserTest {
         assertEquals(4, a.getIdAttr());
         assertEquals("g", a.getNameAttr());
         assertEquals("h", a.getDisplayNameAttr());
+    }
+
+    /**
+     * Tests the readGFFFromFile method.
+     */
+    @Test
+    public void testReadGFFFromFile() {
+        List<Annotation> annotations = readGFFFromFile("src/main/resources/decorationV5_20130412.gff");
+        assertEquals(4043, annotations.size());
     }
 
 }
