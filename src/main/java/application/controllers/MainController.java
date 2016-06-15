@@ -429,8 +429,9 @@ public class MainController extends Controller<BorderPane> {
                 genomeTextField.setText("");
 
                 fillTree();
-                if (cell != null)
+                if (cell != null) {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
+                }
             }
         });
 
@@ -550,6 +551,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to disable and enable the buttons in the SearchBar
+     *
      * @param x boolean indicating whether something is disabled or enabled
      */
     public void toggleGenomeSearchBar(boolean x) {
@@ -699,7 +701,7 @@ public class MainController extends Controller<BorderPane> {
 
         treeController.clearSelectedStrains();
         filtering.getSelectedGenomes().forEach(g ->
-                treeController.addSelectedStrain(treeController.getCellByName(g.getName()))
+                        treeController.addSelectedStrain(treeController.getCellByName(g.getName()))
         );
 
         if (inGraph) {
@@ -716,10 +718,7 @@ public class MainController extends Controller<BorderPane> {
      * @return a list of loaded genome names.
      */
     public List<String> getLoadedGenomeNames() {
-        return graphController.getGraph().reduceGenomes(
-                filtering.getSelectedGenomes(),
-                filtering.isFiltering()
-        );
+        return graphController.getGraph().reduceGenomes(filtering.getSelectedGenomes(), filtering.isFiltering());
     }
 
     /**

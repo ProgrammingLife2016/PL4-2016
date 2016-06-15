@@ -96,7 +96,7 @@ public class TreeController extends Controller<ScrollPane> {
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
-        maxY = ((TreeLayout)layout).getMaxY();
+        maxY = ((TreeLayout) layout).getMaxY();
 
         List<Cell> nodeList = pt.getModel().getAddedCells();
         List<Edge> edgeList = pt.getModel().getAddedEdges();
@@ -533,6 +533,10 @@ public class TreeController extends Controller<ScrollPane> {
         selectedStrains.clear();
     }
 
+    /**
+     * Getter method for the maximum Y value.
+     * @return the max Y value.
+     */
     public double getMaxY() {
         return maxY;
     }

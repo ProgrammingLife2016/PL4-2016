@@ -175,6 +175,10 @@ public class TreeLayout extends CellLayout {
         drawnCells.put(cell.getCellId(), cell);
     }
 
+    /**
+     * Getter method for the max Y value.
+     * @return the max Y value.
+     */
     public double getMaxY() {
         return maxY;
     }

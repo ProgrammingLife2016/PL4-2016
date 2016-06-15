@@ -587,6 +587,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      * @param genomes selected genomes.
+     * @param filtering whether filters are applied.
      * @return the reduced list of genomes.
      */
     public List<String> reduceGenomes(List<Genome> genomes, boolean filtering) {
