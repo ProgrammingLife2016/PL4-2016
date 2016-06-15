@@ -7,8 +7,6 @@ import application.fxobjects.layout.CellLayout;
 import application.fxobjects.layout.TreeLayout;
 import application.fxobjects.treeCells.LeafCell;
 import application.mouseHandlers.TreeMouseHandling;
-import core.filtering.Filter;
-import core.filtering.Filtering;
 import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
@@ -41,8 +39,9 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
-    private Filtering filtering;
     private MainController mainController;
+
+    private double maxY = -1;
 
     /**
      * Class constructor.
@@ -56,7 +55,6 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
-        this.filtering = new Filtering();
         this.mainController = m;
 
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -98,6 +96,7 @@ public class TreeController extends Controller<ScrollPane> {
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
+        maxY = ((TreeLayout) layout).getMaxY();
 
         List<Cell> nodeList = pt.getModel().getAddedCells();
         List<Edge> edgeList = pt.getModel().getAddedEdges();
@@ -429,7 +428,7 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
      */
-    private void modifyGraphOptions() {
+    protected void modifyGraphOptions() {
         int s = selectedStrains.size();
         if (s == 0) {
             MenuFactory.showOnlyThisStrain.setDisable(true);
@@ -467,30 +466,6 @@ public class TreeController extends Controller<ScrollPane> {
         selectedStrains.clear();
         modifyGraphOptions();
 
-    }
-
-    /**
-     * Modify the filters applied to the tree.
-     *
-     * @param f     Filter type.
-     * @param state true or false state.
-     */
-    public void modifyFilter(Filter f, boolean state) {
-        selectedStrains.forEach(this::revertCellHighlight);
-
-        if (state) {
-            filtering.applyFilter(f);
-        } else {
-            filtering.removeFilter(f);
-        }
-
-        selectedStrains.clear();
-        filtering.getSelectedGenomes().forEach(g ->
-                        selectedStrains.add(getCellByName(g.getName()))
-        );
-
-        colorSelectedStrains();
-        modifyGraphOptions();
     }
 
     /**
@@ -537,5 +512,36 @@ public class TreeController extends Controller<ScrollPane> {
         builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
 
         mainController.getListFactory().modifyNodeInfo(builder.toString());
+    }
+
+    /**
+     * Add a strain to the selected strains list.
+     * @param cell the Cell to add.
+     */
+    public void addSelectedStrain(Cell cell) {
+        selectedStrains.add(cell);
+    }
+
+    /**
+     * Remove a strain from the selected strains list.
+     * @param cell the Cell to remove.
+     */
+    public void removeSelectedStrain(Cell cell) {
+        selectedStrains.remove(cell);
+    }
+
+    /**
+     * Clear the list of selected strains.
+     */
+    public void clearSelectedStrains() {
+        selectedStrains.clear();
+    }
+
+    /**
+     * Getter method for the maximum Y value.
+     * @return the max Y value.
+     */
+    public double getMaxY() {
+        return maxY;
     }
 }
