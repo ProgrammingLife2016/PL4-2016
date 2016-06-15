@@ -56,8 +56,7 @@ public final class GraphReducer {
      * @param minDelta The minimum reduction necessary to continue the reducing.
      * @return A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>>
-    createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
         levelMaps.add(startMap);
         startMapSize = startMap.size();
         int reduceAmount = 5;
@@ -76,23 +75,9 @@ public final class GraphReducer {
             // than the number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= minDelta) {
                 levelMaps.set(i - 1, levelMap);
-                int maxDepth = 20;
-                for (int j = i; maxDepth < 1001; j++) {
-                    if (levelMaps.size() == 25) {
-                        reduceZoomingLevels(5);
-                        j -= reduceAmount;
-                    }
-                    HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
-                    int previousMapSize2 = levelMaps.get(j - 1).size();
-                    int currentMapSize2 = levelMap2.size();
-                    if (previousMapSize2 - currentMapSize2 == 0) {
-                        levelMaps.set(j - 1, levelMap2);
-                        maxDepth += 5;
-                        j--;
-                    } else {
-                        levelMaps.add(levelMap2);
-                    }
-                }
+
+                traverseMaps(reduceAmount, i);
+
                 return levelMaps;
             } else {
                 levelMaps.add(levelMap);
@@ -100,6 +85,35 @@ public final class GraphReducer {
         }
     }
 
+    /**
+     * Traverse the maps
+     * @param reduceAmount amount to reduce
+     * @param i i
+     */
+    private static void traverseMaps(int reduceAmount, int i) {
+        int maxDepth = 20;
+        for (int j = i; maxDepth < 1001; j++) {
+            if (levelMaps.size() == 25) {
+                reduceZoomingLevels(5);
+                j -= reduceAmount;
+            }
+            HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
+            int previousMapSize2 = levelMaps.get(j - 1).size();
+            int currentMapSize2 = levelMap2.size();
+            if (previousMapSize2 - currentMapSize2 == 0) {
+                levelMaps.set(j - 1, levelMap2);
+                maxDepth += 5;
+                j--;
+            } else {
+                levelMaps.add(levelMap2);
+            }
+        }
+    }
+
+    /**
+     * Reduced the number of zoomlevels.
+     * @param amountToRemove amount to remove
+     */
     public static void reduceZoomingLevels(int amountToRemove) {
         for (int k = 0; k < amountToRemove; k++) {
             int smallestDifference = Integer.MAX_VALUE;
