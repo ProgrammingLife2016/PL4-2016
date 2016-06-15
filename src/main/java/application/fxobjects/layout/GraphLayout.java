@@ -144,6 +144,9 @@ public class GraphLayout extends CellLayout {
                     if (child.isRelocatedY()) {
                         yCoordinate = child.getLayoutY();
                     }
+                    if (yCoordinate > maxHeight) {
+                        maxHeight = yCoordinate;
+                    }
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
                     evenChildOffset = (yOffset / 2) * modifier;
@@ -156,6 +159,9 @@ public class GraphLayout extends CellLayout {
                             - (child.getCellShape().getLayoutBounds().getHeight() / 2);
                     if (child.isRelocatedY()) {
                         yCoordinate = child.getLayoutY();
+                    }
+                    if (yCoordinate > maxHeight) {
+                        maxHeight = yCoordinate;
                     }
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
