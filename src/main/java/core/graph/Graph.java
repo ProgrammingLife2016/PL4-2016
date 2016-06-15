@@ -326,8 +326,7 @@ public class Graph {
             boolean edgePlaced = false;
             for (int child : from.getLinks()) {
                 if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
-                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0
-                        && ref.size() < 2) {
+                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                     if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                         toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
