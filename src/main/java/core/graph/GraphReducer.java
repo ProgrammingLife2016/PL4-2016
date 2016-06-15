@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
  */
 public final class GraphReducer {
 
+    /**
+     * Class constructor
+     */
     private GraphReducer() {
     }
 

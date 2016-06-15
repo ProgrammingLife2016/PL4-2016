@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
  */
 public final class AnnotationParser {
 
+    /**
+     * Class constructor
+     */
     private AnnotationParser() {
     }
 
@@ -27,7 +30,6 @@ public final class AnnotationParser {
      * @throws IOException Throw exception on read failure.
      */
     @SuppressFBWarnings("I18N")
-    @SuppressWarnings("CheckStyle.MethodLength")
     public static List<Annotation> readGFF(InputStream input) throws IOException {
         List<Annotation> annotations = new ArrayList<Annotation>();
 
@@ -38,14 +40,7 @@ public final class AnnotationParser {
             String[] content = nextLine.trim().split("\t");
             Annotation ann = new Annotation();
 
-            ann.setSeqid(content[0]);
-            ann.setSource(content[1]);
-            ann.setType(content[2]);
-            ann.setStart(Integer.parseInt(content[3]));
-            ann.setEnd(Integer.parseInt(content[4]));
-            ann.setScore(Float.parseFloat(content[5]));
-            ann.setStrand(content[6]);
-            ann.setPhase(content[7]);
+            fillAnnotation(ann, content);
 
             String[] attributes = content[8].split(";");
             for (int i = 0; i < attributes.length; i++) {
@@ -67,6 +62,22 @@ public final class AnnotationParser {
 
         bReader.close();
         return annotations;
+    }
+
+    /**
+     * Method to create an Annotation with the needed information
+     * @param ann the Annotation
+     * @param content the information to be given to the Annotation
+     */
+    private static void fillAnnotation(Annotation ann, String[] content) {
+        ann.setSeqid(content[0]);
+        ann.setSource(content[1]);
+        ann.setType(content[2]);
+        ann.setStart(Integer.parseInt(content[3]));
+        ann.setEnd(Integer.parseInt(content[4]));
+        ann.setScore(Float.parseFloat(content[5]));
+        ann.setStrand(content[6]);
+        ann.setPhase(content[7]);
     }
 
     /**

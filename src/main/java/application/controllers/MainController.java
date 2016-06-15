@@ -7,6 +7,8 @@ import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
+import core.filtering.Filter;
+import core.filtering.Filtering;
 import core.graph.Node;
 import core.parsers.AnnotationParser;
 import core.parsers.MetaDataParser;
@@ -59,6 +61,13 @@ public class MainController extends Controller<BorderPane> {
     private StackPane box;
     private int count;
     private int secondCount;
+    private Filtering filtering;
+    private boolean inGraph;
+
+    private Button searchButton;
+    private Button selectAllButton;
+    private Button deselectSearchButton;
+    private HBox hBox;
 
     private Stack<String> mostRecentGFF;
     private Stack<String> mostRecentMetadata;
@@ -78,13 +87,11 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentMetadata = new Stack<>();
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
+        this.filtering = new Filtering();
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-
         checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false, false);
@@ -269,8 +276,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentGFF(String s) {
-        mostRecentGFF.push(s);
-        writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        if (!mostRecentGFF.contains(s)) {
+            mostRecentGFF.push(s);
+            writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
     }
 
     /**
@@ -279,8 +288,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentMetadata(String s) {
-        mostRecentMetadata.push(s);
-        writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        if (!mostRecentMetadata.contains(s)) {
+            mostRecentMetadata.push(s);
+            writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
     }
 
     /**
@@ -315,14 +326,18 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
+        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleFileMenu(true);
+        MenuFactory.toggleMostRecent(true);
+
         this.getRoot().setCenter(graphController.getRoot());
+
         if (secondCount == -1) {
             createList();
             setListItems();
             secondCount++;
         }
 
-        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -334,6 +349,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         createMenu(true, true);
+        inGraph = true;
 
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
@@ -368,7 +384,6 @@ public class MainController extends Controller<BorderPane> {
         graphController.getGraph().reset();
         fillGraph(new ArrayList<>(), s);
 
-        initGUI();
         setListItems();
     }
 
@@ -412,7 +427,11 @@ public class MainController extends Controller<BorderPane> {
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
+
                 fillTree();
+                if (cell != null) {
+                    treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
+                }
             }
         });
 
@@ -432,12 +451,14 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the annotation highlight button.
      *
-     * @param highlightButton     The annotation highlight button.
-     * @param deselectAnnotationButton     The annotation deselect button.
+     * @param highlightButton          The annotation highlight button.
+     * @param deselectAnnotationButton The annotation deselect button.
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (currentView != 0) { return; }
+            if (currentView != 0) {
+                return;
+            }
 
             if (!annotationTextField.getText().isEmpty()) {
                 List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
@@ -446,7 +467,9 @@ public class MainController extends Controller<BorderPane> {
                     Annotation newAnnotation
                             = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                     Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) { return; }
+                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
+                        return;
+                    }
 
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
@@ -471,7 +494,9 @@ public class MainController extends Controller<BorderPane> {
      * Deselects all annotations
      */
     private void deselectAllAnnotations() {
-        if (currentView != 0) { return; }
+        if (currentView != 0) {
+            return;
+        }
         Map<Integer, Node> nodeMap = graphController.getGraph().getModel().getLevelMaps().get(0);
         Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
 
@@ -485,19 +510,20 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to create the menu bar.
      *
-     * @param withSearch Whether to add the search bar.
+     * @param withSearch           Whether to add the search bar.
      * @param withAnnotationSearch Whether to add the annotation seach box to the search bar.
      */
     public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
         VBox vBox = new VBox();
-        HBox hBox = new HBox();
+        hBox = new HBox();
         genomeTextField = new TextField();
+
 
         hBox.getStylesheets().add("/css/main.css");
 
-        Button searchButton = new Button("Search Genome (In Tree)");
-        Button selectAllButton = new Button("Select all");
-        Button deselectSearchButton = new Button("Deselect All");
+        searchButton = new Button("Search Genome (In Tree)");
+        selectAllButton = new Button("Select all");
+        deselectSearchButton = new Button("Deselect All");
         setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
@@ -512,13 +538,27 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
+            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
+            MenuFactory.toggleViewMenu(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    /**
+     * Method to disable and enable the buttons in the SearchBar
+     *
+     * @param x boolean indicating whether something is disabled or enabled
+     */
+    public void toggleGenomeSearchBar(boolean x) {
+        searchButton.setDisable(x);
+        selectAllButton.setDisable(x);
+        deselectSearchButton.setDisable(x);
+        genomeTextField.setDisable(x);
     }
 
     /**
@@ -582,18 +622,12 @@ public class MainController extends Controller<BorderPane> {
      * Method to fill the phylogenetic tree.
      */
     public void fillTree() {
+        inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
+        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
-        hideListVBox();
-    }
-
-    /**
-     * Hide the info panel.
-     */
-    private void hideListVBox() {
-        this.getRoot().getChildren().remove(listVBox);
     }
 
     /**
@@ -648,5 +682,51 @@ public class MainController extends Controller<BorderPane> {
      */
     public TextField getTextField() {
         return genomeTextField;
+    }
+
+    /**
+     * Modify the filters applied to the tree.
+     *
+     * @param f     Filter type.
+     * @param state true or false state.
+     */
+    public void modifyFilter(Filter f, boolean state) {
+        treeController.getSelectedStrains().forEach(treeController::revertCellHighlight);
+
+        if (state) {
+            filtering.applyFilter(f);
+        } else {
+            filtering.removeFilter(f);
+        }
+
+        treeController.clearSelectedStrains();
+        filtering.getSelectedGenomes().forEach(g ->
+                        treeController.addSelectedStrain(treeController.getCellByName(g.getName()))
+        );
+
+        if (inGraph) {
+            strainSelection(getLoadedGenomeNames());
+        }
+
+        treeController.colorSelectedStrains();
+        treeController.modifyGraphOptions();
+    }
+
+    /**
+     * Return a list with in the graph loaded genome names.
+     *
+     * @return a list of loaded genome names.
+     */
+    public List<String> getLoadedGenomeNames() {
+        return graphController.getGraph().reduceGenomes(filtering.getSelectedGenomes(), filtering.isFiltering());
+    }
+
+    /**
+     * Getter for the Filtering class.
+     *
+     * @return the Filtering class.
+     */
+    public Filtering getFiltering() {
+        return filtering;
     }
 }

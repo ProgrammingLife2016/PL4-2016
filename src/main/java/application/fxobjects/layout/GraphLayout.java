@@ -27,6 +27,7 @@ public class GraphLayout extends CellLayout {
     private int centerY;
 
     private double maxWidth;
+    private double maxHeight;
 
     private Cell leftMost;
     private Cell rightMost;
@@ -45,13 +46,14 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public GraphLayout(Model model, int offset, int middle) {
-        this.currentX = BASE_X;
         this.currentY = middle;
         this.lastType = null;
         this.offset = offset;
         this.model = model;
         this.centerY = middle;
         this.maxWidth = 0;
+
+        this.maxHeight = 0;
         }
 
     /**
@@ -152,6 +154,10 @@ public class GraphLayout extends CellLayout {
                 currentX += offset;
                 currentY = (int) (child.getLayoutY()
                         + (child.getCellShape().getLayoutBounds().getHeight() / 2));
+
+                if (currentY > maxHeight) {
+                    maxHeight = currentY;
+                }
                 cellCount = child.getCellChildren().size() - 1;
                 breadthFirstPlacing(child);
             }
@@ -257,6 +263,11 @@ public class GraphLayout extends CellLayout {
         return maxWidth;
     }
 
+    /**
+     * Get the max height
+     * @return the max height
+     */
+    public double getMaxHeight() { return maxHeight; }
     /**
      * getter for the leftmost cell.
      *

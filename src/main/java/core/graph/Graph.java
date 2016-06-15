@@ -3,6 +3,7 @@ package core.graph;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import core.annotation.Annotation;
+import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -33,6 +35,7 @@ public class Graph {
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
+    private boolean filtering;
     /**
      * All the genomes that are in this graph.
      */
@@ -109,8 +112,7 @@ public class Graph {
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
-                loadOneUp(depth);
-                loadOneDown(depth);
+                loadBoth(depth);
             } else { //Second time. All models are loaded
 
                 if (depth < currentInt) {
@@ -128,14 +130,21 @@ public class Graph {
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
-                    loadOneUp(depth);
-                    loadOneDown(depth);
+                    loadBoth(depth);
                 }
             }
         }
-
         currentInt = depth;
         return true;
+    }
+
+    /**
+     * Load both.
+     * @param depth depth
+     */
+    private void loadBoth(int depth) {
+        loadOneUp(depth);
+        loadOneDown(depth);
     }
 
     /**
@@ -207,7 +216,7 @@ public class Graph {
 
         //Root Node
         Node root = nodeMap.get(1);
-        if (currentGenomes.size() > 0) { //Draw selected references
+        if (filtering) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
@@ -287,20 +296,15 @@ public class Graph {
     public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
                         ArrayList<String> ref, Node to, Node from) {
         //Add next cell
-        int maxEdgeWidth = 10;
         CellType type = nodeMap.get(j).getType();
 
         if (type == CellType.RECTANGLE) {
-            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(),
-                    CellType.RECTANGLE);
+            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(), CellType.RECTANGLE);
         } else if (type == CellType.BUBBLE) {
-            toret.addCell(to.getId(),
-                    to.getBubbleText(),
-                    to.getNucleotides(), CellType.BUBBLE);
+            toret.addCell(to.getId(), to.getBubbleText(), to.getNucleotides(), CellType.BUBBLE);
         } else if (type == CellType.INDEL) {
             toret.addCell(to.getId(),
-                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
-                    CellType.INDEL);
+                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(), CellType.INDEL);
         } else if (type == CellType.COLLECTION) {
             toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
                     CellType.COLLECTION);
@@ -309,6 +313,21 @@ public class Graph {
                     CellType.COMPLEX);
         }
 
+        addEdgesToCell(to, from, nodeMap, toret, ref);
+
+    }
+
+    /**
+     * Method to give each cell to the edges
+     * @param to source
+     * @param from sink
+     * @param nodeMap the current NodeMap
+     * @param toret the new Model
+     * @param ref the currently highlighted strain
+     */
+    private void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
+                                ArrayList<String> ref) {
+        int maxEdgeWidth = 10;
         int width = (int) Math.round(maxEdgeWidth
                 * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
                 intersectingStrings(to.getGenomes(), genomes))
@@ -635,5 +654,19 @@ public class Graph {
             }
         }
         return m;
+    }
+
+    /**
+     * Reduce the list of selected genomes to genomes available in the loaded graph.
+     * @param genomes selected genomes.
+     * @param filtering whether filters are applied.
+     * @return the reduced list of genomes.
+     */
+    public List<String> reduceGenomes(List<Genome> genomes, boolean filtering) {
+        this.filtering = filtering;
+        List<String> selectedGenomeNames = genomes.stream().map(Genome::getName)
+                .collect(Collectors.toList());
+        return selectedGenomeNames.stream().filter(
+                this.genomes::contains).collect(Collectors.toList());
     }
 }

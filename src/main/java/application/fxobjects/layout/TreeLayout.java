@@ -23,6 +23,8 @@ public class TreeLayout extends CellLayout {
     private HashMap<Integer, Cell> drawnCells;
     private HashMap<Integer, Cell> undrawnCells;
 
+    private double maxY = 0;
+
     /**
      * Class constructor.
      *
@@ -60,8 +62,8 @@ public class TreeLayout extends CellLayout {
      * relocate all leaves to the right of the screen
      */
     private void drawLeaves() {
-        Rectangle2D bounds = Screen.getPrimary().getBounds();
-        final int leafX = (int) bounds.getWidth() - 200;
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        final double leafX = bounds.getWidth() * 0.74;
 
         for (int i = 0; i < model.getAddedCells().size(); i++) {
             Cell cell = undrawnCells.get(i);
@@ -164,9 +166,20 @@ public class TreeLayout extends CellLayout {
      * @param x    The new X coordinate of the cell.
      * @param y    The new Y coordinate of the cell.
      */
-    private void relocateCell(Cell cell, int x, int y) {
+    private void relocateCell(Cell cell, double x, int y) {
         cell.relocate(x, y);
+        if (y > maxY) {
+            maxY = y;
+        }
         undrawnCells.remove(cell.getCellId());
         drawnCells.put(cell.getCellId(), cell);
+    }
+
+    /**
+     * Getter method for the max Y value.
+     * @return the max Y value.
+     */
+    public double getMaxY() {
+        return maxY;
     }
 }

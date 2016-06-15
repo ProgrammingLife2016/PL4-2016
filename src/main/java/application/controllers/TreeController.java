@@ -7,8 +7,7 @@ import application.fxobjects.layout.CellLayout;
 import application.fxobjects.layout.TreeLayout;
 import application.fxobjects.treeCells.LeafCell;
 import application.mouseHandlers.TreeMouseHandling;
-import core.filtering.Filter;
-import core.filtering.Filtering;
+import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -40,7 +39,9 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
-    private Filtering filtering;
+    private MainController mainController;
+
+    private double maxY = -1;
 
     /**
      * Class constructor.
@@ -54,7 +55,7 @@ public class TreeController extends Controller<ScrollPane> {
         this.selectedStrains = new ArrayList<>();
         this.collectedStrains = new ArrayList<>();
         this.treeMouseHandling = new TreeMouseHandling(m);
-        this.filtering = new Filtering();
+        this.mainController = m;
 
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
@@ -92,11 +93,10 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void init() {
         root = new AnchorPane();
-//        root.getStylesheets().add("/css/tree.css");
-//        root.getStyleClass().add("anchor-pane");
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
+        maxY = ((TreeLayout) layout).getMaxY();
 
         List<Cell> nodeList = pt.getModel().getAddedCells();
         List<Edge> edgeList = pt.getModel().getAddedEdges();
@@ -156,6 +156,7 @@ public class TreeController extends Controller<ScrollPane> {
     public void applyCellHighlight(Cell cell) {
         if (cell instanceof LeafCell) {
             String name = ((LeafCell) cell).getName();
+            updateMetaInfo((LeafCell) cell);
             List<Cell> parentList = new ArrayList<>();
             parentList.add(cell);
             collectedStrains.clear();
@@ -427,7 +428,7 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
      */
-    private void modifyGraphOptions() {
+    protected void modifyGraphOptions() {
         int s = selectedStrains.size();
         if (s == 0) {
             MenuFactory.showOnlyThisStrain.setDisable(true);
@@ -468,30 +469,6 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
-     * Modify the filters applied to the tree.
-     *
-     * @param f     Filter type.
-     * @param state true or false state.
-     */
-    public void modifyFilter(Filter f, boolean state) {
-        selectedStrains.forEach(this::revertCellHighlight);
-
-        if (state) {
-            filtering.applyFilter(f);
-        } else {
-            filtering.removeFilter(f);
-        }
-
-        selectedStrains.clear();
-        filtering.getSelectedGenomes().forEach(g ->
-                        selectedStrains.add(getCellByName(g.getName()))
-        );
-
-        colorSelectedStrains();
-        modifyGraphOptions();
-    }
-
-    /**
      * Method to select all genomes in the tree.
      */
     public void selectAll() {
@@ -500,5 +477,71 @@ public class TreeController extends Controller<ScrollPane> {
             applyCellHighlight((Cell) c);
         });
         modifyGraphOptions();
+    }
+
+    /**
+     * Put all info of a TreeCell in the infoBox
+     * @param cell the cell of which we want info
+     */
+    private void updateMetaInfo(LeafCell cell) {
+        StringBuilder builder = new StringBuilder();
+        Genome genome = MetaDataParser.getMetadata().get(cell.getName());
+
+        builder.append(genome.getName()).append("\n");
+        builder.append("Lineage: ").append(genome.getLineage()).append("\n");
+        builder.append("Age: ").append(genome.getAge()).append("\n");
+        builder.append("Sex: ").append(genome.getSex()).append("\n");
+        builder.append("HIV: ").append(genome.isHiv()).append("\n");
+        builder.append("Cohort: ").append(genome.getCohort()).append("\n");
+        builder.append("Study district: ").append(genome.getStudyDistrict()).append("\n");
+        builder.append("Specimen type: ").append(genome.getSpecimenType()).append("\n");
+        builder.append("Microscopic smear: ").append(genome.getSmearStatus()).append("\n");
+        builder.append("DNA Isolation: ").append(genome.getIsolation()).append("\n");
+        builder.append("Phenotypic DST: ").append(genome.getPhenoDST()).append("\n");
+        builder.append("Capreomycin: ").append(genome.getCapreomycin()).append("\n");
+        builder.append("Ethambutol: ").append(genome.getEthambutol()).append("\n");
+        builder.append("Ethionamide: ").append(genome.getEthionamide()).append("\n");
+        builder.append("Isoniazid: ").append(genome.getIsoniazid()).append("\n");
+        builder.append("Kanamycin: ").append(genome.getKanamycin()).append("\n");
+        builder.append("Pyrazinamide: ").append(genome.getPyrazinamide()).append("\n");
+        builder.append("Ofloxacin: ").append(genome.getOfloxacin()).append("\n");
+        builder.append("Rifampin: ").append(genome.getRifampin()).append("\n");
+        builder.append("Streptomycin: ").append(genome.getStreptomycin()).append("\n");
+        builder.append("Spoligotype: ").append(genome.getSpoligotype()).append("\n");
+        builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n");
+        builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
+
+        mainController.getListFactory().modifyNodeInfo(builder.toString());
+    }
+
+    /**
+     * Add a strain to the selected strains list.
+     * @param cell the Cell to add.
+     */
+    public void addSelectedStrain(Cell cell) {
+        selectedStrains.add(cell);
+    }
+
+    /**
+     * Remove a strain from the selected strains list.
+     * @param cell the Cell to remove.
+     */
+    public void removeSelectedStrain(Cell cell) {
+        selectedStrains.remove(cell);
+    }
+
+    /**
+     * Clear the list of selected strains.
+     */
+    public void clearSelectedStrains() {
+        selectedStrains.clear();
+    }
+
+    /**
+     * Getter method for the maximum Y value.
+     * @return the max Y value.
+     */
+    public double getMaxY() {
+        return maxY;
     }
 }
