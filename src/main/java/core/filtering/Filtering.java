@@ -78,6 +78,7 @@ public class Filtering {
      */
     private void collectPredicates() {
         predicates.clear();
+        predicate = g -> true;
 
         filters.forEach(f -> {
             checkFilter1(f);
