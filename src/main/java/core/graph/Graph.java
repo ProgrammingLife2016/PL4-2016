@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 /**
  * Class representing a graph.
  */
-@SuppressWarnings("PMD.UselessParentheses")
 public class Graph {
 
     private Boolean debugScreenShouldBeInitialized;
@@ -326,7 +325,7 @@ public class Graph {
         if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
             boolean edgePlaced = false;
             for (int child : from.getLinks()) {
-                if ((intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0)
+                if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
                         && intersection(nodeMap.get(child).getGenomes(), ref) > 0
                         && ref.size() < 2) {
                     toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
@@ -550,8 +549,8 @@ public class Graph {
                 .forEach(m::addCell);
 
         this.getModel().getAddedEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
+                e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min
+                        || e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
                 .forEach(m::addEdge);
 
         return addFirstAndLast(m);
@@ -571,8 +570,8 @@ public class Graph {
                 .forEach(m::addCell);
 
         this.getModel().getAllEdges().stream().filter(e -> !(
-                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
+                e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min
+                        || e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)).forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
