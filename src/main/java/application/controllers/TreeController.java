@@ -41,6 +41,8 @@ public class TreeController extends Controller<ScrollPane> {
     private AnchorPane root;
     public MainController mainController;
 
+    private double maxY = -1;
+
     /**
      * Class constructor.
      *
@@ -96,6 +98,7 @@ public class TreeController extends Controller<ScrollPane> {
 
         CellLayout layout = new TreeLayout(pt.getModel(), 30);
         layout.execute();
+        maxY = ((TreeLayout)layout).getMaxY();
 
         List<Cell> nodeList = pt.getModel().getAddedCells();
         List<Edge> edgeList = pt.getModel().getAddedEdges();
@@ -530,5 +533,9 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void clearSelectedStrains() {
         selectedStrains.clear();
+    }
+
+    public double getMaxY() {
+        return maxY;
     }
 }
