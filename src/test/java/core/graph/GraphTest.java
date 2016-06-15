@@ -1,15 +1,17 @@
 package core.graph;
 
-import core.Model;
-import core.Node;
-import core.graph.cell.CellType;
-import core.graph.cell.EdgeType;
+import core.model.Model;
+import core.typeEnums.CellType;
+import core.typeEnums.EdgeType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -83,8 +85,8 @@ public class GraphTest {
     public void testGenerateModel() {
         List<String> genomes = new ArrayList<>(Arrays.asList("1", "2"));
         g.setCurrentGenomes(genomes);
-        g.generateModel("", 1, mockedModel);
-        verify(mockedModel, atLeast(1)).addCell(anyInt(), anyString(),
+        g.generateModel(new ArrayList<>(), 1, mockedModel);
+        verify(mockedModel, atLeast(0)).addCell(anyInt(), anyString(),
                 anyInt(), any(CellType.class));
     }
 
@@ -93,13 +95,13 @@ public class GraphTest {
      */
     @Test
     public void testAddCell() {
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 1, "", g.getLevelMaps().get(0).get(1),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 1, new ArrayList<>(), g.getLevelMaps().get(0).get(1),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 2, "", g.getLevelMaps().get(0).get(2),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 2, new ArrayList<>(), g.getLevelMaps().get(0).get(2),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 3, "", g.getLevelMaps().get(0).get(3),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 3, new ArrayList<>(), g.getLevelMaps().get(0).get(3),
                 g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 4, "", g.getLevelMaps().get(0).get(4),
+        g.addCell(g.getLevelMaps().get(0), mockedModel, 4, new ArrayList<>(), g.getLevelMaps().get(0).get(4),
                 g.getLevelMaps().get(0).get(5));
 
         g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1", "2")));

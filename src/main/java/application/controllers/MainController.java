@@ -1,20 +1,31 @@
 package application.controllers;
 
-import application.fxobjects.cell.graph.RectangleCell;
-import core.Annotation;
-import core.AnnotationProcessor;
-import core.Node;
+import application.factories.LegendFactory;
+import application.factories.ListFactory;
+import application.factories.MenuFactory;
+import application.fxobjects.Cell;
+import application.fxobjects.graphCells.RectangleCell;
+import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
+import core.graph.Node;
+import core.parsers.AnnotationParser;
+import core.parsers.MetaDataParser;
+import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -37,19 +48,27 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
-    private GridPane annotationSearchBox;
+
     private HBox legend;
     private VBox listVBox;
     private ListView list;
     private int currentView;
     private ListFactory listFactory;
-    private TextField textField;
-    private Button searchButton;
-    private Button deselectButton;
+    private TextField genomeTextField;
+    private TextField annotationTextField;
     private StackPane box;
     private int count;
     private int secondCount;
-    private int selectedIndex;
+
+    private Button searchButton;
+    private Button selectAllButton;
+    private Button deselectSearchButton;
+    private HBox hBox;
+
+    private Stack<String> mostRecentGFF;
+    private Stack<String> mostRecentMetadata;
+    private Stack<String> mostRecentGFA;
+    private Stack<String> mostRecentNWK;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -60,31 +79,78 @@ public class MainController extends Controller<BorderPane> {
 
         this.count = -1;
         this.secondCount = -1;
+        this.mostRecentGFF = new Stack<>();
+        this.mostRecentMetadata = new Stack<>();
+        this.mostRecentGFA = new Stack<>();
+        this.mostRecentNWK = new Stack<>();
 
-        ImageView imageView = new ImageView("/DART2N.png");
-        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
-        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
-        this.getRoot().setCenter(imageView);
+        createMenu(false, false);
+
+        setBackground("/background_images/DART2N.png");
 
         // Create the new GraphController
         graphController = new GraphController(this);
     }
 
+    /**
+     * Initializes the graph.
+     */
     public void initGraph() {
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-        //Fill the graph
-        fillGraph(null, new ArrayList<>());
+        fillGraph(new ArrayList<>(), new ArrayList<>());
 
+        graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
+    /**
+     * Method to set the background of the MainScreen
+     *
+     * @param s URL of the image to be set
+     */
+    public void setBackground(String s) {
+        ImageView imageView = new ImageView(s);
+        imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
+        imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        this.getRoot().setCenter(imageView);
+    }
+
+    /**
+     * Initializes the tree.
+     *
+     * @param s Path to the tree file.
+     */
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
+
     }
 
+    /**
+     * Initializes the annotation data.
+     *
+     * @param path Path to the annotation data file.
+     */
+    public void initAnnotations(String path) {
+        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
 
+        graphController.getGraph().setAnnotations(annotations);
+        graphController.getGraph().getModel().matchNodesAndAnnotations();
+    }
+
+    /**
+     * Initializes the meta data in the MetaData class.
+     *
+     * @param path Path to the meta data file.
+     */
+    public void initMetadata(String path) {
+        MetaDataParser.readMetadataFromFile(path);
+    }
 
     /**
      * Getter method for the current view level.
@@ -103,7 +169,150 @@ public class MainController extends Controller<BorderPane> {
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     public final void initialize(URL location, ResourceBundle resources) {
-        createMenu(false);
+    }
+
+    /**
+     * Method to check whether the file containing recently opened files is empty or not.
+     *
+     * @param fileName   The name of the most recent file.
+     * @param mostRecent list of most recent files.
+     */
+    @SuppressFBWarnings
+    public void checkMostRecent(String fileName, Stack<String> mostRecent) {
+        try {
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
+            File current = new File(file.getParentFile() + fileName);
+
+            if (current.exists()) {
+                Scanner sc = new Scanner(current);
+                while (sc.hasNextLine()) {
+                    String string = sc.nextLine();
+                    mostRecent.add(string);
+                }
+
+                sc.close();
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Write a recently chosen NWK file to the file
+     *
+     * @param fileName   The name of the most recent file.
+     * @param mostRecent list of most recent files.
+     */
+    @SuppressFBWarnings
+    public void writeMostRecent(String fileName, Stack<String> mostRecent) {
+        try {
+            File file = new File(MainController.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath());
+            File current = new File(file.getParentFile() + fileName);
+
+            current.createNewFile();
+
+            PrintWriter writer = new PrintWriter(current, "UTF-8");
+
+            for (int i = 0; i < mostRecent.size(); i++) {
+                writer.println(mostRecent.get(i));
+            }
+
+            writer.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Get the list containing most recent GFF files
+     *
+     * @return the list
+     */
+    public Stack getMostRecentGFF() {
+        return mostRecentGFF;
+    }
+
+    /**
+     * Get the list containing most recent GFA files
+     *
+     * @return the list
+     */
+    public Stack getMostRecentMetadata() {
+        return mostRecentMetadata;
+    }
+
+    /**
+     * Get the list containing most recent GFA files
+     *
+     * @return the list
+     */
+    public Stack getMostRecentGFA() {
+        return mostRecentGFA;
+    }
+
+    /**
+     * Get the list containing most recent NWK files
+     *
+     * @return the list
+     */
+    public Stack getMostRecentNWK() {
+        return mostRecentNWK;
+    }
+
+    /**
+     * Add a file to the recent opened GFF files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentGFF(String s) {
+        if (!mostRecentGFF.contains(s)) {
+            mostRecentGFF.push(s);
+            writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
+    }
+
+    /**
+     * Add a file to the recent opened Metadata files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentMetadata(String s) {
+        if (!mostRecentMetadata.contains(s)) {
+            mostRecentMetadata.push(s);
+            writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
+    }
+
+    /**
+     * Add a file to the recent opened GFA files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentGFA(String s) {
+        if (!mostRecentGFA.contains(s)) {
+            mostRecentGFA.push(s);
+            writeMostRecent("/mostRecentGFA.txt", mostRecentGFA);
+        }
+
+    }
+
+    /**
+     * Add a file to the recent opened NWK files
+     *
+     * @param s the file to be added
+     */
+    public void addRecentNWK(String s) {
+        if (!mostRecentNWK.contains(s)) {
+            mostRecentNWK.push(s);
+            writeMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        }
+
     }
 
     /**
@@ -112,6 +321,11 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
+        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleFilters(true);
+        MenuFactory.toggleFileMenu(true);
+        MenuFactory.toggleMostRecent(true);
+
         this.getRoot().setCenter(graphController.getRoot());
         if (secondCount == -1) {
             createList();
@@ -119,7 +333,6 @@ public class MainController extends Controller<BorderPane> {
             secondCount++;
         }
 
-        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -129,7 +342,9 @@ public class MainController extends Controller<BorderPane> {
      * @param ref             the reference string.
      * @param selectedGenomes the genomes to display.
      */
-    public void fillGraph(Object ref, List<String> selectedGenomes) {
+    public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
+        createMenu(true, true);
+
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
 
@@ -147,7 +362,9 @@ public class MainController extends Controller<BorderPane> {
      * @param s a List of selected strains.
      */
     public void soloStrainSelection(List<String> s) {
-        fillGraph(s.get(0), new ArrayList<>());
+        ArrayList<String> list2 = new ArrayList<>();
+        list2.add(s.get(0));
+        fillGraph(list2, new ArrayList<>());
         initGUI();
     }
 
@@ -159,7 +376,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(null, s);
+        fillGraph(new ArrayList<>(), s);
 
         initGUI();
         setListItems();
@@ -171,10 +388,6 @@ public class MainController extends Controller<BorderPane> {
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
 
-        // Place the annotationsearch box
-        createAnnotationSearchBox();
-        annotationSearchBox.setAlignment(Pos.CENTER_LEFT);
-
         // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
@@ -183,36 +396,8 @@ public class MainController extends Controller<BorderPane> {
         box = graphController.getZoomBox().getZoomBox();
 
         hbox.setAlignment(Pos.CENTER);
-        hbox.getChildren().addAll(annotationSearchBox, box, legend);
+        hbox.getChildren().addAll(box, legend);
         this.getRoot().setBottom(hbox);
-    }
-
-    /**
-     * Method to create the annotation search box.
-     */
-    private void createAnnotationSearchBox() {
-        annotationSearchBox = new AnnotationSearchBoxFactory().createSearchBox();
-
-        TextField box = (TextField) annotationSearchBox.getChildren().get(2);
-        Button search = (Button) annotationSearchBox.getChildren().get(3);
-
-        search.setOnAction(e -> {
-            if (box.getText() != null && !box.getText().isEmpty()) {
-                long input = Long.parseLong(box.getText());
-
-                List<Annotation> annotations
-                        = graphController.getGraph().getModel().getAnnotations();
-                Annotation ann = AnnotationProcessor.findAnnotationByID(
-                        annotations, input);
-
-                Map<Integer, application.fxobjects.cell.Cell> cellMap
-                        = graphController.getGraph().getModel().getCellMap();
-
-                for (Node n : ann.getSpannedNodes()) {
-                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-                }
-            }
-        });
     }
 
     /**
@@ -224,42 +409,141 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to create the menu bar.
+     * Adds an action listener to the genome search and deselect buttons.
+     *
+     * @param searchButton    The genome search button.
+     * @param deselectButton  The deselect button.
+     * @param selectAllButton The select all button.
      */
-    public void createMenu(boolean withSearch) {
-        VBox vBox = new VBox();
-        HBox hBox = new HBox();
-        searchButton = new Button("Search Genome (In Tree)");
-        deselectButton = new Button("Deselect All");
-
-        textField = new TextField();
+    private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
-            if (!textField.getText().isEmpty()) {
-                application.fxobjects.cell.Cell cell = treeController.getCellByName(
-                        textField.textProperty().get().trim());
+            if (!genomeTextField.getText().isEmpty()) {
+                Cell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
-                textField.setText("");
+                genomeTextField.setText("");
                 fillTree();
             }
         });
 
         deselectButton.setOnAction(e -> {
             treeController.clearSelection();
+            genomeTextField.setText("");
             fillTree();
-
         });
-        hBox.getChildren().addAll(textField, searchButton, deselectButton);
+
+        selectAllButton.setOnAction(e -> {
+            treeController.selectAll();
+            genomeTextField.setText("");
+            fillTree();
+        });
+    }
+
+    /**
+     * Adds an action listener to the annotation highlight button.
+     *
+     * @param highlightButton     The annotation highlight button.
+     * @param deselectAnnotationButton     The annotation deselect button.
+     */
+    private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
+        highlightButton.setOnAction(e -> {
+            if (currentView != 0) { return; }
+
+            if (!annotationTextField.getText().isEmpty()) {
+                List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+
+                try {
+                    Annotation newAnnotation
+                            = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                    Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) { return; }
+
+                    // Deselect the previously highlighted annotation as only one should be highlighted at a time.
+                    deselectAllAnnotations();
+                    for (Node n : newAnnotation.getSpannedNodes()) {
+                        ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                    }
+                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                    System.out.println("[DEBUG] Found too many matching annotations");
+                }
+
+                annotationTextField.setText("");
+            }
+        });
+
+        deselectAnnotationButton.setOnAction(e -> {
+            deselectAllAnnotations();
+            annotationTextField.setText("");
+        });
+    }
+
+    /**
+     * Deselects all annotations
+     */
+    private void deselectAllAnnotations() {
+        if (currentView != 0) { return; }
+        Map<Integer, Node> nodeMap = graphController.getGraph().getModel().getLevelMaps().get(0);
+        Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+
+        for (Node n : nodeMap.values()) {
+            if (n.getType().equals(CellType.RECTANGLE)) {
+                ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
+            }
+        }
+    }
+
+    /**
+     * Method to create the menu bar.
+     *
+     * @param withSearch Whether to add the search bar.
+     * @param withAnnotationSearch Whether to add the annotation seach box to the search bar.
+     */
+    public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
+        VBox vBox = new VBox();
+        hBox = new HBox();
+        genomeTextField = new TextField();
+
+
+        hBox.getStylesheets().add("/css/main.css");
+
+        searchButton = new Button("Search Genome (In Tree)");
+        selectAllButton = new Button("Select all");
+        deselectSearchButton = new Button("Deselect All");
+        setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
+        hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
+
+        // Dont add the annotation search box in the tree view
+        if (withAnnotationSearch) {
+            annotationTextField = new TextField();
+            Button highlightButton = new Button("Highlight annotation");
+            Button deselectAnnotationButton = new Button("Deselect annotation");
+            setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+            hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
+        }
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
+            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
+            MenuFactory.toggleFilters(true);
+            MenuFactory.toggleViewMenu(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    /**
+     * Method to disable and enable the buttons in the SearchBar
+     * @param x boolean indicating whether something is disabled or enabled
+     */
+    public void toggleGenomeSearchBar(boolean x) {
+        searchButton.setDisable(x);
+        selectAllButton.setDisable(x);
+        deselectSearchButton.setDisable(x);
+        genomeTextField.setDisable(x);
     }
 
     /**
@@ -271,36 +555,36 @@ public class MainController extends Controller<BorderPane> {
         list = listFactory.getList();
 
         list.setOnMouseClicked(event -> listSelect());
-        
-        list.setOnMouseClicked(event -> {
-            if (!(list.getSelectionModel().getSelectedItem() == null)) {
-                graphController.getGraph().reset();
-                getTextField().setText((String) list.getSelectionModel().getSelectedItem());
-
-                fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
-                graphController.takeSnapshot();
-
-            }
-        });
-
-        list.setOnMouseReleased(event -> list.getFocusModel().focus(selectedIndex));
 
         setListItems();
+
+        listVBox.getStylesheets().add("/css/list.css");
+
         this.getRoot().setRight(listVBox);
     }
 
+    /**
+     * All strains selected to highlight.
+     */
+    private ArrayList<String> highlights = new ArrayList<>();
 
     /**
      * Method to perform action upon listItem selection
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            selectedIndex = list.getSelectionModel().getSelectedIndex();
             graphController.getGraph().reset();
-            fillGraph(list.getSelectionModel().getSelectedItem(), graphController.getGenomes());
+
+            highlights.clear();
+
+            for (Object o : list.getSelectionModel().getSelectedItems()) {
+                highlights.add((String) o);
+            }
+
+            fillGraph(highlights, graphController.getGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
-                        .getGraphMouseHandling().getPrevClick());
+                        .getGraphMouseHandling().getPrevClick().getCellId());
             }
         }
 
@@ -323,17 +607,12 @@ public class MainController extends Controller<BorderPane> {
      * Method to fill the phylogenetic tree.
      */
     public void fillTree() {
+        createMenu(true, false);
         screen = treeController.getRoot();
+        toggleGenomeSearchBar(false);
+        MenuFactory.toggleFilters(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
-        hideListVBox();
-    }
-
-    /**
-     * Hide the info panel.
-     */
-    private void hideListVBox() {
-        this.getRoot().getChildren().remove(listVBox);
     }
 
     /**
@@ -382,11 +661,11 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Getter for the textfiel.d
+     * Getter for the textfield
      *
      * @return the textfield.
      */
     public TextField getTextField() {
-        return textField;
+        return genomeTextField;
     }
 }
