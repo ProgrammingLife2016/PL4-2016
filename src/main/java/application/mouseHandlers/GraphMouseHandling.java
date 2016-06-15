@@ -87,8 +87,6 @@ public class GraphMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
-
-
     };
 
     /**
