@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.spy;
 
 /**
@@ -17,8 +16,8 @@ import static org.mockito.Mockito.spy;
  *
  * @author Niels Warnars
  */
-public class CollectionCellTest {
-    CollectionCell c;
+public class ComplexCellTest {
+    ComplexCell c;
     StackPane pane;
 
     /**
@@ -29,7 +28,7 @@ public class CollectionCellTest {
         pane = spy(new StackPane());
         Text text = spy(new Text());
 
-        c = new CollectionCell(1, 1, pane, text);
+        c = new ComplexCell(1, 1, pane, text);
     }
 
     /**
@@ -37,9 +36,8 @@ public class CollectionCellTest {
      */
     @Test
     public void testGetType() {
-        assertEquals(CellType.COLLECTION, c.getType());
+        assertEquals(CellType.COMPLEX, c.getType());
     }
-
 
     /**
      * Tests the resetFocus method.
@@ -54,7 +52,7 @@ public class CollectionCellTest {
 
         c.resetFocus();
 
-        assertEquals(Color.LIGHTGREEN, shape.getStroke());
+        assertEquals(Color.DARKRED, shape.getStroke());
         assertEquals(1, shape.getStrokeWidth(), 0.0001);
     }
 }

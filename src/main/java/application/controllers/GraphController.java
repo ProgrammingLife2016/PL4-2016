@@ -9,8 +9,8 @@ import core.graph.Graph;
 import core.model.Model;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -23,12 +23,9 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
+
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 
 
