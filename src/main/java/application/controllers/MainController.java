@@ -5,6 +5,7 @@ import application.factories.ListFactory;
 import application.factories.MenuFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
+import application.fxobjects.treeCells.LeafCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
 import core.graph.Node;
@@ -408,7 +409,7 @@ public class MainController extends Controller<BorderPane> {
     private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
         searchButton.setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
-                Cell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
+                LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
