@@ -67,7 +67,6 @@ public class GraphController extends Controller<ScrollPane> {
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
-
             new Thread() {
                 public void start() {
                     update(graph.getCurrentRef(), graph.getCurrentInt());
@@ -101,9 +100,7 @@ public class GraphController extends Controller<ScrollPane> {
                     mainController.switchScene(+1);
                     if (graphMouseHandling.getPrevClick() != null) {
                         zoomOutFocus(graphMouseHandling.getPrevClick());
-
                     }
-
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
 
@@ -111,12 +108,9 @@ public class GraphController extends Controller<ScrollPane> {
                     mainController.switchScene(-1);
                     if (graphMouseHandling.getPrevClick() != null) {
                         zoomInFocus(graphMouseHandling.getPrevClick());
-
                     }
-
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
-
                     drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
                     update(graph.getCurrentRef(), graph.getCurrentInt());
                 }
@@ -283,55 +277,40 @@ public class GraphController extends Controller<ScrollPane> {
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
-
             root.getChildren().clear();
-
             graph.addGraphComponents(ref, depth);
             // add components to graph pane
             addToPane(min);
 
-            double maxEdgeLength = screenSize.getWidth() / 6.4;
-            double maxEdgeLengthLong = screenSize.getWidth();
-
             for (Edge e : graph.getModel().getAddedEdges()) {
-                checkEdgeLength(e, maxEdgeLength, maxEdgeLengthLong);
+                checkEdgeLength(e);
             }
 
             Set<Node> nodes = this.getRoot().lookupAll(".scroll-bar");
             nodes.stream().filter(node -> node instanceof ScrollBar).forEach(node -> {
                 ScrollBar sb = (ScrollBar) node;
-                sb.valueProperty().addListener((ObservableValue<? extends Number> ov,
-                                                Number old, Number newval) -> {
+                sb.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old, Number newval) -> {
                     zoomBox.replaceZoomBox(updateZoomBox());
                 });
             });
-
             initMouseHandler();
-            graph.endUpdate();
-            //@ToDo See issue 156
         } else {
-            //if(hValue != lastDrawnHValue) {
-            //lastDrawnHValue = hValue;
             addToPane(min);
         }
         graph.endUpdate();
 
-        //Set Graph as center.
         this.getRoot().setContent(root);
     }
 
     /**
      * Method to check whether an edge should be dashed because it is too long
-     *
-     * @param e                 the edge to check
-     * @param maxEdgeLength     the max length of the edge
-     * @param maxEdgeLengthLong length to check whether does not go out of screen
+     * @param e the edge to check
      */
-    private void checkEdgeLength(Edge e, double maxEdgeLength, double maxEdgeLengthLong) {
-        double xLength = e.getLine().endXProperty().get()
-                - e.getLine().startXProperty().get();
-        double yLength = e.getLine().endYProperty().get()
-                - e.getLine().startYProperty().get();
+    private void checkEdgeLength(Edge e) {
+        double maxEdgeLength = screenSize.getWidth() / 6.4;
+        double maxEdgeLengthLong = screenSize.getWidth();
+        double xLength = e.getLine().endXProperty().get() - e.getLine().startXProperty().get();
+        double yLength = e.getLine().endYProperty().get() - e.getLine().startYProperty().get();
         double length = Math.sqrt(Math.pow(xLength, 2) + Math.pow(yLength, 2));
 
         if (length > maxEdgeLength || length > maxEdgeLengthLong) {

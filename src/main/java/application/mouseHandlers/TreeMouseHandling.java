@@ -27,8 +27,8 @@ public class TreeMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         if (event.getSource() instanceof LeafCell) {
             mainController.getTreeController().applyCellHighlight((LeafCell) event.getSource());
-        }
-        else if (event.getSource() instanceof Edge) {
+        } else if (event.getSource() instanceof Edge) {
+
             mainController.getTreeController().applyEdgeHighlight((Edge) event.getSource());
 
         }
@@ -40,8 +40,7 @@ public class TreeMouseHandling {
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
         if (event.getSource() instanceof LeafCell) {
             mainController.getTreeController().revertCellHighlight((LeafCell) event.getSource());
-        }
-        else if (event.getSource() instanceof Edge) {
+        } else if (event.getSource() instanceof Edge) {
             mainController.getTreeController().revertEdgeHighlight((Edge) event.getSource());
         }
         mainController.getTreeController().colorSelectedStrains();
