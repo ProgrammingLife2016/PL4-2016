@@ -79,6 +79,7 @@ public class MenuFactory {
 
     /**
      * Method to enable and disable Filters in the Phylogenetic Tree.
+     *
      * @param x boolean, indicates whether a Button should be enabled or disabled
      */
     public static void toggleFilters(boolean x) {
@@ -418,15 +419,20 @@ public class MenuFactory {
     private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
         String fileTypeStr = "";
         switch (type) {
-            case GFF: fileTypeStr = "GFF";
+            case GFF:
+                fileTypeStr = "GFF";
                 break;
-            case META_DATA: fileTypeStr = "Metadata";
+            case META_DATA:
+                fileTypeStr = "Metadata";
                 break;
-            case GFA: fileTypeStr = "GFA";
+            case GFA:
+                fileTypeStr = "GFA";
                 break;
-            case NWK: fileTypeStr = "NWK";
+            case NWK:
+                fileTypeStr = "NWK";
                 break;
-            default: break;
+            default:
+                break;
         }
         return new Menu(format("Load recently opened %s file", fileTypeStr));
     }
