@@ -474,8 +474,16 @@ public class MainController extends Controller<BorderPane> {
 
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
+
+                    if(newAnnotation.getSpannedNodes().get(0) != null) {
+                        int i = newAnnotation.getSpannedNodes().get(0).getId();
+                        graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
+                                / getGraphController().getGraph().getModel().getMaxWidth());
+                    }
+
                     for (Node n : newAnnotation.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+
                     }
                 } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                     System.out.println("[DEBUG] Found too many matching annotations");
