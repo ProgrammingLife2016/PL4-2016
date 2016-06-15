@@ -32,7 +32,7 @@ public class GraphParser {
      */
     @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
-    public final HashMap<Integer, Node> readGFA(final InputStream input) {
+    private HashMap<Integer, Node> readGFA(final InputStream input) {
         try {
             String nextLine;
             BufferedReader bReader = new BufferedReader(new InputStreamReader(input));
@@ -57,34 +57,37 @@ public class GraphParser {
     private void processNextLine(String nextLine) {
         String[] content = nextLine.trim().split("\\s+");
         switch (nextLine.charAt(0)) {
-            case 'H':
-                break;
             case 'S':
-                int id = Integer.parseInt(content[1]);
-                String sequence = content[2];
-                int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
-                String[] genomes = content[4].split(":")[2].split(";");
-                for (int i = 0; i < genomes.length; i++) {
-                    genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
-                }
-
-                if (!nodeMap.containsKey(id)) {
-                    nodeMap.put(id, new Node(id, sequence, z));
-                } else {
-                    nodeMap.get(id).setSequence(sequence);
-                    nodeMap.get(id).setzIndex(z);
-                }
-
-                nodeMap.get(id).addAllGenome(genomes);
+                parseS(content);
                 break;
             case 'L':
                 int orig = Integer.parseInt(content[1]);
                 int dest = Integer.parseInt(content[3]);
                 nodeMap.get(orig).addLink(dest);
                 break;
-            default:
-                break;
+            default: break;
         }
+    }
+
+    /**
+     * Method to parse sequence lines.
+     * @param content - the line
+     */
+    private void parseS (String[] content) {
+        int id = Integer.parseInt(content[1]);
+        String sequence = content[2];
+        int z = Integer.parseInt(content[content.length - 1].split(":")[2]);
+        String[] genomes = content[4].split(":")[2].split(";");
+        for (int i = 0; i < genomes.length; i++) {
+            genomes[i] = genomes[i].substring(0, genomes[i].length() - 6);
+        }
+        if (!nodeMap.containsKey(id)) {
+            nodeMap.put(id, new Node(id, sequence, z));
+        } else {
+            nodeMap.get(id).setSequence(sequence);
+            nodeMap.get(id).setzIndex(z);
+        }
+        nodeMap.get(id).addAllGenome(genomes);
     }
 
     /**

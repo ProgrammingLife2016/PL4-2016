@@ -277,7 +277,6 @@ public final class GraphReducer {
             complexNode.addLink(targetNode.getId());
             return true;
         }
-
         return false;
     }
 

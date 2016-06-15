@@ -31,7 +31,7 @@ public class Model {
     private List<Edge> allEdges;
     private List<Edge> addedEdges;
 
-    private Map<Integer, Cell> cellMap; // <id,cell>
+    private Map<Integer, Cell> cellMap;
 
     private List<HashMap<Integer, Node>> levelMaps;
 
@@ -99,6 +99,15 @@ public class Model {
      */
     public GraphLayout getGraphLayout() {
         return graphLayout;
+    }
+
+    /**
+     * Method to set the layout of the graph.
+     *
+     * @param graphLayout the layout
+     */
+    public void setGraphLayout(GraphLayout graphLayout) {
+        this.graphLayout = graphLayout;
     }
 
     /**
@@ -300,25 +309,12 @@ public class Model {
      * @param cellList List of cells without a parent.
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
-
         for (Cell cell : cellList) {
             if (cell.getCellParents().size() == 0) {
                 graphParent.addCellChild(cell);
             }
         }
 
-    }
-
-    /**
-     * Remove the graphParent reference if it is set
-     *
-     * @param cellList List of cells to be removed from the graph
-     */
-    public void disconnectFromGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
-            graphParent.removeCellChild(cell);
-        }
     }
 
     /**

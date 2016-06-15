@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 
 /**
  * Class representing a phylogenetic tree.
@@ -62,14 +63,14 @@ public class PhylogeneticTree {
     /**
      * Set-up the tree model from a Newick data file.
      *
-     * @param s The name of the tree.
+     * @param path The path to the newick file
      * @return A Newick tree.
      */
-    @SuppressFBWarnings()
-    public Tree getTreeFromFile(String s) {
+    @SuppressFBWarnings({"NP_NULL_PARAM_DEREF", "DM_DEFAULT_ENCODING", "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"})
+    public Tree getTreeFromFile(String path) {
         FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream(s);
+            fileInputStream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,17 +78,7 @@ public class PhylogeneticTree {
         BufferedReader r = new BufferedReader(new InputStreamReader(fileInputStream));
         TreeParser tp = new TreeParser(r);
 
-        char[] x = s.toCharArray();
-        StringBuffer buf = new StringBuffer();
-        for (int i = s.length(); i > 0; i--) {
-            if (!(x[i - 1] == '\\')) {
-                buf.append(x[i - 1]);
-            } else {
-                break;
-            }
-        }
-
-        String f = new StringBuilder(buf.toString()).reverse().toString();
+        String f = Paths.get(path).getFileName().toString();
         return tp.tokenize(f);
     }
 
