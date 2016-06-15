@@ -195,11 +195,9 @@ public final class GraphReducer {
                                               int zoomLevel, int maxComplexity) {
         // Links must be present from parent --> child
 
-        if (parent == null) {
-            return false;
-        }
+        if (parent == null) { return false; }
 
-        Stack<Node> nonVisitedNodes = new Stack();
+        Stack<Node> nonVisitedNodes = new Stack<>();
         ArrayList<Node> collapsingNodes = new ArrayList<>();
         Node targetNode = null;
         for (int parentChild : parent.getLinks()) {
@@ -210,10 +208,7 @@ public final class GraphReducer {
         boolean foundTarget = false;
         while (!nonVisitedNodes.isEmpty() && pathComplexity < maxComplexity) {
             Node sourceNode = nonVisitedNodes.pop();
-            if (sourceNode == null) {
-                continue;
-            }
-
+            if (sourceNode == null) { continue; }
             pathComplexity++;
             if (foundTarget) {
                 if (!sourceNode.equals(targetNode)) {
