@@ -329,6 +329,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleViewMenu(false);
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
+        MenuFactory.toggleFilters(false);
 
         this.getRoot().setCenter(graphController.getRoot());
 
@@ -545,6 +546,7 @@ public class MainController extends Controller<BorderPane> {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
+            MenuFactory.toggleFilters(true);
             vBox.getChildren().addAll(menuBar);
         }
 
