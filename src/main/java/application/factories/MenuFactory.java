@@ -269,6 +269,14 @@ public class MenuFactory {
             mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
         });
 
+        return initMenuPartTwo();
+    }
+
+    /**
+     * Part two of the viewMenu init.
+     * @return the ViewMenu.
+     */
+    private Menu initMenuPartTwo() {
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
@@ -377,7 +385,7 @@ public class MenuFactory {
             int finalIdx = idx;
             MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
                 String recentFile = recents.get(finalIdx);
-                setActionOnSelection(type, recentFile);});
+                setActionOnSelection(type, recentFile); });
             if (recents.get(finalIdx).equals("Empty")) {
                 recentMenuItem.setDisable(true);
             }

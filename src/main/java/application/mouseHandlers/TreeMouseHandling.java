@@ -1,7 +1,6 @@
 package application.mouseHandlers;
 
 import application.controllers.MainController;
-import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import application.fxobjects.treeCells.LeafCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

@@ -475,7 +475,7 @@ public class MainController extends Controller<BorderPane> {
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
 
-                    if(newAnnotation.getSpannedNodes().get(0) != null) {
+                    if (newAnnotation.getSpannedNodes().get(0) != null) {
                         int i = newAnnotation.getSpannedNodes().get(0).getId();
                         graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
                                 / getGraphController().getGraph().getModel().getMaxWidth());
@@ -755,7 +755,7 @@ public class MainController extends Controller<BorderPane> {
      * @param builder a builder to append to.
      */
     public void appendFilterNames(StringBuilder builder) {
-        if(filtering.isFiltering()) {
+        if (filtering.isFiltering()) {
             builder.append("Applied filters: ").append("\n");
             filtering.getFilters().forEach(f ->
                             builder.append(f.getFilterName()).append("\n")

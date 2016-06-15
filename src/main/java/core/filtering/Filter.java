@@ -101,10 +101,18 @@ public enum Filter {
 
     private String filterName;
 
+    /**
+     * Constructor method.
+     * @param filterName name of the Filter.
+     */
     Filter(String filterName) {
         this.filterName = filterName;
     }
 
+    /**
+     * Get the name of a filter.
+     * @return the name of the Filter.
+     */
     public String getFilterName() {
         return filterName;
     }
