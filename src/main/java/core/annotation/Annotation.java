@@ -53,7 +53,7 @@ public class Annotation implements Comparable<Annotation> {
         nameAttr = "";
         displayNameAttr = "";
 
-        spannedNodes = new ArrayList<Node>();
+        spannedNodes = new ArrayList<>();
         offsetInFirstSpannedNode = -1;
         offsetInLastSpannedNode = -1;
     }

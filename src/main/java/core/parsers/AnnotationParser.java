@@ -31,7 +31,7 @@ public final class AnnotationParser {
      */
     @SuppressFBWarnings("I18N")
     public static List<Annotation> readGFF(InputStream input) throws IOException {
-        List<Annotation> annotations = new ArrayList<Annotation>();
+        List<Annotation> annotations = new ArrayList<>();
 
         String nextLine;
         BufferedReader bReader = new BufferedReader(new InputStreamReader(input));

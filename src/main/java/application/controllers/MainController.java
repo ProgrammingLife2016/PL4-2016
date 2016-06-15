@@ -51,7 +51,6 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
-
     private HBox legend;
     private VBox listVBox;
     private ListView list;
@@ -149,6 +148,8 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.getGraph().setAnnotations(annotations);
         graphController.getGraph().getModel().matchNodesAndAnnotations();
+
+        MenuFactory.loadAnnotations.setDisable(true);
     }
 
     /**
@@ -549,7 +550,6 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
-            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
@@ -558,18 +558,6 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setTop(vBox);
-    }
-
-    /**
-     * Method to disable and enable the buttons in the SearchBar
-     *
-     * @param x boolean indicating whether something is disabled or enabled
-     */
-    public void toggleGenomeSearchBar(boolean x) {
-        searchButton.setDisable(x);
-        selectAllButton.setDisable(x);
-        deselectSearchButton.setDisable(x);
-        genomeTextField.setDisable(x);
     }
 
     /**
@@ -636,7 +624,6 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
-        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }

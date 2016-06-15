@@ -100,7 +100,6 @@ public class MenuFactory {
      * @param x boolean
      */
     public static void toggleFileMenu(boolean x) {
-        loadAnnotations.setDisable(x);
         loadGenome.setDisable(x);
         loadMetadata.setDisable(x);
         loadPhylogeneticTree.setDisable(x);
@@ -185,6 +184,7 @@ public class MenuFactory {
     private void showShortCutMenu() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
 
         VBox content = new VBox();
 
@@ -192,6 +192,7 @@ public class MenuFactory {
         grid.setVgap(5);
         grid.setHgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
+
 
         grid.add(new Text("Ctrl + G"), 0, 0);
         grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
@@ -265,7 +266,6 @@ public class MenuFactory {
         });
 
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
-            mainController.toggleGenomeSearchBar(true);
             mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
         });
 

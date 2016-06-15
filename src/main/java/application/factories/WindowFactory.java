@@ -372,11 +372,11 @@ public final class WindowFactory {
                 mainController.initGraph();
                 mainController.addRecentGFA(NWKFile.getAbsolutePath());
             } else {
+                mainController.initTree(NWKFile.getAbsolutePath());
+                mainController.addRecentNWK(NWKFile.getAbsolutePath());
                 mainController.getGraphController().getGraph().getNodeMapFromFile(GFAFile.getAbsolutePath());
                 mainController.initGraph();
                 mainController.addRecentGFA(GFAFile.getAbsolutePath());
-                mainController.initTree(NWKFile.getAbsolutePath());
-                mainController.addRecentNWK(NWKFile.getAbsolutePath());
             }
 
             tempStage.hide();
