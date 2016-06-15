@@ -139,7 +139,6 @@ public class GraphLayout extends CellLayout {
 
                 if (currentY > maxHeight) {
                     maxHeight = currentY;
-                    System.out.println("maxHeight: " + maxHeight);
                 }
                 cellCount = child.getCellChildren().size() - 1;
                 breadthFirstPlacing(child);
