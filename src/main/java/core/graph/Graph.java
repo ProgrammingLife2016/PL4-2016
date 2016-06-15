@@ -1,6 +1,7 @@
 package core.graph;
 
 import core.annotation.Annotation;
+import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
@@ -8,7 +9,11 @@ import core.typeEnums.EdgeType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -24,6 +29,7 @@ public class Graph {
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
+    private boolean filtering;
     /**
      * All the genomes that are in this graph.
      */
@@ -198,7 +204,7 @@ public class Graph {
 
         //Root Node
         Node root = nodeMap.get(1);
-        if (currentGenomes.size() > 0) { //Draw selected references
+        if (filtering) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
@@ -650,5 +656,19 @@ public class Graph {
             }
         }
         return m;
+    }
+
+    /**
+     * Reduce the list of selected genomes to genomes available in the loaded graph.
+     * @param genomes selected genomes.
+     * @param filtering whether filters are applied.
+     * @return the reduced list of genomes.
+     */
+    public List<String> reduceGenomes(List<Genome> genomes, boolean filtering) {
+        this.filtering = filtering;
+        List<String> selectedGenomeNames = genomes.stream().map(Genome::getName)
+                .collect(Collectors.toList());
+        return selectedGenomeNames.stream().filter(
+                this.genomes::contains).collect(Collectors.toList());
     }
 }
