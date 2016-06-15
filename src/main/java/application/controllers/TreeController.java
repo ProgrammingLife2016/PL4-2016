@@ -479,6 +479,10 @@ public class TreeController extends Controller<ScrollPane> {
         modifyGraphOptions();
     }
 
+    /**
+     * Put all info of a TreeCell in the infoBox
+     * @param cell the cell of which we want info
+     */
     private void updateMetaInfo(LeafCell cell) {
         StringBuilder builder = new StringBuilder();
         Genome genome = MetaDataParser.getMetadata().get(cell.getName());
