@@ -282,21 +282,22 @@ public class Graph {
         //S <- Set of all nodes with no incoming edges
         HashMap<Integer, Node> copyNodeMap = new HashMap<>();
         copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
-        Queue<Node> nodesWithoutParent = new LinkedList<>();
+        LinkedList<Node> nodesWithoutParent = new LinkedList<>();
         List<Integer> sortedNodeIds = new ArrayList<>();
         for (int key : nodeMap.keySet()) {
             Node node = nodeMap.get(key);
             //Check whether the node has no parents
             if (node.getParents().size() == 0) {
                 //Add the node to the stack of nodes without parent
-                nodesWithoutParent.add(node);
+                nodesWithoutParent.addLast(node);
             }
         }
 
         //while S is non-empty do
         while (!nodesWithoutParent.isEmpty()) {
             //remove a node n from S
-            Node n = nodesWithoutParent.poll();
+            Node n = nodesWithoutParent.getFirst();
+            nodesWithoutParent.remove(n);
 
             //insert n into L
             sortedNodeIds.add(n.getId());
@@ -309,7 +310,7 @@ public class Graph {
 
                 //if m has no other incoming edges then insert m into S
                 if (m.getParents().size() == 0) {
-                    nodesWithoutParent.add(m);
+                    nodesWithoutParent.addLast(m);
                 }
             }
         }
