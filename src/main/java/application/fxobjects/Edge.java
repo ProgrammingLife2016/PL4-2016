@@ -124,6 +124,11 @@ public class Edge extends Group {
         return ("(" + source.getCellId() + "," + target.getCellId() + ")");
     }
 
+    /**
+     * Returns the length of this Edge.
+     *
+     * @return the Edge.
+     */
     public double getLength() {
         double xLength = getLine().endXProperty().get()
                 - getLine().startXProperty().get();

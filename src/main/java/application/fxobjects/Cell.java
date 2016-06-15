@@ -144,10 +144,20 @@ public abstract class Cell extends Pane {
         return cellId + "";
     }
 
+    /**
+     * Method to get the edges attached to a Cell.
+     *
+     * @return the edges.
+     */
     public Set<Edge> getEdges() {
         return edges;
     }
 
+    /**
+     * Method to add an Edge to a cell.
+     *
+     * @param e the Edge to add.
+     */
     public void addEdge(Edge e) {
         edges.add(e);
     }

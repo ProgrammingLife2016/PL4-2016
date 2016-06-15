@@ -202,28 +202,36 @@ public class Model {
      */
     public Boolean addCell(int id, String text, int nucleotides, CellType type) {
         switch (type) {
-            case RECTANGLE: RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
+            case RECTANGLE:
+                RectangleCell rectangleCell = new RectangleCell(id, nucleotides);
                 addCell(rectangleCell);
                 break;
-            case BUBBLE: BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
+            case BUBBLE:
+                BubbleCell bubbleCell = new BubbleCell(id, nucleotides, text);
                 addCell(bubbleCell);
                 break;
-            case INDEL: IndelCell indelCell = new IndelCell(id, nucleotides, text);
+            case INDEL:
+                IndelCell indelCell = new IndelCell(id, nucleotides, text);
                 addCell(indelCell);
                 break;
-            case COLLECTION: CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
+            case COLLECTION:
+                CollectionCell collectionCell = new CollectionCell(id, nucleotides, text);
                 addCell(collectionCell);
                 break;
-            case COMPLEX: ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
+            case COMPLEX:
+                ComplexCell complexCell = new ComplexCell(id, nucleotides, text);
                 addCell(complexCell);
                 break;
-            case TREELEAF: LeafCell leafCell = new LeafCell(id, text);
+            case TREELEAF:
+                LeafCell leafCell = new LeafCell(id, text);
                 addCell(leafCell);
                 break;
-            case TREEMIDDLE: MiddleCell middleCell = new MiddleCell(id);
+            case TREEMIDDLE:
+                MiddleCell middleCell = new MiddleCell(id);
                 addCell(middleCell);
                 break;
-            default: throw new UnsupportedOperationException("Unsupported type: " + type);
+            default:
+                throw new UnsupportedOperationException("Unsupported type: " + type);
         }
         return false;
     }
@@ -380,8 +388,9 @@ public class Model {
      * @param e the edge to add.
      */
     public void addEdge(Edge e) {
-        if(!addedEdges.contains(e))
-        addedEdges.add(e);
+        if (!addedEdges.contains(e)) {
+            addedEdges.add(e);
+        }
     }
 
     /**
@@ -402,21 +411,34 @@ public class Model {
         return getGraphLayout().getRightMost();
     }
 
+    /**
+     * Method to add a long Edge.
+     *
+     * @param e the Edge to add.
+     */
     public void addLongEdge(Edge e) {
         longEdges.add(e);
     }
 
+    /**
+     * Method to add a cell to a Tile
+     *
+     * @param tile to the to add to.
+     * @param c the Cell to add.
+     */
     public void addCellInTile(int tile, Cell c) {
         tileCellMap.putIfAbsent(tile, new ArrayList<>());
 
         tileCellMap.get(tile).add(c);
     }
 
+    /**
+     * Method to get a Tile.
+     *
+     * @param i the tile to get.
+     * @return the Tile.
+     */
     public ArrayList<Cell> getCellTile(int i) {
         return tileCellMap.get(i);
-    }
-
-    public ArrayList<Edge> getLongEdges() {
-        return longEdges;
     }
 }

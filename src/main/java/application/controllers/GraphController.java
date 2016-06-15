@@ -283,7 +283,7 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void update(ArrayList<String> ref, int depth) {
         int min = drawFrom;
-        
+
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
