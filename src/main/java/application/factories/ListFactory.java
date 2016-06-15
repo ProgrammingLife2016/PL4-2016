@@ -68,7 +68,6 @@ public class ListFactory {
         list.setPlaceholder(new Label("No Genomes Loaded."));
         list.prefHeightProperty().bind(listVBox.heightProperty());
         list.prefWidthProperty().bind(listVBox.widthProperty());
-
     }
 
 

@@ -1,5 +1,6 @@
 package core.graph;
 
+import core.annotation.Annotation;
 import core.model.Model;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
@@ -61,24 +62,6 @@ public class GraphTest {
     }
 
     /**
-     * Test for the getModel method.
-     */
-    @Test
-    public void testGetModel() {
-        Object model = g.getModel();
-        assertEquals(Model.class, model.getClass());
-    }
-
-//    /**
-//     * Test for the getNodeMapFromFile method.
-//     */
-//    @Test
-//    public void testGetNodeMapFromFile() {
-//        HashMap<Integer, Node> nodeMap = g.getNodeMapFromFile();
-//        assertNotEquals(0, nodeMap.size());
-//    }
-
-    /**
      * Test for the generateModel method.
      */
     @Test
@@ -123,6 +106,43 @@ public class GraphTest {
     }
 
     /**
+     * Tests the intersectingInt method.
+     */
+    @Test
+    public void testIntersectingInt() {
+        List<Integer> l1 = Arrays.asList(1, 2, 3);
+        List<Integer> l2 = Arrays.asList(1, 2);
+
+        assertEquals(2, g.intersectionInt(l1, l2));
+    }
+
+    /**
+     * Tests the intersectingStrings method.
+     */
+    @Test
+    public void testIntersectingStrings() {
+        List<String> l1 = Arrays.asList("a", "b", "c");
+        List<String> l2 = Arrays.asList("b");
+
+        List<String> res = g.intersectingStrings(l1, l2);
+
+        assertEquals(1, res.size());
+        assertEquals("b", res.get(0));
+    }
+
+    /**
+     * Test for the getModel method.
+     */
+    @Test
+    public void testGetModel() {
+        Graph g2 = new Graph();
+        Model m = new Model();
+        g2.setModel(m);
+
+        assertEquals(m, g2.getModel());
+    }
+
+    /**
      * Test for the get/setGenomes method.
      */
     @Test
@@ -159,5 +179,76 @@ public class GraphTest {
     public void testCurrentInt() {
         g.reset();
         assertEquals(-1, g.getCurrentInt());
+    }
+
+    /**
+     * Tests the getCurrentRef method.
+     */
+    @Test
+    public void testGetCurrentRef() {
+        ArrayList<String> ref = new ArrayList<>();
+        ref.add("a");
+        ref.add("b");
+
+        g.setDebugScreenShouldBeInitialized(false);
+        g.addGraphComponents(ref, 1);
+
+        assertEquals(ref, g.getCurrentRef());
+    }
+    /**
+     * Tests the set/getAnnotations methods.
+     */
+    @Test
+    public void testGetAnnotations() {
+        List<Annotation> annotations = new ArrayList();
+        g.setAnnotations(annotations);
+
+        assertEquals(annotations, g.getAnnotations());
+    }
+
+    /**
+     * Tests the getMaxWidth method.
+     */
+    @Test
+    public void testGetMaxWidth() {
+        Model m = mock(Model.class);
+        when(m.getMaxWidth()).thenReturn(new Double(42));
+
+        Graph g2 = new Graph();
+
+        g2.setModel(m);
+        assertEquals(42, g2.getMaxWidth(), 0.0001);
+    }
+
+    /**
+     * Tests the getModelAddedInView method.
+     */
+    @Test
+    public void testGetModelAddedInView() {
+        Model m = g.getModel();
+        Model res = g.getModelAddedInView(0, Integer.MAX_VALUE);
+        assertNotEquals(m, res);
+    }
+
+    /**
+     * Tests the getModelAllInView method.
+     */
+    @Test
+    public void testGetModelAllInView() {
+        Model m = g.getModel();
+        Model res = g.getModelAllInView(0, Integer.MAX_VALUE);
+        assertNotEquals(m, res);
+    }
+
+    /**
+     * Tests the getDebugScreenShouldBeInitialized method.
+     */
+    @Test
+    public void testGetDebugScreenShouldBeInitialized() {
+        Graph g2 = new Graph();
+
+        assertTrue(g2.getDebugScreenShouldBeInitialized());
+        g2.setDebugScreenShouldBeInitialized(false);
+        assertFalse(g2.getDebugScreenShouldBeInitialized());
     }
 }
