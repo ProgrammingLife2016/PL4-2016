@@ -67,7 +67,6 @@ public class Graph {
         zoomOut = new Model();
 
         annotations = new ArrayList<>();
-
     }
 
     /**
@@ -590,13 +589,14 @@ public class Graph {
         for (int i = startTile; i < startTile + 3; i++) {
             if (getModel().getCellTile(i) != null) {
                 for (Cell c : getModel().getCellTile(i)) {
-                    if (c.getLayoutX() > min && c.getLayoutX() <= max) {
-                        m.addCell(c);
-                        for (Edge e : c.getEdges()) {
-                            m.addEdge(e);
-                        }
-                        runs++;
+                    //if (c.getLayoutX() > min && c.getLayoutX() <= max) {
+                    m.addCell(c);
+                    for (Edge e : c.getEdges()) {
+                        System.out.println("peop");
+                        m.addEdge(e);
                     }
+                    runs++;
+                    // }
                 }
             }
         }
