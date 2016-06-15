@@ -154,7 +154,9 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void applyCellHighlight(LeafCell cell) {
         String name = cell.getName();
-        updateMetaInfo(cell);
+        if (!mainController.isInGraph()) {
+            updateMetaInfo(cell);
+        }
         List<Cell> parentList = new ArrayList<>();
         parentList.add(cell);
         collectedStrains.clear();
@@ -481,6 +483,7 @@ public class TreeController extends Controller<ScrollPane> {
         StringBuilder builder = new StringBuilder();
         Genome genome = MetaDataParser.getMetadata().get(cell.getName());
 
+        mainController.appendFilterNames(builder);
         builder.append(genome.getName()).append("\n");
         builder.append("Lineage: ").append(genome.getLineage()).append("\n");
         builder.append("Age: ").append(genome.getAge()).append("\n");

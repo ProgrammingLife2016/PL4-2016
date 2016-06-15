@@ -715,6 +715,9 @@ public class MainController extends Controller<BorderPane> {
 
         if (inGraph) {
             strainSelection(getLoadedGenomeNames());
+            StringBuilder builder = new StringBuilder();
+            appendFilterNames(builder);
+            listFactory.modifyNodeInfo(builder.toString());
         }
 
         treeController.colorSelectedStrains();
@@ -737,5 +740,27 @@ public class MainController extends Controller<BorderPane> {
      */
     public Filtering getFiltering() {
         return filtering;
+    }
+
+    /**
+     * Check whether scene is in graph.
+     * @return true if in graph, false otherwise.
+     */
+    public boolean isInGraph() {
+        return inGraph;
+    }
+
+    /**
+     * Get the names of all applied filters.
+     * @param builder a builder to append to.
+     */
+    public void appendFilterNames(StringBuilder builder) {
+        if(filtering.isFiltering()) {
+            builder.append("Applied filters: ").append("\n");
+            filtering.getFilters().forEach(f ->
+                            builder.append(f.getFilterName()).append("\n")
+            );
+            builder.append("\n");
+        }
     }
 }
