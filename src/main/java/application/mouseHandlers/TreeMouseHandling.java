@@ -3,7 +3,6 @@ package application.mouseHandlers;
 import application.controllers.MainController;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
-import application.fxobjects.treeCells.LeafCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -27,7 +26,7 @@ public class TreeMouseHandling {
      */
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         if (event.getSource() instanceof Cell) {
-            mainController.getTreeController().applyCellHighlight((LeafCell) event.getSource());
+            mainController.getTreeController().applyCellHighlight((Cell) event.getSource());
         }
         else {
             mainController.getTreeController().applyEdgeHighlight((Edge) event.getSource());
@@ -40,7 +39,7 @@ public class TreeMouseHandling {
      */
     private EventHandler<MouseEvent> onMouseExitedEventHandler = event -> {
         if (event.getSource() instanceof Cell) {
-            mainController.getTreeController().revertCellHighlight((LeafCell) event.getSource());
+            mainController.getTreeController().revertCellHighlight((Cell) event.getSource());
         }
         else {
             mainController.getTreeController().revertEdgeHighlight((Edge) event.getSource());

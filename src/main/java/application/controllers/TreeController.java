@@ -35,8 +35,8 @@ import static application.fxobjects.LineageColor.*;
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
     private List<Edge> collectedEdges;
-    private List<LeafCell> selectedStrains;
-    private List<LeafCell> collectedStrains;
+    private List<Cell> selectedStrains;
+    private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
     private MainController mainController;
@@ -129,7 +129,7 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param cell the strain to add.
      */
-    public void selectStrain(LeafCell cell) {
+    public void selectStrain(Cell cell) {
         selectedStrains.add(cell);
     }
 
@@ -152,23 +152,25 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param cell the Cell being hovered over.
      */
-    public void applyCellHighlight(LeafCell cell) {
-        String name = cell.getName();
-        updateMetaInfo(cell);
-        List<Cell> parentList = new ArrayList<>();
-        parentList.add(cell);
-        collectedStrains.clear();
-        collectedStrains.add(cell);
+    @SuppressWarnings("checkstyle:linelength")
+    public void applyCellHighlight(Cell cell) {
+        if (cell instanceof LeafCell) {
+            String name = ((LeafCell) cell).getName();
+            updateMetaInfo((LeafCell) cell);
+            List<Cell> parentList = new ArrayList<>();
+            parentList.add(cell);
+            collectedStrains.clear();
+            collectedStrains.add(cell);
 
-        if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
-            applyColorUpwards(parentList,
-                    determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
-            applyColorOnCell(cell, determineSelectedLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
-        } else if (name.contains("G")) {
-            applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
-            applyColorOnCell(cell, determineSelectedLeafLinColor(4));
-        } else {
-            applyColorUpwards(parentList, Color.YELLOW, 4.0);
+            if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
+                applyColorUpwards(parentList, determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
+                applyColorOnCell(cell, determineSelectedLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
+            } else if (name.contains("G")) {
+                applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
+                applyColorOnCell(cell, determineSelectedLeafLinColor(4));
+            } else {
+                applyColorUpwards(parentList, Color.YELLOW, 4.0);
+            }
         }
     }
 
@@ -177,23 +179,25 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param cell the Cell which is no longer being hovered over.
      */
-    public void revertCellHighlight(LeafCell cell) {
-        String name = cell.getName();
-        List<Cell> parentList = new ArrayList<>();
-        parentList.add(cell);
-        collectedStrains.clear();
-        collectedStrains.add(cell);
+    public void revertCellHighlight(Cell cell) {
+        if (cell instanceof LeafCell) {
+            String name = ((LeafCell) cell).getName();
+            List<Cell> parentList = new ArrayList<>();
+            parentList.add(cell);
+            collectedStrains.clear();
+            collectedStrains.add(cell);
 
-        if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
-            applyColorUpwards(parentList, Color.BLACK, 1.0);
-            applyColorOnCell(cell, determineLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
-        } else if (name.contains("G")) {
-            applyColorUpwards(parentList, Color.BLACK, 1.0);
-            applyColorOnCell(cell, determineLeafLinColor(4));
-        } else {
+            if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+                applyColorOnCell(cell, determineLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
+            } else if (name.contains("G")) {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+                applyColorOnCell(cell, determineLeafLinColor(4));
+            } else {
+                applyColorUpwards(parentList, Color.BLACK, 1.0);
+            }
             applyColorUpwards(parentList, Color.BLACK, 1.0);
         }
-        applyColorUpwards(parentList, Color.BLACK, 1.0);
     }
 
     /**
@@ -228,9 +232,10 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Apply a certain color and stroke to all cells being hovered over.
      */
+    @SuppressWarnings("checkstyle:linelength")
     private void applyColorOnCells() {
         collectedStrains.forEach(s -> {
-                    LeafCell c = s;
+                    LeafCell c = (LeafCell) s;
                     if (c.getName().contains("TKK") && MetaDataParser.getMetadata().get(c.getName()) != null) {
                         c.setBackground(
                                 new Background(
@@ -256,9 +261,10 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Revert a certain color and stroke to all cells being hovered over.
      */
+    @SuppressWarnings("checkstyle:linelength")
     private void revertColorOnCells() {
         collectedStrains.forEach(s -> {
-            LeafCell c = s;
+            LeafCell c = (LeafCell) s;
             if (c.getName().contains("TKK") && MetaDataParser.getMetadata().get(c.getName()) != null) {
                 c.setBackground(
                         new Background(
@@ -367,7 +373,7 @@ public class TreeController extends Controller<ScrollPane> {
             if (!(next instanceof LeafCell)) {
                 collectedEdges.addAll(pt.getModel().getEdgeFromParent(next));
             } else {
-                collectedStrains.add((LeafCell) next);
+                collectedStrains.add(next);
             }
         }
     }
@@ -402,7 +408,7 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @return a list with the selected strains.
      */
-    public List<LeafCell> getSelectedStrains() {
+    public List<Cell> getSelectedStrains() {
         return selectedStrains;
     }
 
@@ -414,7 +420,7 @@ public class TreeController extends Controller<ScrollPane> {
     public List<String> getSelectedGenomes() {
         List<String> genomes = new ArrayList<>();
 
-        selectedStrains.forEach(s -> genomes.add(s.getName()));
+        selectedStrains.forEach(s -> genomes.add(((LeafCell) s).getName()));
 
         return genomes;
     }
@@ -442,10 +448,10 @@ public class TreeController extends Controller<ScrollPane> {
      * @param name the name to search for.
      * @return a Cell gotten by its name.
      */
-    public LeafCell getCellByName(String name) {
+    public Cell getCellByName(String name) {
         for (Object c : root.getChildren()) {
             if (c instanceof LeafCell && ((LeafCell) c).getName().contains(name)) {
-                return (LeafCell) c;
+                return (Cell) c;
             }
         }
 
@@ -468,15 +474,11 @@ public class TreeController extends Controller<ScrollPane> {
     public void selectAll() {
         root.getChildren().stream().filter(c -> c instanceof LeafCell).forEach(c -> {
             selectedStrains.add(((LeafCell) c));
-            applyCellHighlight((LeafCell) c);
+            applyCellHighlight((Cell) c);
         });
         modifyGraphOptions();
     }
 
-    /**
-     * Put all info of a TreeCell in the infoBox
-     * @param cell the cell of which we want info
-     */
     private void updateMetaInfo(LeafCell cell) {
         StringBuilder builder = new StringBuilder();
         Genome genome = MetaDataParser.getMetadata().get(cell.getName());
@@ -512,7 +514,7 @@ public class TreeController extends Controller<ScrollPane> {
      * Add a strain to the selected strains list.
      * @param cell the Cell to add.
      */
-    public void addSelectedStrain(LeafCell cell) {
+    public void addSelectedStrain(Cell cell) {
         selectedStrains.add(cell);
     }
 

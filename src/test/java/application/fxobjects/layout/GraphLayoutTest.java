@@ -114,29 +114,11 @@ public class GraphLayoutTest {
 
         graphLayout = new GraphLayout(model, 20, 500);
 
-        assertFalse(cell.isRelocated());
+        assertFalse(cell.isRelocatedX());
+        assertFalse(cell.isRelocatedY());
         graphLayout.execute();
-        assertTrue(cell.isRelocated());
-    }
-
-    /**
-     * Tests whether the breathFirstPlacing method actually relocates a cell.
-     */
-    @Test
-    public void testBreadthFirstPlacing() {
-        Cell celll = spy(new RectangleCell(1, 1));
-        Cell cell2 = spy(new RectangleCell(2, 1));
-
-        celll.addCellChild(cell2);
-
-        Model model = spy(new Model());
-        model.addCell(celll);
-
-        graphLayout = new GraphLayout(model, 20, 500);
-
-        assertFalse(cell2.isRelocated());
-        graphLayout.breadthFirstPlacing(celll);
-        assertTrue(cell2.isRelocated());
+        assertTrue(cell.isRelocatedY());
+        assertTrue(cell.isRelocatedX());
     }
 
 }

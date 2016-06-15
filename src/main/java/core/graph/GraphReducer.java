@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
  */
 public final class GraphReducer {
 
-    /**
-     * Class constructor
-     */
     private GraphReducer() {
     }
 
@@ -58,13 +55,20 @@ public final class GraphReducer {
      */
     public static List<HashMap<Integer, Node>>
     createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
+        determineParents(startMap);
         levelMaps.add(startMap);
         startMapSize = startMap.size();
+        int reduceAmount = 5;
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
+
+            if (levelMaps.size() == 25) {
+                reduceZoomingLevels(reduceAmount);
+                i -= reduceAmount;
+            }
 
             // Don't make any new zoom level if the number of nodes after reduction is only 2 less
             // than the number of nodes after previous reduction.
@@ -72,6 +76,10 @@ public final class GraphReducer {
                 levelMaps.set(i - 1, levelMap);
                 int maxDepth = 20;
                 for (int j = i; maxDepth < 1001; j++) {
+                    if (levelMaps.size() == 25) {
+                        reduceZoomingLevels(5);
+                        j -= reduceAmount;
+                    }
                     HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
                     int previousMapSize2 = levelMaps.get(j - 1).size();
                     int currentMapSize2 = levelMap2.size();
@@ -87,6 +95,29 @@ public final class GraphReducer {
             } else {
                 levelMaps.add(levelMap);
             }
+        }
+    }
+
+    /**
+     * Method to reduce the amount of zoominglevels.
+     * Removes a levelmap that differs the least in size from the
+     * previous nodemap.
+     * @param amountToRemove the amount of nodeMaps to remove from LevelMaps.
+     */
+    public static void reduceZoomingLevels(int amountToRemove) {
+        for (int k = 0; k < amountToRemove; k++) {
+            int smallestDifference = Integer.MAX_VALUE;
+            int index = -1;
+            for (int level = 3; level < levelMaps.size() - 2; level++) {
+                int currentMapSize = levelMaps.get(level).size();
+                int previousMapSize = levelMaps.get(level - 1).size();
+                int difference = currentMapSize - previousMapSize;
+                if (difference < smallestDifference) {
+                    index = level;
+                    smallestDifference = difference;
+                }
+            }
+            levelMaps.remove(index);
         }
     }
 
@@ -248,8 +279,10 @@ public final class GraphReducer {
             }
             complexNode.setLinks(new ArrayList<>());
             complexNode.addLink(targetNode.getId());
+            targetNode.addParent(complexNode.getId());
             return true;
         }
+
         return false;
     }
 

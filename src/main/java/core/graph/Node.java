@@ -134,7 +134,9 @@ public class Node {
      * @param parent - A parent node.
      */
     public void addParent(int parent) {
-        this.parents.add(parent);
+        if (!this.parents.contains(parent)) {
+            this.parents.add(parent);
+        }
     }
 
     /**

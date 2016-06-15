@@ -78,19 +78,50 @@ public class GraphTest {
      */
     @Test
     public void testAddCell() {
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 1, new ArrayList<>(), g.getLevelMaps().get(0).get(1),
-                g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 2, new ArrayList<>(), g.getLevelMaps().get(0).get(2),
-                g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 3, new ArrayList<>(), g.getLevelMaps().get(0).get(3),
-                g.getLevelMaps().get(0).get(5));
-        g.addCell(g.getLevelMaps().get(0), mockedModel, 4, new ArrayList<>(), g.getLevelMaps().get(0).get(4),
-                g.getLevelMaps().get(0).get(5));
-
-        g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1", "2")));
-        verify(mockedModel, atLeast(4)).addCell(anyInt(), anyString(),
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        Node node4 = nodeMap.get(4);
+        g.addCell(nodeMap, new ArrayList<>(), mockedModel, node1);
+        g.addCell(nodeMap, new ArrayList<>(), mockedModel, node2);
+        g.addCell(nodeMap, new ArrayList<>(), mockedModel, node3);
+        g.addCell(nodeMap, new ArrayList<>(), mockedModel, node4);
+        verify(mockedModel, times(4)).addCell(anyInt(), anyString(),
                 anyInt(), any(CellType.class));
-        verify(mockedModel, atLeast(4)).addEdge(anyInt(), anyInt(),
+    }
+
+    /**
+     * Test whether the edges are added to the model.
+     */
+    @Test
+    public void testAddEdges() {
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        g.addEdgesToCell(node2, node1, nodeMap, mockedModel, new ArrayList<>());
+        g.addEdgesToCell(node3, node2, nodeMap, mockedModel, new ArrayList<>());
+        verify(mockedModel, times(2)).addEdge(anyInt(), anyInt(),
+                anyInt(), any(EdgeType.class));
+    }
+
+    /**
+     * Tests whether edges are added to a model when a reference is selected.
+     */
+    @Test
+    public void testAddEdgesWithSelectedGenomes() {
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1")));
+        node1.setGenomes(new ArrayList<>(Arrays.asList("1")));
+        node2.setGenomes(new ArrayList<>(Arrays.asList("2")));
+        node3.setGenomes(new ArrayList<>(Arrays.asList("1")));
+        g.addEdgesToCell(node2, node1, nodeMap, mockedModel, new ArrayList<>());
+        g.addEdgesToCell(node3, node2, nodeMap, mockedModel, new ArrayList<>());
+        verify(mockedModel, times(2)).addEdge(anyInt(), anyInt(),
                 anyInt(), any(EdgeType.class));
     }
 
@@ -179,6 +210,87 @@ public class GraphTest {
     public void testCurrentInt() {
         g.reset();
         assertEquals(-1, g.getCurrentInt());
+    }
+
+    /**
+     * Test the sorting of a typical bubble structure of nodes.
+     */
+    @Test
+    public void testTopologicalSortBubble() {
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        Node node4 = nodeMap.get(4);
+        Node node5 = nodeMap.get(5);
+
+        node1.setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        node2.setLinks(new ArrayList<>(Arrays.asList(4)));
+        node3.setLinks(new ArrayList<>(Arrays.asList(4)));
+        node4.setLinks(new ArrayList<>(Arrays.asList(5)));
+
+        node2.setParents(new ArrayList<>(Arrays.asList(1)));
+        node3.setParents(new ArrayList<>(Arrays.asList(1)));
+        node4.setParents(new ArrayList<>(Arrays.asList(2, 3)));
+        node5.setParents(new ArrayList<>(Arrays.asList(4)));
+
+
+        List<Integer> sortedNodeIds = g.topologicalSort(nodeMap);
+        assertEquals(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)), sortedNodeIds);
+    }
+
+    /**
+     * Test the sorting of a typical indel structure of nodes.
+     */
+    @Test
+    public void testTopologicalSortIndel() {
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        Node node4 = nodeMap.get(4);
+        Node node5 = nodeMap.get(5);
+
+        node1.setLinks(new ArrayList<>(Arrays.asList(2)));
+        node2.setLinks(new ArrayList<>(Arrays.asList(3, 4)));
+        node3.setLinks(new ArrayList<>(Arrays.asList(4)));
+        node4.setLinks(new ArrayList<>(Arrays.asList(5)));
+
+        node2.setParents(new ArrayList<>(Arrays.asList(1)));
+        node3.setParents(new ArrayList<>(Arrays.asList(2)));
+        node4.setParents(new ArrayList<>(Arrays.asList(2, 3)));
+        node5.setParents(new ArrayList<>(Arrays.asList(4)));
+
+
+        List<Integer> sortedNodeIds = g.topologicalSort(nodeMap);
+        assertEquals(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)), sortedNodeIds);
+    }
+
+    /**
+     * Test the sorting of a more complex structure of nodes.
+     */
+    @Test
+    public void testTopologicalSortComplex() {
+        HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
+        Node node1 = nodeMap.get(1);
+        Node node2 = nodeMap.get(2);
+        Node node3 = nodeMap.get(3);
+        Node node4 = nodeMap.get(4);
+        Node node5 = nodeMap.get(5);
+
+        node1.setLinks(new ArrayList<>(Arrays.asList(2, 3)));
+        node2.setLinks(new ArrayList<>(Arrays.asList(5)));
+        node3.setLinks(new ArrayList<>(Arrays.asList(2, 4, 5)));
+        node4.setLinks(new ArrayList<>(Arrays.asList(5)));
+
+        node2.setParents(new ArrayList<>(Arrays.asList(1, 3)));
+        node3.setParents(new ArrayList<>(Arrays.asList(1)));
+        node4.setParents(new ArrayList<>(Arrays.asList(3)));
+        node5.setParents(new ArrayList<>(Arrays.asList(2, 3, 4)));
+
+
+        List<Integer> sortedNodeIds = g.topologicalSort(nodeMap);
+        assertEquals(new ArrayList<>(Arrays.asList(1, 3, 2, 4, 5)), sortedNodeIds);
     }
 
     /**
