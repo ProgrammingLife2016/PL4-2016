@@ -330,6 +330,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleViewMenu(false);
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
+        MenuFactory.toggleFilters(false);
 
         this.getRoot().setCenter(graphController.getRoot());
 
@@ -429,7 +430,10 @@ public class MainController extends Controller<BorderPane> {
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
 
-                fillTree();
+                if (inGraph) {
+                    fillTree();
+                }
+
                 if (cell != null) {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
@@ -547,27 +551,15 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
-            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
+            MenuFactory.toggleFilters(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
-    }
-
-    /**
-     * Method to disable and enable the buttons in the SearchBar
-     *
-     * @param x boolean indicating whether something is disabled or enabled
-     */
-    public void toggleGenomeSearchBar(boolean x) {
-        searchButton.setDisable(x);
-        selectAllButton.setDisable(x);
-        deselectSearchButton.setDisable(x);
-        genomeTextField.setDisable(x);
     }
 
     /**
@@ -634,7 +626,6 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
-        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }
