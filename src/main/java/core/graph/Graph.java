@@ -24,7 +24,6 @@ public class Graph {
     private Model zoomOut;
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
-    private int nodeIds;
 
     private boolean filtering;
 
@@ -76,7 +75,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
-            nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -239,7 +237,6 @@ public class Graph {
     public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
 
         //Add next cell
-        int maxEdgeWidth = 10;
         CellType type = node.getType();
 
         if (type == CellType.RECTANGLE) {
@@ -276,7 +273,7 @@ public class Graph {
      */
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
         //S <- Set of all nodes with no incoming edges
-        HashMap<Integer, Node> copyNodeMap = new HashMap<>();
+        HashMap<Integer, Node> copyNodeMap;
         copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
         Queue<Node> nodesWithoutParent = new LinkedList<>();
         List<Integer> sortedNodeIds = new ArrayList<>();

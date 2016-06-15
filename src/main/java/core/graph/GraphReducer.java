@@ -98,6 +98,12 @@ public final class GraphReducer {
         }
     }
 
+    /**
+     * Method to reduce the amount of zoominglevels.
+     * Removes a levelmap that differs the least in size from the
+     * previous nodemap.
+     * @param amountToRemove the amount of nodeMaps to remove from LevelMaps.
+     */
     public static void reduceZoomingLevels(int amountToRemove) {
         for (int k = 0; k < amountToRemove; k++) {
             int smallestDifference = Integer.MAX_VALUE;
