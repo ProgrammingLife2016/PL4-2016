@@ -312,7 +312,7 @@ public final class GraphReducer {
         Node child = nodeMap.get(childrenIds.get(0));
 
         // The child may only have one parent and child
-        if ((child.getLinks(nodeMap).size() != 1) || (child.getParents(nodeMap).size() != 1)) { return false; }
+        if (child.getLinks(nodeMap).size() != 1 || child.getParents(nodeMap).size() != 1) { return false; }
 
         parent.setType(CellType.COLLECTION);
         parent.setSequence("");
