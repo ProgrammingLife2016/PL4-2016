@@ -81,6 +81,32 @@ public class MenuFactory {
     }
 
     /**
+     * Method to enable and disable Filters in the Phylogenetic Tree.
+     * @param x boolean, indicates whether a Button should be enabled or disabled
+     */
+    public static void toggleFilters(boolean x) {
+        filterLineage.setDisable(x);
+        filterHIV.setDisable(x);
+        filterCohort.setDisable(x);
+        filterStudyDistrict.setDisable(x);
+        filterSpecimenType.setDisable(x);
+        filterIsolation.setDisable(x);
+        filterPhenoDST.setDisable(x);
+        filterCapreomycin.setDisable(x);
+        filterEthambutol.setDisable(x);
+        filterEthionAmide.setDisable(x);
+        filterIsoniazid.setDisable(x);
+        filterKanamycin.setDisable(x);
+        filterPyrazinamide.setDisable(x);
+        filterOfloxacin.setDisable(x);
+        filterRifampin.setDisable(x);
+        filterStreptomycin.setDisable(x);
+        filterSpoligotype.setDisable(x);
+        filterGenoDST.setDisable(x);
+        filterTF.setDisable(x);
+    }
+
+    /**
      * Method to disable and enable buttons in View-Menu
      *
      * @param x boolean
