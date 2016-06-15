@@ -263,30 +263,18 @@ public final class GraphReducer {
      */
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         // Links must be present from parent --> child
-        if (parent == null) {
-            return false;
-        }
+        if (parent == null) { return false; }
 
         List<Integer> childrenIds = parent.getLinks(nodeMap);
 
         //Parent may only have one child.
-        if (childrenIds.size() != 1) {
-            return false;
-        }
-
+        if (childrenIds.size() != 1) { return false; }
 
         //Retrieve the single child of the node.
         Node child = nodeMap.get(childrenIds.get(0));
 
-
         // The child may only have one parent and child
-        if (child.getLinks(nodeMap).size() != 1) {
-            return false;
-        }
-
-        if (child.getParents(nodeMap).size() != 1) {
-            return false;
-        }
+        if ((child.getLinks(nodeMap).size() != 1) || (child.getParents(nodeMap).size() != 1)) { return false; }
 
         parent.setType(CellType.COLLECTION);
         parent.setSequence("");
@@ -311,7 +299,6 @@ public final class GraphReducer {
 
         //Remove the child node that is collapsed.
         nodeMap.remove(child.getId());
-
 
         return true;
     }
