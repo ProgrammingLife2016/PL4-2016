@@ -18,12 +18,15 @@ import java.util.List;
 @SuppressWarnings("PMD.UselessParentheses")
 public class Graph {
 
+    private Boolean debugScreenShouldBeInitialized;
+
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
+
     /**
      * All the genomes that are in this graph.
      */
@@ -53,6 +56,8 @@ public class Graph {
      * Class constructor.
      */
     public Graph() {
+        debugScreenShouldBeInitialized = true;
+
         zoomIn = new Model();
         current = new Model();
         zoomOut = new Model();
@@ -219,7 +224,10 @@ public class Graph {
             }
         }
 
-        toret.setLayout();
+        if (debugScreenShouldBeInitialized) {
+            toret.setLayout();
+        }
+
         return toret;
     }
 
@@ -575,5 +583,23 @@ public class Graph {
             }
         }
         return m;
+    }
+
+    /**
+     * Gets whether screen elements should be initialized.
+     *
+     * @return Whether screen elements should be initialized.
+     */
+    public Boolean getDebugScreenShouldBeInitialized() {
+        return debugScreenShouldBeInitialized;
+    }
+
+    /**
+     * Sets whether screen elements should be initialized.
+     *
+     * @param debugScreenShouldBeInitialized Whether screen elements should be initialized.
+     */
+    public void setDebugScreenShouldBeInitialized(Boolean debugScreenShouldBeInitialized) {
+        this.debugScreenShouldBeInitialized = debugScreenShouldBeInitialized;
     }
 }
