@@ -424,7 +424,6 @@ public class Model {
      */
     public void addCellInTile(int tile, Cell c) {
         tileCellMap.putIfAbsent(tile, new ArrayList<>());
-
         tileCellMap.get(tile).add(c);
     }
 

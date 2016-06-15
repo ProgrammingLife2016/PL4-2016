@@ -49,8 +49,6 @@ public class GraphController extends Controller<ScrollPane> {
     //@ToDo see issue #159
     //private double lastDrawnHValue = 0;
 
-
-
     /**
      * Constructor method for this class.
      *
@@ -361,15 +359,9 @@ public class GraphController extends Controller<ScrollPane> {
      */
     private void addToPane(int min) {
         root.getChildren().clear();
-        //if (graph.getModel().getAllCells().size() > 0) {
-            Model model = graph.getModelAllInView(min);
-            root.getChildren().addAll(model.getAddedEdges());
-            root.getChildren().addAll(model.getAddedCells());
-//        } else {
-//            Model model = graph.getModelAddedInView(min, max);
-//            root.getChildren().addAll(model.getAddedEdges());
-//            root.getChildren().addAll(model.getAddedCells());
-//        }
+        Model model = graph.getModelAllInView(min);
+        root.getChildren().addAll(model.getAddedEdges());
+        root.getChildren().addAll(model.getAddedCells());
     }
 
     /**

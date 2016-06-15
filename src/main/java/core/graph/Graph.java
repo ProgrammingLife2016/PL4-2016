@@ -112,7 +112,6 @@ public class Graph {
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadBoth(depth);
             } else { //Second time. All models are loaded
-
                 if (depth < currentInt) {
                     zoomOut = current;
                     current = zoomIn;
@@ -204,7 +203,6 @@ public class Graph {
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-
 
         //Root Node
         Node root = nodeMap.get(1);
