@@ -127,7 +127,7 @@ public class ZoomBox extends ScrollPane {
 
         double right = rectX + rightOffset * zoomBoxWidth;
         double newWidth = shown * zoomBoxWidth;
-        double maxX = rectX + zoomBoxWidth -  newWidth;
+        double maxX = rectX + zoomBoxWidth - newWidth;
 
         if (right > maxX) {
             right = maxX;
