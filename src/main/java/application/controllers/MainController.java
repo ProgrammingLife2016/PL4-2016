@@ -64,6 +64,11 @@ public class MainController extends Controller<BorderPane> {
     private Filtering filtering;
     private boolean inGraph;
 
+    private Button searchButton;
+    private Button selectAllButton;
+    private Button deselectSearchButton;
+    private HBox hBox;
+
     private Stack<String> mostRecentGFF;
     private Stack<String> mostRecentMetadata;
     private Stack<String> mostRecentGFA;
@@ -85,11 +90,8 @@ public class MainController extends Controller<BorderPane> {
         this.filtering = new Filtering();
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
-
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-
         checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
-
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false, false);
@@ -274,8 +276,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentGFF(String s) {
-        mostRecentGFF.push(s);
-        writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        if (!mostRecentGFF.contains(s)) {
+            mostRecentGFF.push(s);
+            writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
+        }
     }
 
     /**
@@ -284,8 +288,10 @@ public class MainController extends Controller<BorderPane> {
      * @param s the file to be added
      */
     public void addRecentMetadata(String s) {
-        mostRecentMetadata.push(s);
-        writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        if (!mostRecentMetadata.contains(s)) {
+            mostRecentMetadata.push(s);
+            writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
+        }
     }
 
     /**
@@ -320,14 +326,18 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
-//        this.getRoot().setCenter(graphController.getRoot());
+        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleFileMenu(true);
+        MenuFactory.toggleMostRecent(true);
+
+        this.getRoot().setCenter(graphController.getRoot());
+
         if (secondCount == -1) {
             createList();
             setListItems();
             secondCount++;
         }
 
-        this.getRoot().setCenter(graphController.getRoot());
         this.getRoot().setRight(listVBox);
     }
 
@@ -504,14 +514,15 @@ public class MainController extends Controller<BorderPane> {
      */
     public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
         VBox vBox = new VBox();
-        HBox hBox = new HBox();
+        hBox = new HBox();
         genomeTextField = new TextField();
+
 
         hBox.getStylesheets().add("/css/main.css");
 
-        Button searchButton = new Button("Search Genome (In Tree)");
-        Button selectAllButton = new Button("Select all");
-        Button deselectSearchButton = new Button("Deselect All");
+        searchButton = new Button("Search Genome (In Tree)");
+        selectAllButton = new Button("Select all");
+        deselectSearchButton = new Button("Deselect All");
         setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
@@ -526,13 +537,26 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
+            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
+            MenuFactory.toggleViewMenu(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    /**
+     * Method to disable and enable the buttons in the SearchBar
+     * @param x boolean indicating whether something is disabled or enabled
+     */
+    public void toggleGenomeSearchBar(boolean x) {
+        searchButton.setDisable(x);
+        selectAllButton.setDisable(x);
+        deselectSearchButton.setDisable(x);
+        genomeTextField.setDisable(x);
     }
 
     /**
@@ -599,15 +623,9 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
+        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
-    }
-
-    /**
-     * Hide the info panel.
-     */
-    private void hideListVBox() {
-        this.getRoot().getChildren().remove(listVBox);
     }
 
     /**
