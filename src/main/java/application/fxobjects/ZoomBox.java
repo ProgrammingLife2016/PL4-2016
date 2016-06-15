@@ -129,7 +129,7 @@ public class ZoomBox extends ScrollPane {
 
         double right = rectX + rightOffset * zoomBoxWidth;
         double newWidth = shown * zoomBoxWidth;
-        double maxX = (rectX + zoomBoxWidth) -  newWidth;
+        double maxX = rectX + zoomBoxWidth -  newWidth;
 
         if (right > maxX) {
             right = maxX;
@@ -150,14 +150,6 @@ public class ZoomBox extends ScrollPane {
      */
     public StackPane getZoomBox() {
         return right;
-    }
-
-    public double getZoomBoxHeight() {
-        return zoomBoxHeight;
-    }
-
-    public double getZoomBoxWidth() {
-        return zoomBoxWidth;
     }
 
 }

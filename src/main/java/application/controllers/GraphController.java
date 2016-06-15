@@ -307,7 +307,7 @@ public class GraphController extends Controller<ScrollPane> {
             nodes.stream().filter(node -> node instanceof ScrollBar).forEach(node -> {
                 ScrollBar sb = (ScrollBar) node;
                 sb.valueProperty().addListener((ObservableValue<? extends Number> ov,
-                                                Number old_val, Number new_val) -> {
+                                                Number old, Number newval) -> {
                     zoomBox.replaceZoomBox(updateZoomBox());
                 });
             });
