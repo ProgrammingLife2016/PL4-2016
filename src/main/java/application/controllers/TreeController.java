@@ -153,7 +153,6 @@ public class TreeController extends Controller<ScrollPane> {
      *
      * @param cell the Cell being hovered over.
      */
-    @SuppressWarnings("checkstyle:linelength")
     public void applyCellHighlight(LeafCell cell) {
         String name = cell.getName();
         updateMetaInfo(cell);
@@ -163,7 +162,8 @@ public class TreeController extends Controller<ScrollPane> {
         collectedStrains.add(cell);
 
         if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
-            applyColorUpwards(parentList, determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
+            applyColorUpwards(parentList,
+                    determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
             applyColorOnCell(cell, determineSelectedLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
         } else if (name.contains("G")) {
             applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
@@ -229,7 +229,6 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Apply a certain color and stroke to all cells being hovered over.
      */
-    @SuppressWarnings("checkstyle:linelength")
     private void applyColorOnCells() {
         collectedStrains.forEach(s -> {
                     LeafCell c = s;
@@ -258,7 +257,6 @@ public class TreeController extends Controller<ScrollPane> {
     /**
      * Revert a certain color and stroke to all cells being hovered over.
      */
-    @SuppressWarnings("checkstyle:linelength")
     private void revertColorOnCells() {
         collectedStrains.forEach(s -> {
             LeafCell c = s;
