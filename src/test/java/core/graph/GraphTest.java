@@ -62,17 +62,6 @@ public class GraphTest {
     }
 
     /**
-     * Tests the getNodeMapFromFile method.
-     */
-    @Test
-    public void testGetNodeMapFromFile() {
-        Graph g2 = new Graph();
-
-        HashMap<Integer, Node> map = g2.getNodeMapFromFile("src/main/resources/TestFiles/TBTestFile.gfa");
-        assertEquals(4, map.size());
-    }
-
-    /**
      * Test for the generateModel method.
      */
     @Test
