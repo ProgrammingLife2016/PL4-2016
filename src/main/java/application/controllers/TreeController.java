@@ -39,7 +39,7 @@ public class TreeController extends Controller<ScrollPane> {
     private List<Cell> collectedStrains;
     private TreeMouseHandling treeMouseHandling;
     private AnchorPane root;
-    public MainController mainController;
+    private MainController mainController;
 
     private double maxY = -1;
 
