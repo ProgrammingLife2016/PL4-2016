@@ -299,6 +299,14 @@ public class Graph {
 
     }
 
+    /**
+     * Method to give each cell to the edges
+     * @param to source
+     * @param from sink
+     * @param nodeMap the current NodeMap
+     * @param toret the new Model
+     * @param ref the currently highlighted strain
+     */
     private void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
                                 ArrayList<String> ref) {
         int maxEdgeWidth = 10;

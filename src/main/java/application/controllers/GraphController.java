@@ -87,6 +87,10 @@ public class GraphController extends Controller<ScrollPane> {
 
     }
 
+    /**
+     * Add EventHandlers to the GraphController
+     * @param gc the current GraphController
+     */
     private void setScrolling(GraphController gc) {
         gc.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
@@ -133,16 +137,6 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void addNodeIdToZoomPath(int nodeId) {
         zoomPath.push(nodeId);
-    }
-
-    /**
-     * Returns the node ID of the node we
-     * should zoom in on.
-     *
-     * @return the ID of the node next in the path
-     */
-    public int getNextNodeInZoomPath() {
-        return zoomPath.pop();
     }
 
     /**
@@ -249,6 +243,10 @@ public class GraphController extends Controller<ScrollPane> {
         getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
     }
 
+    /**
+     * Method to zoom to focus when zooming
+     * @return id of the node to focus
+     */
     private int findNextInZoomPath() {
         if (zoomPath.size() == 1) {
             return zoomPath.peek();
@@ -326,6 +324,12 @@ public class GraphController extends Controller<ScrollPane> {
         this.getRoot().setContent(root);
     }
 
+    /**
+     * Method to check whether an edge should be dashed because it is too long
+     * @param e the edge to check
+     * @param maxEdgeLength the max length of the edge
+     * @param maxEdgeLengthLong length to check whether does not go out of screen
+     */
     private void checkEdgeLength(Edge e, double maxEdgeLength, double maxEdgeLengthLong) {
         double xLength = e.getLine().endXProperty().get()
                 - e.getLine().startXProperty().get();

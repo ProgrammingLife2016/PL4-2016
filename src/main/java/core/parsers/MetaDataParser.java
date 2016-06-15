@@ -19,9 +19,11 @@ import java.util.TreeMap;
  * @since 23-05-2016.
  */
 public final class MetaDataParser {
-    public static String fileName = null;
     private static TreeMap<String, Genome> metadata = new TreeMap<>();
 
+    /**
+     * Class constructor
+     */
     private MetaDataParser() {
     }
 

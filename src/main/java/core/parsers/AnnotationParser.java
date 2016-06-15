@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
  */
 public final class AnnotationParser {
 
+    /**
+     * Class constructor
+     */
     private AnnotationParser() {
     }
 
@@ -61,6 +64,11 @@ public final class AnnotationParser {
         return annotations;
     }
 
+    /**
+     * Method to create an Annotation with the needed information
+     * @param ann the Annotation
+     * @param content the information to be given to the Annotation
+     */
     private static void fillAnnotation(Annotation ann, String[] content) {
         ann.setSeqid(content[0]);
         ann.setSource(content[1]);
