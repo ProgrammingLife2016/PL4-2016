@@ -1,11 +1,14 @@
 package application.fxobjects;
 
 import core.typeEnums.CellType;
+import edu.umd.cs.findbugs.ba.*;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Abstract cell class representing a node in the gui.
@@ -15,6 +18,8 @@ public abstract class Cell extends Pane {
     private boolean relocated = false;
     List<Cell> children = new ArrayList<>();
     List<Cell> parents = new ArrayList<>();
+
+    private Set<Edge> edges = new HashSet<>();
 
     Node view;
 
@@ -137,5 +142,23 @@ public abstract class Cell extends Pane {
      */
     public String toString() {
         return cellId + "";
+    }
+
+    /**
+     * Method to get the edges attached to a Cell.
+     *
+     * @return the edges.
+     */
+    public Set<Edge> getEdges() {
+        return edges;
+    }
+
+    /**
+     * Method to add an Edge to a cell.
+     *
+     * @param e the Edge to add.
+     */
+    public void addEdge(Edge e) {
+        edges.add(e);
     }
 }

@@ -330,6 +330,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleViewMenu(false);
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
+        MenuFactory.toggleFilters(false);
 
         this.getRoot().setCenter(graphController.getRoot());
 
@@ -429,7 +430,10 @@ public class MainController extends Controller<BorderPane> {
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
 
-                fillTree();
+                if (inGraph) {
+                    fillTree();
+                }
+
                 if (cell != null) {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
@@ -464,9 +468,15 @@ public class MainController extends Controller<BorderPane> {
                     Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                     Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
                     if (newAnn == null || newAnn.getSpannedNodes() == null) { return; }
-
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
+
+                    if (newAnn.getSpannedNodes().get(0) != null) {
+                        int i = newAnn.getSpannedNodes().get(0).getId();
+                        graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
+                                / getGraphController().getGraph().getModel().getMaxWidth());
+                    }
+
                     for (Node n : newAnn.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                     }
@@ -531,27 +541,15 @@ public class MainController extends Controller<BorderPane> {
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
-            toggleGenomeSearchBar(true);
         } else {
             MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
+            MenuFactory.toggleFilters(true);
             vBox.getChildren().addAll(menuBar);
         }
 
         this.getRoot().setTop(vBox);
-    }
-
-    /**
-     * Method to disable and enable the buttons in the SearchBar
-     *
-     * @param x boolean indicating whether something is disabled or enabled
-     */
-    public void toggleGenomeSearchBar(boolean x) {
-        searchButton.setDisable(x);
-        selectAllButton.setDisable(x);
-        deselectSearchButton.setDisable(x);
-        genomeTextField.setDisable(x);
     }
 
     /**
@@ -618,7 +616,6 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
-        toggleGenomeSearchBar(false);
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }

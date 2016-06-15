@@ -1,10 +1,12 @@
 package application.fxobjects.layout;
 
 import application.fxobjects.Cell;
+import application.fxobjects.Edge;
 import application.fxobjects.graphCells.GraphCell;
 import core.model.Model;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.stage.Screen;
 
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class GraphLayout extends CellLayout {
     private Cell leftMost;
     private Cell rightMost;
 
+    private double tileWidth;
+
+
     private static final int BASE_X = 100;
 
     /**
@@ -47,6 +52,7 @@ public class GraphLayout extends CellLayout {
         this.model = model;
         this.centerY = middle;
         this.maxWidth = 0;
+
         this.maxHeight = 0;
     }
 
@@ -55,6 +61,7 @@ public class GraphLayout extends CellLayout {
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
+        tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();
@@ -74,6 +81,8 @@ public class GraphLayout extends CellLayout {
 
                 cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
                         currentY - (cell.getCellShape().getLayoutBounds().getHeight() / 2));
+                int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
+                model.addCellInTile(tile, c);
                 cell.setRelocated(true);
 
                 currentX += offset;
@@ -86,6 +95,13 @@ public class GraphLayout extends CellLayout {
 
                 breadthFirstPlacing(cell);
             }
+
+            for (Edge e : cell.getEdges()) {
+                if (e.getLength() > Screen.getPrimary().getBounds().getWidth()) {
+                    model.addLongEdge(e);
+                }
+            }
+
         }
     }
 
@@ -114,6 +130,8 @@ public class GraphLayout extends CellLayout {
                     if (modifier > 0) {
                         modifier++;
                     }
+                    int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
+                    model.addCellInTile(tile, c);
                 } else {
                     child.relocate(currentX
                                     - (child.getCellShape().getLayoutBounds().getWidth() / 2),
@@ -121,7 +139,8 @@ public class GraphLayout extends CellLayout {
                                     - (child.getCellShape().getLayoutBounds().getHeight() / 2));
                     oddChildOffset = yOffset * modifier;
                     child.setRelocated(true);
-
+                    int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
+                    model.addCellInTile(tile, c);
                     modifier *= -1;
                     if (modifier < 0) {
                         modifier--;

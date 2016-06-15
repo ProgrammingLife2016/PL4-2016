@@ -1,12 +1,15 @@
 package core.graph;
 
+import application.fxobjects.Cell;
+import application.fxobjects.Edge;
 import core.annotation.Annotation;
 import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
-
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +22,13 @@ import java.util.stream.Collectors;
  */
 public class Graph {
 
+    private Rectangle2D screenSize;
     private Boolean debugScreenShouldBeInitialized;
 
     private Model zoomIn;
     private Model current;
     private Model zoomOut;
+
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private int nodeIds;
@@ -66,7 +71,6 @@ public class Graph {
         zoomOut = new Model();
 
         annotations = new ArrayList<>();
-
     }
 
     /**
@@ -538,39 +542,22 @@ public class Graph {
      * Method to return a model with all nodes within the view.
      *
      * @param min left side of the view.
-     * @param max right side of the view.
      * @return the model.
      */
-    public Model getModelAddedInView(int min, int max) {
+    public Model getModelAllInView(int min) {
         Model m = new Model();
-
-        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
-
-        this.getModel().getAddedEdges().stream().filter(e -> !(
-                e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min
-                        || e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))
-                .forEach(m::addEdge);
-
-        return addFirstAndLast(m);
-    }
-
-    /**
-     * Method to return a model with all nodes within the view.
-     *
-     * @param min left side of the view.
-     * @param max right side of the view.
-     * @return the model.
-     */
-    public Model getModelAllInView(int min, int max) {
-        Model m = new Model();
-
-        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-                .forEach(m::addCell);
-
-        this.getModel().getAllEdges().stream().filter(e -> !(
-                e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min
-                        || e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)).forEach(m::addEdge);
+        screenSize = Screen.getPrimary().getVisualBounds();
+        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
+        for (int i = startTile; i < startTile + 3; i++) {
+            if (getModel().getCellTile(i) != null) {
+                for (Cell c : getModel().getCellTile(i)) {
+                    m.addCell(c);
+                    for (Edge e : c.getEdges()) {
+                        m.addEdge(e);
+                    }
+                }
+            }
+        }
 
         return addFirstAndLast(m);
     }
