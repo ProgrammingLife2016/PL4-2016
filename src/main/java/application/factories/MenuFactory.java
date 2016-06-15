@@ -393,8 +393,16 @@ public class MenuFactory {
         non.setSelected(true);
 
         hiv.selectedToggleProperty().addListener(ob -> {
-            mainController.modifyFilter(HIVP, pos.isSelected());
-            mainController.modifyFilter(HIVN, neg.isSelected());
+            if (pos.isSelected()) {
+                mainController.modifyFilter(HIVN, false);
+                mainController.modifyFilter(HIVP, true);
+            } else if (neg.isSelected()) {
+                mainController.modifyFilter(HIVP, false);
+                mainController.modifyFilter(HIVN, true);
+            } else {
+                mainController.modifyFilter(HIVP, false);
+                mainController.modifyFilter(HIVN, false);
+            }
         });
 
         filterHIV = initMenu("HIV", pos, neg, non);
@@ -717,8 +725,16 @@ public class MenuFactory {
         non.setSelected(true);
 
         tf.selectedToggleProperty().addListener(ob -> {
-            mainController.modifyFilter(TF, pos.isSelected());
-            mainController.modifyFilter(NTF, neg.isSelected());
+            if (pos.isSelected()) {
+                mainController.modifyFilter(NTF, false);
+                mainController.modifyFilter(TF, true);
+            } else if (neg.isSelected()) {
+                mainController.modifyFilter(TF, false);
+                mainController.modifyFilter(NTF, true);
+            } else {
+                mainController.modifyFilter(TF, false);
+                mainController.modifyFilter(NTF, false);
+            }
         });
 
         filterTF = initMenu("Tugela Ferry XDR", pos, neg, non);
