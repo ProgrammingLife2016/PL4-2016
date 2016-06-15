@@ -596,7 +596,7 @@ public class Graph {
         return m;
     }
 
-    /*
+    /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
      * @param genomes selected genomes.
