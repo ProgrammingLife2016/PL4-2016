@@ -74,8 +74,7 @@ public class Graph {
      */
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
-            GraphParser parser = new GraphParser();
-            startMap = parser.readGFAFromFile(path);
+            startMap = new GraphParser().readGFAFromFile(path);
             nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
