@@ -73,7 +73,7 @@ public class GraphParser {
      * Method to parse sequence lines.
      * @param content - the line
      */
-    private void parseS (String[] content) {
+    private void parseS(String[] content) {
         int id = Integer.parseInt(content[1]);
         String sequence = content[2];
         int z = Integer.parseInt(content[content.length - 1].split(":")[2]);

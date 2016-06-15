@@ -100,6 +100,11 @@ public final class GraphReducer {
         }
     }
 
+    /**
+     * Reduces zoom levels.
+     *
+     * @param amountToRemove The number of levels to remove.
+     */
     public static void reduceZoomingLevels(int amountToRemove) {
         for (int k = 0; k < amountToRemove; k++) {
             int smallestDifference = Integer.MAX_VALUE;
