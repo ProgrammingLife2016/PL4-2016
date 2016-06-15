@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
         "PMD.UnusedLocalVariable", "PMD.UselessParentheses"})
 public class Graph {
 
-    private Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+    private Rectangle2D screenSize;
 
     private Model zoomIn;
     private Model current;
@@ -549,7 +549,7 @@ public class Graph {
      */
     public Model getModelAllInView(int min) {
         Model m = new Model();
-
+        screenSize = Screen.getPrimary().getVisualBounds();
         int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
         for (int i = startTile; i < startTile + 3; i++) {
             if (getModel().getCellTile(i) != null) {

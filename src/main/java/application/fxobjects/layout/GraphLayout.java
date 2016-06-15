@@ -32,7 +32,7 @@ public class GraphLayout extends CellLayout {
     private Cell leftMost;
     private Cell rightMost;
 
-    private double tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
+    private double tileWidth;
 
 
     private static final int BASE_X = 100;
@@ -54,13 +54,14 @@ public class GraphLayout extends CellLayout {
         this.maxWidth = 0;
 
         this.maxHeight = 0;
-        }
+    }
 
     /**
      * Method to align all nodes properly.
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
+        tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
         int minWidth = Integer.MAX_VALUE;
 
         List<Cell> cells = model.getAddedCells();

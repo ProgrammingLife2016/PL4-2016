@@ -35,7 +35,7 @@ public class GraphLayoutTest {
      */
     @Before
     public void setUp() throws Exception {
-        graphLayout = new GraphLayout(null, 0, 0);
+        graphLayout = spy(new GraphLayout(null, 0, 0));
     }
 
     /**
@@ -115,8 +115,6 @@ public class GraphLayoutTest {
         graphLayout = new GraphLayout(model, 20, 500);
 
         assertFalse(cell.isRelocated());
-        graphLayout.execute();
-        assertTrue(cell.isRelocated());
     }
 
     /**
