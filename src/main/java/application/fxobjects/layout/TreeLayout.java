@@ -23,6 +23,8 @@ public class TreeLayout extends CellLayout {
     private HashMap<Integer, Cell> drawnCells;
     private HashMap<Integer, Cell> undrawnCells;
 
+    private double maxY = 0;
+
     /**
      * Class constructor.
      *
@@ -166,7 +168,18 @@ public class TreeLayout extends CellLayout {
      */
     private void relocateCell(Cell cell, double x, int y) {
         cell.relocate(x, y);
+        if (y > maxY) {
+            maxY = y;
+        }
         undrawnCells.remove(cell.getCellId());
         drawnCells.put(cell.getCellId(), cell);
+    }
+
+    /**
+     * Getter method for the max Y value.
+     * @return the max Y value.
+     */
+    public double getMaxY() {
+        return maxY;
     }
 }
