@@ -28,7 +28,6 @@ import static java.lang.String.format;
 
 /**
  * Created by Daphne van Tetering on 4-5-2016.
- *
  */
 @SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
 public class MenuFactory {
@@ -37,11 +36,12 @@ public class MenuFactory {
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
     public static MenuItem loadPhylogeneticTree, loadGenome, loadMetadata, loadAnnotations, resetView,
-            shortcuts, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
-    private Menu fileMenu;
+    private static Menu mostRecentGFA, mostRecentNWK, mostRecentGFF, mostRecentMeta;
 
+    private Menu fileMenu;
     /**
      * Enum for the recent menu dropdown types.
      */
@@ -76,8 +76,74 @@ public class MenuFactory {
         return bar;
     }
 
+    /**
+     * Method to enable and disable Filters in the Phylogenetic Tree.
+     * @param x boolean, indicates whether a Button should be enabled or disabled
+     */
+    public static void toggleFilters(boolean x) {
+        filterLineage.setDisable(x);
+        filterHIV.setDisable(x);
+        filterCohort.setDisable(x);
+        filterStudyDistrict.setDisable(x);
+        filterSpecimenType.setDisable(x);
+        filterIsolation.setDisable(x);
+        filterPhenoDST.setDisable(x);
+        filterCapreomycin.setDisable(x);
+        filterEthambutol.setDisable(x);
+        filterEthionAmide.setDisable(x);
+        filterIsoniazid.setDisable(x);
+        filterKanamycin.setDisable(x);
+        filterPyrazinamide.setDisable(x);
+        filterOfloxacin.setDisable(x);
+        filterRifampin.setDisable(x);
+        filterStreptomycin.setDisable(x);
+        filterSpoligotype.setDisable(x);
+        filterGenoDST.setDisable(x);
+        filterTF.setDisable(x);
+    }
+
+    /**
+     * Method to disable and enable buttons in View-Menu
+     * @param x boolean
+     */
+    public static void toggleViewMenu(boolean x) {
+        showGenomeSequence.setDisable(x);
+        showOnlyThisStrain.setDisable(x);
+        showPhylogeneticTree.setDisable(x);
+        showSelectedStrains.setDisable(x);
+        resetView.setDisable(x);
+
+    }
+
+    /**
+     * Method to disable and enable buttons in File-Menu
+     * @param x boolean
+     */
+    public static void toggleFileMenu(boolean x) {
+        loadAnnotations.setDisable(x);
+        loadGenome.setDisable(x);
+        loadMetadata.setDisable(x);
+        loadPhylogeneticTree.setDisable(x);
+    }
+
+    /**
+     * Method to enable and disable buttons in the MostRecent menu
+     * @param x boolean
+     */
+    public static void toggleMostRecent(boolean x) {
+        mostRecentNWK.setDisable(x);
+        mostRecentMeta.setDisable(x);
+        mostRecentGFA.setDisable(x);
+        mostRecentGFF.setDisable(x);
+    }
+
+
+    /**
+     * Create Help-Menu
+     * @return the Help-Menu
+     */
     private Menu initHelpMenu() {
-        shortcuts = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
+        about = initMenuItem("About", new KeyCodeCombination(KeyCode.TAB), event -> {
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
 
@@ -103,9 +169,15 @@ public class MenuFactory {
             dialog.show();
         });
 
-        return initMenu("Help", shortcuts);
+        shortcuts = initMenuItem("Shortcuts", null, event -> showShortCutMenu());
+
+        return initMenu("Help", shortcuts, about);
     }
 
+    /**
+     * Build part 2 of the about Help-Section
+     * @return part 2
+     */
     private GridPane buildHelpGridPane2() {
         GridPane grid2 = new GridPane();
         grid2.setVgap(10);
@@ -124,6 +196,42 @@ public class MenuFactory {
         return grid2;
     }
 
+    /**
+     * Method to show and build the menu containing all shortcuts
+     */
+    private void showShortCutMenu() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        VBox content = new VBox();
+
+        GridPane grid = new GridPane();
+        grid.setVgap(5);
+        grid.setHgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
+        grid.add(new Text("Ctrl + G"), 0, 0);
+        grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
+        grid.add(new Text("Ctrl + O"), 0, 1);
+        grid.add(new Text("Load a NWK file (Phylogenetic Tree"), 1, 1);
+        grid.add(new Text("Ctrl + A"), 0, 2);
+        grid.add(new Text("Load a GFF file (Annotation data)"), 1, 2);
+        grid.add(new Text("Ctrl + M"), 0, 3);
+        grid.add(new Text("Load a MetaData file"), 1, 3);
+        grid.add(new Text("Tab"), 0, 4);
+        grid.add(new Text("Open about-information"), 1, 4);
+
+        content.getChildren().addAll(grid);
+
+        Scene dialogScene = new Scene(content, 300, 150);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
+    /**
+     * Part 2 of the about Help-section
+     * @return part 2
+     */
     private GridPane buildHelpGridPane() {
         final GridPane grid = new GridPane();
         grid.setVgap(10);
@@ -153,17 +261,26 @@ public class MenuFactory {
         return grid;
     }
 
+    /**
+     * Create the View-Menu
+     * @return the View-Menu
+     */
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null,
                 event -> mainController.fillGraph(new ArrayList<>(), new ArrayList<>()));
-        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
+
+        showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> { mainController.fillTree(); });
+
         showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain", null, event -> {
-                    mainController.getGraphController().getGraph().reset();
-                    mainController.soloStrainSelection(mainController.getTreeController().
-                            getSelectedGenomes());
-                });
-        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event ->
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes()));
+            mainController.getGraphController().getGraph().reset();
+            mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes());
+        });
+
+        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
+            mainController.toggleGenomeSearchBar(true);
+            mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
+        });
+
         MenuItem separatorOne = new SeparatorMenuItem();
         MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
@@ -182,6 +299,10 @@ public class MenuFactory {
                 showSelectedStrains, showOnlyThisStrain, separatorTwo, resetView);
     }
 
+    /**
+     * Create the File-Menu
+     * @return the File-Menu
+     */
     private Menu initFileMenu() {
         loadAnnotations = initMenuItem("Load Annotation data",
                 new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
@@ -201,22 +322,48 @@ public class MenuFactory {
                 initMostRecentMetadataMenu());
     }
 
+    /**
+     * Create the menu for choosing a most recent GFF file
+     * @return the mostRecentGFFMenu
+     */
     private Menu initMostRecentGFFMenu() {
-        return initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
+        mostRecentGFF = initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
+        return mostRecentGFF;
     }
 
+    /**
+     * Create the menu for choosing a most recent MetaData file
+     * @return the mostRecentMetaDataMenu
+     */
     private Menu initMostRecentMetadataMenu() {
-        return initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
+        mostRecentMeta = initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
+        return mostRecentMeta;
     }
 
+    /**
+     * Create the menu for choosing a most recent GFA file
+     * @return the mostRecentGFAMenu
+     */
     private Menu initMostRecentGFAMenu() {
-        return initMostRecentMenu(RecentMenuTypes.GFA, mainController.getMostRecentGFA());
+        mostRecentGFA = initMostRecentMenu(RecentMenuTypes.GFA, mainController.getMostRecentGFA());
+        return mostRecentGFA;
     }
 
+    /**
+     * Create the menu for choosing a most recent NWK file
+     * @return the mostRecentNWKMenu
+     */
     private Menu initMostRecentNWKMenu() {
-        return initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
+        mostRecentNWK = initMostRecentMenu(RecentMenuTypes.NWK, mainController.getMostRecentNWK());
+        return mostRecentNWK;
     }
 
+    /**
+     * Method to create a generic most recent menu
+     * @param type - the type of the menu (NWK, GFA, GFF or MetaData)
+     * @param mostRecentFileNames - list of most recent chosen filenames
+     * @return the created menu
+     */
     private Menu initMostRecentMenu(RecentMenuTypes type, Stack<String> mostRecentFileNames) {
         List<String> recents = new ArrayList<>(Arrays.asList("Empty", "Empty", "Empty"));
 
@@ -239,6 +386,11 @@ public class MenuFactory {
         return menu;
     }
 
+    /**
+     * Method to create the right menu with the right type
+     * @param type the wanted type
+     * @return
+     */
     private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
         String fileTypeStr = "";
         switch (type) {
@@ -255,6 +407,11 @@ public class MenuFactory {
         return new Menu(format("Load recently opened %s file", fileTypeStr));
     }
 
+    /**
+     * Add actions to perform when a button is selected to load a file
+     * @param type the file type
+     * @param recentFile the previously selected file
+     */
     private void setActionOnSelection(RecentMenuTypes type, String recentFile) {
         if (!recentFile.isEmpty()) {
             File file = new File(recentFile);
@@ -275,6 +432,10 @@ public class MenuFactory {
         }
     }
 
+    /**
+     * Method to create a Menu containing all filters
+     * @return the created menu
+     */
     private Menu initFilterMenu() {
         initLineageFilter();
         initHIVFilter();
@@ -302,12 +463,26 @@ public class MenuFactory {
                 filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF);
     }
 
+    /**
+     * Template method to create a Menu
+     * @param title the title of the Menu
+     * @param items the items in the Menu
+     * @return the new Menu
+     */
     private Menu initMenu(String title, final MenuItem... items) {
         Menu newMenu = new Menu(title);
         newMenu.getItems().addAll(items);
         return newMenu;
     }
 
+
+    /**
+     * Template method to create a MenuItem
+     * @param title the title of the MenuItem
+     * @param combination the keycombination to invoke the action of the button
+     * @param handler the EventHandler
+     * @return the new MenuItem
+     */
     private MenuItem initMenuItem(String title, KeyCombination combination, EventHandler<ActionEvent> handler) {
         MenuItem newItem = new MenuItem(title);
         newItem.setAccelerator(combination);
@@ -315,6 +490,9 @@ public class MenuFactory {
         return newItem;
     }
 
+    /**
+     * Method to create each LineageFilter
+     */
     private void initLineageFilter() {
         filterLineage = new Menu("Lineage");
         CheckMenuItem lin1 = new CheckMenuItem("LIN 1");
@@ -340,6 +518,9 @@ public class MenuFactory {
         filterLineage = initMenu("Lineage", lin1, lin2, lin3, lin4, lin5, lin6, lin7, lin8, lin9, lin10);
     }
 
+    /**
+     * Method to create the HIVFilter
+     */
     private void initHIVFilter() {
         final ToggleGroup hiv = new ToggleGroup();
         RadioMenuItem pos = new RadioMenuItem("Positive");
@@ -360,6 +541,9 @@ public class MenuFactory {
         filterHIV = initMenu("HIV", pos, neg, non);
     }
 
+    /**
+     * Method to create the CohortFilter
+     */
     private void initCohortFilter() {
         filterCohort = new Menu("Cohort");
         CheckMenuItem cohort1 = new CheckMenuItem("KZNSUR");
@@ -375,6 +559,9 @@ public class MenuFactory {
         filterCohort = initMenu("Cohort", cohort1, cohort2, cohort3, cohort4, cohort5);
     }
 
+    /**
+     * Method to create the DistrictFilter
+     */
     private void initDistrictFilter() {
         CheckMenuItem dist1 = new CheckMenuItem("Amajuba");
         dist1.setOnAction(event -> mainController.getTreeController().modifyFilter(AMAJUBA, dist1.isSelected()));
@@ -403,6 +590,9 @@ public class MenuFactory {
                 dist6, dist7, dist8, dist9, dist10, dist11);
     }
 
+    /**
+     * Method to create the SpecimenFilter
+     */
     private void initSpecimenFilter() {
         CheckMenuItem spec1 = new CheckMenuItem("blood");
         spec1.setOnAction(event -> mainController.getTreeController().modifyFilter(BLOOD, spec1.isSelected()));
@@ -419,6 +609,9 @@ public class MenuFactory {
         filterSpecimenType = initMenu("Specimen type", spec1, spec2, spec3, spec4, spec5, spec6);
     }
 
+    /**
+     * Method to create the IsolationFilter
+     */
     private void initIsolationFilter() {
         CheckMenuItem iso1 = new CheckMenuItem("single colony");
         iso1.setOnAction(event ->
@@ -430,6 +623,9 @@ public class MenuFactory {
         filterIsolation = initMenu("DNA isolation", iso1, iso2);
     }
 
+    /**
+     * Method to create the PhenoDSTFilter
+     */
     private void initPhenoDSTfilter() {
         CheckMenuItem dst1 = new CheckMenuItem("MDR");
         dst1.setOnAction(event ->
@@ -450,6 +646,9 @@ public class MenuFactory {
         filterPhenoDST = initMenu("Phenotypic DST", dst1, dst2, dst3, dst4, dst5);
     }
 
+    /**
+     * Method to create the CapreomycinFilter
+     */
     private void initCapreomycinFilter() {
         CheckMenuItem cap1 = new CheckMenuItem("R");
         cap1.setOnAction(event ->
@@ -464,6 +663,9 @@ public class MenuFactory {
         filterCapreomycin = initMenu("Capreomycin", cap1, cap2, cap3);
     }
 
+    /**
+     * Method to create the EthambutolFilter
+     */
     private void initEthambutolFilter() {
         CheckMenuItem eth1 = new CheckMenuItem("R");
         eth1.setOnAction(event ->
@@ -478,6 +680,9 @@ public class MenuFactory {
         filterEthambutol = initMenu("Ethambutol", eth1, eth2, eth3);
     }
 
+    /**
+     * Method to create the EthionamideFilter
+     */
     private void initEthionamideFilter() {
         CheckMenuItem eth1 = new CheckMenuItem("R");
         eth1.setOnAction(event ->
@@ -492,6 +697,9 @@ public class MenuFactory {
         filterEthionAmide = initMenu("Ethionamide", eth1, eth2, eth3);
     }
 
+    /**
+     * Method to create the IsoniazidFilter
+     */
     private void initIsoniazidFilter() {
         CheckMenuItem iso1 = new CheckMenuItem("R");
         iso1.setOnAction(event ->
@@ -506,6 +714,9 @@ public class MenuFactory {
         filterIsoniazid = initMenu("Isoniazid", iso1, iso2, iso3);
     }
 
+    /**
+     * Method to create the KanamycinFilter
+     */
     private void initKanamycinFilter() {
         CheckMenuItem kan1 = new CheckMenuItem("R");
         kan1.setOnAction(event ->
@@ -520,6 +731,9 @@ public class MenuFactory {
         filterKanamycin = initMenu("Kanamycin", kan1, kan2, kan3);
     }
 
+    /**
+     * Method to create the PyrazinamideFilter
+     */
     private void initPyrazinamideFilter() {
         CheckMenuItem pyr1 = new CheckMenuItem("R");
         pyr1.setOnAction(event ->
@@ -534,6 +748,9 @@ public class MenuFactory {
         filterPyrazinamide = initMenu("Pyrazinamide", pyr1, pyr2, pyr3);
     }
 
+    /**
+     * Method to create the OfloxacinFilter
+     */
     private void initOfloxacinFilter() {
         CheckMenuItem ofl1 = new CheckMenuItem("R");
         ofl1.setOnAction(event ->
@@ -548,6 +765,9 @@ public class MenuFactory {
         filterOfloxacin = initMenu("Ofloxacin", ofl1, ofl2, ofl3);
     }
 
+    /**
+     * Method to create the RifampinFilter
+     */
     private void initRifampinFilter() {
         CheckMenuItem rif1 = new CheckMenuItem("R");
         rif1.setOnAction(event ->
@@ -562,6 +782,9 @@ public class MenuFactory {
         filterRifampin = initMenu("Rifampin", rif1, rif2, rif3);
     }
 
+    /**
+     * Method to create the StreptomycinFilter
+     */
     private void initStreptomycinFilter() {
         CheckMenuItem str1 = new CheckMenuItem("R");
         str1.setOnAction(event -> mainController.getTreeController().modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
@@ -573,6 +796,9 @@ public class MenuFactory {
         filterStreptomycin = initMenu("Streptomycin", str1, str2, str3);
     }
 
+    /**
+     * Method to create the SpoligotypeFilter
+     */
     private void initSpoligotypeFilter() {
         CheckMenuItem s1 = new CheckMenuItem("Bejing");
         s1.setOnAction(event -> mainController.getTreeController().modifyFilter(SPOLIGOTYPE_BEJING, s1.isSelected()));
@@ -591,6 +817,9 @@ public class MenuFactory {
         initSpoligotypeFilter2(s1, s2, s, c, s5, s6, s7);
     }
 
+    /**
+     * Method to create the second part of the SpoligotypeFilter
+     */
     private void initSpoligotypeFilter2(CheckMenuItem spo1, CheckMenuItem spo2, CheckMenuItem spo3,
                                         CheckMenuItem spo4, CheckMenuItem spo5, CheckMenuItem spo6, CheckMenuItem sp7) {
         CheckMenuItem s = new CheckMenuItem("LAM11-ZWE");
@@ -624,6 +853,9 @@ public class MenuFactory {
                 s11, s12, s13, s14, s15, s16, s17, s18, sn, s20, s21);
     }
 
+    /**
+     * Method to create the GenoDSTFilter
+     */
     private void initGenoDSTFilter() {
         CheckMenuItem gen1 = new CheckMenuItem("Drug-resistant (other)");
         gen1.setOnAction(event -> mainController.getTreeController().modifyFilter(GENO_DRUG_RESIST, gen1.isSelected()));
@@ -637,6 +869,9 @@ public class MenuFactory {
         filterGenoDST = initMenu("Genotypic DST", gen1, gen2, gen3, gen4);
     }
 
+    /**
+     * Method to create the TFF filter
+     */
     private void initTFFilter() {
         final ToggleGroup tf = new ToggleGroup();
         RadioMenuItem pos = new RadioMenuItem("True");
