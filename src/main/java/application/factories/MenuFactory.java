@@ -386,6 +386,9 @@ public class MenuFactory {
                 setActionOnSelection(type, recentFile);
             });
 
+            if (recents.get(finalIdx).equals("Empty")) {
+                recentMenuItem.setDisable(true);
+            }
             menu.getItems().add(recentMenuItem);
         }
 

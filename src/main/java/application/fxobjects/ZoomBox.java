@@ -95,7 +95,10 @@ public class ZoomBox extends ScrollPane {
             image = snapshot;
         }
 
-        ImagePattern pattern = new ImagePattern(image);
+        System.out.println("image widht: " + image.getWidth());
+        System.out.println("image height: " + image.getHeight());
+        ImagePattern pattern = new ImagePattern(image, rectX, 20, zoomBoxWidth, zoomBoxHeight, false);
+
         zoomRectBorder.setFill(pattern);
     }
 
@@ -147,6 +150,14 @@ public class ZoomBox extends ScrollPane {
      */
     public StackPane getZoomBox() {
         return right;
+    }
+
+    public double getZoomBoxHeight() {
+        return zoomBoxHeight;
+    }
+
+    public double getZoomBoxWidth() {
+        return zoomBoxWidth;
     }
 
 }
