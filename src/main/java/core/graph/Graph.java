@@ -153,8 +153,6 @@ public class Graph {
      * @param depth Depth to be loaded
      */
     private void loadOneUp(int depth) {
-        System.out.println("Start Load one up on depth: " + (depth + 1));
-        long time = System.currentTimeMillis();
         int finalDepth = depth;
         new Thread("Load one up") {
             public void start() {
@@ -163,7 +161,6 @@ public class Graph {
                 }
             }
         }.start();
-        System.out.println("Loading level " + (depth + 1) + " took " + (System.currentTimeMillis() - time) + " milis");
     }
 
     /**
@@ -172,8 +169,6 @@ public class Graph {
      * @param depth Depth to be loaded
      */
     private void loadOneDown(int depth) {
-        System.out.println("Start Load one down on depth: " + (depth - 1));
-        long time = System.currentTimeMillis();
         int finalDepth = depth;
         new Thread("Load one down") {
             public void start() {
@@ -183,7 +178,6 @@ public class Graph {
                 }
             }
         }.start();
-        System.out.println("Loading level " + (depth - 1) + " took " + (System.currentTimeMillis() - time) + " milis");
     }
 
     /**
@@ -551,88 +545,22 @@ public class Graph {
      * Method to return a model with all nodes within the view.
      *
      * @param min left side of the view.
-     * @param max right side of the view.
      * @return the model.
      */
-    public Model getModelAddedInView(int min, int max) {
-        Model m = new Model();
-
-//        this.getModel().getAddedCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-//                .forEach(m::addCell);
-        int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
-
-        int runs = 0;
-        for (int i = startTile; i <= startTile + 2; i++) {
-            if (getModel().getCellTile(i) != null) {
-
-                for (Cell c : getModel().getCellTile(i)) {
-                    if (c.getLayoutX() > min && c.getLayoutX() <= max) {
-                        m.addCell(c);
-                        for (Edge e : c.getEdges()) {
-                            m.addEdge(e);
-                        }
-                        runs++;
-                    }
-                }
-
-            }
-        }
-//        for(Edge e : getModel().getLongEdges()) {
-//            if(!(e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() > max)) {
-//                m.addEdge(e);
-//            }
-//        }
-        System.out.println(getModel().getLongEdges().size());
-
-
-//        this.getModel().getAddedEdges().stream().filter(e -> !(
-//                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-//                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max)))
-//                .forEach(m::addEdge);
-
-        return addFirstAndLast(m);
-    }
-
-    /**
-     * Method to return a model with all nodes within the view.
-     *
-     * @param min left side of the view.
-     * @param max right side of the view.
-     * @return the model.
-     */
-    public Model getModelAllInView(int min, int max) {
+    public Model getModelAllInView(int min) {
         Model m = new Model();
 
         int startTile = Math.max(((int) ((min - (min % screenSize.getWidth())) / screenSize.getWidth()) - 1), 0);
-        int runs = 0;
         for (int i = startTile; i < startTile + 3; i++) {
             if (getModel().getCellTile(i) != null) {
                 for (Cell c : getModel().getCellTile(i)) {
-                    //if (c.getLayoutX() > min && c.getLayoutX() <= max) {
                     m.addCell(c);
                     for (Edge e : c.getEdges()) {
-                        System.out.println("peop");
                         m.addEdge(e);
                     }
-                    runs++;
-                    // }
                 }
             }
         }
-//        for(Edge e : getModel().getLongEdges()) {
-//            if(!(e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() > max)) {
-//                m.addEdge(e);
-//            }
-//        }
-
-        // System.out.println("Runs: " + runs);
-
-//        this.getModel().getAllCells().stream().filter(c -> c.getLayoutX() > min && c.getLayoutX() <= max)
-//                .forEach(m::addCell);
-
-//        this.getModel().getAllEdges().stream().filter(e -> !(
-//                (e.getSource().getLayoutX() < min && e.getTarget().getLayoutX() < min)
-//                        || (e.getSource().getLayoutX() > max && e.getTarget().getLayoutX() > max))).forEach(m::addEdge);
 
         return addFirstAndLast(m);
     }
