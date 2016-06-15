@@ -198,7 +198,7 @@ public class Graph {
 
         //Root Node
         Node root = nodeMap.get(1);
-        if (currentRef.size() > 0) { //Draw selected references
+        if (currentGenomes.size() > 0) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
@@ -247,13 +247,10 @@ public class Graph {
             toret.addCell(node.getId(), String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
                     CellType.COMPLEX);
         }
+
         for (int parentId : node.getParents()) {
             Node parent = nodeMap.get(parentId);
-            int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(parent.getGenomes(), genomes),
-                    intersectingStrings(node.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
-            toret.addEdge(parentId, node.getId(), width, EdgeType.GRAPH);
+            addEdgesToCell(node, parent, nodeMap, toret, ref);
         }
     }
 
@@ -314,14 +311,16 @@ public class Graph {
                     root.getNucleotides(), CellType.RECTANGLE);
         }
 
+        System.out.println("currentRef size:" + currentRef.size());
+        System.out.println("ref size: " + ref.size());
         // In this case we know that the genomes in the graph are only this ones.
         genomes = currentGenomes;
 
-        System.out.println("oops");
         // Only draw when the intersection > 0 (Node contains genome that we
         // want to draw.
-        for (int i = 1; i < nodeIds; i++) {
-            Node from = nodeMap.get(i);
+        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+        for (int nodeId : sortedNodeIds) {
+            Node from = nodeMap.get(nodeId);
             if (from == null) {
                 continue;
             }
