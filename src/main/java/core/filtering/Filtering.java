@@ -79,7 +79,6 @@ public class Filtering {
     private void collectPredicates() {
         predicates.clear();
         predicate = g -> true;
-
         filters.forEach(f -> {
             checkFilter1(f);
             checkFilter2(f);
@@ -89,8 +88,18 @@ public class Filtering {
             checkFilter6(f);
             checkFilter7(f);
             checkFilter8(f);
+            checkFilter9(f);
+            checkFilter10(f);
+            checkFilter11(f);
+            checkFilter12(f);
+            checkFilter13(f);
+            checkFilter14(f);
+            checkFilter15(f);
+            checkFilter16(f);
+            checkFilter17(f);
+            checkFilter18(f);
+            checkFilter19(f);
         });
-
         predicate = predicates.stream().reduce(p -> true, Predicate::and);
     }
 
@@ -122,6 +131,12 @@ public class Filtering {
                 break;
             case LIN5: predicates.add(predicate.and(g -> g.getLineage() == 5));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter2(Filter f) {
+        switch (f) {
             case LIN6: predicates.add(predicate.and(g -> g.getLineage() == 6));
                 break;
             case LIN7: predicates.add(predicate.and(g -> g.getLineage() == 7));
@@ -131,44 +146,6 @@ public class Filtering {
             case LIN9: predicates.add(predicate.and(g -> g.getLineage() == 9));
                 break;
             case LIN10: predicates.add(predicate.and(g -> g.getLineage() == 10));
-                break;
-            case HIVP: predicates.add(predicate.and(Genome::isHiv));
-                break;
-            case HIVN: predicates.add(predicate.and(g -> !g.isHiv()));
-                break;
-            default: break;
-        }
-    }
-
-    /**
-     * Check the filters.
-     * @param f Filter to be checked.
-     */
-    private void checkFilter2(Filter f) {
-        switch (f) {
-            case NHLS: predicates.add(predicate.and(g -> g.getCohort().equals("NHLS")));
-                break;
-            case CUBS: predicates.add(predicate.and(g -> g.getCohort().equals("CUBS")));
-                break;
-            case PHAGE: predicates.add(predicate.and(g -> g.getCohort().equals("Phage")));
-                break;
-            case AMAJUBA: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Amajuba")));
-                break;
-            case ETHEKWINI: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("eThekwini")));
-                break;
-            case ILEMBE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("iLembe")));
-                break;
-            case SISONKE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Sisonke")));
-                break;
-            case UGU: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Ugu")));
-                break;
-            case UMGUNGUNDLOVU: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMgungundlovu")));
-                break;
-            case UMKHANYAKUDE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMkhanyakude")));
-                break;
-            case UMZINYATHI: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMzinyathi")));
-                break;
-            case UTHUKELA: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Uthukela")));
                 break;
             default: break;
         }
@@ -180,63 +157,31 @@ public class Filtering {
      */
     private void checkFilter3(Filter f) {
         switch (f) {
-            case BLOOD: predicates.add(predicate.and(g -> g.getSpecimenType().equals("blood")));
+            case HIVP: predicates.add(predicate.and(Genome::isHiv));
                 break;
-            case CSF: predicates.add(predicate.and(g -> g.getSpecimenType().equals("CSF")));
+            case HIVN: predicates.add(predicate.and(g -> !g.isHiv()));
                 break;
-            case PLEURA: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pleura")));
+            case NHLS: predicates.add(predicate.and(g -> g.getCohort().equals("NHLS")));
                 break;
-            case PLEURAL_FLUID: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pleural fluid")));
+            case CUBS: predicates.add(predicate.and(g -> g.getCohort().equals("CUBS")));
                 break;
-            case PUS: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pus")));
-                break;
-            case SPUTUM: predicates.add(predicate.and(g -> g.getSpecimenType().equals("sputum")));
-                break;
-            case SINGLE_COLONY: predicates.add(predicate.and(g -> g.getIsolation().equals("single colony")));
-                break;
-            case NON_SINGLE_COLONY: predicates.add(predicate.and(g -> g.getIsolation().equals("non-single colony")));
-                break;
-            case PHENO_MDR: predicates.add(predicate.and(g -> g.getPhenoDST().equals("MDR")));
-                break;
-            case PHENO_MONO: predicates.add(predicate.and(g -> g.getPhenoDST().equals("mono")));
-                break;
-            case PHENO_POLY: predicates.add(predicate.and(g -> g.getPhenoDST().equals("poly")));
-                break;
-            case PHENO_SUSCEPTIBLE: predicates.add(predicate.and(g -> g.getPhenoDST().equals("susceptible")));
+            case PHAGE: predicates.add(predicate.and(g -> g.getCohort().equals("Phage")));
                 break;
             default: break;
         }
     }
 
-    /**
-     * Check the filters.
-     * @param f Filter to be checked.
-     */
     private void checkFilter4(Filter f) {
         switch (f) {
-            case CAPREOMYCIN_S: predicates.add(predicate.and(g -> g.getCapreomycin().equals("S")));
+            case AMAJUBA: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Amajuba")));
                 break;
-            case CAPREOMYCIN_U: predicates.add(predicate.and(g -> g.getCapreomycin().equals("U")));
+            case ETHEKWINI: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("eThekwini")));
                 break;
-            case ETHAMBUTOL_R: predicates.add(predicate.and(g -> g.getEthambutol().equals("R")));
+            case ILEMBE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("iLembe")));
                 break;
-            case ETHAMBUTOL_S: predicates.add(predicate.and(g -> g.getEthambutol().equals("S")));
+            case SISONKE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Sisonke")));
                 break;
-            case ETHAMBUTOL_U: predicates.add(predicate.and(g -> g.getEthambutol().equals("U")));
-                break;
-            case ETHIONAMIDE_R: predicates.add(predicate.and(g -> g.getEthionamide().equals("R")));
-                break;
-            case ETHIONAMIDE_S: predicates.add(predicate.and(g -> g.getEthionamide().equals("S")));
-                break;
-            case ETHIONAMIDE_U: predicates.add(predicate.and(g -> g.getEthionamide().equals("U")));
-                break;
-            case ISONIAZID_R: predicates.add(predicate.and(g -> g.getIsoniazid().equals("R")));
-                break;
-            case ISONIAZID_S: predicates.add(predicate.and(g -> g.getIsoniazid().equals("S")));
-                break;
-            case ISONIAZID_U: predicates.add(predicate.and(g -> g.getIsoniazid().equals("U")));
-                break;
-            case KANAMYCIN_R: predicates.add(predicate.and(g -> g.getKanamycin().equals("R")));
+            case UGU: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Ugu")));
                 break;
             default: break;
         }
@@ -248,10 +193,118 @@ public class Filtering {
      */
     private void checkFilter5(Filter f) {
         switch (f) {
+            case UMGUNGUNDLOVU: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMgungundlovu")));
+                break;
+            case UMKHANYAKUDE: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMkhanyakude")));
+                break;
+            case UMZINYATHI: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("uMzinyathi")));
+                break;
+            case UTHUKELA: predicates.add(predicate.and(g -> g.getStudyDistrict().equals("Uthukela")));
+                break;
+            case BLOOD: predicates.add(predicate.and(g -> g.getSpecimenType().equals("blood")));
+                break;
+            default: break;
+        }
+    }
+
+    private void checkFilter6(Filter f) {
+        switch (f) {
+            case CSF: predicates.add(predicate.and(g -> g.getSpecimenType().equals("CSF")));
+                break;
+            case PLEURA: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pleura")));
+                break;
+            case PLEURAL_FLUID: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pleural fluid")));
+                break;
+            case PUS: predicates.add(predicate.and(g -> g.getSpecimenType().equals("pus")));
+                break;
+            case SPUTUM: predicates.add(predicate.and(g -> g.getSpecimenType().equals("sputum")));
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Check the filters.
+     * @param f Filter to be checked.
+     */
+    private void checkFilter7(Filter f) {
+        switch (f) {
+            case SINGLE_COLONY: predicates.add(predicate.and(g -> g.getIsolation().equals("single colony")));
+                break;
+            case NON_SINGLE_COLONY: predicates.add(predicate.and(g -> g.getIsolation().equals("non-single colony")));
+                break;
+            case PHENO_MDR: predicates.add(predicate.and(g -> g.getPhenoDST().equals("MDR")));
+                break;
+            case PHENO_MONO: predicates.add(predicate.and(g -> g.getPhenoDST().equals("mono")));
+                break;
+            case PHENO_POLY: predicates.add(predicate.and(g -> g.getPhenoDST().equals("poly")));
+                break;
+            default: break;
+        }
+    }
+
+    private void checkFilter8(Filter f) {
+        switch (f) {
+            case PHENO_SUSCEPTIBLE: predicates.add(predicate.and(g -> g.getPhenoDST().equals("susceptible")));
+                break;
+            case CAPREOMYCIN_S: predicates.add(predicate.and(g -> g.getCapreomycin().equals("S")));
+                break;
+            case CAPREOMYCIN_U: predicates.add(predicate.and(g -> g.getCapreomycin().equals("U")));
+                break;
+            case ETHAMBUTOL_R: predicates.add(predicate.and(g -> g.getEthambutol().equals("R")));
+                break;
+            case ETHAMBUTOL_S: predicates.add(predicate.and(g -> g.getEthambutol().equals("S")));
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Check the filters.
+     * @param f Filter to be checked.
+     */
+    private void checkFilter9(Filter f) {
+        switch (f) {
+            case ETHAMBUTOL_U: predicates.add(predicate.and(g -> g.getEthambutol().equals("U")));
+                break;
+            case ETHIONAMIDE_R: predicates.add(predicate.and(g -> g.getEthionamide().equals("R")));
+                break;
+            case ETHIONAMIDE_S: predicates.add(predicate.and(g -> g.getEthionamide().equals("S")));
+                break;
+            case ETHIONAMIDE_U: predicates.add(predicate.and(g -> g.getEthionamide().equals("U")));
+                break;
+            case ISONIAZID_R: predicates.add(predicate.and(g -> g.getIsoniazid().equals("R")));
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Check the filters.
+     * @param f Filter to be checked.
+     */
+    private void checkFilter10(Filter f) {
+        switch (f) {
+            case ISONIAZID_S: predicates.add(predicate.and(g -> g.getIsoniazid().equals("S")));
+                break;
+            case ISONIAZID_U: predicates.add(predicate.and(g -> g.getIsoniazid().equals("U")));
+                break;
+            case KANAMYCIN_R: predicates.add(predicate.and(g -> g.getKanamycin().equals("R")));
+                break;
             case PYRAZINAMIDE_R: predicates.add(predicate.and(g -> g.getPyrazinamide().equals("R")));
                 break;
             case PYRAZINAMIDE_S: predicates.add(predicate.and(g -> g.getPyrazinamide().equals("S")));
                 break;
+            default: break;
+        }
+    }
+
+    /**
+     * Check the filters.
+     * @param f Filter to be checked.
+     */
+    private void checkFilter11(Filter f) {
+        switch (f) {
             case PYRAZINAMIDE_U: predicates.add(predicate.and(g -> g.getPyrazinamide().equals("U")));
                 break;
             case OFLOXACIN_R: predicates.add(predicate.and(g -> g.getOfloxacin().equals("R")));
@@ -262,6 +315,16 @@ public class Filtering {
                 break;
             case RIFAMPIN_R: predicates.add(predicate.and(g -> g.getRifampin().equals("R")));
                 break;
+            default: break;
+        }
+    }
+
+    /**
+     * Check the filters.
+     * @param f Filter to be checked.
+     */
+    private void checkFilter12(Filter f) {
+        switch (f) {
             case RIFAMPIN_S: predicates.add(predicate.and(g -> g.getRifampin().equals("S")));
                 break;
             case RIFAMPIN_U: predicates.add(predicate.and(g -> g.getRifampin().equals("U")));
@@ -276,11 +339,7 @@ public class Filtering {
         }
     }
 
-    /**
-     * Check the filters.
-     * @param f Filter to be checked.
-     */
-    private void checkFilter6(Filter f) {
+    private void checkFilter13(Filter f) {
         switch (f) {
             case SPOLIGOTYPE_CAS1_DELHI: predicates.add(predicate.and(g -> g.getSpoligotype().equals("CAS1-Delhi")));
                 break;
@@ -290,6 +349,12 @@ public class Filtering {
                 break;
             case SPOLIGOTYPE_H1: predicates.add(predicate.and(g -> g.getSpoligotype().equals("H1")));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter14(Filter f) {
+        switch (f) {
             case SPOLIGOTYPE_H37RV: predicates.add(predicate.and(g -> g.getSpoligotype().equals("H37Rv")));
                 break;
             case SPOLIGOTYPE_LAM11_ZWE: predicates.add(predicate.and(g -> g.getSpoligotype().equals("LAM11_ZWE")));
@@ -300,26 +365,28 @@ public class Filtering {
                 break;
             case SPOLIGOTYPE_LAM5: predicates.add(predicate.and(g -> g.getSpoligotype().equals("LAM5")));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter15(Filter f) {
+        switch (f) {
             case SPOLIGOTYPE_LAM6: predicates.add(predicate.and(g -> g.getSpoligotype().equals("LAM6")));
                 break;
             case SPOLIGOTYPE_LAM9: predicates.add(predicate.and(g -> g.getSpoligotype().equals("LAM9")));
                 break;
             case SPOLIGOTYPE_S: predicates.add(predicate.and(g -> g.getSpoligotype().equals("S")));
                 break;
-            default: break;
-        }
-    }
-
-    /**
-     * Check the filters.
-     * @param f Filter to be checked.
-     */
-    private void checkFilter7(Filter f) {
-        switch (f) {
             case SPOLIGOTYPE_T3: predicates.add(predicate.and(g -> g.getSpoligotype().equals("T3")));
                 break;
             case SPOLIGOTYPE_T5_RUS1: predicates.add(predicate.and(g -> g.getSpoligotype().equals("T5-RUS1")));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter16(Filter f) {
+        switch (f) {
             case SPOLIGOTYPE_X2: predicates.add(predicate.and(g -> g.getSpoligotype().equals("X2")));
                 break;
             case SPOLIGOTYPE_X3: predicates.add(predicate.and(g -> g.getSpoligotype().equals("X3")));
@@ -330,6 +397,12 @@ public class Filtering {
                 break;
             case GENO_SUSCEPTIBLE: predicates.add(predicate.and(g -> g.getGenoDST().equals("susceptible")));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter17(Filter f) {
+        switch (f) {
             case GENO_XDR: predicates.add(predicate.and(g -> g.getGenoDST().equals("XDR")));
                 break;
             case TF: predicates.add(predicate.and(Genome::isTf));
@@ -344,11 +417,7 @@ public class Filtering {
         }
     }
 
-    /**
-     * Check the filters.
-     * @param f Filter to be checked.
-     */
-    private void checkFilter8(Filter f) {
+    private void checkFilter18(Filter f) {
         switch (f) {
             case KZNSUR: predicates.add(predicate.and(g -> g.getCohort().equals("KZNSUR")));
                 break;
@@ -360,6 +429,12 @@ public class Filtering {
                 break;
             case PHENO_XDR: predicates.add(predicate.and(g -> g.getPhenoDST().equals("XDR")));
                 break;
+            default: break;
+        }
+    }
+
+    private void checkFilter19(Filter f) {
+        switch (f) {
             case CAPREOMYCIN_R: predicates.add(predicate.and(g -> g.getCapreomycin().equals("R")));
                 break;
             case KANAMYCIN_S: predicates.add(predicate.and(g -> g.getKanamycin().equals("S")));
