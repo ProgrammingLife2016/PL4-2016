@@ -30,6 +30,7 @@ public class Graph {
 
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
+    private ArrayList<String> allGenomes = new ArrayList<>();
     private int nodeIds;
 
     private boolean filtering;
@@ -205,6 +206,7 @@ public class Graph {
 
         //Root Node
         Node root = nodeMap.get(1);
+        allGenomes.addAll(root.getGenomes());
         if (filtering) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
@@ -650,7 +652,7 @@ public class Graph {
         List<String> selectedGenomeNames = genomes.stream().map(Genome::getName)
                 .collect(Collectors.toList());
         return selectedGenomeNames.stream().filter(
-                this.genomes::contains).collect(Collectors.toList());
+                this.allGenomes::contains).collect(Collectors.toList());
     }
 
     /**
