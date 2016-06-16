@@ -14,7 +14,8 @@ import java.util.Set;
  */
 public abstract class Cell extends Pane {
     private int cellId;
-    private boolean relocated = false;
+    private boolean relocatedX = false;
+    private boolean relocatedY = false;
     List<Cell> children = new ArrayList<>();
     List<Cell> parents = new ArrayList<>();
 
@@ -121,17 +122,35 @@ public abstract class Cell extends Pane {
      *
      * @return Whether a cell has been relocated.
      */
-    public boolean isRelocated() {
-        return relocated;
+    public boolean isRelocatedX() {
+        return relocatedX;
     }
 
     /**
-     * Set the relocation status of a cell.
+     * Return whether a cell has been relocated.
      *
-     * @param relocated The relocation status of a cell.
+     * @return Whether a cell has been relocated.
      */
-    public void setRelocated(boolean relocated) {
-        this.relocated = relocated;
+    public boolean isRelocatedY() {
+        return relocatedY;
+    }
+
+    /**
+     * Set the relocation status of a cell's X coordinate.
+     *
+     * @param relocated The relocation status.
+     */
+    public void setRelocatedX(boolean relocated) {
+        this.relocatedX = relocated;
+    }
+
+    /**
+     * Set the relocation status of a cell's Y coordinate.
+     *
+     * @param relocated The relocation status.
+     */
+    public void setRelocatedY(boolean relocated) {
+        this.relocatedY = relocated;
     }
 
     /**

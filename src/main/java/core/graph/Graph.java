@@ -12,9 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -216,26 +214,117 @@ public class Graph {
                     root.getNucleotides(), root.getType());
             genomes = new ArrayList<>();
             genomes.addAll(root.getGenomes());
-            for (int i = 1; i < nodeIds; i++) {
-                Node from = nodeMap.get(i);
-                if (from == null) {
+
+            List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+            for (int nodeId : sortedNodeIds) {
+                Node node = nodeMap.get(nodeId);
+                if (node == null) {
                     continue;
                 }
-                for (int j : from.getLinks(nodeMap)) {
-                    Node to = nodeMap.get(j);
-                    to.getGenomes().stream().filter(s -> !genomes.contains(s)).
-                            forEach(genomes::add);
-                    //Add next cell
-                    addCell(nodeMap, toret, j, ref, to, from);
-                }
+                node.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                        forEach(genomes::add);
+                addCell(nodeMap, ref, toret, node);
             }
         }
-
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
-
         return toret;
+    }
+
+    /**
+     * Method to add a cell, that corresponds to a given node, to a model.
+     *
+     * @param nodeMap the map the node resides in
+     * @param ref the reference strain
+     * @param toret the model to add the cell to
+     * @param node the node for which we need to add a cell
+     */
+    public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
+
+        //Add next cell
+        int maxEdgeWidth = 10;
+        CellType type = node.getType();
+
+        if (type == CellType.RECTANGLE) {
+            toret.addCell(node.getId(), node.getSequence(), node.getNucleotides(),
+                    CellType.RECTANGLE);
+        } else if (type == CellType.BUBBLE) {
+            toret.addCell(node.getId(),
+                    node.getBubbleText(),
+                    node.getNucleotides(), CellType.BUBBLE);
+        } else if (type == CellType.INDEL) {
+            toret.addCell(node.getId(),
+                    String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.INDEL);
+        } else if (type == CellType.COLLECTION) {
+            toret.addCell(node.getId(), String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.COLLECTION);
+        } else if (type == CellType.COMPLEX) {
+            toret.addCell(node.getId(), String.valueOf(node.getCollapseLevel()), node.getNucleotides(),
+                    CellType.COMPLEX);
+        }
+
+        for (int parentId : node.getParents()) {
+            Node parent = nodeMap.get(parentId);
+            addEdgesToCell(node, parent, nodeMap, toret, ref);
+        }
+    }
+
+    /**
+     * Method to topologically sort the nodes in a given node map.
+     * Puts the IDs of the topologically sorted nodes in a list.
+     *
+     * @param nodeMap the node map to sort topologically
+     * @return the list of topologically sorted IDs
+     */
+    public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
+        //Copy the nodeMap to not make any changes to our original map.
+        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        //nodesWithoutParent <-List of all nodes with no incoming edges
+        LinkedList<Node> nodesWithoutParent = new LinkedList<>();
+        for (int key : nodeMap.keySet()) {
+            Node node = nodeMap.get(key);
+            //Check whether the node has no parents
+            if (node.getParents().size() == 0) {
+                //Add the node to the list of nodes without parent
+                nodesWithoutParent.addLast(node);
+            }
+        }
+        return topologicalSort(nodesWithoutParent, copyNodeMap);
+    }
+
+    /**
+     * Traverses the graph and adds all Node IDs horizontally
+     * @param nodesWithoutParent list of starting nodes
+     * @param nodeMap a copy of the nodemap the nodes reside in
+     * @return
+     */
+    private List<Integer> topologicalSort(LinkedList<Node> nodesWithoutParent, HashMap<Integer, Node> nodeMap) {
+        //Empty list to put all node IDs in topologically sorted order.
+        List<Integer> sortedNodeIds = new ArrayList<>();
+        //while still nodes without parent unvisited
+        while (!nodesWithoutParent.isEmpty()) {
+            //remove a node n from the list
+            Node n = nodesWithoutParent.getFirst();
+            nodesWithoutParent.remove(n);
+
+            //insert ID of n into the sorted list
+            sortedNodeIds.add(n.getId());
+
+            //for each node m with an edge e from n to m do
+            for (int childId : n.getLinks()) {
+                Node m = nodeMap.get(childId);
+                m.removeParent(n.getId()); //Remove edge from m
+
+                //if m has no other incoming edges then insert m into the linked list.
+                if (m.getParents().size() == 0) {
+                    nodesWithoutParent.addLast(m);
+                }
+            }
+        }
+        //return the sorted list
+        return sortedNodeIds;
     }
 
 
@@ -259,8 +348,9 @@ public class Graph {
 
         // Only draw when the intersection > 0 (Node contains genome that we
         // want to draw.
-        for (int i = 1; i < nodeIds; i++) {
-            Node from = nodeMap.get(i);
+        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+        for (int nodeId : sortedNodeIds) {
+            Node from = nodeMap.get(nodeId);
             if (from == null) {
                 continue;
             }
@@ -269,7 +359,7 @@ public class Graph {
                     Node to = nodeMap.get(j);
                     if (intersection(to.getGenomes(), currentGenomes) > 0) {
                         //Add next cell
-                        addCell(nodeMap, toret, j, ref, to, from);
+                        addCell(nodeMap, ref, toret, from);
                     }
                 }
             }
@@ -277,48 +367,14 @@ public class Graph {
     }
 
     /**
-     * Method to add a new Cell to the graph
-     *
-     * @param nodeMap the current NodeMap we are reading from
-     * @param toret   the Model the Cell is added to
-     * @param j       the number of the Cell
-     * @param ref     the current Reference strain
-     * @param to      cell we are going to
-     * @param from    cell we are coming from
+     * Method to add Edges to a cell.
+     * @param to the target node
+     * @param from the source node
+     * @param nodeMap the node map both nodes reside in
+     * @param toret the model to which the edges are added
+     * @param ref the reference strain
      */
-    public void addCell(HashMap<Integer, Node> nodeMap, Model toret, int j,
-                        ArrayList<String> ref, Node to, Node from) {
-        //Add next cell
-        CellType type = nodeMap.get(j).getType();
-
-        if (type == CellType.RECTANGLE) {
-            toret.addCell(to.getId(), to.getSequence(), to.getNucleotides(), CellType.RECTANGLE);
-        } else if (type == CellType.BUBBLE) {
-            toret.addCell(to.getId(), to.getBubbleText(), to.getNucleotides(), CellType.BUBBLE);
-        } else if (type == CellType.INDEL) {
-            toret.addCell(to.getId(),
-                    String.valueOf(to.getCollapseLevel()), to.getNucleotides(), CellType.INDEL);
-        } else if (type == CellType.COLLECTION) {
-            toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
-                    CellType.COLLECTION);
-        } else if (type == CellType.COMPLEX) {
-            toret.addCell(to.getId(), String.valueOf(to.getCollapseLevel()), to.getNucleotides(),
-                    CellType.COMPLEX);
-        }
-
-        addEdgesToCell(to, from, nodeMap, toret, ref);
-
-    }
-
-    /**
-     * Method to give each cell to the edges
-     * @param to source
-     * @param from sink
-     * @param nodeMap the current NodeMap
-     * @param toret the new Model
-     * @param ref the currently highlighted strain
-     */
-    private void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
+    public void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
                                 ArrayList<String> ref) {
         int maxEdgeWidth = 10;
         int width = (int) Math.round(maxEdgeWidth

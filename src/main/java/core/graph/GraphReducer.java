@@ -57,6 +57,7 @@ public final class GraphReducer {
      * @return A list of node maps with a decreasing amount of nodes.
      */
     public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
+        determineParents(startMap);
         levelMaps.add(startMap);
         startMapSize = startMap.size();
         int reduceAmount = 5;
@@ -286,6 +287,7 @@ public final class GraphReducer {
             }
             complexNode.setLinks(new ArrayList<>());
             complexNode.addLink(targetNode.getId());
+            targetNode.addParent(complexNode.getId());
             return true;
         }
         return false;

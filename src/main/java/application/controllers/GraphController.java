@@ -375,7 +375,6 @@ public class GraphController extends Controller<ScrollPane> {
         }
 
         WritableImage image;
-
         if (graph.getModel().getAllCells().isEmpty()) {
             image = new WritableImage(1, 1);
         } else {
