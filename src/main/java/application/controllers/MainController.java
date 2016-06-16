@@ -159,6 +159,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initMetadata(String path) {
         MetaDataParser.readMetadataFromFile(path);
+        setMetaDataLoaded(true);
     }
 
     /**
@@ -167,6 +168,14 @@ public class MainController extends Controller<BorderPane> {
      */
     public boolean isMetaDataLoaded() {
         return metaDataLoaded;
+    }
+
+    /**
+     * Method to set whether the MetaData is loaded or not
+     * @param x
+     */
+    public void setMetaDataLoaded(boolean x) {
+        metaDataLoaded = x;
     }
 
     /**
