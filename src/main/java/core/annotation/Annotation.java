@@ -284,17 +284,17 @@ public class Annotation implements Comparable<Annotation> {
      *
      * @param startLoopIdx The index to start the enumeration at.
      * @param nodeMap A hash map of nodes in the reference.
-     * @param nodeMapSize The original size of the node map.
      * @return the new startLoopIndex.
      */
-    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap,
-                                           int nodeMapSize) {
+    public int detNodesSpannedByAnnotation(int startLoopIdx, HashMap<Integer, Node> nodeMap) {
         Boolean nodesMustBeAdded = false;
+        int nodeMapSize = -1;
+        for (int key : nodeMap.keySet()) {
+            if (key > nodeMapSize) { nodeMapSize = key; }
+        }
         for (int idx = startLoopIdx; idx < nodeMapSize; idx++) {
             Node n = nodeMap.get(idx);
-            if (n == null) {
-                continue;
-            }
+            if (n == null) { continue; }
 
             int nLower = n.getzIndex();
             int nUpper = n.getzIndex() + n.getSequence().length();
@@ -304,16 +304,13 @@ public class Annotation implements Comparable<Annotation> {
                 nodesMustBeAdded = true;
             }
 
-            if (nodesMustBeAdded) {
-                addSpannedNode(n);
-            }
+            if (nodesMustBeAdded) { addSpannedNode(n); }
 
             if (nLower <= end && nUpper >= end) {
                 offsetInLastSpannedNode = end - n.getzIndex();
                 return n.getId();
             }
         }
-
         return -1;
     }
 }

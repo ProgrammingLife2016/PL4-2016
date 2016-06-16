@@ -438,12 +438,10 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the genome search and deselect buttons.
      *
-     * @param searchButton    The genome search button.
-     * @param deselectButton  The deselect button.
-     * @param selectAllButton The select all button.
+     * @param buttons The buttons.
      */
-    private void setGenomeButtonActionListener(Button searchButton, Button deselectButton, Button selectAllButton) {
-        searchButton.setOnAction(e -> {
+    private void setGenomeButtonActionListener(ArrayList<Button> buttons) {
+        buttons.get(0).setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()) {
                 LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
                 treeController.applyCellHighlight(cell);
@@ -460,13 +458,13 @@ public class MainController extends Controller<BorderPane> {
             }
         });
 
-        deselectButton.setOnAction(e -> {
+        buttons.get(1).setOnAction(e -> {
             treeController.clearSelection();
             genomeTextField.setText("");
             fillTree();
         });
 
-        selectAllButton.setOnAction(e -> {
+        buttons.get(2).setOnAction(e -> {
             treeController.selectAll();
             genomeTextField.setText("");
             fillTree();
@@ -563,14 +561,14 @@ public class MainController extends Controller<BorderPane> {
         VBox vBox = new VBox();
         hBox = new HBox();
         genomeTextField = new TextField();
-
-
         hBox.getStylesheets().add("/css/main.css");
 
         searchButton = new Button("Search Genome (In Tree)");
         selectAllButton = new Button("Select all");
         deselectSearchButton = new Button("Deselect All");
-        setGenomeButtonActionListener(searchButton, deselectSearchButton, selectAllButton);
+        ArrayList<Button> buttons = new ArrayList<>();
+        Collections.addAll(buttons, searchButton, deselectSearchButton, selectAllButton);
+        setGenomeButtonActionListener(buttons);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
         // Dont add the annotation search box in the tree view
