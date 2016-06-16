@@ -368,8 +368,8 @@ public class GraphController extends Controller<ScrollPane> {
      * @return A snapshot taken of the graph.
      */
     public Image takeSnapshot() {
-        int pref = (int) graph.getModel().getGraphLayout().getMaxWidth();
-        int height = ((int) graph.getModel().getGraphLayout().getMaxHeight()) * 2;
+        int pref = (int) graph.getModel().getGraphLayout().getMaxWidth() + 1;
+        int height = ((int) graph.getModel().getGraphLayout().getMaxHeight()) * 2 + 1;
         if (pref + 50 > 2500) {
             pref = 2500;
         }
