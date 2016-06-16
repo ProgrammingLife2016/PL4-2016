@@ -2,7 +2,7 @@ package application.mouseHandlers;
 
 import application.controllers.MainController;
 import application.fxobjects.Edge;
-import application.fxobjects.treeCells.LeafCell;
+import core.cells.LeafCell;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

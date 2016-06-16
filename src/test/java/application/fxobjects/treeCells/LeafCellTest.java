@@ -1,6 +1,7 @@
 package application.fxobjects.treeCells;
 
 import application.fxobjects.LineageColor;
+import core.cells.LeafCell;
 import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
 import javafx.scene.layout.StackPane;

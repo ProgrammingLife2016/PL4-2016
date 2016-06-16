@@ -4,7 +4,7 @@ import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import application.fxobjects.graphCells.*;
 import application.fxobjects.layout.GraphLayout;
-import application.fxobjects.treeCells.LeafCell;
+import core.cells.LeafCell;
 import application.fxobjects.treeCells.MiddleCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
