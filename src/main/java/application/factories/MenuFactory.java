@@ -271,8 +271,7 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
             if (mainController.getFiltering().isFiltering()) {
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
-                //mainController.strainSelection(mainController.getLoadedGenomeNames());
+                mainController.strainSelection(mainController.getLoadedGenomeNames());
             } else {
                 mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
             }

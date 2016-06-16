@@ -206,7 +206,7 @@ public class Graph {
         //Root Node
         Node root = nodeMap.get(1);
         allGenomes.addAll(root.getGenomes());
-        if (true) { //Draw selected references
+        if (filtering) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.
