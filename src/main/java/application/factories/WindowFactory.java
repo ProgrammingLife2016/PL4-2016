@@ -112,7 +112,7 @@ public final class WindowFactory {
 
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
-            showPopup(candidates, selectedFile, parentDir, "NWK");
+            showPopup(candidates, selectedFile, "NWK");
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(selectedFile.toString());
             mainController.initGraph();
@@ -157,7 +157,7 @@ public final class WindowFactory {
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
 
-            showPopup(candidates, selectedFile, parentDir, "GFA");
+            showPopup(candidates, selectedFile, "GFA");
         } else {
             mainController.addRecentNWK(selectedFile.getAbsolutePath());
             mainController.initTree(selectedFile.getAbsolutePath());
@@ -169,10 +169,9 @@ public final class WindowFactory {
      *
      * @param candidates   all candidates which can be loaded next
      * @param selectedFile the currently selected GFA File
-     * @param parentDir    the Directory containing the chosen File
      * @param type         The type
      */
-    public static void showPopup(ArrayList<Text> candidates, File selectedFile, File parentDir, String type) {
+    public static void showPopup(ArrayList<Text> candidates, File selectedFile, String type) {
         Stage tempStage = new Stage();
         ListView listView = new ListView();
 
