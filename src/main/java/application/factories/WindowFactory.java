@@ -382,7 +382,7 @@ public final class WindowFactory {
 
     /**
      * Method that creates a directoryChooser.
-     *
+     * @param s the title of the directoryChooser
      * @return the directoryChooser
      */
     public static FileChooser createAnnotationChooser(String s) {

@@ -34,8 +34,8 @@ public class MenuFactory {
     private static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
-            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF, mostRecentGFA, mostRecentNWK,
-            mostRecentGFF;
+            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
+            mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;

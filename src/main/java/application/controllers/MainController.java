@@ -193,7 +193,7 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to set whether the annotation-data is loaded or not
      *
-     * @param x
+     * @param x boolean indication whether annotation-data is loaded or not
      */
     public void setAnnotationsLoaded(boolean x) {
         this.annotationsLoaded = x;
@@ -491,7 +491,8 @@ public class MainController extends Controller<BorderPane> {
                 if (!annotationTextField.getText().isEmpty()) {
                     List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
                     try {
-                        Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                        Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
+                                annotationTextField.getText());
                         Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
                         if (newAnn == null || newAnn.getSpannedNodes() == null) {
                             return;
@@ -510,7 +511,6 @@ public class MainController extends Controller<BorderPane> {
                     } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                         System.out.println("[DEBUG] Found too many matching annotations");
                     }
-                   // annotationTextField.setText("");
                 }
             }
         });
@@ -589,7 +589,11 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setTop(vBox);
     }
 
-    public void toggleSelectDeselect(boolean x){
+    /**
+     * Method to enable and disable the select and the select buttons
+     * @param x boolean indicating enabling or disabling
+     */
+    public void toggleSelectDeselect(boolean x) {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
 
