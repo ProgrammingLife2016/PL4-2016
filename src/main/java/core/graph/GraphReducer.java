@@ -23,7 +23,7 @@ public final class GraphReducer {
     }
 
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
-    private static int firstMapSize = 0;
+    private static int startMapSize = 0;
 
     /**
      * Give all nodes a list of its parents.
@@ -61,13 +61,15 @@ public final class GraphReducer {
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
-        firstMapSize = filteredNodeMap.size();
+        startMapSize = startMap.size();
         int reduceAmount = 5;
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
+            System.out.println("prev map size: " + previousMapSize);
+            System.out.println("curr map size: " + currentMapSize);
 
             if (levelMaps.size() == 25) {
                 reduceZoomingLevels(reduceAmount);
@@ -105,6 +107,8 @@ public final class GraphReducer {
                 filteredNodeMap.remove(nodeId);
             }
         }
+        System.out.println("startmap size: "+ startMap.size());
+        System.out.println("filtered nodemap size: " + filteredNodeMap.size());
         return filteredNodeMap;
     }
 
@@ -177,7 +181,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx < firstMapSize; idx++) {
+        for (int idx = 1; idx < startMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -235,7 +239,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx < firstMapSize; idx++) {
+        for (int idx = 1; idx < startMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -539,9 +543,9 @@ public final class GraphReducer {
     /**
      * Set the start map size.
      *
-     * @param firstMapSize The start map sie.
+     * @param startMapSize The start map sie.
      */
-    public static void setFirstMapSize(int firstMapSize) {
-        GraphReducer.firstMapSize = firstMapSize;
+    public static void setStartMapSize(int startMapSize) {
+        GraphReducer.startMapSize = startMapSize;
     }
 }

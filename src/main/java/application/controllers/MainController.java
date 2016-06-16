@@ -659,7 +659,7 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.max(0, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
-                graphController.getGraph().getGenomes());
+                graphController.getGraph().getCurrentGenomes());
     }
 
     /**

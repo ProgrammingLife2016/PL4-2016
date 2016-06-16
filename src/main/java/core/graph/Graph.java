@@ -103,7 +103,7 @@ public class Graph {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
-                currentInt = depth;
+                currentInt = levelMaps.size()-1;
                 current.setLevelMaps(levelMaps);
                 current = generateModel(ref, depth);
 
