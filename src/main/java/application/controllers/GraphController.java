@@ -23,10 +23,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
-
 import java.net.URL;
 import java.util.*;
-
 
 
 /**
@@ -84,6 +82,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Add EventHandlers to the GraphController
+     *
      * @param gc the current GraphController
      */
     private void setScrolling(GraphController gc) {
@@ -223,7 +222,7 @@ public class GraphController extends Controller<ScrollPane> {
         GraphCell prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
-                    getCurrentView()).get(prevClick.getCellId()));
+                getCurrentView()).get(prevClick.getCellId()));
         if (mainController.getCurrentView() == graphMouseHandling.getOriginalZoomLevel()) {
             prevClick.originalFocus();
         } else {
@@ -235,6 +234,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to zoom to focus when zooming
+     *
      * @return id of the node to focus
      */
     private int findNextInZoomPath() {
@@ -332,6 +332,7 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method that gets the nodes that are in the view, and adds it to the model.
+     *
      * @param min left side of the view.
      */
     private void addToPane(int min) {
@@ -373,7 +374,14 @@ public class GraphController extends Controller<ScrollPane> {
             pref = 2500;
         }
 
-        WritableImage image = new WritableImage(pref, height);
+        WritableImage image;
+
+        if (graph.getModel().getAllCells().isEmpty()) {
+            image = new WritableImage(1, 1);
+        } else {
+            image = new WritableImage(pref, height);
+        }
+
         WritableImage snapshot = this.getRoot().getContent().snapshot(
                 new SnapshotParameters(), image);
 

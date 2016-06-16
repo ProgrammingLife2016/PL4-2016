@@ -28,6 +28,7 @@ public class TreeMouseHandling {
         if (event.getSource() instanceof LeafCell) {
             mainController.getTreeController().applyCellHighlight((LeafCell) event.getSource());
         } else if (event.getSource() instanceof Edge) {
+
             mainController.getTreeController().applyEdgeHighlight((Edge) event.getSource());
 
         }

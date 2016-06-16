@@ -287,6 +287,7 @@ public class MenuFactory {
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
             mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
         });
+
         resetView = initMenuItem("Reset", null, event -> {
             handleReset();
         });
@@ -400,6 +401,7 @@ public class MenuFactory {
                 String recentFile = recents.get(finalIdx);
                 setActionOnSelection(type, recentFile);
             });
+
             if (recents.get(finalIdx).equals("Empty")) {
                 recentMenuItem.setDisable(true);
             }
