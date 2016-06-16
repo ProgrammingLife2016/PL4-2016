@@ -182,7 +182,7 @@ public final class WindowFactory {
         if (type.toUpperCase().equals("NWK")) {
             addGFAEventHandler(listView, selectedFile, tempStage);
         } else if (type.toUpperCase().equals("GFA")) {
-            addNWKEventHandler(listView, selectedFile, parentDir, tempStage);
+            addNWKEventHandler(listView, selectedFile, tempStage);
         }
     }
 
@@ -235,9 +235,13 @@ public final class WindowFactory {
             }
         }
 
+        File[] files = new File[2];
+        files[0] = gfaFile;
+        files[1] = nwkFile;
+
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
-            showMetaDataPopup(candidates, gfaFile, nwkFile, "metaData");
+            showMetaDataPopup(candidates, files, "metaData");
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.toString());
             mainController.initGraph();
@@ -250,11 +254,10 @@ public final class WindowFactory {
      * Method to create and show the MetaData Pop-up
      *
      * @param candidates  all candidates that can be opened
-     * @param selectedGFA the earlier selected GFA-File
-     * @param selectedNWK the earlier selected NWK-File
+     * @param files the list of selected Files
      * @param type        the type
      */
-    public static void showMetaDataPopup(ArrayList<Text> candidates, File selectedGFA, File selectedNWK, String type) {
+    public static void showMetaDataPopup(ArrayList<Text> candidates, File[] files, String type) {
         Stage tempStage = new Stage();
         ListView listView = new ListView();
 
@@ -262,9 +265,6 @@ public final class WindowFactory {
         handleTempStage(tempStage, type, listView);
 
         if (type.equals("metaData")) {
-            File[] files = new File[2];
-            files[0] = selectedGFA;
-            files[1] = selectedNWK;
             addMetaDataEventHandler(listView, files, tempStage);
         }
     }
@@ -322,10 +322,9 @@ public final class WindowFactory {
      *
      * @param listView     the List of Files
      * @param selectedFile the Files which is selected
-     * @param parentDir    the Directory in which the Files are
      * @param tempStage    the currently showed Stage
      */
-    public static void addNWKEventHandler(ListView listView, File selectedFile, File parentDir, Stage tempStage) {
+    public static void addNWKEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             File nwk = new File(listView.getSelectionModel().getSelectedItem().toString());
 

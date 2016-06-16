@@ -446,19 +446,15 @@ public class MenuFactory {
             File file = new File(recentFile);
             File parentDir = file.getParentFile();
             switch (type) {
-                case GFF:
-                    mainController.initAnnotations(recentFile);
+                case GFF: mainController.initAnnotations(recentFile);
                     mainController.addRecentGFF(recentFile);
                     break;
-                case META_DATA:
-                    mainController.initMetadata(recentFile);
+                case META_DATA: mainController.initMetadata(recentFile);
                     mainController.addRecentMetadata(recentFile);
                     break;
-                case GFA:
-                    WindowFactory.createGFApopup(parentDir, file);
+                case GFA: WindowFactory.createGFApopup(parentDir, file);
                     break;
-                case NWK:
-                    WindowFactory.createNWKpopup(parentDir, file);
+                case NWK: WindowFactory.createNWKpopup(parentDir, file);
                     break;
                 default:
                     break;
@@ -804,7 +800,6 @@ public class MenuFactory {
      */
     private void initStreptomycinFilter() {
         CheckMenuItem str1 = new CheckMenuItem("R");
-
         str1.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
         CheckMenuItem str2 = new CheckMenuItem("S");
         str2.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_S, str2.isSelected()));
