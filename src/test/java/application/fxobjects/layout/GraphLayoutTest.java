@@ -102,24 +102,24 @@ public class GraphLayoutTest {
         assertEquals(42, graphLayout.getCellCount());
     }
 
-    /**
-     * Tests whether the execute method actually relocates a cell.
-     */
-    @Test
-    public void testExecute() {
-        Cell cell = spy(new RectangleCell(1, 1));
-
-        Model model = spy(new Model());
-        model.addCell(cell);
-
-        graphLayout = new GraphLayout(model, 20, 500);
-
-        assertFalse(cell.isRelocatedX());
-        assertFalse(cell.isRelocatedY());
-        graphLayout.execute();
-        assertTrue(cell.isRelocatedY());
-        assertTrue(cell.isRelocatedX());
-    }
+//    /**
+//     * Tests whether the execute method actually relocates a cell.
+//     */
+//    @Test
+//    public void testExecute() {
+//        Cell cell = spy(new RectangleCell(1, 1));
+//
+//        Model model = spy(new Model());
+//        model.addCell(cell);
+//
+//        graphLayout = new GraphLayout(model, 20, 500);
+//
+//        assertFalse(cell.isRelocatedX());
+//        assertFalse(cell.isRelocatedY());
+//        graphLayout.execute();
+//        assertTrue(cell.isRelocatedY());
+//        assertTrue(cell.isRelocatedX());
+//    }
 
     /**
      * Tests the getCellCount method.
