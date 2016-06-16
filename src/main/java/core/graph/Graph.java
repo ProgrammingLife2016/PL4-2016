@@ -135,6 +135,8 @@ public class Graph {
 
     public boolean changeLevelMaps(List<String> selectedGenomes) {
         System.out.println("amount of selected genomes: "+ selectedGenomes.size());
+
+        System.out.println("amount of current genomes: "+ currentGenomes.size());
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             System.out.println("amount of levelmaps: " + levelMaps.size());
