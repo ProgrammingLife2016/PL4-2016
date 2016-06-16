@@ -98,7 +98,6 @@ public class GraphTest {
     @Test
     public void testAddEdges() {
         HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
-        Node node1 = nodeMap.get(1);
         Node node2 = nodeMap.get(2);
         Node node3 = nodeMap.get(3);
         node2.setParents(new ArrayList<>(Arrays.asList(1)));

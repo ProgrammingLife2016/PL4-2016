@@ -8,6 +8,7 @@ import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
@@ -30,7 +31,6 @@ public class Graph {
 
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
-    private int nodeIds;
 
     private boolean filtering;
 
@@ -81,7 +81,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
-            nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -241,9 +240,7 @@ public class Graph {
      * @param node the node for which we need to add a cell
      */
     public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
-
         //Add next cell
-        int maxEdgeWidth = 10;
         CellType type = node.getType();
 
         if (type == CellType.RECTANGLE) {
@@ -275,6 +272,7 @@ public class Graph {
      * @param nodeMap the node map to sort topologically
      * @return the list of topologically sorted IDs
      */
+    @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
         //Copy the nodeMap to not make any changes to our original map.
         HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
