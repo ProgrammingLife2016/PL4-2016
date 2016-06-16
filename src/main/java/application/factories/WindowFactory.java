@@ -355,6 +355,8 @@ public final class WindowFactory {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             File meta = new File(file.getText());
 
+            tempStage.hide();
+
             mainController.initMetadata(meta.getAbsolutePath());
             createMenuWithSearchWithoutAnnotation();
 
@@ -377,8 +379,6 @@ public final class WindowFactory {
                     mainController.addRecentNWK(nwkFile.getAbsolutePath());
                 }
             }
-
-            tempStage.hide();
         });
     }
 
