@@ -683,7 +683,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to add items to the Info-List
      */
     private void setListItems() {
-        List<String> genomes = graphController.getGenomes();
+        List<String> genomes = graphController.getGraph().getCurrentGenomes();
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
     }
