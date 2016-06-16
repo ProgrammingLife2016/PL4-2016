@@ -511,7 +511,7 @@ public class MainController extends Controller<BorderPane> {
                     } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                         System.out.println("[DEBUG] Found too many matching annotations");
                     }
-                    annotationTextField.setText("");
+                   // annotationTextField.setText("");
                 }
             }
         });
@@ -662,7 +662,7 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
-        
+
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }
