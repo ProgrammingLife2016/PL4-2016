@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
@@ -270,10 +271,15 @@ public class MenuFactory {
      */
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
-            if (mainController.getFiltering().isFiltering()) {
-                mainController.strainSelection(mainController.getLoadedGenomeNames());
-            } else {
-                mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
+            if(mainController.getTreeController().getSelectedGenomes().size() == 0) {
+                JOptionPane.showMessageDialog(null, "Please select some genomes to display in the Graph.", "Alert",1);
+            }
+            else {
+                if (mainController.getFiltering().isFiltering()) {
+                    mainController.strainSelection(mainController.getLoadedGenomeNames());
+                } else {
+                    mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
+                }
             }
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
