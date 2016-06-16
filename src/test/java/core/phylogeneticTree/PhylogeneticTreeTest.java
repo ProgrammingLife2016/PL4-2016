@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
 /**
  * Test suite for the Phylogenetic Tree class.
  *
- * @author Niels Warnars
  */
 @SuppressFBWarnings("DLS_DEAD_LOCAL_STORE")
 public class PhylogeneticTreeTest {

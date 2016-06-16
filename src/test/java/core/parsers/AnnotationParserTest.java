@@ -15,8 +15,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for the AnnotationParser class
- *
- * @author Niels Warnars
  */
 public class AnnotationParserTest {
 

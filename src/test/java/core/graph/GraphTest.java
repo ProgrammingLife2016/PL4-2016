@@ -19,7 +19,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by user on 18-5-2016.
+ * GraphTest
  */
 @RunWith(MockitoJUnitRunner.class)
 public class GraphTest {
@@ -334,16 +334,6 @@ public class GraphTest {
         g2.setModel(m);
         assertEquals(42, g2.getMaxWidth(), 0.0001);
     }
-
-//    /**
-//     * Tests the getModelAllInView method.
-//     */
-//    @Test
-//    public void testGetModelAllInView() {
-//        Model m = g.getModel();
-//        Model res = g.getModelAllInView(0);
-//        assertNotEquals(m, res);
-//    }
 
     /**
      * Tests the getDebugScreenShouldBeInitialized method.

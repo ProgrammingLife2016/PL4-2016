@@ -12,8 +12,6 @@ import static org.mockito.Mockito.*;
 
 /**
  * Test class for the RectangleCell class.
- *
- * @author Niels Warnars
  */
 public class RectangleCellTest {
     RectangleCell c;

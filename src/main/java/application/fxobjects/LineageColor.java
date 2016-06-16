@@ -4,7 +4,6 @@ import javafx.scene.paint.Color;
 
 /**
  * Utility class for color values.
- * Created by Arthur on 6/1/16.
  */
 public final class LineageColor {
 

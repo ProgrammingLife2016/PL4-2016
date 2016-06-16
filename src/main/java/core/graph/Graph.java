@@ -106,7 +106,6 @@ public class Graph {
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
-                //currentRef = ref;
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
@@ -207,7 +206,7 @@ public class Graph {
         //Root Node
         Node root = nodeMap.get(1);
         allGenomes.addAll(root.getGenomes());
-        if (filtering) { //Draw selected references
+        if (true) { //Draw selected references
             // We are now drawing only the selected items.
             generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
         } else { // Draw all nodes.

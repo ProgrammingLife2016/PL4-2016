@@ -9,7 +9,6 @@ import java.util.*;
 import static java.lang.String.format;
 
 /**
- * Created by Skullyhoofd on 25/04/2016.
  * A Node in the genome.
  */
 @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
@@ -62,7 +61,7 @@ public class Node {
      */
     private List<Annotation> annotations;
 
-    /*
+    /**
      * Amount of nucleotides in the node.
      */
     private int nucleotides;
@@ -169,15 +168,6 @@ public class Node {
      */
     public void removeParent(Integer parentId) {
         parents.remove(parentId);
-    }
-
-    /**
-     * Method to add parent
-     *
-     * @param parentId parent to be added
-     */
-    public void addParent(Integer parentId) {
-        parents.add(parentId);
     }
 
     /**
@@ -452,6 +442,11 @@ public class Node {
         return sb.toString();
     }
 
+    /**
+     * Equals method
+     * @param o Object to compare
+     * @return boolean indicating equality
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {

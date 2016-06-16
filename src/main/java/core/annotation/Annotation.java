@@ -11,10 +11,8 @@ import java.util.List;
  * Class representing a gene annotation according to the specification on
  * http://www.sequenceontology.org/gff3.shtml and differences in provided GFF data.
  *
- * @author Niels Warnars
  */
 @SuppressFBWarnings("URF_UNREAD_FIELD")
-@SuppressWarnings("PMD.UnusedPrivateField")
 public class Annotation implements Comparable<Annotation> {
     private String seqid;
     private String source;
@@ -33,8 +31,6 @@ public class Annotation implements Comparable<Annotation> {
     private String displayNameAttr;
 
     private List<Node> spannedNodes;
-    private int offsetInFirstSpannedNode;
-    private int offsetInLastSpannedNode;
 
     /**
      * Sets up a gene annotation.
@@ -54,8 +50,6 @@ public class Annotation implements Comparable<Annotation> {
         displayNameAttr = "";
 
         spannedNodes = new ArrayList<>();
-        offsetInFirstSpannedNode = -1;
-        offsetInLastSpannedNode = -1;
     }
 
     /**
@@ -300,14 +294,12 @@ public class Annotation implements Comparable<Annotation> {
             int nUpper = n.getzIndex() + n.getSequence().length();
 
             if (nLower <= start && nUpper >= start) {
-                offsetInFirstSpannedNode = start - n.getzIndex();
                 nodesMustBeAdded = true;
             }
 
             if (nodesMustBeAdded) { addSpannedNode(n); }
 
             if (nLower <= end && nUpper >= end) {
-                offsetInLastSpannedNode = end - n.getzIndex();
                 return n.getId();
             }
         }

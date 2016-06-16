@@ -17,7 +17,6 @@ import java.util.List;
  * @version 1.0
  * @since 27-04-2016
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class GraphLayout extends CellLayout {
     private int offset;
     private Model model;

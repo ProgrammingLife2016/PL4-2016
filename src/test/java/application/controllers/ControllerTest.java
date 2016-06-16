@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Observer;
 
 /**
- * Created by Niek on 5/18/2016.
+ * Controller Test
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {

@@ -27,7 +27,7 @@ import static core.filtering.Filter.*;
 import static java.lang.String.format;
 
 /**
- * Created by Daphne van Tetering on 4-5-2016.
+ * MenuFactory Class
  */
 @SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
 public class MenuFactory {
@@ -271,7 +271,8 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show Graph", null, event -> {
             if (mainController.getFiltering().isFiltering()) {
-                mainController.strainSelection(mainController.getLoadedGenomeNames());
+                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
+                //mainController.strainSelection(mainController.getLoadedGenomeNames());
             } else {
                 mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
             }

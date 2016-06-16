@@ -8,8 +8,6 @@ import javafx.scene.shape.Shape;
 
 /**
  * Interface defining overlapping cell behaviour.
- *
- * @author Niels Warnars
  */
 public abstract class GraphCell extends Cell {
     public Shape shape = null;

@@ -13,7 +13,6 @@ import java.io.InputStream;
  * Controller class, used when creating other controllers.
  *
  * @param <T> FXML-root.
- * @author Daphne van Tetering.
  * @version 1.0
  * @since 25-04-2016
  */
@@ -68,21 +67,4 @@ public abstract class Controller<T extends Parent> implements Initializable {
         this.root = root;
     }
 
-    /**
-     * Method to get the visibility.
-     *
-     * @return the current visibility.
-     */
-    public SimpleBooleanProperty visibleProperty() {
-        return visible;
-    }
-
-    /**
-     * Method to set the visibility.
-     *
-     * @param visible new visibility to be set.
-     */
-    public void setVisible(boolean visible) {
-        this.visible.set(visible);
-    }
 }
