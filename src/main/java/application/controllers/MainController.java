@@ -377,7 +377,9 @@ public class MainController extends Controller<BorderPane> {
         inGraph = true;
 
         // Apply the selected genomes
-        graphController.getGraph().changeLevelMaps(selectedGenomes);
+        if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
+            currentView = getGraphController().getGraph().getLevelMaps().size()-1;
+        }
         graphController.update(ref, currentView);
         graphController.getZoomBox().fillZoomBox(count == -1);
 
