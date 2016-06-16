@@ -86,7 +86,8 @@ public final class GraphReducer {
     }
 
     /**
-     * Traverse the maps
+     * Traverse the maps.
+     *
      * @param reduceAmount amount to reduce
      * @param i i
      */
@@ -112,6 +113,7 @@ public final class GraphReducer {
 
     /**
      * Reduced the number of zoomlevels.
+     *
      * @param amountToRemove amount to remove
      */
     public static void reduceZoomingLevels(int amountToRemove) {

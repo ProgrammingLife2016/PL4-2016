@@ -30,11 +30,15 @@ public class GraphMouseHandling {
 
         originalZoomLevel = mainController.getCurrentView();
 
+        StringBuilder builder = new StringBuilder();
+        mainController.appendFilterNames(builder);
+
         String info = "";
 
         info += format("Genome ID: %d \n", clicked.getId());
         info += format("%d genomes in Node: \n%s\n",
                 clicked.getGenomes().size(), clicked.getGenomesAsString());
+
 
         if (clicked.getAnnotations().size() > 0) {
             info += format("Responsible for: \n%s", clicked.getAnnotationsAsString());
@@ -44,7 +48,9 @@ public class GraphMouseHandling {
             info += format("Seq: %s\n", clicked.getSequence());
         }
 
-        mainController.getListFactory().modifyNodeInfo(info);
+        builder.append(info);
+
+        mainController.getListFactory().modifyNodeInfo(builder.toString());
 
         if (prevClick == null) {
             prevClick = node;
@@ -87,8 +93,6 @@ public class GraphMouseHandling {
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
         cell.setCursor(Cursor.HAND);
-
-
     };
 
     /**
