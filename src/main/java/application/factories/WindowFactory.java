@@ -180,7 +180,7 @@ public final class WindowFactory {
         handleTempStage(tempStage, type, listView);
 
         if (type.toUpperCase().equals("NWK")) {
-            addGFAEventHandler(listView, selectedFile, parentDir, tempStage);
+            addGFAEventHandler(listView, selectedFile, tempStage);
         } else if (type.toUpperCase().equals("GFA")) {
             addNWKEventHandler(listView, selectedFile, parentDir, tempStage);
         }
@@ -191,10 +191,9 @@ public final class WindowFactory {
      *
      * @param listView        the List of Files
      * @param selectedGFAFile the Files which is selected
-     * @param parentDir       the Directory containing the chosen Files
      * @param tempStage       the currently showed Stage
      */
-    public static void addGFAEventHandler(ListView listView, File selectedGFAFile, File parentDir, Stage tempStage) {
+    public static void addGFAEventHandler(ListView listView, File selectedGFAFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             File nwk = new File(file.getText());
@@ -202,7 +201,7 @@ public final class WindowFactory {
             tempStage.hide();
 
             if (!mainController.isMetaDataLoaded()) {
-                createMetaDatapopup(selectedGFAFile, nwk, parentDir);
+                createMetaDatapopup(selectedGFAFile, nwk);
             } else {
                 mainController.addRecentNWK(nwk.getAbsolutePath());
                 mainController.initTree(nwk.getAbsolutePath());
@@ -219,10 +218,10 @@ public final class WindowFactory {
      *
      * @param gfaFile   the earlier chosen GFA-File
      * @param nwkFile   the earlier chosen NWK-File
-     * @param parentDir the directory of the chosen Files
      */
-    public static void createMetaDatapopup(File gfaFile, File nwkFile, File parentDir) {
+    public static void createMetaDatapopup(File gfaFile, File nwkFile) {
         ArrayList<Text> candidates = new ArrayList<>();
+        File parentDir = gfaFile.getParentFile();
         if (parentDir.isDirectory()) {
             File[] fileList = parentDir.listFiles();
             if (fileList != null) {
@@ -263,7 +262,10 @@ public final class WindowFactory {
         handleTempStage(tempStage, type, listView);
 
         if (type.equals("metaData")) {
-            addMetaDataEventHandler(listView, selectedGFA, selectedNWK, tempStage);
+            File[] files = new File[2];
+            files[0] = selectedGFA;
+            files[1] = selectedNWK;
+            addMetaDataEventHandler(listView, files, tempStage);
         }
     }
 
@@ -330,7 +332,7 @@ public final class WindowFactory {
             tempStage.hide();
 
             if (!mainController.isMetaDataLoaded()) {
-                createMetaDatapopup(selectedFile, nwk, parentDir);
+                createMetaDatapopup(selectedFile, nwk);
             } else {
                 mainController.getGraphController().getGraph().getNodeMapFromFile(nwk.getAbsolutePath());
                 mainController.initGraph();
@@ -346,11 +348,10 @@ public final class WindowFactory {
      * Method to add EventHandlers to the MetaData Pop-uo
      *
      * @param listView  the listView showing
-     * @param gfaFile   the chosen GFA-File
-     * @param nwkFile   the chosen NWK-File
+     * @param files     the list of chosen Files
      * @param tempStage the Stage of the shown window
      */
-    public static void addMetaDataEventHandler(ListView listView, File gfaFile, File nwkFile, Stage tempStage) {
+    public static void addMetaDataEventHandler(ListView listView, File[] files, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
             File meta = new File(file.getText());
@@ -359,18 +360,23 @@ public final class WindowFactory {
             mainController.addRecentMetadata(meta.getAbsolutePath());
             createMenuWithSearchWithoutAnnotation();
 
-            if (FilenameUtils.getExtension(gfaFile.getName()).equals("NWK")) {
-                mainController.initTree(gfaFile.getAbsolutePath());
-                mainController.addRecentNWK(gfaFile.getAbsolutePath());
-                mainController.getGraphController().getGraph().getNodeMapFromFile(nwkFile.getAbsolutePath());
-                mainController.initGraph();
-                mainController.addRecentGFA(nwkFile.getAbsolutePath());
-            } else {
-                mainController.initTree(nwkFile.getAbsolutePath());
-                mainController.addRecentNWK(nwkFile.getAbsolutePath());
-                mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
-                mainController.initGraph();
-                mainController.addRecentGFA(gfaFile.getAbsolutePath());
+            if (files[0] != null && files[1] != null) {
+                File gfaFile = files[0];
+                File nwkFile = files[1];
+
+                if (FilenameUtils.getExtension(gfaFile.getName()).equals("NWK")) {
+                    mainController.initTree(gfaFile.getAbsolutePath());
+                    mainController.addRecentNWK(gfaFile.getAbsolutePath());
+                    mainController.getGraphController().getGraph().getNodeMapFromFile(nwkFile.getAbsolutePath());
+                    mainController.initGraph();
+                    mainController.addRecentGFA(nwkFile.getAbsolutePath());
+                } else {
+                    mainController.initTree(nwkFile.getAbsolutePath());
+                    mainController.addRecentNWK(nwkFile.getAbsolutePath());
+                    mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
+                    mainController.initGraph();
+                    mainController.addRecentGFA(gfaFile.getAbsolutePath());
+                }
             }
 
             tempStage.hide();
