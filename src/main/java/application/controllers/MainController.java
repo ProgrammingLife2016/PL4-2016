@@ -110,11 +110,11 @@ public class MainController extends Controller<BorderPane> {
     public void initGraph() {
         initGUI();
         graphController.getGraph().findAllGenomes();
-       // currentView = graphController.getGraph().getLevelMaps().size() - 1;
+        // currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-       // fillGraph(new ArrayList<>(), new ArrayList<>());
+        // fillGraph(new ArrayList<>(), new ArrayList<>());
 
-      //  graphController.getGraph().getModel().matchNodesAndAnnotations();
+        //  graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
     /**
@@ -177,6 +177,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to set whether the MetaData is loaded or not
+     *
      * @param x boolean
      */
     public void setMetaDataLoaded(boolean x) {
@@ -378,7 +379,7 @@ public class MainController extends Controller<BorderPane> {
 
         // Apply the selected genomes
         if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
-            currentView = getGraphController().getGraph().getLevelMaps().size()-1;
+            currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
         }
         graphController.update(ref, currentView);
         graphController.getZoomBox().fillZoomBox(count == -1);
@@ -600,6 +601,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to enable and disable the select and the select buttons
+     *
      * @param x boolean indicating enabling or disabling
      */
     public void toggleSelectDeselect(boolean x) {
@@ -683,7 +685,14 @@ public class MainController extends Controller<BorderPane> {
      * Method to add items to the Info-List
      */
     private void setListItems() {
-        List<String> genomes = graphController.getGraph().getCurrentGenomes();
+        List<String> genomes = new ArrayList<>();
+        if (filtering.isFiltering()) {
+            genomes = graphController.getGraph().reduceGenomes(
+                    filtering.getSelectedGenomes(), filtering.isFiltering());
+        } else if (treeController != null && !treeController.getSelectedGenomes().isEmpty()) {
+            genomes = graphController.getGraph().reduceGenomes(
+                    treeController.getSelectedGenomes());
+        }
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
     }
