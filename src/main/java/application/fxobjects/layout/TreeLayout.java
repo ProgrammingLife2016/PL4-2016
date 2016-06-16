@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 /**
  * This class is responsible for properly drawing the phylogenetic tree.
- * Created by Niek on 5/9/2016.
  */
 public class TreeLayout extends CellLayout {
 

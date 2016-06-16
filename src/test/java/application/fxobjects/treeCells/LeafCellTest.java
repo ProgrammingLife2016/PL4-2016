@@ -13,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test suite for the LeafCell class.
  *
- * @author Niels Warnars
  */
 public class LeafCellTest {
     public LeafCell c;

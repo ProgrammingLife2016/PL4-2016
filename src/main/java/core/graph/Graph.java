@@ -106,7 +106,6 @@ public class Graph {
             if (currentInt == -1) { //First time we are here.
                 currentInt = depth;
                 current.setLevelMaps(levelMaps);
-                //currentRef = ref;
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.

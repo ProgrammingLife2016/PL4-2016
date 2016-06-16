@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Class responsible for processing the annotation data.
  *
- * @author Niels Warnars
  */
 public class AnnotationProcessor {
 

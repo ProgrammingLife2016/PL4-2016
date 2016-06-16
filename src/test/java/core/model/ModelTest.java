@@ -22,7 +22,6 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for the model class
  *
- * Created by Ties on 11-5-2016.
  */
 public class ModelTest {
 

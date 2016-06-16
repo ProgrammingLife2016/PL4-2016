@@ -202,11 +202,12 @@ public final class WindowFactory {
             if (!mainController.isMetaDataLoaded()) {
                 createMetaDatapopup(selectedGFAFile, nwk);
             } else {
-                mainController.addRecentNWK(nwk.getAbsolutePath());
-                mainController.initTree(nwk.getAbsolutePath());
                 mainController.addRecentGFA(selectedGFAFile.getAbsolutePath());
                 mainController.getGraphController().getGraph().getNodeMapFromFile(selectedGFAFile.getAbsolutePath());
                 mainController.initGraph();
+                mainController.addRecentNWK(nwk.getAbsolutePath());
+                mainController.initTree(nwk.getAbsolutePath());
+
                 createMenuWithSearch();
             }
         });
@@ -361,18 +362,19 @@ public final class WindowFactory {
                 File gfaFile = files[0];
                 File nwkFile = files[1];
 
-                if (FilenameUtils.getExtension(gfaFile.getName()).equals("NWK")) {
-                    mainController.initTree(gfaFile.getAbsolutePath());
-                    mainController.addRecentNWK(gfaFile.getAbsolutePath());
+                if (FilenameUtils.getExtension(gfaFile.getName()).equals("nwk")) {
                     mainController.getGraphController().getGraph().getNodeMapFromFile(nwkFile.getAbsolutePath());
                     mainController.initGraph();
                     mainController.addRecentGFA(nwkFile.getAbsolutePath());
+
+                    mainController.initTree(gfaFile.getAbsolutePath());
+                    mainController.addRecentNWK(gfaFile.getAbsolutePath());
                 } else {
-                    mainController.initTree(nwkFile.getAbsolutePath());
-                    mainController.addRecentNWK(nwkFile.getAbsolutePath());
                     mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
                     mainController.initGraph();
                     mainController.addRecentGFA(gfaFile.getAbsolutePath());
+                    mainController.initTree(nwkFile.getAbsolutePath());
+                    mainController.addRecentNWK(nwkFile.getAbsolutePath());
                 }
             }
 

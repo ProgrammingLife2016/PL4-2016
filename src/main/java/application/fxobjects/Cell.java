@@ -71,15 +71,6 @@ public abstract class Cell extends Pane {
     }
 
     /**
-     * Remove a given child cell.
-     *
-     * @param cell A given child cell to be removed.
-     */
-    public void removeCellChild(Cell cell) {
-        children.remove(cell);
-    }
-
-    /**
      * Set the view of the cell and its children.
      *
      * @param view A given view node.

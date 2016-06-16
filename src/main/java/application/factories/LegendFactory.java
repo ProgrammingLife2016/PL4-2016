@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 
 
 /**
- * Created by Daphne van Tetering on 30-5-2016.
+ * LegendFactory Class
  */
 public class LegendFactory {
 

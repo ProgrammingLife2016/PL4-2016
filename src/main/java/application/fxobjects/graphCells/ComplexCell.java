@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 /**
- * Created by Niek on 6/9/2016.
+ * ComplexCell class
  */
 public class ComplexCell extends GraphCell {
     /**

@@ -1,7 +1,7 @@
 package core.filtering;
 
 /**
- * Created by Arthur on 6/2/16.
+ * All possible Filters
  */
 public enum Filter {
     LIN1("Lineage 1"),

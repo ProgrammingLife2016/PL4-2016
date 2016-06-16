@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 /**
  * Test suite for the Genome class.
  *
- * @author Niels Warnars
  */
 public class GenomeTest {
     Genome g;

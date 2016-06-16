@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 /**
  * Class responsible for the collapsing of nodes in the graph.
  * By collapsing nodes the size of the graph can be reduced.
- * Created by Niels Warnars on 2-5-2016.
  */
 public final class GraphReducer {
 
@@ -512,14 +511,5 @@ public final class GraphReducer {
      */
     public static void setStartMapSize(int startMapSize) {
         GraphReducer.startMapSize = startMapSize;
-    }
-
-    /**
-     * Set the level maps.
-     *
-     * @param levelMaps The level maps.
-     */
-    public static void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
-        GraphReducer.levelMaps = levelMaps;
     }
 }

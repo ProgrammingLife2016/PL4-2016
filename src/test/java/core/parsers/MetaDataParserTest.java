@@ -12,7 +12,6 @@ import static org.junit.Assert.assertFalse;
 /**
  * Test for the MetaData class.
  *
- * @author Niels Warnars
  */
 public class MetaDataParserTest {
 

@@ -11,7 +11,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 
 /**
- * Created by Daphne van Tetering on 30-5-2016.
+ * ListFactory Class
  */
 public class ListFactory {
     private ListView list;
