@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.HashMap;
 
 /**
- * Created by Skullyhoofd on 24/04/2016.
  * Parser to turn file format into data structure.
  */
 public class GraphParser {
@@ -30,7 +29,6 @@ public class GraphParser {
      * @param input - filepath of .gfa file to be parsed.
      * @return - A HashMap containing the information from the .gfa file.
      */
-    @SuppressWarnings({"checkstyle:magicnumbers", "checkstyle:methodlength"})
     @SuppressFBWarnings("I18N")
     private HashMap<Integer, Node> readGFA(final InputStream input) {
         try {

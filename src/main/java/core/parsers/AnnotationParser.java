@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 /**
  * Parser for Annotation data from a gff file.
  *
- * @author Niels Warnars
  */
 public final class AnnotationParser {
 

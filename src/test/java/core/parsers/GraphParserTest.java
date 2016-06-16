@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for the Graph
- * @author Niels Warnars
  */
 public class GraphParserTest {
     public GraphParser p;

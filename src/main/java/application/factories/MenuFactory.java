@@ -27,7 +27,7 @@ import static core.filtering.Filter.*;
 import static java.lang.String.format;
 
 /**
- * Created by Daphne van Tetering on 4-5-2016.
+ * MenuFactory Class
  */
 @SuppressFBWarnings({"MS_PKGPROTECT", "MS_CANNOT_BE_FINAL"})
 public class MenuFactory {

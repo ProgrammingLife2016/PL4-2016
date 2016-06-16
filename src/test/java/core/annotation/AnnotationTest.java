@@ -11,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test suite for the Annotation class.
  *
- * @author Niels Warnars
  */
 public class AnnotationTest {
     public Annotation a;

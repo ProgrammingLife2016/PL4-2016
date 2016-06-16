@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 
 /**
  * Class representing a phylogenetic tree.
- * Created by Niek on 4/25/2016.
  */
 public class PhylogeneticTree {
 
@@ -97,12 +96,5 @@ public class PhylogeneticTree {
                 model.addCell(node.getKey(), node.getName(), 0, CellType.TREEMIDDLE);
             }
         }
-    }
-
-    /**
-     * Method that updates the model.
-     */
-    public void endUpdate() {
-        model.merge();
     }
 }

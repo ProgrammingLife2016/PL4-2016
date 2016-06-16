@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 /**
  * Class responsible for the collapsing of nodes in the graph.
  * By collapsing nodes the size of the graph can be reduced.
- * Created by Niels Warnars on 2-5-2016.
  */
 public final class GraphReducer {
 
@@ -241,11 +240,10 @@ public final class GraphReducer {
 
         if (parent == null) { return false; }
 
-        Stack<Node> nonVisitedNodes = new Stack<>();
         ArrayList<Node> collapsingNodes = new ArrayList<>();
         Node targetNode = findComplexPath(parent, collapsingNodes, nodeMap, maxComplexity);
 
-        if (nonVisitedNodes.isEmpty() && !collapsingNodes.isEmpty() && targetNode != null) {
+        if (!collapsingNodes.isEmpty() && targetNode != null) {
             Node complexNode = collapsingNodes.get(0);
             complexNode.setType(CellType.COMPLEX);
             for (Node collapseNode : collapsingNodes) {
@@ -264,6 +262,15 @@ public final class GraphReducer {
         return false;
     }
 
+    /**
+     * Finds a path of nodes to be collapsed to a complex node.
+     *
+     * @param parent the node at the start
+     * @param collapsingNodes list all nodes in the path
+     * @param nodeMap the node map the nodes reside in
+     * @param maxComplexity the maximum allowed number of nodes to be collapsed
+     * @return
+     */
     private static Node findComplexPath(Node parent, ArrayList<Node> collapsingNodes,
                                         HashMap<Integer, Node> nodeMap, int maxComplexity) {
         int pathComplexity = 0;
@@ -293,10 +300,16 @@ public final class GraphReducer {
                 }
             }
         }
-        return targetNode;
+        if (nonVisitedNodes.isEmpty()) { return targetNode; } else { return null; }
     }
 
 
+    /**
+     * Pushes all children of a node onto a stack and returns it
+     * @param parent the parent node
+     * @param nodeMap the node map the node resides in
+     * @return the stack
+     */
     private static Stack<Node> pushChildrenToStack(Node parent, HashMap<Integer, Node> nodeMap) {
         Stack<Node> nonVisitedNodes = new Stack<>();
         for (int parentChild : parent.getLinks()) {
@@ -498,14 +511,5 @@ public final class GraphReducer {
      */
     public static void setStartMapSize(int startMapSize) {
         GraphReducer.startMapSize = startMapSize;
-    }
-
-    /**
-     * Set the level maps.
-     *
-     * @param levelMaps The level maps.
-     */
-    public static void setLevelMaps(List<HashMap<Integer, Node>> levelMaps) {
-        GraphReducer.levelMaps = levelMaps;
     }
 }

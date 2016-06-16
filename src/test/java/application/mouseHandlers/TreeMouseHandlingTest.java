@@ -12,7 +12,6 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for the TreeMouseHandling class.
  *
- * @author Niels Warnars
  */
 public class TreeMouseHandlingTest {
     public TreeMouseHandling handling;

@@ -17,7 +17,6 @@ import java.util.List;
  * @version 1.0
  * @since 27-04-2016
  */
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnusedPrivateMethod"})
 public class GraphLayout extends CellLayout {
     private int offset;
     private Model model;
@@ -25,7 +24,6 @@ public class GraphLayout extends CellLayout {
     private int currentY;
     private CellType lastType;
     private int cellCount = 0;
-    private int centerY;
 
     private double maxWidth;
     private double minWidth;
@@ -49,7 +47,6 @@ public class GraphLayout extends CellLayout {
         this.lastType = null;
         this.offset = offset;
         this.model = model;
-        this.centerY = middle;
         this.maxWidth = 0;
         this.minWidth = Integer.MAX_VALUE;
 

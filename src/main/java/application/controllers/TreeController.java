@@ -10,18 +10,11 @@ import application.mouseHandlers.TreeMouseHandling;
 import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import net.sourceforge.olduvai.treejuxtaposer.TreeParser;
-import net.sourceforge.olduvai.treejuxtaposer.drawer.Tree;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,29 +52,6 @@ public class TreeController extends Controller<ScrollPane> {
 
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         init();
-    }
-
-    /**
-     * Set-up the tree model from a Newick data file.
-     *
-     * @return A Newick tree.
-     */
-    @SuppressFBWarnings({"I18N", "NP_DEREFERENCE_OF_READLINE_VALUE"})
-    public Tree getTreeFromFile() {
-        InputStream stream = this.getClass().getResourceAsStream("/340tree.rooted.TKK.nwk");
-        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
-        TreeParser tp = new TreeParser(r);
-
-        return tp.tokenize("340tree.rooted.TKK");
-    }
-
-    /**
-     * Get the phylogenetic tree.
-     *
-     * @return The phylogenetic tree.
-     */
-    public PhylogeneticTree getPT() {
-        return pt;
     }
 
     @Override
@@ -137,13 +107,6 @@ public class TreeController extends Controller<ScrollPane> {
      * Colors the selected strains after un-hover.
      */
     public void colorSelectedStrains() {
-        selectedStrains.forEach(this::applyCellHighlight);
-    }
-
-    /**
-     * Revert color on all cells.
-     */
-    public void revertColorOnAllCells() {
         selectedStrains.forEach(this::applyCellHighlight);
     }
 
@@ -523,15 +486,6 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void addSelectedStrain(LeafCell cell) {
         selectedStrains.add(cell);
-    }
-
-    /**
-     * Remove a strain from the selected strains list.
-     *
-     * @param cell the Cell to remove.
-     */
-    public void removeSelectedStrain(Cell cell) {
-        selectedStrains.remove(cell);
     }
 
     /**

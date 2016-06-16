@@ -6,8 +6,7 @@ import static org.junit.Assert.*;
 
 /**
  * Filtering class test
- * 
- * @author Niels Warnars
+ *
  */
 public class FilteringTest {
 
