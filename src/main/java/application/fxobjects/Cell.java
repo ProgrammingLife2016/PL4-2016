@@ -127,6 +127,11 @@ public abstract class Cell extends Pane {
         return relocatedX;
     }
 
+    /**
+     * Return whether a cell has been relocated.
+     *
+     * @return Whether a cell has been relocated.
+     */
     public boolean isRelocatedY() {
         return relocatedY;
     }

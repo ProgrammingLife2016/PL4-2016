@@ -9,8 +9,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.stage.Screen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -129,6 +127,7 @@ public class GraphLayout extends CellLayout {
      * A method to place a Node's children and if need be, recursively their children.
      *
      * @param cell - The parent node.
+     * @param childrenToDraw list of Cells that are ready to be drawn topologically.
      */
     @SuppressWarnings("checkstyle:methodlength")
     public void breadthFirstPlacing(Cell cell, List<Cell> childrenToDraw) {

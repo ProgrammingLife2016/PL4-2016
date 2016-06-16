@@ -400,7 +400,7 @@ public class MenuFactory {
             int finalIdx = idx;
             MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
                 String recentFile = recents.get(finalIdx);
-                setActionOnSelection(type, recentFile);});
+                setActionOnSelection(type, recentFile); });
             if (recents.get(finalIdx).equals("Empty")) {
                 recentMenuItem.setDisable(true);
             }

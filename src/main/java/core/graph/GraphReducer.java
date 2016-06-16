@@ -101,6 +101,11 @@ public final class GraphReducer {
         }
     }
 
+    /**
+     * Method to reduce the total amount of level maps
+     *
+     * @param amountToRemove the amount of level maps to remove
+     */
     public static void reduceZoomingLevels(int amountToRemove) {
         for (int k = 0; k < amountToRemove; k++) {
             int smallestDifference = Integer.MAX_VALUE;
