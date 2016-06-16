@@ -79,6 +79,7 @@ public class MenuFactory {
 
     /**
      * Method to enable and disable Filters in the Phylogenetic Tree.
+     *
      * @param x boolean, indicates whether a Button should be enabled or disabled
      */
     public static void toggleFilters(boolean x) {
@@ -121,7 +122,6 @@ public class MenuFactory {
      * @param x boolean
      */
     public static void toggleFileMenu(boolean x) {
-        loadAnnotations.setDisable(x);
         loadGenome.setDisable(x);
         loadMetadata.setDisable(x);
         loadPhylogeneticTree.setDisable(x);
@@ -206,6 +206,7 @@ public class MenuFactory {
     private void showShortCutMenu() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
 
         VBox content = new VBox();
 
@@ -213,6 +214,7 @@ public class MenuFactory {
         grid.setVgap(5);
         grid.setHgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
+
 
         grid.add(new Text("Ctrl + G"), 0, 0);
         grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
@@ -427,7 +429,8 @@ public class MenuFactory {
                 break;
             case NWK: fileTypeStr = "NWK";
                 break;
-            default: break;
+            default:
+                break;
         }
         return new Menu(format("Load recently opened %s file", fileTypeStr));
     }
@@ -443,19 +446,15 @@ public class MenuFactory {
             File file = new File(recentFile);
             File parentDir = file.getParentFile();
             switch (type) {
-                case GFF:
-                    mainController.initAnnotations(recentFile);
+                case GFF: mainController.initAnnotations(recentFile);
                     mainController.addRecentGFF(recentFile);
                     break;
-                case META_DATA:
-                    mainController.initMetadata(recentFile);
+                case META_DATA: mainController.initMetadata(recentFile);
                     mainController.addRecentMetadata(recentFile);
                     break;
-                case GFA:
-                    WindowFactory.createGFApopup(parentDir, file);
+                case GFA: WindowFactory.createGFApopup(parentDir, file);
                     break;
-                case NWK:
-                    WindowFactory.createNWKpopup(parentDir, file);
+                case NWK: WindowFactory.createNWKpopup(parentDir, file);
                     break;
                 default:
                     break;
@@ -801,7 +800,6 @@ public class MenuFactory {
      */
     private void initStreptomycinFilter() {
         CheckMenuItem str1 = new CheckMenuItem("R");
-
         str1.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
         CheckMenuItem str2 = new CheckMenuItem("S");
         str2.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_S, str2.isSelected()));
