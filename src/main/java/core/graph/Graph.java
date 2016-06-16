@@ -138,7 +138,7 @@ public class Graph {
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             System.out.println("amount of levelmaps: " + levelMaps.size());
-            currentGenomes = selectedGenomes;
+            currentGenomes = new ArrayList<>(selectedGenomes);
             return true;
         }
 

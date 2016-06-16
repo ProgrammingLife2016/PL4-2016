@@ -57,19 +57,18 @@ public final class GraphReducer {
      * @return A list of node maps with a decreasing amount of nodes.
      */
     public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta, List<String> genomesInFilter) {
+        startMapSize = startMap.size();
         determineParents(startMap);
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
+        filteredNodeMap = collapseFirstMap(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
-        startMapSize = startMap.size();
         int reduceAmount = 1;
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
-            System.out.println("prev map size: " + previousMapSize);
-            System.out.println("curr map size: " + currentMapSize);
 
             if (levelMaps.size() == 10) {
                 reduceZoomingLevels(reduceAmount);
@@ -107,8 +106,6 @@ public final class GraphReducer {
                 filteredNodeMap.remove(nodeId);
             }
         }
-        System.out.println("startmap size: "+ startMap.size());
-        System.out.println("filtered nodemap size: " + filteredNodeMap.size());
         return filteredNodeMap;
     }
 
@@ -119,6 +116,23 @@ public final class GraphReducer {
             }
         }
         return false;
+    }
+
+    private static HashMap<Integer, Node> collapseFirstMap(HashMap<Integer, Node> nodeMap) {
+        HashMap<Integer, Node> reducedMap = copyNodeMap(nodeMap);
+        for (int idx = 1; idx < startMapSize; idx++) {
+            Node parent = reducedMap.get(idx);
+            if (parent == null) {
+                continue;
+            }
+            boolean collapsed = true;
+            while (collapsed) {
+                 collapsed = collapseNodeSequence(reducedMap, parent, 0);
+            }
+        }
+
+        System.out.println("collapsefirstmap size: "+ reducedMap.size());
+        return reducedMap;
     }
 
     /**
@@ -137,8 +151,6 @@ public final class GraphReducer {
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
             int previousMapSize2 = levelMaps.get(j - 1).size();
             int currentMapSize2 = levelMap2.size();
-            System.out.println("prev map size: " + previousMapSize2);
-            System.out.println("curr map size: " + currentMapSize2);
             if (previousMapSize2 - currentMapSize2 == 0) {
                 levelMaps.set(j - 1, levelMap2);
                 maxDepth += 5;
@@ -246,15 +258,14 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            collapseBubble(nodeMap, parent, zoomLevel);
-            collapseIndel(nodeMap, parent);
-            if (zoomLevel > 0) {
-                boolean collapsed = true;
-                int collapseCount = 0;
-                while (collapsed && collapseCount < 6) {
-                    collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
-                    collapseCount++;
-                }
+            boolean collapsed = true;
+            int collapseCount = 0;
+            while (collapsed && collapseCount < 6) {
+                collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
+            }
+            if (zoomLevel != 0) {
+                collapseBubble(nodeMap, parent, zoomLevel);
+                collapseIndel(nodeMap, parent);
             }
         }
 
@@ -367,7 +378,6 @@ public final class GraphReducer {
     public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
         // Links must be present from parent --> child
         if (parent == null) { return false; }
-
         List<Integer> childrenIds = parent.getLinks(nodeMap);
 
         //Parent may only have one child.
