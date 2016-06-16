@@ -470,7 +470,6 @@ public class MainController extends Controller<BorderPane> {
                     if (newAnn == null || newAnn.getSpannedNodes() == null) { return; }
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
-
                     if (newAnn.getSpannedNodes().get(0) != null) {
                         int i = newAnn.getSpannedNodes().get(0).getId();
                         graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()

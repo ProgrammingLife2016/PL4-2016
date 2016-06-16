@@ -12,12 +12,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.spy;
 
 /**
- * Test suite for the IndelCell class.
+ * Test suite for the CollectionCell class.
  *
  * @author Niels Warnars
  */
-public class IndelCellTest {
-    IndelCell c;
+public class ComplexCellTest {
+    ComplexCell c;
     StackPane pane;
 
     /**
@@ -28,7 +28,7 @@ public class IndelCellTest {
         pane = spy(new StackPane());
         Text text = spy(new Text());
 
-        c = new IndelCell(1, 1, pane, text);
+        c = new ComplexCell(1, 1, pane, text);
     }
 
     /**
@@ -36,7 +36,7 @@ public class IndelCellTest {
      */
     @Test
     public void testGetType() {
-        assertEquals(CellType.INDEL, c.getType());
+        assertEquals(CellType.COMPLEX, c.getType());
     }
 
     /**
@@ -52,7 +52,7 @@ public class IndelCellTest {
 
         c.resetFocus();
 
-        assertEquals(Color.RED, shape.getStroke());
+        assertEquals(Color.DARKRED, shape.getStroke());
         assertEquals(1, shape.getStrokeWidth(), 0.0001);
     }
 }

@@ -10,6 +10,7 @@ import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

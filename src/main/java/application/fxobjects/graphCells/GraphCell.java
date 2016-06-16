@@ -24,8 +24,9 @@ public abstract class GraphCell extends Cell {
     }
 
     /**
-     * Returns the cellshape.
-     * @return the cellshape.
+     * Returns the cell shape.
+     *
+     * @return the cell shape.
      */
     public Shape getCellShape() { return shape; }
 
