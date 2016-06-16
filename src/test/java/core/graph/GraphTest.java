@@ -37,7 +37,7 @@ public class GraphTest {
         when(mockedModel.addCell(anyInt(), anyString(),
                 anyInt(), any(CellType.class))).thenReturn(true);
 
-        HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
         nodeMap.put(1, new Node(1, CellType.RECTANGLE, "", 1));
         nodeMap.put(2, new Node(2, CellType.BUBBLE, "", 2));
         nodeMap.put(3, new Node(3, CellType.INDEL, "", 3));

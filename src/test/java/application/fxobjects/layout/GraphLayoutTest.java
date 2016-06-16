@@ -13,7 +13,6 @@ import static org.mockito.Mockito.spy;
 /**
  * Test class for GraphLayout.java.
  *
- * @author Arthur Breurkes.
  * @since 04-05-2016
  * @version 1.0
  */
