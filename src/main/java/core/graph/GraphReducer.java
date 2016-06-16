@@ -54,9 +54,11 @@ public final class GraphReducer {
      *
      * @param startMap An uncollapsed node map.
      * @param minDelta The minimum reduction necessary to continue the reducing.
+     * @param genomesInFilter the genomes in this filter.
      * @return A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta, List<String> genomesInFilter) {
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap,
+                                                               int minDelta, List<String> genomesInFilter) {
         startMapSize = startMap.size();
         determineParents(startMap);
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
@@ -89,11 +91,21 @@ public final class GraphReducer {
         }
     }
 
-    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap, List<String> genomesInFilter) {
+    /**
+     * Generates a filtered map
+     *
+     * @param startMap the startMap.
+     * @param genomesInFilter the genomes in the filter.
+     * @return a filtered map.
+     */
+    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap,
+                                                             List<String> genomesInFilter) {
         HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
         for (int nodeId : startMap.keySet()) {
             Node node = filteredNodeMap.get(nodeId);
-            if(node == null ) { continue; }
+            if (node == null) {
+                continue;
+            }
             if (!intersects(node.getGenomes(), genomesInFilter)) {
                 for (int parentId : node.getParents()) {
                     Node parent = filteredNodeMap.get(parentId);
@@ -131,7 +143,6 @@ public final class GraphReducer {
             }
         }
 
-        System.out.println("collapsefirstmap size: "+ reducedMap.size());
         return reducedMap;
     }
 

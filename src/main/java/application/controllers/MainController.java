@@ -382,6 +382,7 @@ public class MainController extends Controller<BorderPane> {
      * If selections are made in the phylogenetic tree,
      * this method will visualize/highlight them specifically.
      *
+     * @param ref the references to highlight.
      * @param s a List of selected strains.
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
