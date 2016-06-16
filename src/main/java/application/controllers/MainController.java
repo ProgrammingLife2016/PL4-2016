@@ -172,7 +172,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to set whether the MetaData is loaded or not
-     * @param x
+     * @param x boolean
      */
     public void setMetaDataLoaded(boolean x) {
         metaDataLoaded = x;
