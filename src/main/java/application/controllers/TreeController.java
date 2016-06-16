@@ -469,18 +469,21 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void selectAll() {
         root.getChildren().stream().filter(c -> c instanceof LeafCell).forEach(c -> {
-            selectedStrains.add(((LeafCell) c));
-            applyCellHighlight((LeafCell) c);
+            if (!selectedStrains.contains(c) && ((LeafCell) c).getName().contains("TKK")) {
+                selectedStrains.add(((LeafCell) c));
+                applyCellHighlight((LeafCell) c);
+            }
         });
         modifyGraphOptions();
     }
 
     /**
      * Put all info of a TreeCell in the infoBox
+     *
      * @param cell the cell of which we want info
      */
     private void updateMetaInfo(LeafCell cell) {
-        if(cell.getName().contains("TKK")) {
+        if (cell.getName().contains("TKK")) {
             StringBuilder builder = new StringBuilder();
             Genome genome = MetaDataParser.getMetadata().get(cell.getName());
 
@@ -515,6 +518,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Add a strain to the selected strains list.
+     *
      * @param cell the Cell to add.
      */
     public void addSelectedStrain(LeafCell cell) {
@@ -523,6 +527,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Remove a strain from the selected strains list.
+     *
      * @param cell the Cell to remove.
      */
     public void removeSelectedStrain(Cell cell) {
@@ -538,6 +543,7 @@ public class TreeController extends Controller<ScrollPane> {
 
     /**
      * Getter method for the maximum Y value.
+     *
      * @return the max Y value.
      */
     public double getMaxY() {
