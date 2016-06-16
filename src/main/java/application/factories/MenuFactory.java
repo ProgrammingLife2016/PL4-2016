@@ -270,34 +270,28 @@ public class MenuFactory {
      * @return the View-Menu
      */
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Show Graph", null, event -> {
+        showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
             if(mainController.getTreeController().getSelectedGenomes().size() == 0) {
                 JOptionPane.showMessageDialog(null, "Please select some genomes to display in the Graph.", "Alert",1);
             }
             else {
-                if (mainController.getFiltering().isFiltering()) {
-                    mainController.strainSelection(mainController.getLoadedGenomeNames());
-                } else {
-                    mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-                }
+                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
             }
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain", null, event -> {
-            mainController.getGraphController().getGraph().reset();
-            mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes());
-        });
-        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
-            mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
-        });
+//        showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain", null, event -> {
+//            mainController.getGraphController().getGraph().reset();
+//            mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes());
+//        });
+//        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
+//            mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
+//        });
 
-        resetView = initMenuItem("Reset", null, event -> {
-            handleReset();
-        });
-        showSelectedStrains.setDisable(true);
-        showOnlyThisStrain.setDisable(true);
+        resetView = initMenuItem("Reset", null, event -> handleReset());
+//        showSelectedStrains.setDisable(true);
+//        showOnlyThisStrain.setDisable(true);
         return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
-                showSelectedStrains, showOnlyThisStrain, new SeparatorMenuItem(), resetView);
+                new SeparatorMenuItem(), resetView);
     }
 
     /**
