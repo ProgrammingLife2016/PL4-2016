@@ -109,6 +109,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initGraph() {
         initGUI();
+        graphController.getGraph().findAllGenomes();
        // currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
        // fillGraph(new ArrayList<>(), new ArrayList<>());
@@ -405,8 +406,8 @@ public class MainController extends Controller<BorderPane> {
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
         fillGraph(new ArrayList<>(), s);
-
         setListItems();
+        initGUI();
     }
 
     /**

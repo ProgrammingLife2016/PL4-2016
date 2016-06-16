@@ -134,11 +134,14 @@ public class Graph {
     }
 
     public boolean changeLevelMaps(List<String> selectedGenomes) {
+        System.out.println("amount of selected genomes: "+ selectedGenomes.size());
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
+            System.out.println("amount of levelmaps: " + levelMaps.size());
             currentGenomes = selectedGenomes;
             return true;
         }
+
         return false;
     }
 
@@ -210,19 +213,16 @@ public class Graph {
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-
-        //Root Node
-        Node root = nodeMap.get(1);
-        allGenomes.addAll(root.getGenomes());
-        if (filtering) { //Draw selected references
-            // We are now drawing only the selected items.
-            generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
-        } else { // Draw all nodes.
+//
+//        //Root Node
+//        Node root = nodeMap.get(1);
+//        allGenomes.addAll(root.getGenomes());
+            // Draw all nodes.
             //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), root.getType());
+//            toret.addCell(root.getId(), root.getSequence(),
+//                    root.getNucleotides(), root.getType());
             genomes = new ArrayList<>();
-            genomes.addAll(root.getGenomes());
+//            genomes.addAll(root.getGenomes());
 
             List<Integer> sortedNodeIds = topologicalSort(nodeMap);
             for (int nodeId : sortedNodeIds) {
@@ -234,7 +234,6 @@ public class Graph {
                         forEach(genomes::add);
                 addCell(nodeMap, ref, toret, node);
             }
-        }
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
