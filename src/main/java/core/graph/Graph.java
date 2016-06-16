@@ -672,6 +672,17 @@ public class Graph {
     }
 
     /**
+     * Reduce the list of selected genomes to genomes available in the loaded graph.
+     *
+     * @param genomes selected genomes.
+     * @return the reduced list of genomes.
+     */
+    public List<String> reduceGenomes(List<String> genomes) {
+        return genomes.stream().filter(
+                this.allGenomes::contains).collect(Collectors.toList());
+    }
+
+    /**
      * Gets whether screen elements should be initialized.
      *
      * @return Whether screen elements should be initialized.
