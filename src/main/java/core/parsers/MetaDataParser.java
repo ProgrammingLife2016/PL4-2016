@@ -111,87 +111,108 @@ public final class MetaDataParser {
      * @param row the row to be parsed.
      * @param metaMap map to put results in.
      */
-    public static void parseRow(Row row, TreeMap<String, Genome> metaMap) {
+    private static void parseRow(Row row, TreeMap<String, Genome> metaMap) {
         if (row.getCell(0) != null && row.getCell(0).getStringCellValue().contains("TKK")) {
-            String name = row.getCell(0).getStringCellValue();
-            Genome gen = new Genome(name);
-            for (int i = 1; i < 28; i++) {
-                switchRow1(i, row, gen);
-                switchRow2(i, row, gen);
-                metaMap.put(name, gen);
+            switchRow1(row, metaMap);
+            switchRow2(row, metaMap);
+            switchRow3(row, metaMap);
+        }
+    }
+
+
+    /**
+     * Check all columns of a row.
+     * @param row - the row
+     * @param metaMap - the metamap
+     */
+    private static void switchRow1(Row row, TreeMap<String, Genome> metaMap) {
+        String name = row.getCell(0).getStringCellValue();
+        Genome gen = new Genome(name);
+        for (int i = 1; i < 10; i++) {
+            switch (i) {
+                case 1:
+                    if (row.getCell(1).getCellType() == 0) {
+                        gen.setAge((int) row.getCell(1).getNumericCellValue());
+                    }
+                    break;
+                case 2: gen.setSex(row.getCell(2).getStringCellValue());
+                    break;
+                case 3: gen.setHiv(row.getCell(3).getStringCellValue());
+                    break;
+                case 4: gen.setCohort(row.getCell(4).getStringCellValue());
+                    break;
+                case 6: gen.setStudyDistrict(row.getCell(6).getStringCellValue());
+                    break;
+                case 7: gen.setSpecimenType(row.getCell(7).getStringCellValue());
+                    break;
+                case 8: gen.setSmearStatus(row.getCell(8).getStringCellValue());
+                    break;
+                default: break;
             }
-        }
-    }
-
-
-    /**
-     * Check all columns of a row.
-     * @param i - index of column
-     * @param row - the row
-     * @param gen - genomes
-     */
-    private static void switchRow1(int i, Row row, Genome gen) {
-        switch (i) {
-            case 1:
-                if (row.getCell(1).getCellType() == 0) {
-                    gen.setAge((int) row.getCell(1).getNumericCellValue());
-                }
-                break;
-            case 2: gen.setSex(row.getCell(2).getStringCellValue());
-                break;
-            case 3: gen.setHiv(row.getCell(3).getStringCellValue());
-                break;
-            case 4: gen.setCohort(row.getCell(4).getStringCellValue());
-                break;
-            case 6: gen.setStudyDistrict(row.getCell(6).getStringCellValue());
-                break;
-            case 7: gen.setSpecimenType(row.getCell(7).getStringCellValue());
-                break;
-            case 8: gen.setSmearStatus(row.getCell(8).getStringCellValue());
-                break;
-            case 10: gen.setIsolation(row.getCell(10).getStringCellValue());
-                break;
-            case 11: gen.setPhenoDST(row.getCell(11).getStringCellValue());
-                break;
-            case 12: gen.setCapreomycin(row.getCell(12).getStringCellValue());
-                break;
-            case 13: gen.setEthambutol(row.getCell(13).getStringCellValue());
-                break;
-            default: break;
+            metaMap.put(name, gen);
         }
     }
 
     /**
      * Check all columns of a row.
-     * @param i - index of column
      * @param row - the row
-     * @param gen - genomes
+     * @param metaMap - the metamap
      */
-    private static void switchRow2(int i, Row row, Genome gen) {
-        switch (i) {
-            case 14: gen.setEthionamide(row.getCell(14).getStringCellValue());
-                break;
-            case 16: gen.setIsoniazid(row.getCell(15).getStringCellValue());
-                break;
-            case 17: gen.setKanamycin(row.getCell(16).getStringCellValue());
-                break;
-            case 18: gen.setPyrazinamide(row.getCell(18).getStringCellValue());
-                break;
-            case 19: gen.setOfloxacin(row.getCell(19).getStringCellValue());
-                break;
-            case 20: gen.setRifampin(row.getCell(20).getStringCellValue());
-                break;
-            case 21: gen.setStreptomycin(row.getCell(21).getStringCellValue());
-                break;
-            case 22: gen.setSpoligotype(row.getCell(22).getStringCellValue());
-                break;
-            case 23: gen.setLineage(detLineage(row.getCell(23).getStringCellValue()));
-                break;
-            case 24: gen.setGenoDST(row.getCell(24).getStringCellValue());
-                break;
-            case 26: gen.setTf(row.getCell(26).getStringCellValue());
-                break;
-            default: break;
+    private static void switchRow2(Row row, TreeMap<String, Genome> metaMap) {
+        String name = row.getCell(0).getStringCellValue();
+        Genome gen = new Genome(name);
+        for (int i = 7; i < 21; i++) {
+            switch (i) {
+                case 10: gen.setIsolation(row.getCell(10).getStringCellValue());
+                    break;
+                case 11: gen.setPhenoDST(row.getCell(11).getStringCellValue());
+                    break;
+                case 12: gen.setCapreomycin(row.getCell(12).getStringCellValue());
+                    break;
+                case 13: gen.setEthambutol(row.getCell(13).getStringCellValue());
+                    break;
+                case 14: gen.setEthionamide(row.getCell(14).getStringCellValue());
+                    break;
+                case 16: gen.setIsoniazid(row.getCell(15).getStringCellValue());
+                    break;
+                case 17: gen.setKanamycin(row.getCell(16).getStringCellValue());
+                    break;
+                case 18: gen.setPyrazinamide(row.getCell(18).getStringCellValue());
+                    break;
+                case 19: gen.setOfloxacin(row.getCell(19).getStringCellValue());
+                    break;
+
+                default: break;
+            }
+            metaMap.put(name, gen);
+        }
+    }
+
+    /**
+     * Check all columns of a row.
+     * @param row - the row
+     * @param metaMap - the metamap
+     */
+    private static void switchRow3(Row row, TreeMap<String, Genome> metaMap) {
+        String name = row.getCell(0).getStringCellValue();
+        Genome gen = new Genome(name);
+        for (int i = 17; i < 28; i++) {
+            switch (i) {
+                case 20: gen.setRifampin(row.getCell(20).getStringCellValue());
+                    break;
+                case 21: gen.setStreptomycin(row.getCell(21).getStringCellValue());
+                    break;
+                case 22: gen.setSpoligotype(row.getCell(22).getStringCellValue());
+                    break;
+                case 23: gen.setLineage(detLineage(row.getCell(23).getStringCellValue()));
+                    break;
+                case 24: gen.setGenoDST(row.getCell(24).getStringCellValue());
+                    break;
+                case 26: gen.setTf(row.getCell(26).getStringCellValue());
+                    break;
+                default: break;
+            }
+            metaMap.put(name, gen);
         }
     }
 }
