@@ -5,7 +5,7 @@ import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import application.fxobjects.layout.CellLayout;
 import application.fxobjects.layout.TreeLayout;
-import application.fxobjects.treeCells.LeafCell;
+import core.cells.LeafCell;
 import application.mouseHandlers.TreeMouseHandling;
 import core.genome.Genome;
 import core.parsers.MetaDataParser;

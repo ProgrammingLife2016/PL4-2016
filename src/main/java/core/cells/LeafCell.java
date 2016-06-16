@@ -1,4 +1,4 @@
-package application.fxobjects.treeCells;
+package core.cells;
 
 import application.fxobjects.Cell;
 import core.parsers.MetaDataParser;
