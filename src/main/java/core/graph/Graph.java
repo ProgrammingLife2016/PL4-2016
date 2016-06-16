@@ -123,7 +123,6 @@ public class Graph {
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    System.out.println("!=");
                     current = generateModel(ref, depth);
 
                     //LoadOneUp is only needed when we do not start on the top level.
@@ -344,8 +343,6 @@ public class Graph {
                     root.getNucleotides(), CellType.RECTANGLE);
         }
 
-        System.out.println("currentRef size:" + currentRef.size());
-        System.out.println("ref size: " + ref.size());
         // In this case we know that the genomes in the graph are only this ones.
         genomes = currentGenomes;
 
@@ -370,7 +367,6 @@ public class Graph {
     }
 
     /**
-<<<<<<< HEAD
      * Method to add Edges to a cell.
      * @param to the target node
      * @param from the source node
