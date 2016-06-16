@@ -108,11 +108,12 @@ public class MainController extends Controller<BorderPane> {
      * Initializes the graph.
      */
     public void initGraph() {
-        currentView = graphController.getGraph().getLevelMaps().size() - 1;
+        initGUI();
+       // currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
-        fillGraph(new ArrayList<>(), new ArrayList<>());
+       // fillGraph(new ArrayList<>(), new ArrayList<>());
 
-        graphController.getGraph().getModel().matchNodesAndAnnotations();
+      //  graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
     /**
@@ -375,12 +376,11 @@ public class MainController extends Controller<BorderPane> {
         inGraph = true;
 
         // Apply the selected genomes
-        graphController.getGraph().setCurrentGenomes(selectedGenomes);
+        graphController.getGraph().changeLevelMaps(selectedGenomes);
         graphController.update(ref, currentView);
         graphController.getZoomBox().fillZoomBox(count == -1);
 
         count++;
-        initGUI();
     }
 
     /**

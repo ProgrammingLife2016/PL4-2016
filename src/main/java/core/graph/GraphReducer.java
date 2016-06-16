@@ -19,10 +19,11 @@ public final class GraphReducer {
      * Class constructor
      */
     private GraphReducer() {
+
     }
 
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
-    private static int startMapSize = 0;
+    private static int firstMapSize = 0;
 
     /**
      * Give all nodes a list of its parents.
@@ -55,10 +56,12 @@ public final class GraphReducer {
      * @param minDelta The minimum reduction necessary to continue the reducing.
      * @return A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta, List<String> genomesInFilter) {
         determineParents(startMap);
-        levelMaps.add(startMap);
-        startMapSize = startMap.size();
+        HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
+        determineParents(filteredNodeMap);
+        levelMaps.add(filteredNodeMap);
+        firstMapSize = filteredNodeMap.size();
         int reduceAmount = 5;
 
         for (int i = 1;; i++) {
@@ -83,6 +86,35 @@ public final class GraphReducer {
                 levelMaps.add(levelMap);
             }
         }
+    }
+
+    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap, List<String> genomesInFilter) {
+        HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
+        for (int nodeId : startMap.keySet()) {
+            Node node = filteredNodeMap.get(nodeId);
+            if(node == null ) { continue; }
+            if (!intersects(node.getGenomes(), genomesInFilter)) {
+                for (int parentId : node.getParents()) {
+                    Node parent = filteredNodeMap.get(parentId);
+                    parent.removeLink(nodeId);
+                }
+                for (int childId : node.getLinks()) {
+                    Node child = filteredNodeMap.get(childId);
+                    child.removeParent(nodeId);
+                }
+                filteredNodeMap.remove(nodeId);
+            }
+        }
+        return filteredNodeMap;
+    }
+
+    private static boolean intersects(List<String> l1, List<String> l2) {
+        for (String s : l1) {
+            if (l2.contains(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -145,7 +177,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx < startMapSize; idx++) {
+        for (int idx = 1; idx < firstMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -203,7 +235,7 @@ public final class GraphReducer {
         HashMap<Integer, Node> nodeMap = copyNodeMap(map);
         determineParents(nodeMap);
 
-        for (int idx = 1; idx < startMapSize; idx++) {
+        for (int idx = 1; idx < firstMapSize; idx++) {
             Node parent = nodeMap.get(idx);
             if (parent == null) {
                 continue;
@@ -507,9 +539,9 @@ public final class GraphReducer {
     /**
      * Set the start map size.
      *
-     * @param startMapSize The start map sie.
+     * @param firstMapSize The start map sie.
      */
-    public static void setStartMapSize(int startMapSize) {
-        GraphReducer.startMapSize = startMapSize;
+    public static void setFirstMapSize(int firstMapSize) {
+        GraphReducer.firstMapSize = firstMapSize;
     }
 }

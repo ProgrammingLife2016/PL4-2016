@@ -316,7 +316,7 @@ public class GraphReducerTest {
         nodeMap.get(5).setLinks(new ArrayList<>(Arrays.asList(7)));
         nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
 
-        GraphReducer.setStartMapSize(nodeMap.size());
+        GraphReducer.setFirstMapSize(nodeMap.size());
         nodeMap = GraphReducer.collapse(nodeMap, 0);
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
         assertEquals(2, nodeMap.get(2).getCollapseLevel());

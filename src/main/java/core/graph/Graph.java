@@ -83,7 +83,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
-            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,6 +131,15 @@ public class Graph {
         }
         currentInt = depth;
         return true;
+    }
+
+    public boolean changeLevelMaps(List<String> selectedGenomes) {
+        if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
+            levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
+            currentGenomes = selectedGenomes;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -231,6 +239,17 @@ public class Graph {
             toret.setLayout();
         }
         return toret;
+    }
+
+    public ArrayList<String> findAllGenomes() {
+        ArrayList<String> allGenomes = new ArrayList<>();
+        for (int nodeId : startMap.keySet()) {
+            Node node = startMap.get(nodeId);
+            node.getGenomes().stream().filter(s -> !allGenomes.contains(s)).
+                    forEach(allGenomes::add);
+        }
+        this.allGenomes = allGenomes;
+        return allGenomes;
     }
 
     /**
