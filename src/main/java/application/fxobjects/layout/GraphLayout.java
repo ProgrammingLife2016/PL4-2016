@@ -28,15 +28,13 @@ public class GraphLayout extends CellLayout {
     private int centerY;
 
     private double maxWidth;
+    private double minWidth;
     private double maxHeight;
 
     private Cell leftMost;
     private Cell rightMost;
 
     private double tileWidth;
-
-
-    private static final int BASE_X = 100;
 
     /**
      * Class constructor.
@@ -53,6 +51,7 @@ public class GraphLayout extends CellLayout {
         this.model = model;
         this.centerY = middle;
         this.maxWidth = 0;
+        this.minWidth = Integer.MAX_VALUE;
 
         this.maxHeight = 0;
     }
@@ -60,37 +59,13 @@ public class GraphLayout extends CellLayout {
     /**
      * Method to align all nodes properly.
      */
-    @SuppressWarnings("checkstyle:methodlength")
     public void execute() {
         tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
-        int minWidth = Integer.MAX_VALUE;
-
         List<Cell> cells = model.getAddedCells();
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
             if (!cell.isRelocatedX()) {
-                currentX += offset;
-                if (currentX > maxWidth) {
-                    maxWidth = currentX;
-                    rightMost = cell;
-                }
-                if (currentX < minWidth) {
-                    minWidth = currentX;
-                    leftMost = cell;
-                }
-
-                if (cell.isRelocatedY()) {
-                    cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
-                            cell.getLayoutY());
-                } else {
-                    cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
-                            currentY - (cell.getCellShape().getLayoutBounds().getWidth() / 2));
-                }
-                cell.setRelocatedX(true);
-                cell.setRelocatedY(true);
-
-                currentX += offset + cell.getCellShape().getLayoutBounds().getWidth() / 2;
-
+                placeCells(cell);
                 List<Cell> childrenToDraw = new ArrayList<>(cell.getCellChildren());
 
                 for (Cell child : cell.getCellChildren()) {
@@ -100,15 +75,12 @@ public class GraphLayout extends CellLayout {
                         }
                     }
                 }
-
                 //only continue when there is more than 1 child to draw
                 cellCount = cell.getCellChildren().size();
                 if (cellCount > 1) {
                     breadthFirstPlacing(cell, childrenToDraw);
                 }
-
             }
-
             int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
             model.addCellInTile(tile, c);
 
@@ -117,8 +89,34 @@ public class GraphLayout extends CellLayout {
                     model.addLongEdge(e);
                 }
             }
-
         }
+    }
+
+    /**
+     * Place the cell in the graph
+     * @param cell cell to be placed
+     */
+    private void placeCells(GraphCell cell) {
+        currentX += offset;
+        if (currentX > maxWidth) {
+            maxWidth = currentX;
+            rightMost = cell;
+        }
+        if (currentX < minWidth) {
+            minWidth = currentX;
+            leftMost = cell;
+        }
+
+        if (cell.isRelocatedY()) {
+            cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2), cell.getLayoutY());
+        } else {
+            cell.relocate(currentX - (cell.getCellShape().getLayoutBounds().getWidth() / 2),
+                    currentY - (cell.getCellShape().getLayoutBounds().getWidth() / 2));
+        }
+        cell.setRelocatedX(true);
+        cell.setRelocatedY(true);
+
+        currentX += offset + cell.getCellShape().getLayoutBounds().getWidth() / 2;
     }
 
 
@@ -129,8 +127,7 @@ public class GraphLayout extends CellLayout {
      * @param cell - The parent node.
      * @param childrenToDraw list of Cells that are ready to be drawn topologically.
      */
-    @SuppressWarnings("checkstyle:methodlength")
-    public void breadthFirstPlacing(Cell cell, List<Cell> childrenToDraw) {
+    private void breadthFirstPlacing(Cell cell, List<Cell> childrenToDraw) {
         int yOffset = 2 * offset; //y-offset between nodes on the same x-level
         int oddChildOffset = 0; //initial offset when there are an odd number of children
         int evenChildOffset = yOffset / 2; //offset for an even amount of children
@@ -146,8 +143,7 @@ public class GraphLayout extends CellLayout {
                     if (yCoordinate > maxHeight) {
                         maxHeight = yCoordinate;
                     }
-                    child.relocate(currentX
-                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
+                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
                     evenChildOffset = (yOffset / 2) * modifier;
                     modifier *= -1;
                     if (modifier > 0) {
@@ -162,9 +158,7 @@ public class GraphLayout extends CellLayout {
                     if (yCoordinate > maxHeight) {
                         maxHeight = yCoordinate;
                     }
-                    child.relocate(currentX
-                                    - (child.getCellShape().getLayoutBounds().getWidth() / 2),
-                            yCoordinate);
+                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
                     oddChildOffset = yOffset * modifier;
                     modifier *= -1;
                     if (modifier < 0) {
@@ -177,6 +171,8 @@ public class GraphLayout extends CellLayout {
             child.setRelocatedY(true);
         }
     }
+
+
 
     /**
      * Getter method for the offset.
