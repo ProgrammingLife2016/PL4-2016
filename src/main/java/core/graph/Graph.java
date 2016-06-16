@@ -279,42 +279,51 @@ public class Graph {
      * @return the list of topologically sorted IDs
      */
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
-        //S <- Set of all nodes with no incoming edges
-        HashMap<Integer, Node> copyNodeMap = new HashMap<>();
-        copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        //Copy the nodeMap to not make any changes to our original map.
+        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        //nodesWithoutParent <-List of all nodes with no incoming edges
         LinkedList<Node> nodesWithoutParent = new LinkedList<>();
-        List<Integer> sortedNodeIds = new ArrayList<>();
         for (int key : nodeMap.keySet()) {
             Node node = nodeMap.get(key);
             //Check whether the node has no parents
             if (node.getParents().size() == 0) {
-                //Add the node to the stack of nodes without parent
+                //Add the node to the list of nodes without parent
                 nodesWithoutParent.addLast(node);
             }
         }
+        return topologicalSort(nodesWithoutParent, copyNodeMap);
+    }
 
-        //while S is non-empty do
+    /**
+     * Traverses the graph and adds all Node IDs horizontally
+     * @param nodesWithoutParent list of starting nodes
+     * @param nodeMap a copy of the nodemap the nodes reside in
+     * @return
+     */
+    private List<Integer> topologicalSort(LinkedList<Node> nodesWithoutParent, HashMap<Integer, Node> nodeMap) {
+        //Empty list to put all node IDs in topologically sorted order.
+        List<Integer> sortedNodeIds = new ArrayList<>();
+        //while still nodes without parent unvisited
         while (!nodesWithoutParent.isEmpty()) {
-            //remove a node n from S
+            //remove a node n from the list
             Node n = nodesWithoutParent.getFirst();
             nodesWithoutParent.remove(n);
 
-            //insert n into L
+            //insert ID of n into the sorted list
             sortedNodeIds.add(n.getId());
 
             //for each node m with an edge e from n to m do
             for (int childId : n.getLinks()) {
-                //remove edge e from the graph
-                Node m = copyNodeMap.get(childId);
+                Node m = nodeMap.get(childId);
                 m.removeParent(n.getId()); //Remove edge from m
 
-                //if m has no other incoming edges then insert m into S
+                //if m has no other incoming edges then insert m into the linked list.
                 if (m.getParents().size() == 0) {
                     nodesWithoutParent.addLast(m);
                 }
             }
         }
-
+        //return the sorted list
         return sortedNodeIds;
     }
 
