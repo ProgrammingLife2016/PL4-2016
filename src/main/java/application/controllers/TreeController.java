@@ -90,7 +90,6 @@ public class TreeController extends Controller<ScrollPane> {
             } else {
                 selectedStrains.add(e);
             }
-            modifyGraphOptions();
         });
     }
 
@@ -385,23 +384,6 @@ public class TreeController extends Controller<ScrollPane> {
     }
 
     /**
-     * Modifies the option on the MenuBarItem that shows the graph with the selected strain(s).
-     */
-    protected void modifyGraphOptions() {
-        int s = selectedStrains.size();
-        if (s == 0) {
-            MenuFactory.showOnlyThisStrain.setDisable(true);
-            MenuFactory.showSelectedStrains.setDisable(true);
-        } else if (s == 1) {
-            MenuFactory.showOnlyThisStrain.setDisable(false);
-            MenuFactory.showSelectedStrains.setDisable(false);
-        } else {
-            MenuFactory.showOnlyThisStrain.setDisable(true);
-            MenuFactory.showSelectedStrains.setDisable(false);
-        }
-    }
-
-    /**
      * Method that selects Cells by its name.
      *
      * @param name the name to search for.
@@ -423,7 +405,6 @@ public class TreeController extends Controller<ScrollPane> {
     public void clearSelection() {
         selectedStrains.forEach(this::revertCellHighlight);
         selectedStrains.clear();
-        modifyGraphOptions();
 
     }
 
@@ -437,7 +418,6 @@ public class TreeController extends Controller<ScrollPane> {
                 applyCellHighlight((LeafCell) c);
             }
         });
-        modifyGraphOptions();
     }
 
     /**

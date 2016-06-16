@@ -405,9 +405,9 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param s a List of selected strains.
      */
-    public void strainSelection(List<String> s) {
+    public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(new ArrayList<>(), s);
+        fillGraph(ref, s);
         currentView = graphController.getGraph().getLevelMaps().size() - 1;
 
         setListItems();
@@ -646,7 +646,9 @@ public class MainController extends Controller<BorderPane> {
                 highlights.add((String) o);
             }
 
-            fillGraph(highlights, graphController.getGenomes());
+            //fillGraph(highlights, graphController.getGenomes());
+            strainSelection(highlights, getTreeController().getSelectedGenomes());
+            System.out.println("Select");
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick().getCellId());
@@ -747,14 +749,13 @@ public class MainController extends Controller<BorderPane> {
         );
 
         if (inGraph) {
-            strainSelection(getLoadedGenomeNames());
+            strainSelection(new ArrayList<>(), getLoadedGenomeNames());
             StringBuilder builder = new StringBuilder();
             appendFilterNames(builder);
             listFactory.modifyNodeInfo(builder.toString());
         }
 
         treeController.colorSelectedStrains();
-        treeController.modifyGraphOptions();
     }
 
     /**

@@ -39,7 +39,7 @@ public class MenuFactory {
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
-            shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence;
 
     private MainController mainController;
 
@@ -275,7 +275,8 @@ public class MenuFactory {
                 JOptionPane.showMessageDialog(null, "Please select some genomes to display in the Graph.", "Alert",1);
             }
             else {
-                mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
+                mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
+                        mainController.getTreeController().getSelectedGenomes());
             }
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
@@ -300,7 +301,7 @@ public class MenuFactory {
     public void handleReset() {
         mainController.getGraphController().getGraph().reset();
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
-        mainController.strainSelection(mainController.getLoadedGenomeNames());
+        mainController.strainSelection(new ArrayList<>(), mainController.getLoadedGenomeNames());
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();
