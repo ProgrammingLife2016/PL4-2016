@@ -3,6 +3,7 @@ package application.controllers;
 import application.factories.LegendFactory;
 import application.factories.ListFactory;
 import application.factories.MenuFactory;
+import application.factories.WindowFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
 import application.fxobjects.treeCells.LeafCell;
@@ -64,6 +65,7 @@ public class MainController extends Controller<BorderPane> {
     private Filtering filtering;
     private boolean inGraph;
     private boolean metaDataLoaded;
+    private boolean annotationsLoaded;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -71,7 +73,6 @@ public class MainController extends Controller<BorderPane> {
     private HBox hBox;
 
     private Stack<String> mostRecentGFF;
-    private Stack<String> mostRecentMetadata;
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
 
@@ -85,15 +86,14 @@ public class MainController extends Controller<BorderPane> {
         this.count = -1;
         this.secondCount = -1;
         this.mostRecentGFF = new Stack<>();
-        this.mostRecentMetadata = new Stack<>();
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
         this.filtering = new Filtering();
         this.metaDataLoaded = false;
+        this.annotationsLoaded = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-        checkMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
 
         createMenu(false, false);
@@ -146,6 +146,8 @@ public class MainController extends Controller<BorderPane> {
     public void initAnnotations(String path) {
         List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
 
+        setAnnotationsLoaded(true);
+
         graphController.getGraph().setAnnotations(annotations);
         graphController.getGraph().getModel().matchNodesAndAnnotations();
 
@@ -164,6 +166,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to check whether the MetaData is loaded or not
+     *
      * @return boolean
      */
     public boolean isMetaDataLoaded() {
@@ -172,10 +175,29 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to set whether the MetaData is loaded or not
+     *
      * @param x
      */
     public void setMetaDataLoaded(boolean x) {
-        metaDataLoaded = x;
+        this.metaDataLoaded = x;
+    }
+
+    /**
+     * Method the check whether we have loaded annotation-data or not
+     *
+     * @return boolean
+     */
+    public boolean isAnnotationsLoaded() {
+        return annotationsLoaded;
+    }
+
+    /**
+     * Method to set whether the annotation-data is loaded or not
+     *
+     * @param x
+     */
+    public void setAnnotationsLoaded(boolean x) {
+        this.annotationsLoaded = x;
     }
 
     /**
@@ -269,15 +291,6 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentMetadata() {
-        return mostRecentMetadata;
-    }
-
-    /**
-     * Get the list containing most recent GFA files
-     *
-     * @return the list
-     */
     public Stack getMostRecentGFA() {
         return mostRecentGFA;
     }
@@ -300,18 +313,6 @@ public class MainController extends Controller<BorderPane> {
         if (!mostRecentGFF.contains(s)) {
             mostRecentGFF.push(s);
             writeMostRecent("/mostRecentGFF.txt", mostRecentGFF);
-        }
-    }
-
-    /**
-     * Add a file to the recent opened Metadata files
-     *
-     * @param s the file to be added
-     */
-    public void addRecentMetadata(String s) {
-        if (!mostRecentMetadata.contains(s)) {
-            mostRecentMetadata.push(s);
-            writeMostRecent("/mostRecentMetadata.txt", mostRecentMetadata);
         }
     }
 
@@ -375,10 +376,9 @@ public class MainController extends Controller<BorderPane> {
 
         // Apply the selected genomes
         graphController.getGraph().setCurrentGenomes(selectedGenomes);
-
         graphController.update(ref, currentView);
-
         graphController.getZoomBox().fillZoomBox(count == -1);
+
         count++;
         initGUI();
     }
@@ -481,28 +481,37 @@ public class MainController extends Controller<BorderPane> {
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (currentView != 0) { return; }
-            if (!annotationTextField.getText().isEmpty()) {
-                List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
-                try {
-                    Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
-                    Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-                    if (newAnn == null || newAnn.getSpannedNodes() == null) { return; }
-                    // Deselect the previously highlighted annotation as only one should be highlighted at a time.
-                    deselectAllAnnotations();
-                    if (newAnn.getSpannedNodes().get(0) != null) {
-                        int i = newAnn.getSpannedNodes().get(0).getId();
-                        graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                                / getGraphController().getGraph().getModel().getMaxWidth());
-                    }
+            if (!isAnnotationsLoaded()) {
+                createAnnotationPopup();
+            } else {
 
-                    for (Node n : newAnn.getSpannedNodes()) {
-                        ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-                    }
-                } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-                    System.out.println("[DEBUG] Found too many matching annotations");
+                if (currentView != 0) {
+                    return;
                 }
-                annotationTextField.setText("");
+                if (!annotationTextField.getText().isEmpty()) {
+                    List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+                    try {
+                        Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                        Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+                        if (newAnn == null || newAnn.getSpannedNodes() == null) {
+                            return;
+                        }
+                        // Deselect the previously highlighted annotation as only one should be highlighted at a time.
+                        deselectAllAnnotations();
+                        if (newAnn.getSpannedNodes().get(0) != null) {
+                            int i = newAnn.getSpannedNodes().get(0).getId();
+                            graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
+                                    / getGraphController().getGraph().getModel().getMaxWidth());
+                        }
+
+                        for (Node n : newAnn.getSpannedNodes()) {
+                            ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                        }
+                    } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+                        System.out.println("[DEBUG] Found too many matching annotations");
+                    }
+                    annotationTextField.setText("");
+                }
             }
         });
 
@@ -510,7 +519,16 @@ public class MainController extends Controller<BorderPane> {
             deselectAllAnnotations();
             annotationTextField.setText("");
         });
+
     }
+
+    /**
+     * Method to create a PopUp when no Annotation Data is loaded
+     */
+    public void createAnnotationPopup() {
+        WindowFactory.createAnnotationChooser("Please load Annotation Data first");
+    }
+
 
     /**
      * Deselects all annotations
@@ -685,15 +703,6 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Getter for the textfield
-     *
-     * @return the textfield.
-     */
-    public TextField getTextField() {
-        return genomeTextField;
-    }
-
-    /**
      * Modify the filters applied to the tree.
      *
      * @param f     Filter type.
@@ -744,6 +753,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Check whether scene is in graph.
+     *
      * @return true if in graph, false otherwise.
      */
     public boolean isInGraph() {
@@ -752,6 +762,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Get the names of all applied filters.
+     *
      * @param builder a builder to append to.
      */
     public void appendFilterNames(StringBuilder builder) {

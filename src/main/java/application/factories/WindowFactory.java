@@ -355,7 +355,6 @@ public final class WindowFactory {
             File meta = new File(file.getText());
 
             mainController.initMetadata(meta.getAbsolutePath());
-            mainController.addRecentMetadata(meta.getAbsolutePath());
             createMenuWithSearchWithoutAnnotation();
 
             if (files[0] != null && files[1] != null) {
@@ -386,29 +385,13 @@ public final class WindowFactory {
      *
      * @return the directoryChooser
      */
-    public static FileChooser createAnnotationChooser() {
+    public static FileChooser createAnnotationChooser(String s) {
         FileChooser directoryChooser = new FileChooser();
-        directoryChooser.setTitle("Select Annotation File");
+        directoryChooser.setTitle(s);
 
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initAnnotations(selectedFile.getAbsolutePath());
         mainController.addRecentGFF(selectedFile.getAbsolutePath());
-
-        return directoryChooser;
-    }
-
-    /**
-     * Method that creates a directoryChooser.
-     *
-     * @return the directoryChooser
-     */
-    public static FileChooser createMetadataChooser() {
-        FileChooser directoryChooser = new FileChooser();
-        directoryChooser.setTitle("Select Metadata File");
-
-        File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.initMetadata(selectedFile.getAbsolutePath());
-        mainController.addRecentMetadata(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }

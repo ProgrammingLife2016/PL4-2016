@@ -35,11 +35,11 @@ public class MenuFactory {
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
-    public static MenuItem loadPhylogeneticTree, loadGenome, loadMetadata, loadAnnotations, resetView,
+    public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
     private MainController mainController;
 
-    private static Menu mostRecentGFA, mostRecentNWK, mostRecentGFF, mostRecentMeta;
+    private static Menu mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
     private Menu fileMenu;
 
@@ -123,7 +123,6 @@ public class MenuFactory {
      */
     public static void toggleFileMenu(boolean x) {
         loadGenome.setDisable(x);
-        loadMetadata.setDisable(x);
         loadPhylogeneticTree.setDisable(x);
     }
 
@@ -134,7 +133,6 @@ public class MenuFactory {
      */
     public static void toggleMostRecent(boolean x) {
         mostRecentNWK.setDisable(x);
-        mostRecentMeta.setDisable(x);
         mostRecentGFA.setDisable(x);
         mostRecentGFF.setDisable(x);
     }
@@ -222,10 +220,8 @@ public class MenuFactory {
         grid.add(new Text("Load a NWK file (Phylogenetic Tree"), 1, 1);
         grid.add(new Text("Ctrl + A"), 0, 2);
         grid.add(new Text("Load a GFF file (Annotation data)"), 1, 2);
-        grid.add(new Text("Ctrl + M"), 0, 3);
-        grid.add(new Text("Load a MetaData file"), 1, 3);
-        grid.add(new Text("Tab"), 0, 4);
-        grid.add(new Text("Open about-information"), 1, 4);
+        grid.add(new Text("Tab"), 0, 3);
+        grid.add(new Text("Open about-information"), 1, 3);
 
         content.getChildren().addAll(grid);
 
@@ -323,10 +319,7 @@ public class MenuFactory {
     private Menu initFileMenu() {
         loadAnnotations = initMenuItem("Load Annotation data",
                 new KeyCodeCombination(KeyCode.A, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createAnnotationChooser());
-        loadMetadata = initMenuItem("Load Meta Data",
-                new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN),
-                t -> WindowFactory.createMetadataChooser());
+                t -> WindowFactory.createAnnotationChooser("Select GFF File"));
         loadGenome = initMenuItem("Load Genome Sequence",
                 new KeyCodeCombination(KeyCode.G, KeyCodeCombination.CONTROL_DOWN),
                 t -> WindowFactory.createGraphChooser());
@@ -334,9 +327,8 @@ public class MenuFactory {
                 new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN),
                 t -> WindowFactory.createTreeChooser());
 
-        return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations, loadMetadata,
-                initMostRecentGFAMenu(), initMostRecentNWKMenu(), initMostRecentGFFMenu(),
-                initMostRecentMetadataMenu());
+        return initMenu("File", loadGenome, loadPhylogeneticTree, loadAnnotations,
+                initMostRecentGFAMenu(), initMostRecentNWKMenu(), initMostRecentGFFMenu());
     }
 
     /**
@@ -347,16 +339,6 @@ public class MenuFactory {
     private Menu initMostRecentGFFMenu() {
         mostRecentGFF = initMostRecentMenu(RecentMenuTypes.GFF, mainController.getMostRecentGFF());
         return mostRecentGFF;
-    }
-
-    /**
-     * Create the menu for choosing a most recent MetaData file
-     *
-     * @return the mostRecentMetaDataMenu
-     */
-    private Menu initMostRecentMetadataMenu() {
-        mostRecentMeta = initMostRecentMenu(RecentMenuTypes.META_DATA, mainController.getMostRecentMetadata());
-        return mostRecentMeta;
     }
 
     /**
@@ -421,8 +403,6 @@ public class MenuFactory {
         switch (type) {
             case GFF: fileTypeStr = "GFF";
                 break;
-            case META_DATA: fileTypeStr = "Metadata";
-                break;
             case GFA: fileTypeStr = "GFA";
                 break;
             case NWK: fileTypeStr = "NWK";
@@ -446,9 +426,6 @@ public class MenuFactory {
             switch (type) {
                 case GFF: mainController.initAnnotations(recentFile);
                     mainController.addRecentGFF(recentFile);
-                    break;
-                case META_DATA: mainController.initMetadata(recentFile);
-                    mainController.addRecentMetadata(recentFile);
                     break;
                 case GFA: WindowFactory.createGFApopup(parentDir, file);
                     break;
