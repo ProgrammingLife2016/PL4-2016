@@ -432,8 +432,10 @@ public class TreeController extends Controller<ScrollPane> {
      */
     public void selectAll() {
         root.getChildren().stream().filter(c -> c instanceof LeafCell).forEach(c -> {
-            selectedStrains.add(((LeafCell) c));
-            applyCellHighlight((LeafCell) c);
+            if (!selectedStrains.contains(c) && ((LeafCell) c).getName().contains("TKK")) {
+                selectedStrains.add(((LeafCell) c));
+                applyCellHighlight((LeafCell) c);
+            }
         });
         modifyGraphOptions();
     }
@@ -444,35 +446,37 @@ public class TreeController extends Controller<ScrollPane> {
      * @param cell the cell of which we want info
      */
     private void updateMetaInfo(LeafCell cell) {
-        StringBuilder builder = new StringBuilder();
-        Genome genome = MetaDataParser.getMetadata().get(cell.getName());
+        if (cell.getName().contains("TKK")) {
+            StringBuilder builder = new StringBuilder();
+            Genome genome = MetaDataParser.getMetadata().get(cell.getName());
 
-        mainController.appendFilterNames(builder);
-        builder.append(genome.getName()).append("\n");
-        builder.append("Lineage: ").append(genome.getLineage()).append("\n");
-        builder.append("Age: ").append(genome.getAge()).append("\n");
-        builder.append("Sex: ").append(genome.getSex()).append("\n");
-        builder.append("HIV: ").append(genome.isHiv()).append("\n");
-        builder.append("Cohort: ").append(genome.getCohort()).append("\n");
-        builder.append("Study district: ").append(genome.getStudyDistrict()).append("\n");
-        builder.append("Specimen type: ").append(genome.getSpecimenType()).append("\n");
-        builder.append("Microscopic smear: ").append(genome.getSmearStatus()).append("\n");
-        builder.append("DNA Isolation: ").append(genome.getIsolation()).append("\n");
-        builder.append("Phenotypic DST: ").append(genome.getPhenoDST()).append("\n");
-        builder.append("Capreomycin: ").append(genome.getCapreomycin()).append("\n");
-        builder.append("Ethambutol: ").append(genome.getEthambutol()).append("\n");
-        builder.append("Ethionamide: ").append(genome.getEthionamide()).append("\n");
-        builder.append("Isoniazid: ").append(genome.getIsoniazid()).append("\n");
-        builder.append("Kanamycin: ").append(genome.getKanamycin()).append("\n");
-        builder.append("Pyrazinamide: ").append(genome.getPyrazinamide()).append("\n");
-        builder.append("Ofloxacin: ").append(genome.getOfloxacin()).append("\n");
-        builder.append("Rifampin: ").append(genome.getRifampin()).append("\n");
-        builder.append("Streptomycin: ").append(genome.getStreptomycin()).append("\n");
-        builder.append("Spoligotype: ").append(genome.getSpoligotype()).append("\n");
-        builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n");
-        builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
+            mainController.appendFilterNames(builder);
+            builder.append(genome.getName()).append("\n");
+            builder.append("Lineage: ").append(genome.getLineage()).append("\n");
+            builder.append("Age: ").append(genome.getAge()).append("\n");
+            builder.append("Sex: ").append(genome.getSex()).append("\n");
+            builder.append("HIV: ").append(genome.isHiv()).append("\n");
+            builder.append("Cohort: ").append(genome.getCohort()).append("\n");
+            builder.append("Study district: ").append(genome.getStudyDistrict()).append("\n");
+            builder.append("Specimen type: ").append(genome.getSpecimenType()).append("\n");
+            builder.append("Microscopic smear: ").append(genome.getSmearStatus()).append("\n");
+            builder.append("DNA Isolation: ").append(genome.getIsolation()).append("\n");
+            builder.append("Phenotypic DST: ").append(genome.getPhenoDST()).append("\n");
+            builder.append("Capreomycin: ").append(genome.getCapreomycin()).append("\n");
+            builder.append("Ethambutol: ").append(genome.getEthambutol()).append("\n");
+            builder.append("Ethionamide: ").append(genome.getEthionamide()).append("\n");
+            builder.append("Isoniazid: ").append(genome.getIsoniazid()).append("\n");
+            builder.append("Kanamycin: ").append(genome.getKanamycin()).append("\n");
+            builder.append("Pyrazinamide: ").append(genome.getPyrazinamide()).append("\n");
+            builder.append("Ofloxacin: ").append(genome.getOfloxacin()).append("\n");
+            builder.append("Rifampin: ").append(genome.getRifampin()).append("\n");
+            builder.append("Streptomycin: ").append(genome.getStreptomycin()).append("\n");
+            builder.append("Spoligotype: ").append(genome.getSpoligotype()).append("\n");
+            builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n");
+            builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
 
-        mainController.getListFactory().modifyNodeInfo(builder.toString());
+            mainController.getListFactory().modifyNodeInfo(builder.toString());
+        }
     }
 
     /**
