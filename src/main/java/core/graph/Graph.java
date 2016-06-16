@@ -375,7 +375,6 @@ public class Graph {
 
         for (int parentId : to.getParents()) {
             Node from = nodeMap.get(parentId);
-
             int maxEdgeWidth = 10;
             int width = (int) Math.round(maxEdgeWidth
                     * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
