@@ -51,7 +51,6 @@ public class MainController extends Controller<BorderPane> {
     @FXML
     private MenuBar menuBar;
 
-
     private HBox legend;
     private VBox listVBox;
     private ListView list;
@@ -64,6 +63,7 @@ public class MainController extends Controller<BorderPane> {
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
+    private boolean metaDataLoaded;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -89,6 +89,7 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
         this.filtering = new Filtering();
+        this.metaDataLoaded = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -147,6 +148,8 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.getGraph().setAnnotations(annotations);
         graphController.getGraph().getModel().matchNodesAndAnnotations();
+
+        MenuFactory.loadAnnotations.setDisable(true);
     }
 
     /**
@@ -156,6 +159,23 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initMetadata(String path) {
         MetaDataParser.readMetadataFromFile(path);
+        setMetaDataLoaded(true);
+    }
+
+    /**
+     * Method to check whether the MetaData is loaded or not
+     * @return boolean
+     */
+    public boolean isMetaDataLoaded() {
+        return metaDataLoaded;
+    }
+
+    /**
+     * Method to set whether the MetaData is loaded or not
+     * @param x
+     */
+    public void setMetaDataLoaded(boolean x) {
+        metaDataLoaded = x;
     }
 
     /**
@@ -461,38 +481,27 @@ public class MainController extends Controller<BorderPane> {
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (currentView != 0) {
-                return;
-            }
-
+            if (currentView != 0) { return; }
             if (!annotationTextField.getText().isEmpty()) {
                 List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
-
                 try {
-                    Annotation newAnnotation
-                            = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+                    Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
                     Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-                    if (newAnnotation == null || newAnnotation.getSpannedNodes() == null) {
-                        return;
-                    }
-
+                    if (newAnn == null || newAnn.getSpannedNodes() == null) { return; }
                     // Deselect the previously highlighted annotation as only one should be highlighted at a time.
                     deselectAllAnnotations();
-
-                    if (newAnnotation.getSpannedNodes().get(0) != null) {
-                        int i = newAnnotation.getSpannedNodes().get(0).getId();
+                    if (newAnn.getSpannedNodes().get(0) != null) {
+                        int i = newAnn.getSpannedNodes().get(0).getId();
                         graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
                                 / getGraphController().getGraph().getModel().getMaxWidth());
                     }
 
-                    for (Node n : newAnnotation.getSpannedNodes()) {
+                    for (Node n : newAnn.getSpannedNodes()) {
                         ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-
                     }
                 } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
                     System.out.println("[DEBUG] Found too many matching annotations");
                 }
-
                 annotationTextField.setText("");
             }
         });
@@ -706,6 +715,9 @@ public class MainController extends Controller<BorderPane> {
 
         if (inGraph) {
             strainSelection(getLoadedGenomeNames());
+            StringBuilder builder = new StringBuilder();
+            appendFilterNames(builder);
+            listFactory.modifyNodeInfo(builder.toString());
         }
 
         treeController.colorSelectedStrains();
@@ -728,5 +740,27 @@ public class MainController extends Controller<BorderPane> {
      */
     public Filtering getFiltering() {
         return filtering;
+    }
+
+    /**
+     * Check whether scene is in graph.
+     * @return true if in graph, false otherwise.
+     */
+    public boolean isInGraph() {
+        return inGraph;
+    }
+
+    /**
+     * Get the names of all applied filters.
+     * @param builder a builder to append to.
+     */
+    public void appendFilterNames(StringBuilder builder) {
+        if (filtering.isFiltering()) {
+            builder.append("Applied filters: ").append("\n");
+            filtering.getFilters().forEach(f ->
+                            builder.append(f.getFilterName()).append("\n")
+            );
+            builder.append("\n");
+        }
     }
 }

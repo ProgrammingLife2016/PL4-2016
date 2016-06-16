@@ -121,4 +121,44 @@ public class GraphLayoutTest {
         assertTrue(cell.isRelocatedX());
     }
 
+    /**
+     * Tests the getCellCount method.
+     */
+    @Test
+    public void testGetCellCount() {
+        graphLayout.setCellCount(42);
+        assertEquals(42, graphLayout.getCellCount());
+    }
+
+    /**
+     * Tests the getMaxWidth method.
+     */
+    @Test
+    public void testGetMaxWidth() {
+        assertEquals(0, graphLayout.getMaxWidth(), 0.0001);
+    }
+
+    /**
+     * Tests the getMaxHeight method.
+     */
+    @Test
+    public void testGetMaxHeight() {
+        assertEquals(0, graphLayout.getMaxHeight(), 0.0001);
+    }
+
+    /**
+     * Tests the getLeftMost method.
+     */
+    @Test
+    public void testGetLeftMost() {
+        assertNull(graphLayout.getLeftMost());
+    }
+
+    /**
+     * Tests the getRightMost method.
+     */
+    @Test
+    public void testGetRightMost() {
+        assertNull(graphLayout.getRightMost());
+    }
 }

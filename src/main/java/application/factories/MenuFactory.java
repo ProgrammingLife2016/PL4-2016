@@ -21,10 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 import static core.filtering.Filter.*;
 import static java.lang.String.format;
@@ -82,6 +79,7 @@ public class MenuFactory {
 
     /**
      * Method to enable and disable Filters in the Phylogenetic Tree.
+     *
      * @param x boolean, indicates whether a Button should be enabled or disabled
      */
     public static void toggleFilters(boolean x) {
@@ -124,7 +122,6 @@ public class MenuFactory {
      * @param x boolean
      */
     public static void toggleFileMenu(boolean x) {
-        loadAnnotations.setDisable(x);
         loadGenome.setDisable(x);
         loadMetadata.setDisable(x);
         loadPhylogeneticTree.setDisable(x);
@@ -209,6 +206,7 @@ public class MenuFactory {
     private void showShortCutMenu() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
 
         VBox content = new VBox();
 
@@ -216,6 +214,7 @@ public class MenuFactory {
         grid.setVgap(5);
         grid.setHgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
+
 
         grid.add(new Text("Ctrl + G"), 0, 0);
         grid.add(new Text("Load a GFA file (Genome Sequence"), 1, 0);
@@ -287,31 +286,33 @@ public class MenuFactory {
             mainController.getGraphController().getGraph().reset();
             mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes());
         });
-
         showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
             mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
         });
 
-        MenuItem separatorOne = new SeparatorMenuItem();
-        MenuItem separatorTwo = new SeparatorMenuItem();
         resetView = initMenuItem("Reset", null, event -> {
-            mainController.getGraphController().getGraph().reset();
-            mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
-            if (mainController.getFiltering().isFiltering()) {
-                mainController.strainSelection(mainController.getLoadedGenomeNames());
-            } else {
-                mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-            }
-            mainController.getGraphController().getZoomBox().reset();
-            mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
-            mainController.createList();
+            handleReset();
         });
-
         showSelectedStrains.setDisable(true);
         showOnlyThisStrain.setDisable(true);
+        return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
+                showSelectedStrains, showOnlyThisStrain, new SeparatorMenuItem(), resetView);
+    }
 
-        return initMenu("View", showGenomeSequence, showPhylogeneticTree, separatorOne,
-                showSelectedStrains, showOnlyThisStrain, separatorTwo, resetView);
+    /**
+     * Handle the reset button.
+     */
+    public void handleReset() {
+        mainController.getGraphController().getGraph().reset();
+        mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        if (mainController.getFiltering().isFiltering()) {
+            mainController.strainSelection(mainController.getLoadedGenomeNames());
+        } else {
+            mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
+        }
+        mainController.getGraphController().getZoomBox().reset();
+        mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
+        mainController.createList();
     }
 
     /**
@@ -426,7 +427,8 @@ public class MenuFactory {
                 break;
             case NWK: fileTypeStr = "NWK";
                 break;
-            default: break;
+            default:
+                break;
         }
         return new Menu(format("Load recently opened %s file", fileTypeStr));
     }
@@ -442,19 +444,15 @@ public class MenuFactory {
             File file = new File(recentFile);
             File parentDir = file.getParentFile();
             switch (type) {
-                case GFF:
-                    mainController.initAnnotations(recentFile);
+                case GFF: mainController.initAnnotations(recentFile);
                     mainController.addRecentGFF(recentFile);
                     break;
-                case META_DATA:
-                    mainController.initMetadata(recentFile);
+                case META_DATA: mainController.initMetadata(recentFile);
                     mainController.addRecentMetadata(recentFile);
                     break;
-                case GFA:
-                    WindowFactory.createGFApopup(parentDir, file);
+                case GFA: WindowFactory.createGFApopup(parentDir, file);
                     break;
-                case NWK:
-                    WindowFactory.createNWKpopup(parentDir, file);
+                case NWK: WindowFactory.createNWKpopup(parentDir, file);
                     break;
                 default:
                     break;
@@ -800,7 +798,6 @@ public class MenuFactory {
      */
     private void initStreptomycinFilter() {
         CheckMenuItem str1 = new CheckMenuItem("R");
-
         str1.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_R, str1.isSelected()));
         CheckMenuItem str2 = new CheckMenuItem("S");
         str2.setOnAction(event -> mainController.modifyFilter(STREPTOMYCIN_S, str2.isSelected()));
@@ -828,14 +825,15 @@ public class MenuFactory {
         spo6.setOnAction(event -> mainController.modifyFilter(SPOLIGOTYPE_H1, spo6.isSelected()));
         CheckMenuItem spo7 = new CheckMenuItem("H37Rv");
         spo7.setOnAction(event -> mainController.modifyFilter(SPOLIGOTYPE_H37RV, spo7.isSelected()));
-        initSpoligotypeFilter2(spo1, spo2, spo3, spo4, spo5, spo6, spo7);
+        ArrayList<CheckMenuItem> items = new ArrayList<>();
+        Collections.addAll(items, spo1, spo2, spo3, spo4, spo5, spo6, spo7);
+        initSpoligotypeFilter2(items);
     }
 
     /**
      * Method to create the second part of the SpoligotypeFilter
      */
-    private void initSpoligotypeFilter2(CheckMenuItem spo1, CheckMenuItem spo2, CheckMenuItem spo3,
-                                        CheckMenuItem spo4, CheckMenuItem spo5, CheckMenuItem spo6, CheckMenuItem sp7) {
+    private void initSpoligotypeFilter2(ArrayList<CheckMenuItem> l) {
         CheckMenuItem s = new CheckMenuItem("LAM11-ZWE");
         s.setOnAction(event -> mainController.modifyFilter(SPOLIGOTYPE_LAM11_ZWE, s.isSelected()));
         CheckMenuItem s9 = new CheckMenuItem("LAM3");
@@ -863,8 +861,8 @@ public class MenuFactory {
         CheckMenuItem s21 = new CheckMenuItem("X3");
         s21.setOnAction(event -> mainController.modifyFilter(SPOLIGOTYPE_X3, s21.isSelected()));
 
-        filterSpoligotype = initMenu("Digital spoligotype", spo1, spo2, spo3, spo4, spo5, spo6, sp7, s, s9,
-                s11, s12, s13, s14, s15, s16, s17, s18, sn, s20, s21);
+        filterSpoligotype = initMenu("Digital spoligotype", l.get(0), l.get(1), l.get(2), l.get(3), l.get(4), l.get(5),
+                l.get(6), s, s9, s11, s12, s13, s14, s15, s16, s17, s18, sn, s20, s21);
     }
 
     /**

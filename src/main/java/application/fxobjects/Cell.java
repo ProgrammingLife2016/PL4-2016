@@ -1,7 +1,6 @@
 package application.fxobjects;
 
 import core.typeEnums.CellType;
-import edu.umd.cs.findbugs.ba.*;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
