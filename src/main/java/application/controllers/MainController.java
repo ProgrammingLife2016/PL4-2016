@@ -354,6 +354,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleFilters(false);
 
         this.getRoot().setCenter(graphController.getRoot());
+        toggleSelectDeselect(true);
 
         if (secondCount == -1) {
             createList();
@@ -551,7 +552,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to create the menu bar.
      *
      * @param withSearch           Whether to add the search bar.
-     * @param withAnnotationSearch Whether to add the annotation seach box to the search bar.
+     * @param withAnnotationSearch Whether to add the annotation search box to the search bar.
      */
     public void createMenu(boolean withSearch, boolean withAnnotationSearch) {
         VBox vBox = new VBox();
@@ -588,6 +589,13 @@ public class MainController extends Controller<BorderPane> {
 
         this.getRoot().setTop(vBox);
     }
+
+    public void toggleSelectDeselect(boolean x){
+        selectAllButton.setDisable(x);
+        deselectSearchButton.setDisable(x);
+
+    }
+
 
     /**
      * Method to create the Info-list
@@ -653,6 +661,8 @@ public class MainController extends Controller<BorderPane> {
         inGraph = false;
         createMenu(true, false);
         screen = treeController.getRoot();
+        toggleSelectDeselect(false);
+        
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }

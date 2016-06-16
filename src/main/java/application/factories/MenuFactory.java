@@ -34,12 +34,13 @@ public class MenuFactory {
     private static Menu filterLineage, filterHIV, filterCohort, filterStudyDistrict,
             filterSpecimenType, filterIsolation, filterPhenoDST, filterCapreomycin, filterEthambutol,
             filterEthionAmide, filterIsoniazid, filterKanamycin, filterPyrazinamide, filterOfloxacin,
-            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF;
+            filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF, mostRecentGFA, mostRecentNWK,
+            mostRecentGFF;
+
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
-    private MainController mainController;
 
-    private static Menu mostRecentGFA, mostRecentNWK, mostRecentGFF;
+    private MainController mainController;
 
     private Menu fileMenu;
 
@@ -48,7 +49,6 @@ public class MenuFactory {
      */
     private enum RecentMenuTypes {
         GFF,
-        META_DATA,
         GFA,
         NWK
     }
@@ -136,7 +136,6 @@ public class MenuFactory {
         mostRecentGFA.setDisable(x);
         mostRecentGFF.setDisable(x);
     }
-
 
     /**
      * Create Help-Menu
