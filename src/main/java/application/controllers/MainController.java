@@ -409,7 +409,7 @@ public class MainController extends Controller<BorderPane> {
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
         fillGraph(ref, s);
-        currentView = graphController.getGraph().getLevelMaps().size() - 1;
+        System.out.println("current view: " + currentView);
 
         setListItems();
         initGUI();
@@ -640,7 +640,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            graphController.getGraph().reset();
 
             highlights.clear();
 
@@ -656,7 +655,6 @@ public class MainController extends Controller<BorderPane> {
                         .getGraphMouseHandling().getPrevClick().getCellId());
             }
         }
-
     }
 
     /**

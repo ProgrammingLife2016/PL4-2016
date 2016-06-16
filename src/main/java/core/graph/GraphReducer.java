@@ -258,15 +258,15 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            boolean collapsed = true;
-            int collapseCount = 0;
-            while (collapsed && collapseCount < 6) {
-                collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
+            if (zoomLevel > 0) {
+                boolean collapsed = true;
+                int collapseCount = 0;
+                while (collapsed && collapseCount < 6) {
+                    collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
+                }
             }
-            if (zoomLevel != 0) {
-                collapseBubble(nodeMap, parent, zoomLevel);
-                collapseIndel(nodeMap, parent);
-            }
+            collapseBubble(nodeMap, parent, zoomLevel);
+            collapseIndel(nodeMap, parent);
         }
 
         return nodeMap;
