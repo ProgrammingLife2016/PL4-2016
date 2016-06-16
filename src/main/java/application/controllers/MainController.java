@@ -406,6 +406,8 @@ public class MainController extends Controller<BorderPane> {
     public void strainSelection(List<String> s) {
         graphController.getGraph().reset();
         fillGraph(new ArrayList<>(), s);
+        currentView = graphController.getGraph().getLevelMaps().size() - 1;
+
         setListItems();
         initGUI();
     }

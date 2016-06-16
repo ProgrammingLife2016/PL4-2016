@@ -306,11 +306,7 @@ public class MenuFactory {
     public void handleReset() {
         mainController.getGraphController().getGraph().reset();
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
-        if (mainController.getFiltering().isFiltering()) {
-            mainController.strainSelection(mainController.getLoadedGenomeNames());
-        } else {
-            mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-        }
+        mainController.strainSelection(mainController.getLoadedGenomeNames());
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();

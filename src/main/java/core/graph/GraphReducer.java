@@ -62,7 +62,7 @@ public final class GraphReducer {
         determineParents(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
         startMapSize = startMap.size();
-        int reduceAmount = 5;
+        int reduceAmount = 1;
 
         for (int i = 1;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
@@ -71,7 +71,7 @@ public final class GraphReducer {
             System.out.println("prev map size: " + previousMapSize);
             System.out.println("curr map size: " + currentMapSize);
 
-            if (levelMaps.size() == 25) {
+            if (levelMaps.size() == 10) {
                 reduceZoomingLevels(reduceAmount);
                 i -= reduceAmount;
             }
@@ -128,15 +128,17 @@ public final class GraphReducer {
      * @param i i
      */
     private static void traverseMaps(int reduceAmount, int i) {
-        int maxDepth = 20;
+        int maxDepth = 10;
         for (int j = i; maxDepth < 1001; j++) {
-            if (levelMaps.size() == 25) {
-                reduceZoomingLevels(5);
+            if (levelMaps.size() == 10) {
+                reduceZoomingLevels(reduceAmount);
                 j -= reduceAmount;
             }
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
             int previousMapSize2 = levelMaps.get(j - 1).size();
             int currentMapSize2 = levelMap2.size();
+            System.out.println("prev map size: " + previousMapSize2);
+            System.out.println("curr map size: " + currentMapSize2);
             if (previousMapSize2 - currentMapSize2 == 0) {
                 levelMaps.set(j - 1, levelMap2);
                 maxDepth += 5;
