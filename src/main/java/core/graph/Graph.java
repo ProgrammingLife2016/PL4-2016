@@ -8,6 +8,7 @@ import core.model.Model;
 import core.parsers.GraphParser;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
@@ -31,7 +32,7 @@ public class Graph {
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
     private ArrayList<String> allGenomes = new ArrayList<>();
-    private int nodeIds;
+
 
     private boolean filtering;
 
@@ -82,7 +83,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
-            nodeIds = startMap.size();
             levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -243,9 +243,7 @@ public class Graph {
      * @param node the node for which we need to add a cell
      */
     public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
-
         //Add next cell
-        int maxEdgeWidth = 10;
         CellType type = node.getType();
 
         if (type == CellType.RECTANGLE) {
@@ -267,10 +265,7 @@ public class Graph {
                     CellType.COMPLEX);
         }
 
-        for (int parentId : node.getParents()) {
-            Node parent = nodeMap.get(parentId);
-            addEdgesToCell(node, parent, nodeMap, toret, ref);
-        }
+        addEdgesToCell(node, nodeMap, toret, ref);
     }
 
     /**
@@ -280,6 +275,7 @@ public class Graph {
      * @param nodeMap the node map to sort topologically
      * @return the list of topologically sorted IDs
      */
+    @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
         //Copy the nodeMap to not make any changes to our original map.
         HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
@@ -371,39 +367,42 @@ public class Graph {
     /**
      * Method to add Edges to a cell.
      * @param to the target node
-     * @param from the source node
      * @param nodeMap the node map both nodes reside in
      * @param toret the model to which the edges are added
      * @param ref the reference strain
      */
-    public void addEdgesToCell(Node to, Node from, HashMap<Integer, Node> nodeMap, Model toret,
+    public void addEdgesToCell(Node to, HashMap<Integer, Node> nodeMap, Model toret,
                                 ArrayList<String> ref) {
-        int maxEdgeWidth = 10;
-        int width = (int) Math.round(maxEdgeWidth
-                * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                intersectingStrings(to.getGenomes(), genomes))
-                / (double) Math.max(genomes.size(), 10))) + 1;
 
-        ifStatement:
-        if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
-            boolean edgePlaced = false;
-            for (int child : from.getLinks()) {
-                if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
-                        && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
-                    toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
-                    if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
-                        toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+        for (int parentId : to.getParents()) {
+            Node from = nodeMap.get(parentId);
+            int maxEdgeWidth = 10;
+            int width = (int) Math.round(maxEdgeWidth
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
+                    intersectingStrings(to.getGenomes(), genomes))
+                    / (double) Math.max(genomes.size(), 10))) + 1;
+
+            ifStatement:
+            if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
+                boolean edgePlaced = false;
+                for (int child : from.getLinks()) {
+                    if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
+                            && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
+                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+                        if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
+                            toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                        }
+                        edgePlaced = true;
                     }
-                    edgePlaced = true;
                 }
-            }
-            if (edgePlaced) {
-                break ifStatement;
-            }
-            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
+                if (edgePlaced) {
+                    break ifStatement;
+                }
+                toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
 
-        } else {
-            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+            } else {
+                toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
+            }
         }
     }
 

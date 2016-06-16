@@ -37,7 +37,7 @@ public class GraphTest {
         when(mockedModel.addCell(anyInt(), anyString(),
                 anyInt(), any(CellType.class))).thenReturn(true);
 
-        HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
         nodeMap.put(1, new Node(1, CellType.RECTANGLE, "", 1));
         nodeMap.put(2, new Node(2, CellType.BUBBLE, "", 2));
         nodeMap.put(3, new Node(3, CellType.INDEL, "", 3));
@@ -98,11 +98,12 @@ public class GraphTest {
     @Test
     public void testAddEdges() {
         HashMap<Integer, Node> nodeMap = g.getLevelMaps().get(0);
-        Node node1 = nodeMap.get(1);
         Node node2 = nodeMap.get(2);
         Node node3 = nodeMap.get(3);
-        g.addEdgesToCell(node2, node1, nodeMap, mockedModel, new ArrayList<>());
-        g.addEdgesToCell(node3, node2, nodeMap, mockedModel, new ArrayList<>());
+        node2.setParents(new ArrayList<>(Arrays.asList(1)));
+        node3.setParents(new ArrayList<>(Arrays.asList(2)));
+        g.addEdgesToCell(node2, nodeMap, mockedModel, new ArrayList<>());
+        g.addEdgesToCell(node3, nodeMap, mockedModel, new ArrayList<>());
         verify(mockedModel, times(2)).addEdge(anyInt(), anyInt(),
                 anyInt(), any(EdgeType.class));
     }
@@ -116,12 +117,14 @@ public class GraphTest {
         Node node1 = nodeMap.get(1);
         Node node2 = nodeMap.get(2);
         Node node3 = nodeMap.get(3);
+        node2.setParents(new ArrayList<>(Arrays.asList(1)));
+        node3.setParents(new ArrayList<>(Arrays.asList(2)));
         g.setCurrentGenomes(new ArrayList<>(Arrays.asList("1")));
         node1.setGenomes(new ArrayList<>(Arrays.asList("1")));
         node2.setGenomes(new ArrayList<>(Arrays.asList("2")));
         node3.setGenomes(new ArrayList<>(Arrays.asList("1")));
-        g.addEdgesToCell(node2, node1, nodeMap, mockedModel, new ArrayList<>());
-        g.addEdgesToCell(node3, node2, nodeMap, mockedModel, new ArrayList<>());
+        g.addEdgesToCell(node2, nodeMap, mockedModel, new ArrayList<>());
+        g.addEdgesToCell(node3, nodeMap, mockedModel, new ArrayList<>());
         verify(mockedModel, times(2)).addEdge(anyInt(), anyInt(),
                 anyInt(), any(EdgeType.class));
     }

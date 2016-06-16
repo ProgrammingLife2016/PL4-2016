@@ -31,10 +31,9 @@ public class AnnotationProcessor {
      */
     public void matchNodesAndAnnotations() {
         int startLoopIndex = 0;
-        int nodeMapSize = determineNodeMapSize(filteredNodeMap);
         for (Annotation a : annotations) {
             startLoopIndex = a.detNodesSpannedByAnnotation(
-                    startLoopIndex, filteredNodeMap, nodeMapSize);
+                    startLoopIndex, filteredNodeMap);
 
             for (Node n : a.getSpannedNodes()) {
                 n.addAnnotation(a);

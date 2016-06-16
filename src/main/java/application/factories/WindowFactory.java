@@ -325,8 +325,8 @@ public final class WindowFactory {
      */
     public static void addNWKEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
-            File nwk = new File(listView.getSelectionModel().getSelectedItem().toString());
-
+            Text file = (Text) listView.getSelectionModel().getSelectedItem();
+            File nwk = new File(file.getText());
             tempStage.hide();
 
             if (!mainController.isMetaDataLoaded()) {
@@ -355,7 +355,6 @@ public final class WindowFactory {
             File meta = new File(file.getText());
 
             mainController.initMetadata(meta.getAbsolutePath());
-            mainController.addRecentMetadata(meta.getAbsolutePath());
             createMenuWithSearchWithoutAnnotation();
 
             if (files[0] != null && files[1] != null) {
@@ -383,32 +382,16 @@ public final class WindowFactory {
 
     /**
      * Method that creates a directoryChooser.
-     *
+     * @param s the title of the directoryChooser
      * @return the directoryChooser
      */
-    public static FileChooser createAnnotationChooser() {
+    public static FileChooser createAnnotationChooser(String s) {
         FileChooser directoryChooser = new FileChooser();
-        directoryChooser.setTitle("Select Annotation File");
+        directoryChooser.setTitle(s);
 
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initAnnotations(selectedFile.getAbsolutePath());
         mainController.addRecentGFF(selectedFile.getAbsolutePath());
-
-        return directoryChooser;
-    }
-
-    /**
-     * Method that creates a directoryChooser.
-     *
-     * @return the directoryChooser
-     */
-    public static FileChooser createMetadataChooser() {
-        FileChooser directoryChooser = new FileChooser();
-        directoryChooser.setTitle("Select Metadata File");
-
-        File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.initMetadata(selectedFile.getAbsolutePath());
-        mainController.addRecentMetadata(selectedFile.getAbsolutePath());
 
         return directoryChooser;
     }

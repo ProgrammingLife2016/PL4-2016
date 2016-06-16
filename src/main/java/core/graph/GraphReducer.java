@@ -243,13 +243,33 @@ public final class GraphReducer {
 
         Stack<Node> nonVisitedNodes = new Stack<>();
         ArrayList<Node> collapsingNodes = new ArrayList<>();
-        Node targetNode = null;
-        for (int parentChild : parent.getLinks()) {
-            nonVisitedNodes.push(nodeMap.get(parentChild));
-        }
+        Node targetNode = findComplexPath(parent, collapsingNodes, nodeMap, maxComplexity);
 
+        if (nonVisitedNodes.isEmpty() && !collapsingNodes.isEmpty() && targetNode != null) {
+            Node complexNode = collapsingNodes.get(0);
+            complexNode.setType(CellType.COMPLEX);
+            for (Node collapseNode : collapsingNodes) {
+                if (!collapseNode.equals(complexNode)) {
+                    collapseNodeIntoParent(complexNode, collapseNode, zoomLevel);
+                    parent.removeLink(collapseNode.getId());
+                    targetNode.removeParent(collapseNode.getId());
+                    nodeMap.remove(collapseNode.getId());
+                }
+            }
+            complexNode.setLinks(new ArrayList<>());
+            complexNode.addLink(targetNode.getId());
+            targetNode.addParent(complexNode.getId());
+            return true;
+        }
+        return false;
+    }
+
+    private static Node findComplexPath(Node parent, ArrayList<Node> collapsingNodes,
+                                        HashMap<Integer, Node> nodeMap, int maxComplexity) {
         int pathComplexity = 0;
         boolean foundTarget = false;
+        Node targetNode = null;
+        Stack<Node> nonVisitedNodes = pushChildrenToStack(parent, nodeMap);
         while (!nonVisitedNodes.isEmpty() && pathComplexity < maxComplexity) {
             Node sourceNode = nonVisitedNodes.pop();
             if (sourceNode == null) { continue; }
@@ -273,24 +293,16 @@ public final class GraphReducer {
                 }
             }
         }
+        return targetNode;
+    }
 
-        if (nonVisitedNodes.isEmpty() && !collapsingNodes.isEmpty() && foundTarget) {
-            Node complexNode = collapsingNodes.get(0);
-            complexNode.setType(CellType.COMPLEX);
-            for (Node collapseNode : collapsingNodes) {
-                if (!collapseNode.equals(complexNode)) {
-                    collapseNodeIntoParent(complexNode, collapseNode, zoomLevel);
-                    parent.removeLink(collapseNode.getId());
-                    targetNode.removeParent(collapseNode.getId());
-                    nodeMap.remove(collapseNode.getId());
-                }
-            }
-            complexNode.setLinks(new ArrayList<>());
-            complexNode.addLink(targetNode.getId());
-            targetNode.addParent(complexNode.getId());
-            return true;
+
+    private static Stack<Node> pushChildrenToStack(Node parent, HashMap<Integer, Node> nodeMap) {
+        Stack<Node> nonVisitedNodes = new Stack<>();
+        for (int parentChild : parent.getLinks()) {
+            nonVisitedNodes.push(nodeMap.get(parentChild));
         }
-        return false;
+        return nonVisitedNodes;
     }
 
     /**
@@ -396,17 +408,8 @@ public final class GraphReducer {
      * @return Whether nodes have been collapsed.
      */
     public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
-        List<Integer> children = parent.getLinks(nodeMap);
-        List<Node> bubbleChildren = new ArrayList<>();
-        if (children.size() > 1) {
-            // Add all children that have one child and
-            // parent to the list of potential bubble nodes.
-            for (int i = 0; i < children.size(); i++) {
-                Node child = nodeMap.get(children.get(i));
-                if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
-                    bubbleChildren.add(child);
-                }
-            }
+        List<Node> bubbleChildren = createBubble(parent, nodeMap);
+        if (bubbleChildren.size() > 1) {
             for (Node child : bubbleChildren) {
                 Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
                 List<Node> bubble = new ArrayList<>();
@@ -426,21 +429,49 @@ public final class GraphReducer {
 
                         buf.append(bubbleChild.getSequence() + "\n");
                     }
-                    child.setType(CellType.BUBBLE);
-
-
-                    if (bubble.size() < 6 && buf.length() < 20) {
-                        child.setCollapseLevel("\n" + buf.toString());
-                    } else {
-                        child.setCollapseLevel("Long Sequence");
-                    }
-
-                    child.setSequence("");
+                    changeNodeToBubble(bubble.size(), child, buf);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * Creates a list of nodes that are bubble children of the parent node
+     *
+     * @param parent the parent node
+     * @param nodeMap the nodemap the ndoes reside in
+     * @return the list of bubble children
+     */
+    private static List<Node> createBubble(Node parent, HashMap<Integer, Node> nodeMap) {
+        List<Integer> children = parent.getLinks(nodeMap);
+        List<Node> bubbleChildren = new ArrayList<>();
+        // Add all children that have one child and
+        // parent to the list of potential bubble nodes.
+        for (int i = 0; i < children.size(); i++) {
+            Node child = nodeMap.get(children.get(i));
+            if (child.getLinks(nodeMap).size() == 1 && child.getParents(nodeMap).size() == 1) {
+                bubbleChildren.add(child);
+            }
+        }
+        return bubbleChildren;
+    }
+
+    /**
+     * Sets all parameters of a node according to those of a bubble node.
+     * @param bubbleSize The size of the to be created bubble
+     * @param child the node that will represent the node
+     * @param buf The information to be drawn in the bubble
+     */
+    private static void changeNodeToBubble(int bubbleSize, Node child, StringBuffer buf) {
+        child.setType(CellType.BUBBLE);
+        if (bubbleSize < 6 && buf.length() < 20) {
+            child.setCollapseLevel("\n" + buf.toString());
+        } else {
+            child.setCollapseLevel("Long Sequence");
+        }
+        child.setSequence("");
     }
 
     /**

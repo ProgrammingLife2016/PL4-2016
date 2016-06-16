@@ -8,6 +8,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import net.sourceforge.olduvai.treejuxtaposer.drawer.TreeNode;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -131,7 +133,9 @@ public class TreeLayout extends CellLayout {
         int parentY = (int) (child1.getLayoutY() + child2.getLayoutY()) / 2;
 
         relocateCell(parent, parentX, parentY);
-        drawPerpendicularEdges(parent, child1, child2);
+        ArrayList<Cell> cells = new ArrayList<>();
+        Collections.addAll(cells, parent, child1, child2);
+        drawPerpendicularEdges(cells);
     }
 
 
@@ -139,24 +143,22 @@ public class TreeLayout extends CellLayout {
      * Draw perpendicular lines between a parent node and its children by inserting
      * two invisible helper middle cells.
      *
-     * @param parent A given parent cell.
-     * @param child1 Child cell 1 of the parent.
-     * @param child2 Child cell 2 of the parent.
+     * @param cells parent and its children.
      */
-    private void drawPerpendicularEdges(Cell parent, Cell child1, Cell child2) {
+    private void drawPerpendicularEdges(ArrayList<Cell> cells) {
         Cell upperCorner = new MiddleCell(model.getAddedCells().size());
         Cell lowerCorner = new MiddleCell(model.getAddedCells().size() + 1);
 
         model.addCell(upperCorner);
         model.addCell(lowerCorner);
 
-        model.addEdge(parent.getCellId(), upperCorner.getCellId(), 1, EdgeType.TREE);
-        model.addEdge(upperCorner.getCellId(), child1.getCellId(), 1, EdgeType.TREE);
-        model.addEdge(parent.getCellId(), lowerCorner.getCellId(), 1, EdgeType.TREE);
-        model.addEdge(lowerCorner.getCellId(), child2.getCellId(), 1, EdgeType.TREE);
+        model.addEdge(cells.get(0).getCellId(), upperCorner.getCellId(), 1, EdgeType.TREE);
+        model.addEdge(upperCorner.getCellId(), cells.get(1).getCellId(), 1, EdgeType.TREE);
+        model.addEdge(cells.get(0).getCellId(), lowerCorner.getCellId(), 1, EdgeType.TREE);
+        model.addEdge(lowerCorner.getCellId(), cells.get(2).getCellId(), 1, EdgeType.TREE);
 
-        relocateCell(upperCorner, (int) parent.getLayoutX(), (int) child1.getLayoutY());
-        relocateCell(lowerCorner, (int) parent.getLayoutX(), (int) child2.getLayoutY());
+        relocateCell(upperCorner, (int) cells.get(0).getLayoutX(), (int) cells.get(1).getLayoutY());
+        relocateCell(lowerCorner, (int) cells.get(0).getLayoutX(), (int) cells.get(2).getLayoutY());
     }
 
     /**
