@@ -129,41 +129,27 @@ public class GraphLayout extends CellLayout {
      */
     private void breadthFirstPlacing(Cell cell, List<Cell> childrenToDraw) {
         int yOffset = 2 * offset; //y-offset between nodes on the same x-level
-        int oddChildOffset = 0; //initial offset when there are an odd number of children
-        int evenChildOffset = yOffset / 2; //offset for an even amount of children
+        int oddOffset = 0; //initial offset when there are an odd number of children
+        int evenOffset = yOffset / 2; //offset for an even amount of children
         int modifier = -1; //alternate between above and below for the same x-level
         for (Cell c : cell.getCellChildren()) {
             GraphCell child = (GraphCell) c;
                 if (cellCount % 2 == 0) {
-                    double yCoordinate = currentY - evenChildOffset
-                            - (child.getCellShape().getLayoutBounds().getHeight() / 2);
-                    if (child.isRelocatedY()) {
-                        yCoordinate = child.getLayoutY();
-                    }
-                    if (yCoordinate > maxHeight) {
-                        maxHeight = yCoordinate;
-                    }
-                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
-                    evenChildOffset = (yOffset / 2) * modifier;
+                    double yCoord = currentY - evenOffset - (child.getCellShape().getLayoutBounds().getHeight() / 2);
+                    if (child.isRelocatedY()) { yCoord = child.getLayoutY(); }
+                    if (yCoord > maxHeight) { maxHeight = yCoord; }
+                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoord);
+                    evenOffset = (yOffset / 2) * modifier;
                     modifier *= -1;
-                    if (modifier > 0) {
-                        modifier++;
-                    }
+                    if (modifier > 0) { modifier++; }
                 } else {
-                    double yCoordinate = currentY + oddChildOffset
-                            - (child.getCellShape().getLayoutBounds().getHeight() / 2);
-                    if (child.isRelocatedY()) {
-                        yCoordinate = child.getLayoutY();
-                    }
-                    if (yCoordinate > maxHeight) {
-                        maxHeight = yCoordinate;
-                    }
-                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoordinate);
-                    oddChildOffset = yOffset * modifier;
+                    double yCoord = currentY + oddOffset - (child.getCellShape().getLayoutBounds().getHeight() / 2);
+                    if (child.isRelocatedY()) { yCoord = child.getLayoutY(); }
+                    if (yCoord > maxHeight) { maxHeight = yCoord; }
+                    child.relocate(currentX - (child.getCellShape().getLayoutBounds().getWidth() / 2), yCoord);
+                    oddOffset = yOffset * modifier;
                     modifier *= -1;
-                    if (modifier < 0) {
-                        modifier--;
-                    }
+                    if (modifier < 0) { modifier--; }
                 }
             if (childrenToDraw.contains(child)) {
                 child.setRelocatedX(true);
