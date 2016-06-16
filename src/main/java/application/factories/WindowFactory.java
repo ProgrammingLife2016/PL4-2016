@@ -325,8 +325,8 @@ public final class WindowFactory {
      */
     public static void addNWKEventHandler(ListView listView, File selectedFile, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
-            File nwk = new File(listView.getSelectionModel().getSelectedItem().toString());
-
+            Text file = (Text) listView.getSelectionModel().getSelectedItem();
+            File nwk = new File(file.getText());
             tempStage.hide();
 
             if (!mainController.isMetaDataLoaded()) {
