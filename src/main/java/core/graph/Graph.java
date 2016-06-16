@@ -231,7 +231,6 @@ public class Graph {
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
-
         return toret;
     }
 

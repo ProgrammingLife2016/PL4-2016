@@ -6,7 +6,7 @@ import application.factories.MenuFactory;
 import application.factories.WindowFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.graphCells.RectangleCell;
-import core.cells.LeafCell;
+import application.fxobjects.treeCells.LeafCell;
 import core.annotation.Annotation;
 import core.annotation.AnnotationProcessor;
 import core.filtering.Filter;
