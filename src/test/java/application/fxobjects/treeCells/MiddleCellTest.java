@@ -11,7 +11,6 @@ import static org.mockito.Mockito.spy;
 /**
  * Test suite for the MiddleCell class.
  *
- * @author Niels Warnars
  */
 public class MiddleCellTest {
     public MiddleCell c;

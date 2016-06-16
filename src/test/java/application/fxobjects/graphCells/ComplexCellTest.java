@@ -14,7 +14,6 @@ import static org.mockito.Mockito.spy;
 /**
  * Test suite for the CollectionCell class.
  *
- * @author Niels Warnars
  */
 public class ComplexCellTest {
     ComplexCell c;

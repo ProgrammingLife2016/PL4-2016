@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 /**
- * Created by Daphne van Tetering on 28-4-2016.
+ * ZoomBox class
  */
 public class ZoomBox extends ScrollPane {
     private Rectangle zoomRectBorder;

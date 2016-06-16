@@ -15,7 +15,6 @@ import static org.junit.Assert.assertNull;
 /**
  * Test suite for the Annotation Parser class.
  *
- * @author Niels Warnars
  */
 public class AnnotationProcessorTest {
 

@@ -1,7 +1,7 @@
 package core.genome;
 
 /**
- * Created by Arthur on 5/30/16.
+ * Genome Class
  */
 public class Genome {
     private String name;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Created by Arthur on 6/6/16.
+ * Class Responsible for Filtering
  *
  */
 public class Filtering {

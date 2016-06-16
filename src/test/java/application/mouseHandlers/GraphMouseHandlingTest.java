@@ -14,7 +14,6 @@ import static org.mockito.Mockito.spy;
 /**
  * Test class for the GraphMouseHandling class
  *
- * @author Niels Warnars
  */
 public class GraphMouseHandlingTest {
     GraphMouseHandling handling;

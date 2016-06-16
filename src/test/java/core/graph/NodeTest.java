@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test suite for the Node class.
  *
- * Created by Skullyhoofd on 25/04/2016.
  */
 public class NodeTest {
     Node n;
@@ -32,7 +31,7 @@ public class NodeTest {
      */
     @Test
     public void testAddLink() {
-        ArrayList<Integer> al1 = new ArrayList<Integer>();
+        ArrayList<Integer> al1 = new ArrayList<>();
         al1.add(0);
         al1.add(1);
         al1.add(4);
@@ -81,7 +80,7 @@ public class NodeTest {
         String[] genomes = {"1", "2"};
         n.addAllGenome(genomes);
 
-        List<String> expectedGenomes = new ArrayList<String>();
+        List<String> expectedGenomes = new ArrayList<>();
         expectedGenomes.add(genomes[0]);
         expectedGenomes.add(genomes[1]);
 

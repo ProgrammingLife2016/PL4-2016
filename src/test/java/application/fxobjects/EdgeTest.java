@@ -14,7 +14,6 @@ import static org.mockito.Mockito.mock;
 /**
  * Test class for Edge.java.
  *
- * @author Arthur Breurkes.
  * @version 1.0
  * @since 04-05-2016
  */
@@ -64,7 +63,7 @@ public class EdgeTest {
     }
 
     /**
-     * Test whether getLine() and setLine() work correcly.
+     * Test whether getLine() and setLine() work correctly.
      */
     @Test
     public void testGetAndSetLine() {

@@ -14,7 +14,6 @@ import java.util.TreeMap;
 /**
  * Parser for MetaData stored in .xlsx files.
  *
- * @author Arthur Breurkes.
  * @version 1.0
  * @since 23-05-2016.
  */

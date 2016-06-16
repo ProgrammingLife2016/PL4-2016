@@ -13,7 +13,6 @@ import static org.junit.Assert.*;
 
 /**
  * Test class for the GraphReducer class.
- * Created by Niels Warnars on 5-5-2016.
  */
 public class GraphReducerTest {
 
@@ -274,19 +273,8 @@ public class GraphReducerTest {
     }
 
     /**
-     * Test whether the genomes that are in the deletion edge
-     * are added to the indel node when collapsed.
-=======
-        assertEquals(nodeMap.get(1).getLinks(), new ArrayList<>(Arrays.asList(2, 3)));
-        assertEquals(nodeMap.get(2).getType(), CellType.INDEL);
-        assertEquals(nodeMap.get(2).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
-        assertEquals(nodeMap.get(4).getGenomes(), new ArrayList<>(Arrays.asList("A", "B", "C")));
-    }
-
-    /**
      * Test whether the genomes that are in the deletion edge are
      * added to the indel node when collapsed.
->>>>>>> master
      */
     @Test
     public void testGenomesInBubble() {

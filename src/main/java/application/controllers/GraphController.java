@@ -30,7 +30,6 @@ import java.util.*;
 /**
  * Created by Daphne van Tetering on 4-5-2016.
  */
-@SuppressWarnings("PMD.UnusedPrivateField")
 public class GraphController extends Controller<ScrollPane> {
     private Graph graph;
     private GraphMouseHandling graphMouseHandling;
@@ -41,8 +40,6 @@ public class GraphController extends Controller<ScrollPane> {
     private DoubleProperty visibleAmount;
     private Stack<Integer> zoomPath;
     private int drawFrom = 0;
-    //@ToDo see issue #159
-    //private double lastDrawnHValue = 0;
 
     /**
      * Constructor method for this class.

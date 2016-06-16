@@ -14,7 +14,6 @@ import static org.mockito.Mockito.spy;
 /**
  * Test suite for the IndelCell class.
  *
- * @author Niels Warnars
  */
 public class IndelCellTest {
     IndelCell c;
