@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
@@ -37,8 +38,11 @@ public class MenuFactory {
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
+    public static CheckMenuItem allowLevel;
+    public static CheckMenuItem showReferenceStrain;
+
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
-            shortcuts, about, showPhylogeneticTree, showGenomeSequence, showSelectedStrains, showOnlyThisStrain;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence;
 
     private MainController mainController;
 
@@ -269,29 +273,23 @@ public class MenuFactory {
      * @return the View-Menu
      */
     private Menu initViewMenu() {
-        showGenomeSequence = initMenuItem("Show Graph", null, event -> {
-            if (mainController.getFiltering().isFiltering()) {
-                mainController.strainSelection(mainController.getLoadedGenomeNames());
+        showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
+            if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
+                WindowFactory.createAlert();
             } else {
-                mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
+                mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
+                        mainController.getTreeController().getSelectedGenomes());
             }
         });
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
-        showOnlyThisStrain = initMenuItem("Show graph & highlight selected strain", null, event -> {
-            mainController.getGraphController().getGraph().reset();
-            mainController.soloStrainSelection(mainController.getTreeController().getSelectedGenomes());
-        });
-        showSelectedStrains = initMenuItem("Show only the selected strains in graph", null, event -> {
-            mainController.strainSelection(mainController.getTreeController().getSelectedGenomes());
-        });
 
-        resetView = initMenuItem("Reset", null, event -> {
-            handleReset();
-        });
-        showSelectedStrains.setDisable(true);
-        showOnlyThisStrain.setDisable(true);
+        resetView = initMenuItem("Reset", null, event -> handleReset());
+        allowLevel = new CheckMenuItem("Allow nucliotide level");
+        allowLevel.setOnAction(event -> mainController.toggleAllowNucleotideLevel());
+        showReferenceStrain = new CheckMenuItem("Show reference strain");
+        showReferenceStrain.setOnAction(event -> mainController.toggleShowReferenceStrain());
         return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
-                showSelectedStrains, showOnlyThisStrain, new SeparatorMenuItem(), resetView);
+                new SeparatorMenuItem(), resetView, allowLevel, showReferenceStrain);
     }
 
     /**
@@ -300,11 +298,9 @@ public class MenuFactory {
     public void handleReset() {
         mainController.getGraphController().getGraph().reset();
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
-        if (mainController.getFiltering().isFiltering()) {
-            mainController.strainSelection(mainController.getLoadedGenomeNames());
-        } else {
-            mainController.fillGraph(new ArrayList<>(), new ArrayList<>());
-        }
+        mainController.strainSelection(new ArrayList<>(),
+                mainController.getGraphController().getGraph().getCurrentGenomes());
+        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();

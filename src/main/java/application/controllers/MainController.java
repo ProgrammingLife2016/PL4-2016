@@ -66,6 +66,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
+    private boolean allowNucleotideLevel = false;
+    private boolean showReferenceStrain = false;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -91,6 +93,8 @@ public class MainController extends Controller<BorderPane> {
         this.filtering = new Filtering();
         this.metaDataLoaded = false;
         this.annotationsLoaded = false;
+        this.allowNucleotideLevel = false;
+        this.showReferenceStrain = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -108,11 +112,8 @@ public class MainController extends Controller<BorderPane> {
      * Initializes the graph.
      */
     public void initGraph() {
-        currentView = graphController.getGraph().getLevelMaps().size() - 1;
-
-        fillGraph(new ArrayList<>(), new ArrayList<>());
-
-        graphController.getGraph().getModel().matchNodesAndAnnotations();
+        initGUI();
+        graphController.getGraph().findAllGenomes();
     }
 
     /**
@@ -135,7 +136,6 @@ public class MainController extends Controller<BorderPane> {
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
-
     }
 
     /**
@@ -175,6 +175,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to set whether the MetaData is loaded or not
+     *
      * @param x boolean
      */
     public void setMetaDataLoaded(boolean x) {
@@ -237,13 +238,10 @@ public class MainController extends Controller<BorderPane> {
                     String string = sc.nextLine();
                     mostRecent.add(string);
                 }
-
                 sc.close();
             }
-        } catch (IOException e1) {
+        } catch (IOException | URISyntaxException e1) {
             e1.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
@@ -269,10 +267,8 @@ public class MainController extends Controller<BorderPane> {
             }
 
             writer.close();
-        } catch (IOException e1) {
+        } catch (IOException | URISyntaxException e1) {
             e1.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
@@ -351,7 +347,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
         MenuFactory.toggleFilters(false);
-
+        MenuFactory.allowLevel.setDisable(false);
         this.getRoot().setCenter(graphController.getRoot());
         toggleSelectDeselect(true);
 
@@ -373,40 +369,42 @@ public class MainController extends Controller<BorderPane> {
     public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         createMenu(true, true);
         inGraph = true;
-
+        boolean update = false;
         // Apply the selected genomes
-        graphController.getGraph().setCurrentGenomes(selectedGenomes);
+        if (showReferenceStrain) {
+            selectedGenomes.add("MT_H37RV_BRD_V5.ref");
+        } else {
+            selectedGenomes.remove("MT_H37RV_BRD_V5.ref");
+        }
+        if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
+            currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
+            update = true;
+        }
+
         graphController.update(ref, currentView);
-        graphController.getZoomBox().fillZoomBox(count == -1);
 
         count++;
-        initGUI();
+        if(update) {
+            graphController.getZoomBox().fillZoomBox(true);
+        }
+    }
+
+    public void toggleShowReferenceStrain() {
+        this.showReferenceStrain = !this.showReferenceStrain;
     }
 
     /**
      * If selections are made in the phylogenetic tree,
      * this method will visualize/highlight them specifically.
      *
-     * @param s a List of selected strains.
+     * @param ref the references to highlight.
+     * @param s   a List of selected strains.
      */
-    public void soloStrainSelection(List<String> s) {
-        ArrayList<String> list2 = new ArrayList<>();
-        list2.add(s.get(0));
-        fillGraph(list2, new ArrayList<>());
-        initGUI();
-    }
-
-    /**
-     * If selections are made in the phylogenetic tree,
-     * this method will visualize/highlight them specifically.
-     *
-     * @param s a List of selected strains.
-     */
-    public void strainSelection(List<String> s) {
+    public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(new ArrayList<>(), s);
-
+        fillGraph(ref, s);
         setListItems();
+        initGUI();
     }
 
     /**
@@ -444,8 +442,9 @@ public class MainController extends Controller<BorderPane> {
         buttons.get(0).setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()
                     && treeController.getCellByName(
-                    genomeTextField.textProperty().get().trim()) != null) {
-                LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
+                    genomeTextField.textProperty().get().trim().toUpperCase()) != null) {
+                LeafCell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().toUpperCase().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
@@ -515,17 +514,16 @@ public class MainController extends Controller<BorderPane> {
             }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
-            if (newAnn.getSpannedNodes().get(0) != null) {
+            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
                 int i = newAnn.getSpannedNodes().get(0).getId();
                 graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                        / getGraphController().getGraph().getModel().getMaxWidth());
+                        / getGraphController().getGraph().getModel().getMaxWidth() - 450);
             }
 
             for (Node n : newAnn.getSpannedNodes()) {
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-            System.out.println("[DEBUG] Found too many matching annotations");
         }
     }
 
@@ -546,11 +544,9 @@ public class MainController extends Controller<BorderPane> {
         Map<Integer, Node> nodeMap = graphController.getGraph().getModel().getLevelMaps().get(0);
         Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
 
-        for (Node n : nodeMap.values()) {
-            if (n.getType().equals(CellType.RECTANGLE)) {
-                ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
-            }
-        }
+        nodeMap.values().stream().filter(n -> n.getType().equals(CellType.RECTANGLE)).forEachOrdered(n -> {
+            ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
+        });
     }
 
     /**
@@ -597,12 +593,12 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to enable and disable the select and the select buttons
+     *
      * @param x boolean indicating enabling or disabling
      */
     public void toggleSelectDeselect(boolean x) {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
-
     }
 
 
@@ -633,7 +629,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void listSelect() {
         if (!(list.getSelectionModel().getSelectedItem() == null)) {
-            graphController.getGraph().reset();
 
             highlights.clear();
 
@@ -641,13 +636,13 @@ public class MainController extends Controller<BorderPane> {
                 highlights.add((String) o);
             }
 
-            fillGraph(highlights, graphController.getGenomes());
+            //fillGraph(highlights, graphController.getGenomes());
+            strainSelection(highlights, getTreeController().getSelectedGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick().getCellId());
             }
         }
-
     }
 
     /**
@@ -657,10 +652,21 @@ public class MainController extends Controller<BorderPane> {
      */
     public void switchScene(int delta) {
         currentView += delta;
-        currentView = Math.max(0, currentView);
+
+        int minLevel = 1;
+        if (allowNucleotideLevel) {
+            minLevel = 0;
+        }
+        currentView = Math.max(minLevel, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
-                graphController.getGraph().getGenomes());
+                graphController.getGraph().getCurrentGenomes());
+
+        System.out.println("switched to viewlevel: " + currentView);
+    }
+
+    public void toggleAllowNucleotideLevel() {
+        this.allowNucleotideLevel = !this.allowNucleotideLevel;
     }
 
     /**
@@ -671,6 +677,7 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
+        MenuFactory.allowLevel.setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
@@ -680,7 +687,15 @@ public class MainController extends Controller<BorderPane> {
      * Method to add items to the Info-List
      */
     private void setListItems() {
-        List<String> genomes = graphController.getGenomes();
+        List<String> genomes;
+        if (filtering.isFiltering()) {
+            genomes = graphController.getGraph().reduceGenomeList(filtering.getSelectedGenomes());
+        } else if (treeController != null && !treeController.getSelectedGenomes().isEmpty()) {
+            genomes = graphController.getGraph().reduceGenomes(
+                    treeController.getSelectedGenomes());
+        } else {
+            genomes = graphController.getGraph().getCurrentGenomes();
+        }
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
     }
@@ -742,14 +757,19 @@ public class MainController extends Controller<BorderPane> {
         );
 
         if (inGraph) {
-            strainSelection(getLoadedGenomeNames());
+            if (filtering.isFiltering()) {
+                strainSelection(new ArrayList<>(), getLoadedGenomeNames());
+            } else {
+                strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
+            }
             StringBuilder builder = new StringBuilder();
             appendFilterNames(builder);
             listFactory.modifyNodeInfo(builder.toString());
+        } else {
+            setListItems();
         }
 
         treeController.colorSelectedStrains();
-        treeController.modifyGraphOptions();
     }
 
     /**
@@ -758,16 +778,7 @@ public class MainController extends Controller<BorderPane> {
      * @return a list of loaded genome names.
      */
     public List<String> getLoadedGenomeNames() {
-        return graphController.getGraph().reduceGenomes(filtering.getSelectedGenomes(), filtering.isFiltering());
-    }
-
-    /**
-     * Getter for the Filtering class.
-     *
-     * @return the Filtering class.
-     */
-    public Filtering getFiltering() {
-        return filtering;
+        return graphController.getGraph().reduceGenomeList(filtering.getSelectedGenomes());
     }
 
     /**
