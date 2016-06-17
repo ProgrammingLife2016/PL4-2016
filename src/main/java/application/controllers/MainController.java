@@ -343,7 +343,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
         MenuFactory.toggleFilters(false);
-
+        MenuFactory.allowLevel.setDisable(false);
         this.getRoot().setCenter(graphController.getRoot());
         toggleSelectDeselect(true);
 
@@ -635,7 +635,6 @@ public class MainController extends Controller<BorderPane> {
         currentView += delta;
         currentView = Math.max(1, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
-        System.out.println("switched to current view: "+ currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
     }
@@ -648,6 +647,7 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
+        MenuFactory.allowLevel.setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);

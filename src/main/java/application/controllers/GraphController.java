@@ -366,7 +366,7 @@ public class GraphController extends Controller<ScrollPane> {
     public Image takeSnapshot() {
         int pref = (int) graph.getModel().getGraphLayout().getMaxWidth() + 1;
         int height = ((int) graph.getModel().getGraphLayout().getMaxHeight()) * 2 + 1;
-        
+
         WritableImage image;
         if (graph.getModel().getAllCells().isEmpty()) {
             image = new WritableImage(1, 1);

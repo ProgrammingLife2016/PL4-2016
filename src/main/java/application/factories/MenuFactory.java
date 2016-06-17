@@ -38,7 +38,7 @@ public class MenuFactory {
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
-    private CheckMenuItem allowLevel;
+    public static CheckMenuItem allowLevel;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence;
@@ -283,7 +283,7 @@ public class MenuFactory {
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
 
         resetView = initMenuItem("Reset", null, event -> handleReset());
-        allowLevel = new CheckMenuItem("Allow nucliotide level");
+        allowLevel = new CheckMenuItem("Allow nucleotide level");
         //allowLevel.setOnAction(event -> null);
 
         return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
