@@ -37,8 +37,6 @@ public class Graph {
 
     private ArrayList<String> allGenomes = new ArrayList<>();
 
-    private boolean filtering;
-
 
     /**
      * All the genomes that are in this graph.
@@ -143,13 +141,9 @@ public class Graph {
      * @return true if we change, false if we dont.
      */
     public boolean changeLevelMaps(List<String> selectedGenomes) {
-        System.out.println("amount of selected genomes: " + selectedGenomes.size());
-
-        System.out.println("amount of current genomes: " + currentGenomes.size());
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size()
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
-            System.out.println("amount of levelmaps: " + levelMaps.size());
             currentGenomes = new ArrayList<>(selectedGenomes);
             return true;
         }
@@ -227,8 +221,6 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         genomes = new ArrayList<>();
         List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-        System.out.println("nodemap size:" + nodeMap.size());
-        System.out.println("sortednodeIds size: " + sortedNodeIds.size());
         for (int nodeId : sortedNodeIds) {
             Node node = nodeMap.get(nodeId);
             if (node == null) {
@@ -238,7 +230,6 @@ public class Graph {
                     forEach(genomes::add);
             addCell(nodeMap, ref, toret, node);
         }
-        System.out.println("finished for loop");
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
@@ -304,7 +295,6 @@ public class Graph {
      */
     @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
-        System.out.println("started topological sort");
         //Copy the nodeMap to not make any changes to our original map.
         HashMap<Integer, Node> copyNodeMap = new HashMap<>(GraphReducer.copyNodeMap(nodeMap));
         //nodesWithoutParent <-List of all nodes with no incoming edges
@@ -352,9 +342,7 @@ public class Graph {
                 }
                 n.setLinks(new ArrayList<>());
             }
-        }
-        System.out.println("finished topological sort");
-        //return the sorted list
+        } 
         return sortedNodeIds;
     }
 
@@ -396,9 +384,7 @@ public class Graph {
                 }
                 toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH_REF);
 
-            } else {
-                toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
-            }
+            } else { toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH); }
         }
     }
 
@@ -639,11 +625,9 @@ public class Graph {
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
      * @param genomes   selected genomes.
-     * @param filtering whether filters are applied.
      * @return the reduced list of genomes.
      */
-    public List<String> reduceGenomes(List<Genome> genomes, boolean filtering) {
-        this.filtering = filtering;
+    public List<String> reduceGenomeList(List<Genome> genomes) {
         List<String> selectedGenomeNames = genomes.stream().map(Genome::getName)
                 .collect(Collectors.toList());
         return selectedGenomeNames.stream().filter(

@@ -502,11 +502,9 @@ public class MainController extends Controller<BorderPane> {
             }
 
             for (Node n : newAnn.getSpannedNodes()) {
-                System.out.println(n.getId());
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-            System.out.println("[DEBUG] Found too many matching annotations");
         }
     }
 
@@ -621,7 +619,6 @@ public class MainController extends Controller<BorderPane> {
 
             //fillGraph(highlights, graphController.getGenomes());
             strainSelection(highlights, getTreeController().getSelectedGenomes());
-            System.out.println("Select");
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
                         .getGraphMouseHandling().getPrevClick().getCellId());
@@ -659,10 +656,9 @@ public class MainController extends Controller<BorderPane> {
      * Method to add items to the Info-List
      */
     private void setListItems() {
-        List<String> genomes = new ArrayList<>();
+        List<String> genomes;
         if (filtering.isFiltering()) {
-            genomes = graphController.getGraph().reduceGenomes(
-                    filtering.getSelectedGenomes(), filtering.isFiltering());
+            genomes = graphController.getGraph().reduceGenomeList(filtering.getSelectedGenomes());
         } else if (treeController != null && !treeController.getSelectedGenomes().isEmpty()) {
             genomes = graphController.getGraph().reduceGenomes(
                     treeController.getSelectedGenomes());
@@ -751,16 +747,7 @@ public class MainController extends Controller<BorderPane> {
      * @return a list of loaded genome names.
      */
     public List<String> getLoadedGenomeNames() {
-        return graphController.getGraph().reduceGenomes(filtering.getSelectedGenomes(), filtering.isFiltering());
-    }
-
-    /**
-     * Getter for the Filtering class.
-     *
-     * @return the Filtering class.
-     */
-    public Filtering getFiltering() {
-        return filtering;
+        return graphController.getGraph().reduceGenomeList(filtering.getSelectedGenomes());
     }
 
     /**
