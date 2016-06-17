@@ -672,8 +672,6 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
-
-        System.out.println("switched to viewlevel: " + currentView);
     }
 
     public void toggleAllowNucleotideLevel() {
