@@ -66,7 +66,7 @@ public class MainController extends Controller<BorderPane> {
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
-    private boolean allowNucleotideLevel;
+    private boolean allowNucleotideLevel = false;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -368,14 +368,20 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, true);
         inGraph = true;
 
+        boolean update = false;
         // Apply the selected genomes
         //selectedGenomes.add("MT_H37RV_BRD_V5.ref");
         if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
             currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
+            update = true;
         }
+
         graphController.update(ref, currentView);
-        graphController.getZoomBox().fillZoomBox(count == -1);
+
         count++;
+        if(update) {
+            graphController.getZoomBox().fillZoomBox(true);
+        }
     }
 
     /**
@@ -427,8 +433,9 @@ public class MainController extends Controller<BorderPane> {
         buttons.get(0).setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()
                     && treeController.getCellByName(
-                    genomeTextField.textProperty().get().trim()) != null) {
-                LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
+                    genomeTextField.textProperty().get().trim().toUpperCase()) != null) {
+                LeafCell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().toUpperCase().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
