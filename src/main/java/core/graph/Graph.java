@@ -226,6 +226,8 @@ public class Graph {
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
         genomes = new ArrayList<>();
         List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+        System.out.println("nodemap size:" + nodeMap.size());
+        System.out.println("sortednodeIds size: " + sortedNodeIds.size());
         for (int nodeId : sortedNodeIds) {
             Node node = nodeMap.get(nodeId);
             if (node == null) {
@@ -235,6 +237,7 @@ public class Graph {
                     forEach(genomes::add);
             addCell(nodeMap, ref, toret, node);
         }
+        System.out.println("finished for loop");
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
@@ -300,12 +303,13 @@ public class Graph {
      */
     @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
+        System.out.println("started topological sort");
         //Copy the nodeMap to not make any changes to our original map.
         HashMap<Integer, Node> copyNodeMap = new HashMap<>(GraphReducer.copyNodeMap(nodeMap));
         //nodesWithoutParent <-List of all nodes with no incoming edges
         LinkedList<Node> nodesWithoutParent = new LinkedList<>();
         for (int key : nodeMap.keySet()) {
-            Node node = nodeMap.get(key);
+            Node node = copyNodeMap.get(key);
             if (node == null) {
                 continue;
             }
@@ -340,16 +344,15 @@ public class Graph {
             //for each node m with an edge e from n to m do
             for (int childId : n.getLinks()) {
                 Node m = nodeMap.get(childId);
-                if (m != null) {
-                    System.out.println("Found a null node.");
-                    m.removeParent(n.getId()); //Remove edge from m
-                }
+                m.removeParent(n.getId()); //Remove edge from m
                 //if m has no other incoming edges then insert m into the linked list.
                 if (m.getParents().size() == 0) {
                     nodesWithoutParent.addLast(m);
                 }
+                n.setLinks(new ArrayList<>());
             }
         }
+        System.out.println("finished topological sort");
         //return the sorted list
         return sortedNodeIds;
     }

@@ -269,12 +269,13 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void update(ArrayList<String> ref, int depth) {
         int min = drawFrom;
-
         //We received a different reference of depth, so we need to redraw.
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
+            System.out.println("adding graph components");
             graph.addGraphComponents(ref, depth);
+            System.out.println("finished adding graph components");
             // add components to graph pane
             addToPane(min);
 
@@ -293,6 +294,7 @@ public class GraphController extends Controller<ScrollPane> {
         } else {
             addToPane(min);
         }
+
         graph.endUpdate();
 
         this.getRoot().setContent(root);
