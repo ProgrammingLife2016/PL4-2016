@@ -484,13 +484,12 @@ public class MainController extends Controller<BorderPane> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
             } else {
-
-                if (currentView != 0) {
-                    return;
-                }
-                if (!annotationTextField.getText().isEmpty()) {
+                if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
                     highlightAnnotation();
                 }
+
+                annotationTextField.setText("");
+                return;
             }
         });
 
