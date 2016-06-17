@@ -369,6 +369,7 @@ public class MainController extends Controller<BorderPane> {
         inGraph = true;
 
         // Apply the selected genomes
+        //selectedGenomes.add("MT_H37RV_BRD_V5.ref");
         if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
             currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
         }
@@ -644,6 +645,8 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
+
+        System.out.println("switched to viewlevel: " + currentView);
     }
 
     public void toggleAllowNucleotideLevel() {
