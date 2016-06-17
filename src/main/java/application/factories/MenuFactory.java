@@ -271,7 +271,7 @@ public class MenuFactory {
      */
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
-            if (mainController.getTreeController().getSelectedGenomes().size() == 0) {
+            if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
                 WindowFactory.createAlert();
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
