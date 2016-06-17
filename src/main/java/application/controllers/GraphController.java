@@ -302,7 +302,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param e the edge to check
      */
     private void checkEdgeLength(Edge e) {
-        double maxEdgeLength = screenSize.getWidth() / 6.4;
+        double maxEdgeLength = screenSize.getWidth() / 4;
         double maxEdgeLengthLong = screenSize.getWidth();
         double xLength = e.getLine().endXProperty().get() - e.getLine().startXProperty().get();
         double yLength = e.getLine().endYProperty().get() - e.getLine().startYProperty().get();
@@ -317,9 +317,7 @@ public class GraphController extends Controller<ScrollPane> {
             }
             double newY = e.getSource().getLayoutY()
                     + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                    + (e.getSource().getLayoutY()
-                    + ((GraphCell) e.getSource()).getCellShape().getLayoutBounds().getHeight() / 2
-                    - (screenSize.getHeight() - 100) / 2) * 2.5;
+                    + screenSize.getHeight() / 20;
             newY = Math.max(newY, 10);
             newY = Math.min(newY, screenSize.getHeight() * 0.67);
             e.getSource().relocate(e.getSource().getLayoutX(), newY);
@@ -366,7 +364,7 @@ public class GraphController extends Controller<ScrollPane> {
     public Image takeSnapshot() {
         int pref = (int) graph.getModel().getGraphLayout().getMaxWidth() + 1;
         int height = ((int) graph.getModel().getGraphLayout().getMaxHeight()) * 2 + 1;
-        
+
         WritableImage image;
         if (graph.getModel().getAllCells().isEmpty()) {
             image = new WritableImage(1, 1);
