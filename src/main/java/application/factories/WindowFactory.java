@@ -4,11 +4,16 @@ import application.controllers.MainController;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -301,10 +306,9 @@ public final class WindowFactory {
         text.getStyleClass().add("title");
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(text, listView);
-
         vBox.getStylesheets().add("/css/popup.css");
         vBox.getStyleClass().add("vBox");
+        vBox.getChildren().addAll(text, listView);
 
         Scene tempScene = new Scene(vBox);
 
@@ -397,6 +401,40 @@ public final class WindowFactory {
 
         return directoryChooser;
     }
+
+    /**
+     * Method to create to alert
+     * Shown when no strains are selected but we still want to see the graph
+     */
+    public static void createAlert() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
+        dialog.setTitle("No strain selected");
+
+        VBox content = new VBox();
+        content.getStylesheets().add("/css/popup.css");
+        content.getStyleClass().add("vBox");
+        content.setAlignment(Pos.CENTER);
+        content.setPadding(new Insets(10, 10, 10 , 10));
+        content.setSpacing(10);
+
+        Text text = new Text("Please select strains first");
+        text.getStyleClass().add("text");
+
+        Button ok = new Button();
+        ok.getStyleClass().add("button");
+        ok.setText("OK");
+        ok.setOnMouseClicked(event -> dialog.hide());
+
+        content.getChildren().addAll(text, ok);
+
+        Scene dialogScene = new Scene(content, 200, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+
+    }
+
 
     /**
      * Creates the menu including a search bar with the annotations search box.

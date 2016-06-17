@@ -272,7 +272,7 @@ public class MenuFactory {
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
             if (mainController.getTreeController().getSelectedGenomes().size() == 0) {
-                JOptionPane.showMessageDialog(null, "Please select some genomes to display in the Graph.", "Alert", 1);
+                WindowFactory.createAlert();
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
                         mainController.getTreeController().getSelectedGenomes());

@@ -659,7 +659,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to add items to the Info-List
      */
     private void setListItems() {
-        List<String> genomes = new ArrayList<>();
+        List<String> genomes;
         if (filtering.isFiltering()) {
             genomes = graphController.getGraph().reduceGenomes(
                     filtering.getSelectedGenomes(), filtering.isFiltering());
