@@ -108,7 +108,6 @@ public class GraphController extends Controller<ScrollPane> {
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                     drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
-//                    update(graph.getCurrentRef(), graph.getCurrentInt());
                 }
             }
         });
