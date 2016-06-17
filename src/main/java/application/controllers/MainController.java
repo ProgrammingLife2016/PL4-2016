@@ -66,7 +66,7 @@ public class MainController extends Controller<BorderPane> {
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
-    private boolean allowNucleotideLevel;
+    private boolean allowNucleotideLevel = false;
 
     private Button searchButton;
     private Button selectAllButton;
