@@ -105,16 +105,9 @@ public final class GraphReducer {
                                                              List<String> genomesInFilter) {
         HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
         for (int nodeId : startMap.keySet()) {
-            Node node = filteredNodeMap.get(nodeId);
-<<<<<<< HEAD
-            if(node == null ) {
-                System.out.println("node is null")
-                ;continue; }
-=======
-            if (node == null) {
+            Node node = filteredNodeMap.get(nodeId);if (node == null) {
                 continue;
             }
->>>>>>> edd5a7809409908f09e7c088e8a019355c4afd41
             if (!intersects(node.getGenomes(), genomesInFilter)) {
                 for (int parentId : node.getParents()) {
                     Node parent = filteredNodeMap.get(parentId);
