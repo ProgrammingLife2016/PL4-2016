@@ -636,8 +636,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void switchScene(int delta) {
         currentView += delta;
-        currentView = Math.max(0, currentView);
+        currentView = Math.max(1, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
+        System.out.println("switched to current view: "+ currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
     }

@@ -151,8 +151,17 @@ public class Graph {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             System.out.println("amount of levelmaps: " + levelMaps.size());
             currentGenomes = new ArrayList<>(selectedGenomes);
+
+            int i = 0;
+            for (HashMap<Integer, Node> levelMap : levelMaps) {
+                System.out.println("levelmap " + i + ": " +levelMap.size());
+                i++;
+            }
+
             return true;
         }
+
+
 
         return false;
     }

@@ -65,11 +65,13 @@ public final class GraphReducer {
         determineParents(startMap);
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
-        filteredNodeMap = collapseFirstMap(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
+        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
+        determineParents(collapsedFilteredMap);
+        levelMaps.add(collapsedFilteredMap);
         int reduceAmount = 1;
 
-        for (int i = 1;; i++) {
+        for (int i = 2;; i++) {
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
