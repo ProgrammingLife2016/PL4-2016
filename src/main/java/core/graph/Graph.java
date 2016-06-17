@@ -104,7 +104,6 @@ public class Graph {
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
                 currentInt = levelMaps.size() - 1;
-                current.setLevelMaps(levelMaps);
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
@@ -122,7 +121,7 @@ public class Graph {
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    current = generateModel(ref, depth);
+                    current.setLevelMaps(levelMaps);
 
                     //LoadOneUp is only needed when we do not start on the top level.
                     loadBoth(depth);
@@ -333,8 +332,10 @@ public class Graph {
             //for each node m with an edge e from n to m do
             for (int childId : n.getLinks()) {
                 Node m = nodeMap.get(childId);
-                m.removeParent(n.getId()); //Remove edge from m
-
+                if (m != null) {
+                    System.out.println("Found a null node.");
+                    m.removeParent(n.getId()); //Remove edge from m
+                }
                 //if m has no other incoming edges then insert m into the linked list.
                 if (m.getParents().size() == 0) {
                     nodesWithoutParent.addLast(m);

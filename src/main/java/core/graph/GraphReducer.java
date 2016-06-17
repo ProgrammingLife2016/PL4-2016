@@ -1,6 +1,5 @@
 package core.graph;
 
-import application.controllers.MainController;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -105,7 +104,8 @@ public final class GraphReducer {
                                                              List<String> genomesInFilter) {
         HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
         for (int nodeId : startMap.keySet()) {
-            Node node = filteredNodeMap.get(nodeId);if (node == null) {
+            Node node = filteredNodeMap.get(nodeId);
+            if (node == null) {
                 continue;
             }
             if (!intersects(node.getGenomes(), genomesInFilter)) {
