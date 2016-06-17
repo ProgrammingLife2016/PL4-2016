@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class MainController extends Controller<BorderPane> {
     private ListFactory listFactory;
     private TextField genomeTextField;
     private TextField annotationTextField;
+    private Text annotationWarning;
     private StackPane box;
     private int count;
     private int secondCount;
@@ -496,6 +498,8 @@ public class MainController extends Controller<BorderPane> {
         deselectAnnotationButton.setOnAction(e -> {
             deselectAllAnnotations();
             annotationTextField.setText("");
+            annotationWarning.setText("");
+
         });
 
     }
@@ -510,6 +514,7 @@ public class MainController extends Controller<BorderPane> {
                     annotationTextField.getText());
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
             if (newAnn == null || newAnn.getSpannedNodes() == null) {
+                annotationWarning.setText("Warning: No matches found");
                 return;
             }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
@@ -523,8 +528,9 @@ public class MainController extends Controller<BorderPane> {
             for (Node n : newAnn.getSpannedNodes()) {
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
+            annotationWarning.setText("");
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
-            System.out.println("[DEBUG] Found too many matching annotations");
+            annotationWarning.setText("Warning: Found too many matches");
         }
     }
 
@@ -575,10 +581,14 @@ public class MainController extends Controller<BorderPane> {
         // Dont add the annotation search box in the tree view
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
+            annotationWarning = new Text();
+
+            HBox h = new HBox(annotationWarning);
+            h.setAlignment(Pos.CENTER_LEFT);
             Button highlightButton = new Button("Highlight annotation");
             Button deselectAnnotationButton = new Button("Deselect annotation");
             setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
-            hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
+            hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton, h);
         }
 
         if (withSearch) {
