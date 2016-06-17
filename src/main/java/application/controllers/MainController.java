@@ -380,7 +380,7 @@ public class MainController extends Controller<BorderPane> {
      * this method will visualize/highlight them specifically.
      *
      * @param ref the references to highlight.
-     * @param s a List of selected strains.
+     * @param s   a List of selected strains.
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
@@ -666,6 +666,8 @@ public class MainController extends Controller<BorderPane> {
         } else if (treeController != null && !treeController.getSelectedGenomes().isEmpty()) {
             genomes = graphController.getGraph().reduceGenomes(
                     treeController.getSelectedGenomes());
+        } else {
+            genomes = graphController.getGraph().getCurrentGenomes();
         }
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
@@ -728,10 +730,16 @@ public class MainController extends Controller<BorderPane> {
         );
 
         if (inGraph) {
-            strainSelection(new ArrayList<>(), getLoadedGenomeNames());
+            if (filtering.isFiltering()) {
+                strainSelection(new ArrayList<>(), getLoadedGenomeNames());
+            } else {
+                strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
+            }
             StringBuilder builder = new StringBuilder();
             appendFilterNames(builder);
             listFactory.modifyNodeInfo(builder.toString());
+        } else {
+            setListItems();
         }
 
         treeController.colorSelectedStrains();
