@@ -1,6 +1,5 @@
 package core.graph;
 
-import application.controllers.MainController;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
