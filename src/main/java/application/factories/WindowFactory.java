@@ -408,7 +408,7 @@ public final class WindowFactory {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setResizable(false);
-        dialog.setTitle("No strain selected");
+        dialog.setTitle("Not enough strains selected");
 
         VBox content = new VBox();
 
@@ -432,7 +432,7 @@ public final class WindowFactory {
         content.setPadding(new Insets(10, 10, 10, 10));
         content.setSpacing(10);
 
-        Text text = new Text("Please select strains first");
+        Text text = new Text("Please select two or more strains first");
         text.getStyleClass().add("text");
 
         Button ok = new Button();

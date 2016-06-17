@@ -108,7 +108,6 @@ public class GraphController extends Controller<ScrollPane> {
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                     drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
-//                    update(graph.getCurrentRef(), graph.getCurrentInt());
                 }
             }
         });
@@ -367,10 +366,7 @@ public class GraphController extends Controller<ScrollPane> {
     public Image takeSnapshot() {
         int pref = (int) graph.getModel().getGraphLayout().getMaxWidth() + 1;
         int height = ((int) graph.getModel().getGraphLayout().getMaxHeight()) * 2 + 1;
-        if (pref + 50 > 2500) {
-            pref = 2500;
-        }
-
+        
         WritableImage image;
         if (graph.getModel().getAllCells().isEmpty()) {
             image = new WritableImage(1, 1);
