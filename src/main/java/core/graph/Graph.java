@@ -13,7 +13,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -155,6 +158,7 @@ public class Graph {
 
     /**
      * Load both.
+     *
      * @param depth depth
      */
     private void loadBoth(int depth) {
@@ -257,9 +261,9 @@ public class Graph {
      * Method to add a cell, that corresponds to a given node, to a model.
      *
      * @param nodeMap the map the node resides in
-     * @param ref the reference strain
-     * @param toret the model to add the cell to
-     * @param node the node for which we need to add a cell
+     * @param ref     the reference strain
+     * @param toret   the model to add the cell to
+     * @param node    the node for which we need to add a cell
      */
     public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
         //Add next cell
@@ -313,8 +317,9 @@ public class Graph {
 
     /**
      * Traverses the graph and adds all Node IDs horizontally
+     *
      * @param nodesWithoutParent list of starting nodes
-     * @param nodeMap a copy of the nodemap the nodes reside in
+     * @param nodeMap            a copy of the nodemap the nodes reside in
      * @return
      */
     private List<Integer> topologicalSort(LinkedList<Node> nodesWithoutParent, HashMap<Integer, Node> nodeMap) {
@@ -348,13 +353,14 @@ public class Graph {
 
     /**
      * Method to add Edges to a cell.
-     * @param to the target node
+     *
+     * @param to      the target node
      * @param nodeMap the node map both nodes reside in
-     * @param toret the model to which the edges are added
-     * @param ref the reference strain
+     * @param toret   the model to which the edges are added
+     * @param ref     the reference strain
      */
     public void addEdgesToCell(Node to, HashMap<Integer, Node> nodeMap, Model toret,
-                                ArrayList<String> ref) {
+                               ArrayList<String> ref) {
 
         for (int parentId : to.getParents()) {
             Node from = nodeMap.get(parentId);
@@ -370,9 +376,10 @@ public class Graph {
                 for (int child : from.getLinks()) {
                     if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
                             && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                             toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                        } else {
+                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         }
                         edgePlaced = true;
                     }
@@ -624,7 +631,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes selected genomes.
+     * @param genomes   selected genomes.
      * @param filtering whether filters are applied.
      * @return the reduced list of genomes.
      */
