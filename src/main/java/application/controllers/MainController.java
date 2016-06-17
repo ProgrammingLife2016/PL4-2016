@@ -426,8 +426,9 @@ public class MainController extends Controller<BorderPane> {
         buttons.get(0).setOnAction(e -> {
             if (!genomeTextField.getText().isEmpty()
                     && treeController.getCellByName(
-                    genomeTextField.textProperty().get().trim()) != null) {
-                LeafCell cell = treeController.getCellByName(genomeTextField.textProperty().get().trim());
+                    genomeTextField.textProperty().get().trim().toUpperCase()) != null) {
+                LeafCell cell = treeController.getCellByName(
+                        genomeTextField.textProperty().get().toUpperCase().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
                 genomeTextField.setText("");
