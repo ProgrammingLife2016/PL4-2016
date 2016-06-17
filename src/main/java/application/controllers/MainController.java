@@ -489,7 +489,7 @@ public class MainController extends Controller<BorderPane> {
                     return;
                 }
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                    highlightAnnotation();
                 }
             }
         });
@@ -502,9 +502,9 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to specify what the Listener needs to do
+     * Highlights an annotation based on the string input in the annotationTextField.
      */
-    public void initListenerProperties() {
+    public void highlightAnnotation() {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
         try {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,

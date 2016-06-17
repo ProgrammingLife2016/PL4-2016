@@ -96,7 +96,11 @@ public class AnnotationProcessor {
         Annotation matchingAnnotation = null;
 
         for (Annotation a : annotations) {
-            if (a.getDisplayNameAttr().contains(str)) {
+            String strChar1LowerCase = str.substring(0, 1).toLowerCase() + str.substring(1);
+            String strChar1UpperCase = str.substring(0, 1).toUpperCase() + str.substring(1);
+
+            if (a.getDisplayNameAttr().contains(strChar1LowerCase)
+                    || a.getDisplayNameAttr().contains(strChar1UpperCase)) {
                 counter++;
                 matchingAnnotation = a;
             }
