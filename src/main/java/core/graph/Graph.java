@@ -37,8 +37,6 @@ public class Graph {
 
     private ArrayList<String> allGenomes = new ArrayList<>();
 
-    //private boolean filtering;
-
 
     /**
      * All the genomes that are in this graph.
@@ -344,8 +342,7 @@ public class Graph {
                 }
                 n.setLinks(new ArrayList<>());
             }
-        }
-        //return the sorted list
+        } 
         return sortedNodeIds;
     }
 
