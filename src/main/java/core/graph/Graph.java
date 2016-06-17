@@ -34,10 +34,11 @@ public class Graph {
 
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
+
     private ArrayList<String> allGenomes = new ArrayList<>();
 
-
     private boolean filtering;
+
 
     /**
      * All the genomes that are in this graph.
@@ -675,4 +676,11 @@ public class Graph {
         this.debugScreenShouldBeInitialized = debugScreenShouldBeInitialized;
     }
 
+    /**
+     * Getter method for all genomes.
+     * @return all genomes in gfa file.
+     */
+    public ArrayList<String> getAllGenomes() {
+        return allGenomes;
+    }
 }
