@@ -368,13 +368,19 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, true);
         inGraph = true;
 
+        boolean update = false;
         // Apply the selected genomes
         if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
             currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
+            update = true;
         }
+
         graphController.update(ref, currentView);
-        graphController.getZoomBox().fillZoomBox(count == -1);
+
         count++;
+        if(update) {
+            graphController.getZoomBox().fillZoomBox(true);
+        }
     }
 
     /**
