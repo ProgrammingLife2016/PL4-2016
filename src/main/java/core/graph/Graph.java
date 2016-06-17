@@ -103,7 +103,7 @@ public class Graph {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
-                currentInt = levelMaps.size()-1;
+                currentInt = levelMaps.size() - 1;
                 current.setLevelMaps(levelMaps);
                 current = generateModel(ref, depth);
 
@@ -133,11 +133,18 @@ public class Graph {
         return true;
     }
 
+    /**
+     * Method to apply the collapsing on the selected genomes only.
+     *
+     * @param selectedGenomes the selected genomes.
+     * @return true if we change, false if we dont.
+     */
     public boolean changeLevelMaps(List<String> selectedGenomes) {
-        System.out.println("amount of selected genomes: "+ selectedGenomes.size());
+        System.out.println("amount of selected genomes: " + selectedGenomes.size());
 
-        System.out.println("amount of current genomes: "+ currentGenomes.size());
-        if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
+        System.out.println("amount of current genomes: " + currentGenomes.size());
+        if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size()
+                && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             System.out.println("amount of levelmaps: " + levelMaps.size());
             currentGenomes = new ArrayList<>(selectedGenomes);
@@ -231,6 +238,11 @@ public class Graph {
         return toret;
     }
 
+    /**
+     * Method finds all genomes within this GFA
+     *
+     * @return the list of genomes.
+     */
     public ArrayList<String> findAllGenomes() {
         ArrayList<String> allGenomes = new ArrayList<>();
         for (int nodeId : startMap.keySet()) {

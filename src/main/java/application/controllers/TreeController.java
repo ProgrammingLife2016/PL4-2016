@@ -1,6 +1,5 @@
 package application.controllers;
 
-import application.factories.MenuFactory;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import application.fxobjects.layout.CellLayout;
@@ -15,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -452,8 +452,8 @@ public class TreeController extends Controller<ScrollPane> {
             builder.append("Rifampin: ").append(genome.getRifampin()).append("\n");
             builder.append("Streptomycin: ").append(genome.getStreptomycin()).append("\n");
             builder.append("Spoligotype: ").append(genome.getSpoligotype()).append("\n");
-            builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n");
-            builder.append("Tugela Ferry: ").append(genome.isTf()).append("\n");
+            builder.append("Genotypic DST: ").append(genome.getGenoDST()).append("\n")
+                    .append("Tugela Ferry: ").append(genome.isTf()).append("\n");
 
             mainController.getListFactory().modifyNodeInfo(builder.toString());
         }

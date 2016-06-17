@@ -55,9 +55,11 @@ public final class GraphReducer {
      *
      * @param startMap An uncollapsed node map.
      * @param minDelta The minimum reduction necessary to continue the reducing.
+     * @param genomesInFilter the genomes in this filter.
      * @return A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta, List<String> genomesInFilter) {
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap,
+                                                               int minDelta, List<String> genomesInFilter) {
         levelMaps = new ArrayList<>();
         startMapSize = startMap.size();
         System.out.println("startmap size:" + startMap.size());
@@ -92,13 +94,27 @@ public final class GraphReducer {
         }
     }
 
-    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap, List<String> genomesInFilter) {
+    /**
+     * Generates a filtered map
+     *
+     * @param startMap the startMap.
+     * @param genomesInFilter the genomes in the filter.
+     * @return a filtered map.
+     */
+    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap,
+                                                             List<String> genomesInFilter) {
         HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
         for (int nodeId : startMap.keySet()) {
             Node node = filteredNodeMap.get(nodeId);
+<<<<<<< HEAD
             if(node == null ) {
                 System.out.println("node is null")
                 ;continue; }
+=======
+            if (node == null) {
+                continue;
+            }
+>>>>>>> edd5a7809409908f09e7c088e8a019355c4afd41
             if (!intersects(node.getGenomes(), genomesInFilter)) {
                 for (int parentId : node.getParents()) {
                     Node parent = filteredNodeMap.get(parentId);
@@ -136,7 +152,6 @@ public final class GraphReducer {
             }
         }
 
-        System.out.println("collapsefirstmap size: "+ reducedMap.size());
         return reducedMap;
     }
 

@@ -132,7 +132,6 @@ public class MainController extends Controller<BorderPane> {
     public void initTree(String s) {
         treeController = new TreeController(this, s);
         fillTree();
-
     }
 
     /**
@@ -235,7 +234,6 @@ public class MainController extends Controller<BorderPane> {
                     String string = sc.nextLine();
                     mostRecent.add(string);
                 }
-
                 sc.close();
             }
         } catch (IOException | URISyntaxException e1) {
@@ -381,6 +379,7 @@ public class MainController extends Controller<BorderPane> {
      * If selections are made in the phylogenetic tree,
      * this method will visualize/highlight them specifically.
      *
+     * @param ref the references to highlight.
      * @param s a List of selected strains.
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
@@ -496,13 +495,14 @@ public class MainController extends Controller<BorderPane> {
             }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
-            if (newAnn.getSpannedNodes().get(0) != null) {
+            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
                 int i = newAnn.getSpannedNodes().get(0).getId();
                 graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                        / getGraphController().getGraph().getModel().getMaxWidth());
+                        / getGraphController().getGraph().getModel().getMaxWidth() - 450);
             }
 
             for (Node n : newAnn.getSpannedNodes()) {
+                System.out.println(n.getId());
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
