@@ -67,6 +67,7 @@ public class MainController extends Controller<BorderPane> {
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
     private boolean allowNucleotideLevel = false;
+    private boolean showReferenceStrain = false;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -93,6 +94,7 @@ public class MainController extends Controller<BorderPane> {
         this.metaDataLoaded = false;
         this.annotationsLoaded = false;
         this.allowNucleotideLevel = false;
+        this.showReferenceStrain = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -367,10 +369,13 @@ public class MainController extends Controller<BorderPane> {
     public void fillGraph(ArrayList<String> ref, List<String> selectedGenomes) {
         createMenu(true, true);
         inGraph = true;
-
         boolean update = false;
         // Apply the selected genomes
-        //selectedGenomes.add("MT_H37RV_BRD_V5.ref");
+        if (showReferenceStrain) {
+            selectedGenomes.add("MT_H37RV_BRD_V5.ref");
+        } else {
+            selectedGenomes.remove("MT_H37RV_BRD_V5.ref");
+        }
         if (graphController.getGraph().changeLevelMaps(selectedGenomes)) {
             currentView = getGraphController().getGraph().getLevelMaps().size() - 1;
             update = true;
@@ -382,6 +387,10 @@ public class MainController extends Controller<BorderPane> {
         if(update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
+    }
+
+    public void toggleShowReferenceStrain() {
+        this.showReferenceStrain = !this.showReferenceStrain;
     }
 
     /**

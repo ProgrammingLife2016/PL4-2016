@@ -39,6 +39,7 @@ public class MenuFactory {
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
     public static CheckMenuItem allowLevel;
+    public static CheckMenuItem showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence;
@@ -285,8 +286,10 @@ public class MenuFactory {
         resetView = initMenuItem("Reset", null, event -> handleReset());
         allowLevel = new CheckMenuItem("Allow nucliotide level");
         allowLevel.setOnAction(event -> mainController.toggleAllowNucleotideLevel());
+        showReferenceStrain = new CheckMenuItem("Show reference strain");
+        showReferenceStrain.setOnAction(event -> mainController.toggleShowReferenceStrain());
         return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
-                new SeparatorMenuItem(), resetView, allowLevel);
+                new SeparatorMenuItem(), resetView, allowLevel, showReferenceStrain);
     }
 
     /**
@@ -297,7 +300,7 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
-        mainController.getGraphController().update(new ArrayList<>(),mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();
