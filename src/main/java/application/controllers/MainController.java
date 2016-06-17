@@ -17,10 +17,12 @@ import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -145,13 +147,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initAnnotations(String path) {
         List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
-
         setAnnotationsLoaded(true);
+        graphController.getGraph().initAnnotations(annotations);
 
-        graphController.getGraph().setAnnotations(annotations);
-        graphController.getGraph().getModel().matchNodesAndAnnotations();
-
-        MenuFactory.loadAnnotations.setDisable(true);
+        System.out.println("annotations loaded, size: " + annotations.size());
     }
 
     /**
@@ -483,7 +482,6 @@ public class MainController extends Controller<BorderPane> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
             } else {
-
                 if (currentView != 0) {
                     return;
                 }
@@ -509,15 +507,24 @@ public class MainController extends Controller<BorderPane> {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
                     annotationTextField.getText());
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-            if (newAnn == null || newAnn.getSpannedNodes() == null) {
-                return;
+            if (newAnn == null || newAnn.getSpannedNodes().size() == 0) {
+                System.out.println("annotation not found");
+                WindowFactory.createAnnNotFoundAlert();
             }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
             if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
-                int i = newAnn.getSpannedNodes().get(0).getId();
-                graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                        / getGraphController().getGraph().getModel().getMaxWidth() - 450);
+                for (Node node : newAnn.getSpannedNodes()) {
+                    int id = node.getId();
+                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
+                    if (nodeInMap != null) {
+                        System.out.println("found the node of annotation");
+                        System.out.println("old scrollbar value: "+ graphController.getRoot().getHvalue());
+                        graphController.getRoot().setHvalue(((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                                / (graphController.getGraph().getModel().getMaxWidth() - 450)));
+                        break;
+                    }
+                }
             }
 
             for (Node n : newAnn.getSpannedNodes()) {
@@ -532,6 +539,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void createAnnotationPopup() {
         WindowFactory.createAnnotationChooser("Please load Annotation Data first");
+    }
+
+    public void annotationNotFoundPopup() {
+
     }
 
     /**

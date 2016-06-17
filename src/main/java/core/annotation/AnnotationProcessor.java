@@ -23,19 +23,23 @@ public class AnnotationProcessor {
     public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
         this.annotations = annotations;
         this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
+        int startLoopIndex = 0;
+        for (Annotation annotation : annotations) {
+            startLoopIndex = annotation.detNodesSpannedByAnnotation(startLoopIndex, filteredNodeMap);
+        }
     }
 
     /**
      * Matches reference nodes and annotations to each other.
      */
-    public void matchNodesAndAnnotations() {
+    public void matchNodesAndAnnotations(HashMap<Integer, Node> lowestMap) {
         int startLoopIndex = 0;
         for (Annotation a : annotations) {
-            startLoopIndex = a.detNodesSpannedByAnnotation(
-                    startLoopIndex, filteredNodeMap);
-
             for (Node n : a.getSpannedNodes()) {
-                n.addAnnotation(a);
+                Node node = lowestMap.get(n.getId());
+                if (node != null) {
+                    node.addAnnotation(a);
+                }
             }
         }
     }

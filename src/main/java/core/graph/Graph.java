@@ -3,6 +3,7 @@ package core.graph;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
 import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
@@ -63,6 +64,8 @@ public class Graph {
      */
     private List<Annotation> annotations;
 
+    private AnnotationProcessor annotationProcessor;
+
     /**
      * Class constructor.
      */
@@ -74,6 +77,10 @@ public class Graph {
         zoomOut = new Model();
 
         annotations = new ArrayList<>();
+    }
+
+    public HashMap<Integer, Node> getStartMap() {
+        return startMap;
     }
 
     /**
@@ -145,12 +152,17 @@ public class Graph {
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             currentGenomes = new ArrayList<>(selectedGenomes);
+            if (annotationProcessor != null) {
+                annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
+            }
             return true;
         }
-
-
-
         return false;
+    }
+
+    public void initAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+        annotationProcessor = new AnnotationProcessor(startMap, annotations);
     }
 
     /**

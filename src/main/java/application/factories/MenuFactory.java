@@ -419,7 +419,7 @@ public class MenuFactory {
             File file = new File(recentFile);
             File parentDir = file.getParentFile();
             switch (type) {
-                case GFF: mainController.initAnnotations(recentFile);
+                case GFF:
                     mainController.addRecentGFF(recentFile);
                     break;
                 case GFA: WindowFactory.createGFApopup(parentDir, file);

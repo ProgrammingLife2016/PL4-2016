@@ -44,6 +44,8 @@ public class Model {
     private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 
+    private AnnotationProcessor annotationProcessor;
+
     /**
      * Class constructor.
      */
@@ -56,12 +58,16 @@ public class Model {
         clear();
     }
 
+    public void initAnnotations(HashMap<Integer, Node> startMap) {
+        annotationProcessor = new AnnotationProcessor(startMap, annotations);
+    }
+
     /**
      * Match the nodes in levelMap 0 to the annotation data.
      */
-    public void matchNodesAndAnnotations() {
-        if (levelMaps.size() > 0) {
-            new AnnotationProcessor(levelMaps.get(0), annotations).matchNodesAndAnnotations();
+    public void matchNodesAndAnnotations(HashMap<Integer, Node> startMap) {
+        if (levelMaps.size() > 0 && annotationProcessor != null) {
+            annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
         }
     }
 
