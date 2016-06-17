@@ -284,7 +284,7 @@ public class MenuFactory {
 
         resetView = initMenuItem("Reset", null, event -> handleReset());
         allowLevel = new CheckMenuItem("Allow nucliotide level");
-        //allowLevel.setOnAction(event -> null);
+        allowLevel.setOnAction(event -> mainController.toggleAllowNucleotideLevel());
 
         return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
                 new SeparatorMenuItem(), resetView, allowLevel);

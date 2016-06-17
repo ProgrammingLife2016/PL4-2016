@@ -66,6 +66,7 @@ public class MainController extends Controller<BorderPane> {
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
+    private boolean allowNucleotideLevel;
 
     private Button searchButton;
     private Button selectAllButton;
@@ -91,6 +92,7 @@ public class MainController extends Controller<BorderPane> {
         this.filtering = new Filtering();
         this.metaDataLoaded = false;
         this.annotationsLoaded = false;
+        this.allowNucleotideLevel = false;
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -633,11 +635,20 @@ public class MainController extends Controller<BorderPane> {
      */
     public void switchScene(int delta) {
         currentView += delta;
-        currentView = Math.max(1, currentView);
+
+        int minLevel = 1;
+        if (allowNucleotideLevel) {
+            minLevel = 0;
+        }
+        currentView = Math.max(minLevel, currentView);
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         System.out.println("switched to current view: "+ currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
+    }
+
+    public void toggleAllowNucleotideLevel() {
+        this.allowNucleotideLevel = !this.allowNucleotideLevel;
     }
 
     /**

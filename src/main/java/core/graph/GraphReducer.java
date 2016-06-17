@@ -75,6 +75,10 @@ public final class GraphReducer {
             int previousMapSize = levelMaps.get(i - 1).size();
             int currentMapSize = levelMap.size();
 
+            if (levelMap.size() < 20) {
+                return levelMaps;
+            }
+
             if (levelMaps.size() == 10) {
                 reduceZoomingLevels(reduceAmount);
                 i -= reduceAmount;
@@ -167,6 +171,10 @@ public final class GraphReducer {
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
             int previousMapSize2 = levelMaps.get(j - 1).size();
             int currentMapSize2 = levelMap2.size();
+
+            if (levelMap2.size() < 20) {
+                return;
+            }
             if (previousMapSize2 - currentMapSize2 == 0) {
                 levelMaps.set(j - 1, levelMap2);
                 maxDepth += 10;
