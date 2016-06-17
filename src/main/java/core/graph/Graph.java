@@ -298,11 +298,14 @@ public class Graph {
     @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
         //Copy the nodeMap to not make any changes to our original map.
-        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        HashMap<Integer, Node> copyNodeMap = new HashMap<>(GraphReducer.copyNodeMap(nodeMap));
         //nodesWithoutParent <-List of all nodes with no incoming edges
         LinkedList<Node> nodesWithoutParent = new LinkedList<>();
         for (int key : nodeMap.keySet()) {
             Node node = nodeMap.get(key);
+            if (node == null) {
+                continue;
+            }
             //Check whether the node has no parents
             if (node.getParents().size() == 0) {
                 //Add the node to the list of nodes without parent
