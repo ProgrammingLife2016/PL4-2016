@@ -60,16 +60,7 @@ public final class GraphReducer {
      */
     public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap,
                                                                int minDelta, List<String> genomesInFilter) {
-        levelMaps = new ArrayList<>();
-        zoomLevel = 0;
-        startMapSize = startMap.size();
-        determineParents(startMap);
-        HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
-        determineParents(filteredNodeMap);
-        levelMaps.add(filteredNodeMap);
-        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
-        determineParents(collapsedFilteredMap);
-        levelMaps.add(collapsedFilteredMap);
+        initializeLevelMaps(startMap, genomesInFilter);
         int reduceAmount = 1;
 
         for (int i = 2;; i++) {
@@ -99,6 +90,25 @@ public final class GraphReducer {
                 }
             }
         }
+    }
+
+    /**
+     * Initializes a new LevelMaps
+     *
+     * @param startMap The original nodemap that was parsed.
+     * @param genomesInFilter All genomes that should be present.
+     */
+    public static void initializeLevelMaps(HashMap<Integer, Node> startMap, List<String> genomesInFilter) {
+        levelMaps = new ArrayList<>();
+        zoomLevel = 0;
+        startMapSize = startMap.size();
+        determineParents(startMap);
+        HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
+        determineParents(filteredNodeMap);
+        levelMaps.add(filteredNodeMap);
+        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
+        determineParents(collapsedFilteredMap);
+        levelMaps.add(collapsedFilteredMap);
     }
 
     /**
@@ -133,6 +143,13 @@ public final class GraphReducer {
         return filteredNodeMap;
     }
 
+    /**
+     * Method to check whether at least one element of two lists are shared.
+     *
+     * @param l1 the first list
+     * @param l2 the second list
+     * @return true iff atleast one shared object
+     */
     private static boolean intersects(List<String> l1, List<String> l2) {
         for (String s : l1) {
             if (l2.contains(s)) {
@@ -142,6 +159,12 @@ public final class GraphReducer {
         return false;
     }
 
+    /**
+     * Method to collapse the lowest map horizontally, filering out any
+     * unvaluable information.
+     * @param nodeMap the nodemap to be collapsed
+     * @return the collapsed map
+     */
     private static HashMap<Integer, Node> collapseFirstMap(HashMap<Integer, Node> nodeMap) {
         HashMap<Integer, Node> reducedMap = new HashMap<>(copyNodeMap(nodeMap));
         for (int idx = 1; idx < startMapSize; idx++) {
@@ -272,7 +295,6 @@ public final class GraphReducer {
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
      * @param map       A HashMap containing all nodes in the graph.
-     * @param zoomLevel The current zoomLevel
      * @return A collapsed map.
      */
     public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
@@ -305,13 +327,11 @@ public final class GraphReducer {
      *
      * @param nodeMap       A HashMap containing all nodes in the graph.
      * @param parent        A given parent node to be collapsed with its child.
-     * @param zoomLevel     the zoom level of the previous levelMap.
      * @param maxComplexity The maximum allowed number of nodes that should be collapsed.
      * @return Whether the complex collapse action has succeeded.
      */
     public static Boolean collapseComplexPath(HashMap<Integer, Node> nodeMap, Node parent, int maxComplexity) {
         // Links must be present from parent --> child
-
         if (parent == null) { return false; }
 
         ArrayList<Node> collapsingNodes = new ArrayList<>();
@@ -323,14 +343,6 @@ public final class GraphReducer {
             for (Node collapseNode : collapsingNodes) {
                 if (!collapseNode.equals(complexNode)) {
                     collapseNodeIntoParent(complexNode, collapseNode);
-                    for (int parentId : collapseNode.getParents()) {
-                        Node collapseParent = nodeMap.get(parentId);
-                        if (collapseParent != null) {
-                            collapseParent.removeLink(collapseNode.getId());
-                            collapseParent.addLink(complexNode.getId());
-                            complexNode.addParent(parentId);
-                        }
-                    }
                     parent.removeLink(collapseNode.getId());
                     targetNode.removeParent(collapseNode.getId());
                     nodeMap.remove(collapseNode.getId());
