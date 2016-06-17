@@ -135,6 +135,8 @@ public class Graph {
 
     public boolean changeLevelMaps(List<String> selectedGenomes) {
         System.out.println("amount of selected genomes: "+ selectedGenomes.size());
+
+        System.out.println("amount of current genomes: "+ currentGenomes.size());
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size() && currentGenomes.size() == selectedGenomes.size()) ) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             System.out.println("amount of levelmaps: " + levelMaps.size());
@@ -181,7 +183,6 @@ public class Graph {
             public void start() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = generateModel(currentRef, finalDepth - 1);
-
                 }
             }
         }.start();
@@ -213,27 +214,17 @@ public class Graph {
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-//
-//        //Root Node
-//        Node root = nodeMap.get(1);
-//        allGenomes.addAll(root.getGenomes());
-            // Draw all nodes.
-            //Create a new genome list.
-//            toret.addCell(root.getId(), root.getSequence(),
-//                    root.getNucleotides(), root.getType());
-            genomes = new ArrayList<>();
-//            genomes.addAll(root.getGenomes());
-
-            List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-            for (int nodeId : sortedNodeIds) {
-                Node node = nodeMap.get(nodeId);
-                if (node == null) {
-                    continue;
-                }
-                node.getGenomes().stream().filter(s -> !genomes.contains(s)).
-                        forEach(genomes::add);
-                addCell(nodeMap, ref, toret, node);
+        genomes = new ArrayList<>();
+        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+        for (int nodeId : sortedNodeIds) {
+            Node node = nodeMap.get(nodeId);
+            if (node == null) {
+                continue;
             }
+            node.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                    forEach(genomes::add);
+            addCell(nodeMap, ref, toret, node);
+        }
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
@@ -340,45 +331,6 @@ public class Graph {
         }
         //return the sorted list
         return sortedNodeIds;
-    }
-
-
-    /**
-     * Draws the selected genomes.
-     *
-     * @param nodeMap map of nodes.
-     * @param root    Root of the graph.
-     * @param toret   A given model.
-     * @param ref     Reference object.
-     */
-    private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
-                                                  Model toret, ArrayList<String> ref) {
-        if (intersection(root.getGenomes(), currentGenomes) > 0) {
-            toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), CellType.RECTANGLE);
-        }
-
-        // In this case we know that the genomes in the graph are only this ones.
-        genomes = currentGenomes;
-
-        // Only draw when the intersection > 0 (Node contains genome that we
-        // want to draw.
-        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-        for (int nodeId : sortedNodeIds) {
-            Node from = nodeMap.get(nodeId);
-            if (from == null) {
-                continue;
-            }
-            if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                for (int j : from.getLinks(nodeMap)) {
-                    Node to = nodeMap.get(j);
-                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                        //Add next cell
-                        addCell(nodeMap, ref, toret, from);
-                    }
-                }
-            }
-        }
     }
 
     /**

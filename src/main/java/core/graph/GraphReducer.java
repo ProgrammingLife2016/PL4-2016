@@ -1,5 +1,6 @@
 package core.graph;
 
+import application.controllers.MainController;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -57,7 +58,9 @@ public final class GraphReducer {
      * @return A list of node maps with a decreasing amount of nodes.
      */
     public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta, List<String> genomesInFilter) {
+        levelMaps = new ArrayList<>();
         startMapSize = startMap.size();
+        System.out.println("startmap size:" + startMap.size());
         determineParents(startMap);
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
@@ -93,7 +96,9 @@ public final class GraphReducer {
         HashMap<Integer, Node> filteredNodeMap = copyNodeMap(startMap);
         for (int nodeId : startMap.keySet()) {
             Node node = filteredNodeMap.get(nodeId);
-            if(node == null ) { continue; }
+            if(node == null ) {
+                System.out.println("node is null")
+                ;continue; }
             if (!intersects(node.getGenomes(), genomesInFilter)) {
                 for (int parentId : node.getParents()) {
                     Node parent = filteredNodeMap.get(parentId);
@@ -548,6 +553,7 @@ public final class GraphReducer {
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
         if (levelMaps.size() > 0) {
+            levelMaps.get(zoomLevel).get(child.getId());
             levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
         }
     }

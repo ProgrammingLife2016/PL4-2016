@@ -35,6 +35,10 @@ public class GraphMouseHandling {
 
         String info = "";
 
+        if(clicked == null) {
+            System.out.println("Error on loading data");
+            return;
+        }
         info += format("Genome ID: %d \n", clicked.getId());
         info += format("%d genomes in Node: \n%s\n",
                 clicked.getGenomes().size(), clicked.getGenomesAsString());

@@ -110,11 +110,6 @@ public class MainController extends Controller<BorderPane> {
     public void initGraph() {
         initGUI();
         graphController.getGraph().findAllGenomes();
-        // currentView = graphController.getGraph().getLevelMaps().size() - 1;
-
-        // fillGraph(new ArrayList<>(), new ArrayList<>());
-
-        //  graphController.getGraph().getModel().matchNodesAndAnnotations();
     }
 
     /**
@@ -243,10 +238,8 @@ public class MainController extends Controller<BorderPane> {
 
                 sc.close();
             }
-        } catch (IOException e1) {
+        } catch (IOException | URISyntaxException e1) {
             e1.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
@@ -272,10 +265,8 @@ public class MainController extends Controller<BorderPane> {
             }
 
             writer.close();
-        } catch (IOException e1) {
+        } catch (IOException | URISyntaxException e1) {
             e1.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
@@ -383,21 +374,7 @@ public class MainController extends Controller<BorderPane> {
         }
         graphController.update(ref, currentView);
         graphController.getZoomBox().fillZoomBox(count == -1);
-
         count++;
-    }
-
-    /**
-     * If selections are made in the phylogenetic tree,
-     * this method will visualize/highlight them specifically.
-     *
-     * @param s a List of selected strains.
-     */
-    public void soloStrainSelection(List<String> s) {
-        ArrayList<String> list2 = new ArrayList<>();
-        list2.add(s.get(0));
-        fillGraph(list2, new ArrayList<>());
-        initGUI();
     }
 
     /**
@@ -409,8 +386,6 @@ public class MainController extends Controller<BorderPane> {
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
         fillGraph(ref, s);
-        System.out.println("current view: " + currentView);
-
         setListItems();
         initGUI();
     }
@@ -552,11 +527,9 @@ public class MainController extends Controller<BorderPane> {
         Map<Integer, Node> nodeMap = graphController.getGraph().getModel().getLevelMaps().get(0);
         Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
 
-        for (Node n : nodeMap.values()) {
-            if (n.getType().equals(CellType.RECTANGLE)) {
-                ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
-            }
-        }
+        nodeMap.values().stream().filter(n -> n.getType().equals(CellType.RECTANGLE)).forEachOrdered(n -> {
+            ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
+        });
     }
 
     /**
@@ -609,7 +582,6 @@ public class MainController extends Controller<BorderPane> {
     public void toggleSelectDeselect(boolean x) {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
-
     }
 
 
