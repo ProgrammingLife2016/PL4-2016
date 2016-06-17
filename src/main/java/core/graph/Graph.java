@@ -13,7 +13,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -31,10 +34,11 @@ public class Graph {
 
     private int currentInt = -1;
     private ArrayList<String> currentRef = new ArrayList<>();
+
     private ArrayList<String> allGenomes = new ArrayList<>();
 
-
     private boolean filtering;
+
 
     /**
      * All the genomes that are in this graph.
@@ -83,7 +87,6 @@ public class Graph {
     public HashMap<Integer, Node> getNodeMapFromFile(String path) {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
-            levelMaps = GraphReducer.createLevelMaps(startMap, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,8 +107,7 @@ public class Graph {
 
             //Reset the model and re'add the levelMaps, since we have another reference or depth.
             if (currentInt == -1) { //First time we are here.
-                currentInt = depth;
-                current.setLevelMaps(levelMaps);
+                currentInt = levelMaps.size() - 1;
                 current = generateModel(ref, depth);
 
                 //LoadOneUp is only needed when we do not start on the top level.
@@ -123,7 +125,7 @@ public class Graph {
                     currentInt = depth;
                 } else if (ref != currentRef) {
                     currentRef = ref;
-                    current = generateModel(ref, depth);
+                    current.setLevelMaps(levelMaps);
 
                     //LoadOneUp is only needed when we do not start on the top level.
                     loadBoth(depth);
@@ -135,7 +137,29 @@ public class Graph {
     }
 
     /**
+     * Method to apply the collapsing on the selected genomes only.
+     *
+     * @param selectedGenomes the selected genomes.
+     * @return true if we change, false if we dont.
+     */
+    public boolean changeLevelMaps(List<String> selectedGenomes) {
+        System.out.println("amount of selected genomes: " + selectedGenomes.size());
+
+        System.out.println("amount of current genomes: " + currentGenomes.size());
+        if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size()
+                && currentGenomes.size() == selectedGenomes.size())) {
+            levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
+            System.out.println("amount of levelmaps: " + levelMaps.size());
+            currentGenomes = new ArrayList<>(selectedGenomes);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Load both.
+     *
      * @param depth depth
      */
     private void loadBoth(int depth) {
@@ -170,7 +194,6 @@ public class Graph {
             public void start() {
                 if (finalDepth - 1 >= 0) {
                     zoomIn = generateModel(currentRef, finalDepth - 1);
-
                 }
             }
         }.start();
@@ -202,31 +225,20 @@ public class Graph {
 
         //Select the level to draw from
         HashMap<Integer, Node> nodeMap = levelMaps.get(depth);
-
-        //Root Node
-        Node root = nodeMap.get(1);
-        allGenomes.addAll(root.getGenomes());
-        if (filtering) { //Draw selected references
-            // We are now drawing only the selected items.
-            generateModelWithSelectedGenomes(nodeMap, root, toret, ref);
-        } else { // Draw all nodes.
-            //Create a new genome list.
-            toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), root.getType());
-            genomes = new ArrayList<>();
-            genomes.addAll(root.getGenomes());
-
-            List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-            for (int nodeId : sortedNodeIds) {
-                Node node = nodeMap.get(nodeId);
-                if (node == null) {
-                    continue;
-                }
-                node.getGenomes().stream().filter(s -> !genomes.contains(s)).
-                        forEach(genomes::add);
-                addCell(nodeMap, ref, toret, node);
+        genomes = new ArrayList<>();
+        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
+        System.out.println("nodemap size:" + nodeMap.size());
+        System.out.println("sortednodeIds size: " + sortedNodeIds.size());
+        for (int nodeId : sortedNodeIds) {
+            Node node = nodeMap.get(nodeId);
+            if (node == null) {
+                continue;
             }
+            node.getGenomes().stream().filter(s -> !genomes.contains(s)).
+                    forEach(genomes::add);
+            addCell(nodeMap, ref, toret, node);
         }
+        System.out.println("finished for loop");
         if (debugScreenShouldBeInitialized) {
             toret.setLayout();
         }
@@ -234,12 +246,28 @@ public class Graph {
     }
 
     /**
+     * Method finds all genomes within this GFA
+     *
+     * @return the list of genomes.
+     */
+    public ArrayList<String> findAllGenomes() {
+        ArrayList<String> allGenomes = new ArrayList<>();
+        for (int nodeId : startMap.keySet()) {
+            Node node = startMap.get(nodeId);
+            node.getGenomes().stream().filter(s -> !allGenomes.contains(s)).
+                    forEach(allGenomes::add);
+        }
+        this.allGenomes = allGenomes;
+        return allGenomes;
+    }
+
+    /**
      * Method to add a cell, that corresponds to a given node, to a model.
      *
      * @param nodeMap the map the node resides in
-     * @param ref the reference strain
-     * @param toret the model to add the cell to
-     * @param node the node for which we need to add a cell
+     * @param ref     the reference strain
+     * @param toret   the model to add the cell to
+     * @param node    the node for which we need to add a cell
      */
     public void addCell(HashMap<Integer, Node> nodeMap, ArrayList<String> ref, Model toret, Node node) {
         //Add next cell
@@ -276,12 +304,16 @@ public class Graph {
      */
     @SuppressFBWarnings
     public List<Integer> topologicalSort(HashMap<Integer, Node> nodeMap) {
+        System.out.println("started topological sort");
         //Copy the nodeMap to not make any changes to our original map.
-        HashMap<Integer, Node> copyNodeMap = GraphReducer.copyNodeMap(nodeMap);
+        HashMap<Integer, Node> copyNodeMap = new HashMap<>(GraphReducer.copyNodeMap(nodeMap));
         //nodesWithoutParent <-List of all nodes with no incoming edges
         LinkedList<Node> nodesWithoutParent = new LinkedList<>();
         for (int key : nodeMap.keySet()) {
-            Node node = nodeMap.get(key);
+            Node node = copyNodeMap.get(key);
+            if (node == null) {
+                continue;
+            }
             //Check whether the node has no parents
             if (node.getParents().size() == 0) {
                 //Add the node to the list of nodes without parent
@@ -293,8 +325,9 @@ public class Graph {
 
     /**
      * Traverses the graph and adds all Node IDs horizontally
+     *
      * @param nodesWithoutParent list of starting nodes
-     * @param nodeMap a copy of the nodemap the nodes reside in
+     * @param nodeMap            a copy of the nodemap the nodes reside in
      * @return
      */
     private List<Integer> topologicalSort(LinkedList<Node> nodesWithoutParent, HashMap<Integer, Node> nodeMap) {
@@ -313,65 +346,28 @@ public class Graph {
             for (int childId : n.getLinks()) {
                 Node m = nodeMap.get(childId);
                 m.removeParent(n.getId()); //Remove edge from m
-
                 //if m has no other incoming edges then insert m into the linked list.
                 if (m.getParents().size() == 0) {
                     nodesWithoutParent.addLast(m);
                 }
+                n.setLinks(new ArrayList<>());
             }
         }
+        System.out.println("finished topological sort");
         //return the sorted list
         return sortedNodeIds;
     }
 
-
-    /**
-     * Draws the selected genomes.
-     *
-     * @param nodeMap map of nodes.
-     * @param root    Root of the graph.
-     * @param toret   A given model.
-     * @param ref     Reference object.
-     */
-    private void generateModelWithSelectedGenomes(HashMap<Integer, Node> nodeMap, Node root,
-                                                  Model toret, ArrayList<String> ref) {
-        if (intersection(root.getGenomes(), currentGenomes) > 0) {
-            toret.addCell(root.getId(), root.getSequence(),
-                    root.getNucleotides(), CellType.RECTANGLE);
-        }
-
-        // In this case we know that the genomes in the graph are only this ones.
-        genomes = currentGenomes;
-
-        // Only draw when the intersection > 0 (Node contains genome that we
-        // want to draw.
-        List<Integer> sortedNodeIds = topologicalSort(nodeMap);
-        for (int nodeId : sortedNodeIds) {
-            Node from = nodeMap.get(nodeId);
-            if (from == null) {
-                continue;
-            }
-            if (intersection(from.getGenomes(), currentGenomes) > 0) {
-                for (int j : from.getLinks(nodeMap)) {
-                    Node to = nodeMap.get(j);
-                    if (intersection(to.getGenomes(), currentGenomes) > 0) {
-                        //Add next cell
-                        addCell(nodeMap, ref, toret, from);
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Method to add Edges to a cell.
-     * @param to the target node
+     *
+     * @param to      the target node
      * @param nodeMap the node map both nodes reside in
-     * @param toret the model to which the edges are added
-     * @param ref the reference strain
+     * @param toret   the model to which the edges are added
+     * @param ref     the reference strain
      */
     public void addEdgesToCell(Node to, HashMap<Integer, Node> nodeMap, Model toret,
-                                ArrayList<String> ref) {
+                               ArrayList<String> ref) {
 
         for (int parentId : to.getParents()) {
             Node from = nodeMap.get(parentId);
@@ -387,9 +383,10 @@ public class Graph {
                 for (int child : from.getLinks()) {
                     if (intersectionInt(nodeMap.get(child).getLinks(), from.getLinks()) > 0
                             && intersection(nodeMap.get(child).getGenomes(), ref) > 0 && ref.size() < 2) {
-                        toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         if (intersection(nodeMap.get(child).getGenomes(), ref) > 0) {
                             toret.addEdge(from.getId(), child, width, EdgeType.GRAPH_REF);
+                        } else {
+                            toret.addEdge(from.getId(), to.getId(), width, EdgeType.GRAPH);
                         }
                         edgePlaced = true;
                     }
@@ -641,7 +638,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes selected genomes.
+     * @param genomes   selected genomes.
      * @param filtering whether filters are applied.
      * @return the reduced list of genomes.
      */
@@ -650,6 +647,17 @@ public class Graph {
         List<String> selectedGenomeNames = genomes.stream().map(Genome::getName)
                 .collect(Collectors.toList());
         return selectedGenomeNames.stream().filter(
+                this.allGenomes::contains).collect(Collectors.toList());
+    }
+
+    /**
+     * Reduce the list of selected genomes to genomes available in the loaded graph.
+     *
+     * @param genomes selected genomes.
+     * @return the reduced list of genomes.
+     */
+    public List<String> reduceGenomes(List<String> genomes) {
+        return genomes.stream().filter(
                 this.allGenomes::contains).collect(Collectors.toList());
     }
 
@@ -671,4 +679,11 @@ public class Graph {
         this.debugScreenShouldBeInitialized = debugScreenShouldBeInitialized;
     }
 
+    /**
+     * Getter method for all genomes.
+     * @return all genomes in gfa file.
+     */
+    public ArrayList<String> getAllGenomes() {
+        return allGenomes;
+    }
 }
