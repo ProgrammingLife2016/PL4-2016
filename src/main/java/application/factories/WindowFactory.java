@@ -12,8 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -413,10 +411,25 @@ public final class WindowFactory {
         dialog.setTitle("No strain selected");
 
         VBox content = new VBox();
+
+        addAlertComponents(content, dialog);
+
+        Scene dialogScene = new Scene(content, 200, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+
+    }
+
+    /**
+     * Method to add the components to the alert pop up
+     * @param content the content to be set
+     * @param dialog the dialog to add the content to
+     */
+    public static void addAlertComponents(VBox content, Stage dialog) {
         content.getStylesheets().add("/css/popup.css");
         content.getStyleClass().add("vBox");
         content.setAlignment(Pos.CENTER);
-        content.setPadding(new Insets(10, 10, 10 , 10));
+        content.setPadding(new Insets(10, 10, 10, 10));
         content.setSpacing(10);
 
         Text text = new Text("Please select strains first");
@@ -428,10 +441,6 @@ public final class WindowFactory {
         ok.setOnMouseClicked(event -> dialog.hide());
 
         content.getChildren().addAll(text, ok);
-
-        Scene dialogScene = new Scene(content, 200, 100);
-        dialog.setScene(dialogScene);
-        dialog.show();
 
     }
 

@@ -273,9 +273,7 @@ public class GraphController extends Controller<ScrollPane> {
         if (depth <= graph.getLevelMaps().size() - 1 && depth >= 0
                 && (ref != null && (!(ref.equals(graph.getCurrentRef()))) || depth != graph.getCurrentInt())) {
             root.getChildren().clear();
-            System.out.println("adding graph components");
             graph.addGraphComponents(ref, depth);
-            System.out.println("finished adding graph components");
             // add components to graph pane
             addToPane(min);
 
