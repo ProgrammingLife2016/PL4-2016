@@ -271,8 +271,8 @@ public class MenuFactory {
      */
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
-            if (mainController.getTreeController().getSelectedGenomes().size() == 0) {
-                JOptionPane.showMessageDialog(null, "Please select some genomes to display in the Graph.", "Alert", 1);
+            if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
+                WindowFactory.createAlert();
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
                         mainController.getTreeController().getSelectedGenomes());
@@ -293,6 +293,7 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
+        mainController.getGraphController().update(new ArrayList<>(),mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();

@@ -61,7 +61,6 @@ public final class GraphReducer {
                                                                int minDelta, List<String> genomesInFilter) {
         levelMaps = new ArrayList<>();
         startMapSize = startMap.size();
-        System.out.println("startmap size:" + startMap.size());
         determineParents(startMap);
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
@@ -149,7 +148,6 @@ public final class GraphReducer {
             }
         }
 
-        System.out.println("reduced map size: " + reducedMap.size());
         return reducedMap;
     }
 
@@ -175,7 +173,6 @@ public final class GraphReducer {
                 j--;
             } else {
                 levelMaps.add(levelMap2);
-                System.out.println(levelMap2.size());
             }
         }
     }
@@ -585,7 +582,6 @@ public final class GraphReducer {
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
         if (levelMaps.size() > 0) {
-            levelMaps.get(zoomLevel).get(child.getId());
             levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
         }
     }

@@ -105,6 +105,7 @@ public class ZoomBox extends ScrollPane {
      */
     public void reset() {
         zoomRect.setWidth(zoomBoxWidth);
+        zoomRect.setX(rectX);
     }
 
 

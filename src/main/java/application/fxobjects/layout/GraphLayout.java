@@ -59,7 +59,6 @@ public class GraphLayout extends CellLayout {
     public void execute() {
         tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
         List<Cell> cells = model.getAddedCells();
-        System.out.println("placing cells");
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
             if (!cell.isRelocatedX()) {
@@ -92,8 +91,6 @@ public class GraphLayout extends CellLayout {
                 }
             }
         }
-        System.out.println("finished placing cells");
-
     }
 
     /**
