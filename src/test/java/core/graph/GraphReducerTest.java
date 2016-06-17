@@ -109,7 +109,7 @@ public class GraphReducerTest {
         nodeMap.get(2).addLink(3);
 
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1), 0));
+        assertTrue(GraphReducer.collapseNodeSequence(nodeMap, nodeMap.get(1)));
 
         assertEquals(1, nodeMap.get(1).getLinks(nodeMap).size());
         assertEquals(nodeMap.get(3).getId(), (int) nodeMap.get(1).getLinks(nodeMap).get(0));
@@ -135,7 +135,7 @@ public class GraphReducerTest {
 
         // Collapse the bubble
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0));
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
 
         assertEquals(1, nodeMap.get(1).getLinks(nodeMap).size());
         assertEquals(2, (int) nodeMap.get(1).getLinks(nodeMap).get(0));
@@ -163,7 +163,7 @@ public class GraphReducerTest {
 
         // Collapse the bubble
         GraphReducer.determineParents(nodeMap);
-        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2), 0));
+        assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(2)));
         assertEquals(nodeMap.get(2).getLinks(nodeMap), new ArrayList<>(Arrays.asList(3)));
         assertEquals(nodeMap.get(5).getParents(), new ArrayList<>(Arrays.asList(3, 6)));
     }
@@ -188,7 +188,7 @@ public class GraphReducerTest {
 
                 // Collapse the bubble
                 GraphReducer.determineParents(nodeMap);
-                assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0));
+                assertTrue(GraphReducer.collapseBubble(nodeMap, nodeMap.get(1)));
                 assertEquals(1, nodeMap.get(1).getCollapseLevel());
                 assertEquals(1, nodeMap.get(4).getCollapseLevel());
 
@@ -292,7 +292,7 @@ public class GraphReducerTest {
                 Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
 
         GraphReducer.determineParents(nodeMap);
-        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1), 0);
+        GraphReducer.collapseBubble(nodeMap, nodeMap.get(1));
 
         assertEquals(nodeMap.get(5).getGenomes(),
                 new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "X", "Y")));
@@ -317,7 +317,7 @@ public class GraphReducerTest {
         nodeMap.get(6).setLinks(new ArrayList<>(Arrays.asList(7)));
 
         GraphReducer.setStartMapSize(nodeMap.size());
-        nodeMap = GraphReducer.collapse(nodeMap, 0);
+        nodeMap = GraphReducer.collapse(nodeMap);
         assertEquals(1, nodeMap.get(1).getCollapseLevel());
         assertEquals(2, nodeMap.get(2).getCollapseLevel());
         assertEquals(1, nodeMap.get(4).getCollapseLevel());

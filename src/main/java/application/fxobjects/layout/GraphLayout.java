@@ -81,6 +81,14 @@ public class GraphLayout extends CellLayout {
             int tile = (int) ((c.getLayoutX() - (c.getLayoutX() % tileWidth)) / tileWidth);
             model.addCellInTile(tile, c);
 
+            if (cell.getLayoutY() > maxHeight) {
+                maxHeight = cell.getLayoutY();
+            }
+
+            if (cell.getLayoutX() > maxWidth) {
+                maxWidth = cell.getLayoutX();
+            }
+
             for (Edge e : cell.getEdges()) {
                 if (e.getLength() > Screen.getPrimary().getBounds().getWidth()) {
                     model.addLongEdge(e);

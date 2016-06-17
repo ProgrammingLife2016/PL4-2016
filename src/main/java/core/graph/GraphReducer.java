@@ -19,10 +19,12 @@ public final class GraphReducer {
      * Class constructor
      */
     private GraphReducer() {
+
     }
 
     private static List<HashMap<Integer, Node>> levelMaps = new ArrayList<>();
     private static int startMapSize = 0;
+    private static int zoomLevel;
 
     /**
      * Give all nodes a list of its parents.
@@ -53,57 +55,155 @@ public final class GraphReducer {
      *
      * @param startMap An uncollapsed node map.
      * @param minDelta The minimum reduction necessary to continue the reducing.
+     * @param genomesInFilter the genomes in this filter.
      * @return A list of node maps with a decreasing amount of nodes.
      */
-    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap, int minDelta) {
-        determineParents(startMap);
-        levelMaps.add(startMap);
-        startMapSize = startMap.size();
-        int reduceAmount = 5;
+    public static List<HashMap<Integer, Node>> createLevelMaps(HashMap<Integer, Node> startMap,
+                                                               int minDelta, List<String> genomesInFilter) {
+        initializeLevelMaps(startMap, genomesInFilter);
+        int reduceAmount = 1;
 
-        for (int i = 1;; i++) {
-            HashMap<Integer, Node> levelMap = collapse(levelMaps.get(i - 1), i - 1);
-            int previousMapSize = levelMaps.get(i - 1).size();
+        for (int i = 2;; i++) {
+            zoomLevel = i - 1;
+            HashMap<Integer, Node> levelMap = collapse(levelMaps.get(zoomLevel));
+            int previousMapSize = levelMaps.get(zoomLevel).size();
             int currentMapSize = levelMap.size();
 
-            if (levelMaps.size() == 25) {
-                reduceZoomingLevels(reduceAmount);
-                i -= reduceAmount;
+            if (levelMap.size() < 20) {
+                return levelMaps;
             }
 
-            // Don't make any new zoom level if the number of nodes after reduction is only 2 less
-            // than the number of nodes after previous reduction.
+            // Don't make any new zoom level if the number of nodes after reduction is less
+            // than the set minimum number of nodes after previous reduction.
             if ((previousMapSize - currentMapSize) <= minDelta) {
-                levelMaps.set(i - 1, levelMap);
+                levelMaps.set(zoomLevel, levelMap);
 
-                traverseMaps(reduceAmount, i);
+                traverseMaps(reduceAmount);
 
                 return levelMaps;
             } else {
                 levelMaps.add(levelMap);
+
+                if (levelMaps.size() == 10) {
+                    reduceZoomingLevels(reduceAmount);
+                    i -= reduceAmount;
+                }
             }
         }
+    }
+
+    /**
+     * Initializes a new LevelMaps
+     *
+     * @param startMap The original nodemap that was parsed.
+     * @param genomesInFilter All genomes that should be present.
+     */
+    public static void initializeLevelMaps(HashMap<Integer, Node> startMap, List<String> genomesInFilter) {
+        levelMaps = new ArrayList<>();
+        zoomLevel = 0;
+        startMapSize = startMap.size();
+        determineParents(startMap);
+        HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
+        determineParents(filteredNodeMap);
+        levelMaps.add(filteredNodeMap);
+        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
+        determineParents(collapsedFilteredMap);
+        levelMaps.add(collapsedFilteredMap);
+    }
+
+    /**
+     * Generates a filtered map
+     *
+     * @param startMap the startMap.
+     * @param genomesInFilter the genomes in the filter.
+     * @return a filtered map.
+     */
+    public static HashMap<Integer, Node> generateFilteredMap(HashMap<Integer, Node> startMap,
+                                                             List<String> genomesInFilter) {
+        HashMap<Integer, Node> filteredNodeMap = new HashMap<>(copyNodeMap(startMap));
+        for (int nodeId : startMap.keySet()) {
+            Node node = filteredNodeMap.get(nodeId);
+            if (node == null) {
+                continue;
+            }
+            if (!intersects(node.getGenomes(), genomesInFilter)) {
+                for (int parentId : node.getParents()) {
+                    Node parent = filteredNodeMap.get(parentId);
+                    parent.removeLink(nodeId);
+                }
+                for (int childId : node.getLinks()) {
+                    Node child = filteredNodeMap.get(childId);
+                    child.removeParent(nodeId);
+                }
+                node.setParents(new ArrayList<>());
+                node.setLinks(new ArrayList<>());
+                filteredNodeMap.remove(nodeId);
+            }
+        }
+        return filteredNodeMap;
+    }
+
+    /**
+     * Method to check whether at least one element of two lists are shared.
+     *
+     * @param l1 the first list
+     * @param l2 the second list
+     * @return true iff atleast one shared object
+     */
+    private static boolean intersects(List<String> l1, List<String> l2) {
+        for (String s : l1) {
+            if (l2.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method to collapse the lowest map horizontally, filering out any
+     * unvaluable information.
+     * @param nodeMap the nodemap to be collapsed
+     * @return the collapsed map
+     */
+    private static HashMap<Integer, Node> collapseFirstMap(HashMap<Integer, Node> nodeMap) {
+        HashMap<Integer, Node> reducedMap = new HashMap<>(copyNodeMap(nodeMap));
+        for (int idx = 1; idx < startMapSize; idx++) {
+            Node parent = reducedMap.get(idx);
+            if (parent == null) {
+                continue;
+            }
+            boolean collapsed = true;
+            while (collapsed) {
+                 collapsed = collapseNodeSequence(reducedMap, parent);
+            }
+        }
+
+        return reducedMap;
     }
 
     /**
      * Traverse the maps.
      *
      * @param reduceAmount amount to reduce
-     * @param i i
      */
-    private static void traverseMaps(int reduceAmount, int i) {
-        int maxDepth = 20;
-        for (int j = i; maxDepth < 1001; j++) {
-            if (levelMaps.size() == 25) {
-                reduceZoomingLevels(5);
+    private static void traverseMaps(int reduceAmount) {
+        int maxDepth = 10;
+        for (int j = zoomLevel; maxDepth < 500; j++) {
+            zoomLevel = j - 1;
+            if (levelMaps.size() == 10) {
+                reduceZoomingLevels(reduceAmount);
                 j -= reduceAmount;
             }
-            HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(j - 1), j - 1, maxDepth);
-            int previousMapSize2 = levelMaps.get(j - 1).size();
+            HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(zoomLevel), maxDepth);
+            int previousMapSize2 = levelMaps.get(zoomLevel).size();
             int currentMapSize2 = levelMap2.size();
+
+            if (levelMap2.size() < 20) {
+                return;
+            }
             if (previousMapSize2 - currentMapSize2 == 0) {
-                levelMaps.set(j - 1, levelMap2);
-                maxDepth += 5;
+                levelMaps.set(zoomLevel, levelMap2);
+                maxDepth += 10;
                 j--;
             } else {
                 levelMaps.add(levelMap2);
@@ -137,12 +237,11 @@ public final class GraphReducer {
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
      * @param map       A HashMap containing all nodes in the graph.
-     * @param zoomLevel The current zoomLevel
      * @param maxDepth  The maximumDepth allowed for a complexNode
      * @return A collapsed map.
      */
-    public static HashMap<Integer, Node> secondStageCollapse(HashMap<Integer, Node> map, int zoomLevel, int maxDepth) {
-        HashMap<Integer, Node> nodeMap = copyNodeMap(map);
+    public static HashMap<Integer, Node> secondStageCollapse(HashMap<Integer, Node> map, int maxDepth) {
+        HashMap<Integer, Node> nodeMap = new HashMap<>(copyNodeMap(map));
         determineParents(nodeMap);
 
         for (int idx = 1; idx < startMapSize; idx++) {
@@ -150,12 +249,12 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            collapseComplexPath(nodeMap, parent, zoomLevel, maxDepth);
+            collapseComplexPath(nodeMap, parent, maxDepth);
             //If the nodemap is still bigger than a desired top view,
             //We can try and keep collapsing as we used to do.
             if (nodeMap.size() > 100) {
-                collapseNodeSequence(nodeMap, parent, zoomLevel);
-                collapseBubble(nodeMap, parent, zoomLevel);
+                collapseNodeSequence(nodeMap, parent);
+                collapseBubble(nodeMap, parent);
                 collapseIndel(nodeMap, parent);
             }
         }
@@ -196,11 +295,10 @@ public final class GraphReducer {
      * Reduce the number of nodes in a graph by collapsing vertically and horizontally.
      *
      * @param map       A HashMap containing all nodes in the graph.
-     * @param zoomLevel The current zoomLevel
      * @return A collapsed map.
      */
-    public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map, int zoomLevel) {
-        HashMap<Integer, Node> nodeMap = copyNodeMap(map);
+    public static HashMap<Integer, Node> collapse(HashMap<Integer, Node> map) {
+        HashMap<Integer, Node> nodeMap = new HashMap<>(copyNodeMap(map));
         determineParents(nodeMap);
 
         for (int idx = 1; idx < startMapSize; idx++) {
@@ -208,16 +306,15 @@ public final class GraphReducer {
             if (parent == null) {
                 continue;
             }
-            collapseBubble(nodeMap, parent, zoomLevel);
-            collapseIndel(nodeMap, parent);
             if (zoomLevel > 0) {
                 boolean collapsed = true;
                 int collapseCount = 0;
                 while (collapsed && collapseCount < 6) {
-                    collapsed = collapseNodeSequence(nodeMap, parent, zoomLevel);
-                    collapseCount++;
+                    collapsed = collapseNodeSequence(nodeMap, parent);
                 }
             }
+            collapseBubble(nodeMap, parent);
+            collapseIndel(nodeMap, parent);
         }
 
         return nodeMap;
@@ -230,14 +327,11 @@ public final class GraphReducer {
      *
      * @param nodeMap       A HashMap containing all nodes in the graph.
      * @param parent        A given parent node to be collapsed with its child.
-     * @param zoomLevel     the zoom level of the previous levelMap.
      * @param maxComplexity The maximum allowed number of nodes that should be collapsed.
      * @return Whether the complex collapse action has succeeded.
      */
-    public static Boolean collapseComplexPath(HashMap<Integer, Node> nodeMap, Node parent,
-                                              int zoomLevel, int maxComplexity) {
+    public static Boolean collapseComplexPath(HashMap<Integer, Node> nodeMap, Node parent, int maxComplexity) {
         // Links must be present from parent --> child
-
         if (parent == null) { return false; }
 
         ArrayList<Node> collapsingNodes = new ArrayList<>();
@@ -248,7 +342,7 @@ public final class GraphReducer {
             complexNode.setType(CellType.COMPLEX);
             for (Node collapseNode : collapsingNodes) {
                 if (!collapseNode.equals(complexNode)) {
-                    collapseNodeIntoParent(complexNode, collapseNode, zoomLevel);
+                    collapseNodeIntoParent(complexNode, collapseNode);
                     parent.removeLink(collapseNode.getId());
                     targetNode.removeParent(collapseNode.getId());
                     nodeMap.remove(collapseNode.getId());
@@ -256,6 +350,8 @@ public final class GraphReducer {
             }
             complexNode.setLinks(new ArrayList<>());
             complexNode.addLink(targetNode.getId());
+            complexNode.setParents(new ArrayList<>());
+            complexNode.addParent(parent.getId());
             targetNode.addParent(complexNode.getId());
             return true;
         }
@@ -280,6 +376,14 @@ public final class GraphReducer {
         while (!nonVisitedNodes.isEmpty() && pathComplexity < maxComplexity) {
             Node sourceNode = nonVisitedNodes.pop();
             if (sourceNode == null) { continue; }
+            for (int parentId : sourceNode.getParents()) {
+                Node collapseParent = nodeMap.get(parentId);
+                for (String genome : collapseParent.getGenomes()) {
+                    if (!parent.getGenomes().contains(genome)) {
+                        return null;
+                    }
+                }
+            }
             pathComplexity++;
             if (foundTarget) {
                 if (!sourceNode.equals(targetNode)) {
@@ -323,13 +427,11 @@ public final class GraphReducer {
      *
      * @param nodeMap   A HashMap containing all nodes in the graph.
      * @param parent    A given parent node to be collapsed with its child.
-     * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether the horizontal collapse action has succeeded.
      */
-    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
+    public static Boolean collapseNodeSequence(HashMap<Integer, Node> nodeMap, Node parent) {
         // Links must be present from parent --> child
         if (parent == null) { return false; }
-
         List<Integer> childrenIds = parent.getLinks(nodeMap);
 
         //Parent may only have one child.
@@ -343,7 +445,7 @@ public final class GraphReducer {
 
         parent.setType(CellType.COLLECTION);
         parent.setSequence("");
-        collapseNodeIntoParent(parent, child, zoomLevel);
+        collapseNodeIntoParent(parent, child);
 
         // Retrieve the single grandchild of the node.
         Node grandChild = nodeMap.get(child.getLinks(nodeMap).get(0));
@@ -417,10 +519,9 @@ public final class GraphReducer {
      *
      * @param nodeMap   the nodeMap were currently at
      * @param parent    the parent of the to collapse bubble
-     * @param zoomLevel the zoom level of the previous levelMap
      * @return Whether nodes have been collapsed.
      */
-    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent, int zoomLevel) {
+    public static Boolean collapseBubble(HashMap<Integer, Node> nodeMap, Node parent) {
         List<Node> bubbleChildren = createBubble(parent, nodeMap);
         if (bubbleChildren.size() > 1) {
             for (Node child : bubbleChildren) {
@@ -434,7 +535,7 @@ public final class GraphReducer {
                     StringBuffer buf = new StringBuffer();
                     for (Node bubbleChild : bubble) {
                         if (!bubbleChild.equals(child)) {
-                            collapseNodeIntoParent(child, bubbleChild, zoomLevel);
+                            collapseNodeIntoParent(child, bubbleChild);
                             parent.removeLink(bubbleChild.getId());
                             grandChild.removeParent(bubbleChild.getId());
                             nodeMap.remove(bubbleChild.getId());
@@ -492,9 +593,8 @@ public final class GraphReducer {
      *
      * @param parent    The node that will be retained
      * @param child     The node that will be collapsed
-     * @param zoomLevel The previous zoom level
      */
-    public static void collapseNodeIntoParent(Node parent, Node child, int zoomLevel) {
+    public static void collapseNodeIntoParent(Node parent, Node child) {
         parent.unionGenomes(child);
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
