@@ -137,6 +137,7 @@ public class ZoomBox extends ScrollPane {
         if (newWidth < 5) {
             newWidth = 5;
         }
+
         zoomRect.setX(right);
         zoomRect.setWidth(newWidth);
     }
