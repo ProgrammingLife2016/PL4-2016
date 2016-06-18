@@ -60,7 +60,6 @@ public class MainController extends Controller<BorderPane> {
     private TextField genomeTextField;
     private TextField annotationTextField;
     private StackPane box;
-    private int count;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
@@ -78,6 +77,8 @@ public class MainController extends Controller<BorderPane> {
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
 
+    private MenuFactory menuFactory;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -85,7 +86,6 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
 
-        this.count = -1;
         this.secondCount = -1;
         this.mostRecentGFF = new Stack<>();
         this.mostRecentGFA = new Stack<>();
@@ -342,7 +342,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
         MenuFactory.toggleFilters(false);
-        MenuFactory.allowLevel.setDisable(false);
+        menuFactory.getAllowLevel().setDisable(false);
         this.getRoot().setCenter(graphController.getRoot());
         toggleSelectDeselect(true);
 
@@ -378,7 +378,6 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.update(ref, currentView);
 
-        count++;
         if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
@@ -458,12 +457,16 @@ public class MainController extends Controller<BorderPane> {
         });
 
         buttons.get(1).setOnAction(e -> {
+            showReferenceStrain = false;
+            menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
             genomeTextField.setText("");
             fillTree();
         });
 
         buttons.get(2).setOnAction(e -> {
+            showReferenceStrain = true;
+            menuFactory.setShowReferenceStrain(true);
             treeController.selectAll();
             genomeTextField.setText("");
             fillTree();
@@ -589,7 +592,7 @@ public class MainController extends Controller<BorderPane> {
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
         } else {
-            MenuFactory menuFactory = new MenuFactory(this);
+            menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
             MenuFactory.toggleFilters(true);
@@ -687,7 +690,7 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
-        MenuFactory.allowLevel.setDisable(true);
+        menuFactory.getAllowLevel().setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
