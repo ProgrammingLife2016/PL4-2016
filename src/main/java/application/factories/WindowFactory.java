@@ -442,6 +442,7 @@ public final class WindowFactory {
      * Method to add the components to the alert pop up
      * @param content the content to be set
      * @param dialog the dialog to add the content to
+     * @param textToAdd The text to be displayed in the popup
      */
     public static void addAlertComponents(VBox content, Stage dialog, String textToAdd) {
         content.getStylesheets().add("/css/popup.css");

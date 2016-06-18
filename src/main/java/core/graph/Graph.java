@@ -79,10 +79,6 @@ public class Graph {
         annotations = new ArrayList<>();
     }
 
-    public HashMap<Integer, Node> getStartMap() {
-        return startMap;
-    }
-
     /**
      * Read a node map from a gfa file on disk.
      *
@@ -160,6 +156,10 @@ public class Graph {
         return false;
     }
 
+    /**
+     * Method to add annotations to the startMap, the map that is originally parsed.
+     * @param annotations the list of annotations
+     */
     public void initAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
         annotationProcessor = new AnnotationProcessor(startMap, annotations);

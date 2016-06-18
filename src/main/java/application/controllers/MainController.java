@@ -17,12 +17,10 @@ import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -149,8 +147,6 @@ public class MainController extends Controller<BorderPane> {
         List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         setAnnotationsLoaded(true);
         graphController.getGraph().initAnnotations(annotations);
-
-        System.out.println("annotations loaded, size: " + annotations.size());
     }
 
     /**
@@ -383,11 +379,14 @@ public class MainController extends Controller<BorderPane> {
         graphController.update(ref, currentView);
 
         count++;
-        if(update) {
+        if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
     }
 
+    /**
+     * Toggle whether the reference strain should be filtered or not
+     */
     public void toggleShowReferenceStrain() {
         this.showReferenceStrain = !this.showReferenceStrain;
     }
@@ -507,29 +506,31 @@ public class MainController extends Controller<BorderPane> {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
                     annotationTextField.getText());
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-            if (newAnn == null || newAnn.getSpannedNodes().size() == 0) {
-                System.out.println("annotation not found");
-                WindowFactory.createAnnNotFoundAlert();
-            }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
+            boolean foundAnnotation = false;
             if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
                 for (Node node : newAnn.getSpannedNodes()) {
                     int id = node.getId();
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
-                        System.out.println("found the node of annotation");
-                        System.out.println("old scrollbar value: "+ graphController.getRoot().getHvalue());
-                        graphController.getRoot().setHvalue(((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                        graphController.slideToPercent(((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450)));
+                        foundAnnotation = true;
                         break;
                     }
                 }
             }
-
-            for (Node n : newAnn.getSpannedNodes()) {
-                ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+            if (!foundAnnotation) {
+                WindowFactory.createAnnNotFoundAlert();
             }
+            for (Node n : newAnn.getSpannedNodes()) {
+                RectangleCell cell = ((RectangleCell) cellMap.get(n.getId()));
+                if (cell != null) {
+                    cell.setHighLight();
+                }
+            }
+
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
         }
     }
@@ -539,10 +540,6 @@ public class MainController extends Controller<BorderPane> {
      */
     public void createAnnotationPopup() {
         WindowFactory.createAnnotationChooser("Please load Annotation Data first");
-    }
-
-    public void annotationNotFoundPopup() {
-
     }
 
     /**
@@ -674,6 +671,10 @@ public class MainController extends Controller<BorderPane> {
                 graphController.getGraph().getCurrentGenomes());
     }
 
+    /**
+     * Method to toggle whether or not the nucleotide level can be reached
+     * through scrolling.
+     */
     public void toggleAllowNucleotideLevel() {
         this.allowNucleotideLevel = !this.allowNucleotideLevel;
     }

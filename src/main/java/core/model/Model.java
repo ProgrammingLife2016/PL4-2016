@@ -58,19 +58,6 @@ public class Model {
         clear();
     }
 
-    public void initAnnotations(HashMap<Integer, Node> startMap) {
-        annotationProcessor = new AnnotationProcessor(startMap, annotations);
-    }
-
-    /**
-     * Match the nodes in levelMap 0 to the annotation data.
-     */
-    public void matchNodesAndAnnotations(HashMap<Integer, Node> startMap) {
-        if (levelMaps.size() > 0 && annotationProcessor != null) {
-            annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
-        }
-    }
-
     /**
      * Remove all cells and edges.
      */
