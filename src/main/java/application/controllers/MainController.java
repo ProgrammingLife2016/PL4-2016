@@ -137,6 +137,10 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setCenter(imageView);
     }
 
+    public ScrollPane getScreen() {
+        return screen;
+    }
+
     /**
      * Initializes the tree.
      *
@@ -524,8 +528,8 @@ public class MainController extends Controller<BorderPane> {
                     int id = node.getId();
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
-                        graphController.slideToPercent(((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
-                                / (graphController.getGraph().getModel().getMaxWidth() - 450)));
+                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
                         foundAnnotation = true;
                         break;
                     }

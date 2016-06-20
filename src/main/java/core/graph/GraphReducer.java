@@ -223,14 +223,45 @@ public final class GraphReducer {
             for (int level = 3; level < levelMaps.size() - 2; level++) {
                 int currentMapSize = levelMaps.get(level).size();
                 int previousMapSize = levelMaps.get(level - 1).size();
-                int difference = currentMapSize - previousMapSize;
+                int difference = Math.abs(currentMapSize - previousMapSize);
                 if (difference < smallestDifference) {
                     index = level;
                     smallestDifference = difference;
                 }
             }
-            levelMaps.remove(index);
+            removeZoomLevel(index);
         }
+    }
+
+    /**
+     * Method to remove a zoomLevel from the LevelMaps.
+     *
+     * @param index index of the levelMap to remove
+     */
+    public static void removeZoomLevel(int index) {
+        HashMap<Integer, Node> mapToRemove = levelMaps.get(index);
+        HashMap<Integer, Node> lowerMap = levelMaps.get(index - 1);
+        HashMap<Integer, Node> upperMap = levelMaps.get(index + 1);
+
+        for (int i = 0; i < startMapSize; i++) {
+            Node removeNode = mapToRemove.get(i);
+            if (removeNode == null) {
+                continue;
+            }
+            System.out.println("removeNode id: " + removeNode.getId());
+            System.out.println("i = " + i);
+            Node upperNode = upperMap.get(removeNode.getNextLevelNodeId());
+            System.out.println("upperNode id: " + removeNode.getNextLevelNodeId());
+            for (int lowerNodeId : removeNode.getPreviousLevelNodesIds()) {
+                Node lowerNode = lowerMap.get(lowerNodeId);
+                if (lowerNode == null) {
+                    continue;
+                }
+                lowerNode.setNextLevelNodeId(removeNode.getNextLevelNodeId());
+                upperNode.addPreviousLevelNodesId(lowerNodeId);
+            }
+        }
+        levelMaps.remove(index);
     }
 
     /**
@@ -258,8 +289,6 @@ public final class GraphReducer {
                 collapseIndel(nodeMap, parent);
             }
         }
-
-
         return nodeMap;
     }
 
@@ -599,9 +628,7 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-        if (levelMaps.size() > 0) {
-            levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
-        }
+        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
     }
 
     /**
