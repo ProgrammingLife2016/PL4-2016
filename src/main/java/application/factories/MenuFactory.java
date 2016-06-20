@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
@@ -42,7 +41,7 @@ public class MenuFactory {
     private static CheckMenuItem showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
-            shortcuts, about, showPhylogeneticTree, showGenomeSequence;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence, filterReset;
 
     private MainController mainController;
 
@@ -66,10 +65,20 @@ public class MenuFactory {
         mainController = controller;
     }
 
+    /**
+     * Method to set whether we show the reference strain
+     *
+     * @param show boolean
+     */
     public void setShowReferenceStrain(boolean show) {
         showReferenceStrain.setSelected(show);
     }
 
+    /**
+     * Method to get the MenuItem to allow the nucleotide level
+     *
+     * @return the MenuItem
+     */
     public CheckMenuItem getAllowLevel() {
         return allowLevel;
     }
@@ -284,20 +293,26 @@ public class MenuFactory {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
             if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
                 WindowFactory.createAlert();
+
+//            } else if (!mainController.isAnnotationsLoaded()) {
+//                mainController.createAnnotationPopup();
+//                mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
+//                        mainController.getTreeController().getSelectedGenomes());
+
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
                         mainController.getTreeController().getSelectedGenomes());
             }
         });
+
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
 
         resetView = initMenuItem("Reset", null, event -> handleReset());
-        allowLevel = new CheckMenuItem("Allow nucliotide level");
+        allowLevel = new CheckMenuItem("Allow nucleotide level");
         allowLevel.setOnAction(event -> mainController.toggleAllowNucleotideLevel());
         showReferenceStrain = new CheckMenuItem("Show reference strain");
         showReferenceStrain.setOnAction(event -> mainController.toggleShowReferenceStrain());
-        return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
-                new SeparatorMenuItem(), resetView, allowLevel, showReferenceStrain);
+        return initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView, allowLevel, showReferenceStrain);
     }
 
     /**
@@ -308,7 +323,8 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
-        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        mainController.getGraphController().update(new ArrayList<>(),
+                mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();
@@ -386,7 +402,8 @@ public class MenuFactory {
             int finalIdx = idx;
             MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
                 String recentFile = recents.get(finalIdx);
-                setActionOnSelection(type, recentFile); });
+                setActionOnSelection(type, recentFile);
+            });
             if (recents.get(finalIdx).equals("Empty")) {
                 recentMenuItem.setDisable(true);
             }
@@ -404,11 +421,14 @@ public class MenuFactory {
     private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
         String fileTypeStr = "";
         switch (type) {
-            case GFF: fileTypeStr = "GFF";
+            case GFF:
+                fileTypeStr = "GFF";
                 break;
-            case GFA: fileTypeStr = "GFA";
+            case GFA:
+                fileTypeStr = "GFA";
                 break;
-            case NWK: fileTypeStr = "NWK";
+            case NWK:
+                fileTypeStr = "NWK";
                 break;
             default:
                 break;
@@ -430,9 +450,11 @@ public class MenuFactory {
                 case GFF:
                     mainController.addRecentGFF(recentFile);
                     break;
-                case GFA: WindowFactory.createGFApopup(parentDir, file);
+                case GFA:
+                    WindowFactory.createGFApopup(parentDir, file);
                     break;
-                case NWK: WindowFactory.createNWKpopup(parentDir, file);
+                case NWK:
+                    WindowFactory.createNWKpopup(parentDir, file);
                     break;
                 default:
                     break;
@@ -465,11 +487,13 @@ public class MenuFactory {
         initSpoligotypeFilter();
         initGenoDSTFilter();
         initTFFilter();
+        initResetFilter();
 
         return initMenu("Filter", filterCapreomycin, filterCohort, filterEthambutol, filterEthionAmide,
                 filterGenoDST, filterHIV, filterIsolation, filterIsoniazid, filterKanamycin, filterLineage,
                 filterOfloxacin, filterPhenoDST, filterPyrazinamide, filterRifampin, filterSpecimenType,
-                filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF);
+                filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF, new SeparatorMenuItem(),
+                filterReset);
     }
 
     /**
@@ -850,7 +874,6 @@ public class MenuFactory {
      */
     private void initGenoDSTFilter() {
         CheckMenuItem gen1 = new CheckMenuItem("Drug-resistant (other)");
-
         gen1.setOnAction(event -> mainController.modifyFilter(GENO_DRUG_RESIST, gen1.isSelected()));
         CheckMenuItem gen2 = new CheckMenuItem("MDR");
         gen2.setOnAction(event -> mainController.modifyFilter(GENO_MDR, gen2.isSelected()));
@@ -891,5 +914,33 @@ public class MenuFactory {
         });
 
         filterTF = initMenu("Tugela Ferry XDR", pos, neg, non);
+    }
+
+    /**
+     * Method to create filter reset.
+     */
+    private void initResetFilter() {
+        filterReset = initMenuItem("Reset filters", null, e -> {
+            filterLineage.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterHIV.getItems().forEach(i -> ((RadioMenuItem) i).setSelected(false));
+            filterCohort.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterStudyDistrict.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterSpecimenType.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterIsolation.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterPhenoDST.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterCapreomycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterEthambutol.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterEthionAmide.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterIsoniazid.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterKanamycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterPyrazinamide.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterOfloxacin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterRifampin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterStreptomycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterSpoligotype.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterGenoDST.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterTF.getItems().forEach(i -> ((RadioMenuItem) i).setSelected(false));
+            mainController.getFiltering().clearFilters();
+        });
     }
 }
