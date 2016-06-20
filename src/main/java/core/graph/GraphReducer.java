@@ -85,8 +85,8 @@ public final class GraphReducer {
                 levelMaps.add(levelMap);
 
                 if (levelMaps.size() == 10) {
-                    reduceZoomingLevels(reduceAmount);
-                    i -= reduceAmount;
+//                    reduceZoomingLevels(reduceAmount);
+//                    i -= reduceAmount;
                 }
             }
         }
@@ -191,22 +191,14 @@ public final class GraphReducer {
         for (int j = zoomLevel; maxDepth < 500; j++) {
             zoomLevel = j - 1;
             if (levelMaps.size() == 10) {
-                reduceZoomingLevels(reduceAmount);
-                j -= reduceAmount;
+//                reduceZoomingLevels(reduceAmount);
+//                j -= reduceAmount;
             }
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(zoomLevel), maxDepth);
-            int previousMapSize2 = levelMaps.get(zoomLevel).size();
-            int currentMapSize2 = levelMap2.size();
+            levelMaps.add(levelMap2);
 
-            if (levelMap2.size() < 20) {
+            if (levelMap2.size() < 30) {
                 return;
-            }
-            if (previousMapSize2 - currentMapSize2 == 0) {
-                levelMaps.set(zoomLevel, levelMap2);
-                maxDepth += 10;
-                j--;
-            } else {
-                levelMaps.add(levelMap2);
             }
         }
     }

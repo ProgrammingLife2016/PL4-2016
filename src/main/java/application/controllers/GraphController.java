@@ -64,6 +64,12 @@ public class GraphController extends Controller<ScrollPane> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
             update(graph.getCurrentRef(), graph.getCurrentInt());
+            System.out.println("----");
+            System.out.println("!changelistener!");
+            System.out.println("old value: " + oldValue);
+            System.out.println("new value: " + newValue);
+            System.out.println("----");
+
         };
 
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
@@ -104,8 +110,8 @@ public class GraphController extends Controller<ScrollPane> {
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
                 }
-                //drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
-                //update(graph.getCurrentRef(), graph.getCurrentInt());
+                drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
+                update(graph.getCurrentRef(), graph.getCurrentInt());
             }
         });
     }
@@ -221,8 +227,7 @@ public class GraphController extends Controller<ScrollPane> {
             prevClick.focus();
         }
         sideFocus(true);
-        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4))
-                / (graph.getMaxWidth() - 450));
+        slideToPercent((prevClick.getLayoutX() / (graph.getMaxWidth() - 450)));
         update(getGraph().getCurrentRef(), getGraph().getCurrentInt());
     }
 
@@ -390,6 +395,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
+        System.out.println("should be value: " + percent);
         getRoot().setHvalue((percent));
     }
 
