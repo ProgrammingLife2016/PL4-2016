@@ -12,6 +12,7 @@ import core.annotation.AnnotationProcessor;
 import core.filtering.Filter;
 import core.filtering.Filtering;
 import core.graph.Node;
+import core.model.Model;
 import core.parsers.AnnotationParser;
 import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
@@ -147,12 +148,9 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initAnnotations(String path) {
         List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
-
         setAnnotationsLoaded(true);
 
         graphController.getGraph().setAnnotations(annotations);
-        graphController.getGraph().getModel().matchNodesAndAnnotations();
-
         MenuFactory.loadAnnotations.setDisable(true);
     }
 
@@ -484,14 +482,14 @@ public class MainController extends Controller<BorderPane> {
         highlightButton.setOnAction(e -> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
-            } else {
-                if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
-                    highlightAnnotation();
-                }
+            } 
 
-                annotationTextField.setText("");
-                return;
+            if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
+                highlightAnnotation();
             }
+
+            annotationTextField.setText("");
+            return;
         });
 
         deselectAnnotationButton.setOnAction(e -> {
@@ -507,11 +505,14 @@ public class MainController extends Controller<BorderPane> {
      * Highlights an annotation based on the string input in the annotationTextField.
      */
     public void highlightAnnotation() {
-        List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+        Model model = graphController.getGraph().getModel();
+        List<Annotation> annotations = model.getAnnotations();
+        new AnnotationProcessor(model.getLevelMaps().get(0), annotations).matchNodesAndAnnotations();
+
         try {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
                     annotationTextField.getText());
-            Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+            Map<Integer, Cell> cellMap = model.getCellMap();
             if (newAnn == null || newAnn.getSpannedNodes() == null) {
                 annotationWarning.setText("Warning: No matches found");
                 return;
