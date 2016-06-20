@@ -482,6 +482,10 @@ public class MainController extends Controller<BorderPane> {
         highlightButton.setOnAction(e -> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
+
+                Model model = graphController.getGraph().getModel();
+                new AnnotationProcessor(model.getLevelMaps().get(0), model.getAnnotations())
+                        .matchNodesAndAnnotations();
             }
 
             if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
@@ -507,7 +511,6 @@ public class MainController extends Controller<BorderPane> {
     public void highlightAnnotation() {
         Model model = graphController.getGraph().getModel();
         List<Annotation> annotations = model.getAnnotations();
-        new AnnotationProcessor(model.getLevelMaps().get(0), annotations).matchNodesAndAnnotations();
 
         try {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());

@@ -3,6 +3,7 @@ package core.graph;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import core.annotation.Annotation;
+import core.annotation.AnnotationProcessor;
 import core.genome.Genome;
 import core.model.Model;
 import core.parsers.GraphParser;
@@ -144,6 +145,7 @@ public class Graph {
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size()
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
+            new AnnotationProcessor(levelMaps.get(0), current.getAnnotations()).matchNodesAndAnnotations();
             currentGenomes = new ArrayList<>(selectedGenomes);
             return true;
         }
