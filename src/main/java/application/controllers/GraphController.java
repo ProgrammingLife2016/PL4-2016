@@ -107,8 +107,9 @@ public class GraphController extends Controller<ScrollPane> {
                     }
                     zoomBox.replaceZoomBox(updateZoomBox());
                     event.consume();
-                    drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
                 }
+                drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
+                update(graph.getCurrentRef(), graph.getCurrentInt());
             }
         });
     }
@@ -225,7 +226,7 @@ public class GraphController extends Controller<ScrollPane> {
             prevClick.focus();
         }
         sideFocus(true);
-        getRoot().setHvalue(prevClick.getLayoutX() / (graph.getMaxWidth() - 450));
+        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4)) / (graph.getMaxWidth() - 450));
     }
 
     /**
