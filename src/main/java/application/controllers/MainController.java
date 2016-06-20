@@ -775,12 +775,13 @@ public class MainController extends Controller<BorderPane> {
             } else {
                 strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
             }
-            StringBuilder builder = new StringBuilder();
-            appendFilterNames(builder);
-            listFactory.modifyNodeInfo(builder.toString());
         } else {
             setListItems();
         }
+
+        StringBuilder builder = new StringBuilder();
+        appendFilterNames(builder);
+        listFactory.modifyNodeInfo(builder.toString());
 
         treeController.colorSelectedStrains();
     }
