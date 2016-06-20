@@ -941,6 +941,7 @@ public class MenuFactory {
             filterGenoDST.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
             filterTF.getItems().forEach(i -> ((RadioMenuItem) i).setSelected(false));
             mainController.getFiltering().clearFilters();
+            mainController.fillTree();
         });
     }
 }
