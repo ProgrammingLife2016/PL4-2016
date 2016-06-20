@@ -22,6 +22,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -85,11 +86,24 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Graph File");
 
-        File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.addRecentGFA(selectedFile.getAbsolutePath());
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
 
-        File parentDir = selectedFile.getParentFile();
-        createGFApopup(parentDir, selectedFile);
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        if (selectedFile != null) {
+            mainController.addRecentGFA(selectedFile.getAbsolutePath());
+            File parentDir = selectedFile.getParentFile();
+            mainController.addRecentDir(parentDir.getAbsolutePath());
+
+            createGFApopup(parentDir, selectedFile);
+        }
 
         return directoryChooser;
     }
@@ -131,10 +145,24 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Tree File");
 
-        File selectedFile = directoryChooser.showOpenDialog(window);
-        File parentDir = selectedFile.getParentFile();
-        createNWKpopup(parentDir, selectedFile);
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
 
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+
+        if (selectedFile != null) {
+            File parentDir = selectedFile.getParentFile();
+
+            mainController.addRecentDir(parentDir.getAbsolutePath());
+
+            createNWKpopup(parentDir, selectedFile);
+        }
         return directoryChooser;
     }
 
@@ -255,6 +283,7 @@ public final class WindowFactory {
 
     /**
      * Method to create a PopUp when no Annotation Data is loaded
+     *
      * @param files the currently chosen files
      */
     public static void createAnnotationPopup(File[] files) {
@@ -274,13 +303,14 @@ public final class WindowFactory {
             }
         }
 
-       if (!candidates.isEmpty()) {
-           showMetaAnnoPopup(candidates, files, "gff");
-       } else {
-           chooseCorrectFile(files);
-       }
+        if (!candidates.isEmpty()) {
+            showMetaAnnoPopup(candidates, files, "gff");
+        } else {
+            chooseCorrectFile(files);
+        }
 
     }
+
     /**
      * Method to create and show the MetaData Pop-up
      *
@@ -399,8 +429,9 @@ public final class WindowFactory {
 
     /**
      * Method to add an Event Handler to the GFF (Annotation) Pop Up
-     * @param listView the listView showing
-     * @param files    the list of chosen Files
+     *
+     * @param listView  the listView showing
+     * @param files     the list of chosen Files
      * @param tempStage the Stage of the shown window
      */
     public static void addGFFEventHandler(ListView listView, File[] files, Stage tempStage) {
@@ -422,6 +453,7 @@ public final class WindowFactory {
 
     /**
      * Method to make sure we load the file with the right method
+     *
      * @param files the files to load
      */
     public static void chooseCorrectFile(File[] files) {
@@ -457,7 +489,6 @@ public final class WindowFactory {
             mainController.addRecentNWK(nwkFile.getAbsolutePath());
 
 
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
@@ -476,10 +507,20 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle(s);
 
-        File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.initAnnotations(selectedFile.getAbsolutePath());
-        mainController.addRecentGFF(selectedFile.getAbsolutePath());
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
 
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
+        File selectedFile = directoryChooser.showOpenDialog(window);
+        if (selectedFile != null) {
+            mainController.initAnnotations(selectedFile.getAbsolutePath());
+            mainController.addRecentGFF(selectedFile.getAbsolutePath());
+        }
         return directoryChooser;
     }
 
@@ -558,4 +599,5 @@ public final class WindowFactory {
     public static void createMenuWithSearchWithoutAnnotation() {
         mainController.createMenu(true, false);
     }
+
 }
