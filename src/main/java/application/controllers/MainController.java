@@ -68,9 +68,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean allowNucleotideLevel = false;
     private boolean showReferenceStrain = false;
 
-    private Button searchButton;
-    private Button selectAllButton;
-    private Button deselectSearchButton;
+    private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
+
     private HBox hBox;
 
     private Stack<String> mostRecentGFF;
@@ -369,7 +368,7 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
-        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleGraphViewMenu(false);
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
         MenuFactory.toggleFilters(false);
@@ -607,8 +606,8 @@ public class MainController extends Controller<BorderPane> {
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
             addAnnotationKeyHandler(annotationTextField);
-            Button highlightButton = new Button("Highlight annotation");
-            Button deselectAnnotationButton = new Button("Deselect annotation");
+            highlightButton = new Button("Highlight annotation");
+            deselectAnnotationButton = new Button("Deselect annotation");
             setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
             hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
         }
@@ -618,7 +617,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
-            MenuFactory.toggleViewMenu(true);
+            MenuFactory.toggleTreeViewMenu(true);
             MenuFactory.toggleFilters(true);
             vBox.getChildren().addAll(menuBar);
         }
@@ -678,6 +677,16 @@ public class MainController extends Controller<BorderPane> {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
     }
+
+    /**
+     * Method to enable the annotation searchBar
+     * @param x boolean indicating enabling or disabling
+     */
+//    public void toggleSearchBar(boolean x) {
+//        highlightButton.setDisable(x);
+//        deselectAnnotationButton.setDisable(x);
+//        annotationTextField.setDisable(x);
+    //}
 
 
     /**
@@ -754,13 +763,16 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         inGraph = false;
-        createMenu(true, false);
+        createMenu(false, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
-        menuFactory.getAllowLevel().setDisable(true);
+
+        MenuFactory.treeView(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
+
+
     }
 
     /**

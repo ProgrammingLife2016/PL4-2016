@@ -38,8 +38,7 @@ public class MenuFactory {
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
-    private static CheckMenuItem allowLevel;
-    private static CheckMenuItem showReferenceStrain;
+    private static CheckMenuItem allowLevel, showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence;
@@ -125,16 +124,30 @@ public class MenuFactory {
     }
 
     /**
-     * Method to disable and enable buttons in View-Menu
+     * Method to disable and enable buttons in Tree View-menu
      *
      * @param x boolean
      */
-    public static void toggleViewMenu(boolean x) {
-        showGenomeSequence.setDisable(x);
+    public static void toggleTreeViewMenu(boolean x) {
         showPhylogeneticTree.setDisable(x);
         resetView.setDisable(x);
+        allowLevel.setDisable(x);
+        showReferenceStrain.setDisable(x);
+
 
     }
+
+    /**
+     * Method to disable and enable buttons in the Graph View-menu
+     * @param x boolean
+     */
+    public static void toggleGraphViewMenu(boolean x) {
+        showPhylogeneticTree.setDisable(x);
+        resetView.setDisable(x);
+        allowLevel.setDisable(x);
+        showReferenceStrain.setDisable(x);
+    }
+
 
     /**
      * Method to disable and enable buttons in File-Menu
@@ -156,6 +169,22 @@ public class MenuFactory {
         mostRecentGFA.setDisable(x);
         mostRecentGFF.setDisable(x);
     }
+
+    /**
+     * Method to set the right treeView
+     *
+     * @param x boolean
+     */
+    public static void treeView(boolean x) {
+        showReferenceStrain.setDisable(x);
+        showPhylogeneticTree.setDisable(x);
+
+        toggleTreeViewMenu(x);
+        toggleMostRecent(x);
+        toggleFileMenu(x);
+
+    }
+
 
     /**
      * Create Help-Menu
