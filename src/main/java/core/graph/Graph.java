@@ -370,14 +370,13 @@ public class Graph {
      */
     public void addEdgesToCell(Node to, HashMap<Integer, Node> nodeMap, Model toret,
                                ArrayList<String> ref) {
-
         for (int parentId : to.getParents()) {
             Node from = nodeMap.get(parentId);
             int maxEdgeWidth = 10;
             int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), currentGenomes),
+                    intersectingStrings(to.getGenomes(), currentGenomes))
+                    / (double) Math.max(currentGenomes.size(), 10))) + 1;
 
             ifStatement:
             if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
