@@ -69,7 +69,6 @@ public class MainController extends Controller<BorderPane> {
     private TextField genomeTextField;
     private TextField annotationTextField;
     private StackPane box;
-    private int count;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
@@ -87,6 +86,8 @@ public class MainController extends Controller<BorderPane> {
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
 
+    private MenuFactory menuFactory;
+
     /**
      * Constructor to create MainController based on abstract Controller.
      */
@@ -94,7 +95,6 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
 
-        this.count = -1;
         this.secondCount = -1;
         this.mostRecentGFF = new Stack<>();
         this.mostRecentGFA = new Stack<>();
@@ -154,13 +154,8 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initAnnotations(String path) {
         List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
-
         setAnnotationsLoaded(true);
-
-        graphController.getGraph().setAnnotations(annotations);
-        graphController.getGraph().getModel().matchNodesAndAnnotations();
-
-        MenuFactory.loadAnnotations.setDisable(true);
+        graphController.getGraph().initAnnotations(annotations);
     }
 
     /**
@@ -356,7 +351,7 @@ public class MainController extends Controller<BorderPane> {
         MenuFactory.toggleFileMenu(true);
         MenuFactory.toggleMostRecent(true);
         MenuFactory.toggleFilters(false);
-        MenuFactory.allowLevel.setDisable(false);
+        menuFactory.getAllowLevel().setDisable(false);
         this.getRoot().setCenter(graphController.getRoot());
         toggleSelectDeselect(true);
 
@@ -392,12 +387,14 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.update(ref, currentView);
 
-        count++;
-        if(update) {
+        if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
     }
 
+    /**
+     * Toggle whether the reference strain should be filtered or not
+     */
     public void toggleShowReferenceStrain() {
         this.showReferenceStrain = !this.showReferenceStrain;
     }
@@ -469,12 +466,16 @@ public class MainController extends Controller<BorderPane> {
         });
 
         buttons.get(1).setOnAction(e -> {
+            showReferenceStrain = false;
+            menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
             genomeTextField.setText("");
             fillTree();
         });
 
         buttons.get(2).setOnAction(e -> {
+            showReferenceStrain = true;
+            menuFactory.setShowReferenceStrain(true);
             treeController.selectAll();
             genomeTextField.setText("");
             fillTree();
@@ -492,7 +493,6 @@ public class MainController extends Controller<BorderPane> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
             } else {
-
                 if (currentView != 0) {
                     return;
                 }
@@ -518,20 +518,31 @@ public class MainController extends Controller<BorderPane> {
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
                     annotationTextField.getText());
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
-            if (newAnn == null || newAnn.getSpannedNodes() == null) {
-                return;
-            }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
+            boolean foundAnnotation = false;
             if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
-                int i = newAnn.getSpannedNodes().get(0).getId();
-                graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                        / getGraphController().getGraph().getModel().getMaxWidth() - 450);
+                for (Node node : newAnn.getSpannedNodes()) {
+                    int id = node.getId();
+                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
+                    if (nodeInMap != null) {
+                        graphController.slideToPercent(((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                                / (graphController.getGraph().getModel().getMaxWidth() - 450)));
+                        foundAnnotation = true;
+                        break;
+                    }
+                }
+            }
+            if (!foundAnnotation) {
+                WindowFactory.createAnnNotFoundAlert();
+            }
+            for (Node n : newAnn.getSpannedNodes()) {
+                RectangleCell cell = ((RectangleCell) cellMap.get(n.getId()));
+                if (cell != null) {
+                    cell.setHighLight();
+                }
             }
 
-            for (Node n : newAnn.getSpannedNodes()) {
-                ((RectangleCell) cellMap.get(n.getId())).setHighLight();
-            }
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
         }
     }
@@ -592,7 +603,7 @@ public class MainController extends Controller<BorderPane> {
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
         } else {
-            MenuFactory menuFactory = new MenuFactory(this);
+            menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
             MenuFactory.toggleViewMenu(true);
             MenuFactory.toggleFilters(true);
@@ -709,6 +720,10 @@ public class MainController extends Controller<BorderPane> {
                 graphController.getGraph().getCurrentGenomes());
     }
 
+    /**
+     * Method to toggle whether or not the nucleotide level can be reached
+     * through scrolling.
+     */
     public void toggleAllowNucleotideLevel() {
         this.allowNucleotideLevel = !this.allowNucleotideLevel;
     }
@@ -721,7 +736,7 @@ public class MainController extends Controller<BorderPane> {
         createMenu(true, false);
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
-        MenuFactory.allowLevel.setDisable(true);
+        menuFactory.getAllowLevel().setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
