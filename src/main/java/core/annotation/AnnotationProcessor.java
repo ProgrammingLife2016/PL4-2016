@@ -33,7 +33,6 @@ public class AnnotationProcessor {
      * @param lowestMap the map we want to apply the annotations to
      */
     public void matchNodesAndAnnotations(HashMap<Integer, Node> lowestMap) {
-        int startLoopIndex = 0;
         for (Annotation a : annotations) {
             for (Node n : a.getSpannedNodes()) {
                 Node node = lowestMap.get(n.getId());
