@@ -246,24 +246,29 @@ public class MenuFactory {
         CollectionCell originallyFocusedCell = new CollectionCell(0, 1, "N");
         originallyFocusedCell.originalFocus();
         grid.add(originallyFocusedCell, 0, 1);
-        grid.add(new Text("   -    When you click a cell, it becomes highlighted like this.\n "
+        grid.add(new Text("        When you click a cell, it becomes highlighted like this.\n "
                 + "This means you will keep focus on this node, until deselection or selection "
                 + "of another node."), 1, 1);
 
-        RectangleCell node1 = new RectangleCell(0, 1);
-        node1.sideFocus();
-        grid.add(node1, 0, 2);
-        grid.add(new Text("   -    When zooming in on the originally focused node, nodes that \n"
+        RectangleCell sideFocusedRectangleCell = new RectangleCell(0, 1);
+        sideFocusedRectangleCell.sideFocus();
+        grid.add(sideFocusedRectangleCell, 0, 2);
+        grid.add(new Text("        When zooming in on the originally focused node, nodes that \n"
                 + "were previously collapsed under the selected node will light up."), 1, 2);
 
         CollectionCell focusedCell = new CollectionCell(0, 1, "N");
         focusedCell.focus();
         grid.add(focusedCell, 0, 3);
 
-        grid.add(new Text("   -    When zooming out, your originally focused node may collapse. "
+        grid.add(new Text("        When zooming out, your originally focused node may collapse. "
                 + "The node that contains \n your originally focused node, will now be marked as the "
                 + "new focus. Zooming in will bring you back to your originally focused node."), 1, 3);
 
+        RectangleCell annotationHighlightedCell = new RectangleCell(0, 1);
+        annotationHighlightedCell.setHighLight();
+        grid.add(annotationHighlightedCell, 0, 4);
+        grid.add(new Text("        When an annotation is highlighted, when zoomed in at nucleotide level, "
+                + "the nodes in this annotation will get a yellow border.\n"), 1, 4);
         return grid;
     }
 
