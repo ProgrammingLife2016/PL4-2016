@@ -78,6 +78,17 @@ public class Filtering {
     }
 
     /**
+     * Clear all filters and selected genomes
+     */
+    public void clearFilters() {
+        filters.clear();
+        selectedGenomes.clear();
+
+        collectPredicates();
+        filter();
+    }
+
+    /**
      * Collect all predicates for filtering.
      */
     private void collectPredicates() {

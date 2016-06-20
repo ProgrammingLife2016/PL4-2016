@@ -885,4 +885,12 @@ public class MainController extends Controller<BorderPane> {
             builder.append("\n");
         }
     }
+
+    /**
+     * Getter for Filtering.
+     * @return Filtering.
+     */
+    public Filtering getFiltering() {
+        return filtering;
+    }
 }

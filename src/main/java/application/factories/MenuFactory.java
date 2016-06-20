@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
@@ -42,7 +41,7 @@ public class MenuFactory {
     private static CheckMenuItem showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
-            shortcuts, about, showPhylogeneticTree, showGenomeSequence;
+            shortcuts, about, showPhylogeneticTree, showGenomeSequence, filterReset;
 
     private MainController mainController;
 
@@ -68,6 +67,7 @@ public class MenuFactory {
 
     /**
      * Method to set whether we show the reference strain
+     *
      * @param show boolean
      */
     public void setShowReferenceStrain(boolean show) {
@@ -76,6 +76,7 @@ public class MenuFactory {
 
     /**
      * Method to get the MenuItem to allow the nucleotide level
+     *
      * @return the MenuItem
      */
     public CheckMenuItem getAllowLevel() {
@@ -486,11 +487,13 @@ public class MenuFactory {
         initSpoligotypeFilter();
         initGenoDSTFilter();
         initTFFilter();
+        initResetFilter();
 
         return initMenu("Filter", filterCapreomycin, filterCohort, filterEthambutol, filterEthionAmide,
                 filterGenoDST, filterHIV, filterIsolation, filterIsoniazid, filterKanamycin, filterLineage,
                 filterOfloxacin, filterPhenoDST, filterPyrazinamide, filterRifampin, filterSpecimenType,
-                filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF);
+                filterSpoligotype, filterStreptomycin, filterStudyDistrict, filterTF, new SeparatorMenuItem(),
+                filterReset);
     }
 
     /**
@@ -871,7 +874,6 @@ public class MenuFactory {
      */
     private void initGenoDSTFilter() {
         CheckMenuItem gen1 = new CheckMenuItem("Drug-resistant (other)");
-
         gen1.setOnAction(event -> mainController.modifyFilter(GENO_DRUG_RESIST, gen1.isSelected()));
         CheckMenuItem gen2 = new CheckMenuItem("MDR");
         gen2.setOnAction(event -> mainController.modifyFilter(GENO_MDR, gen2.isSelected()));
@@ -912,5 +914,33 @@ public class MenuFactory {
         });
 
         filterTF = initMenu("Tugela Ferry XDR", pos, neg, non);
+    }
+
+    /**
+     * Method to create filter reset.
+     */
+    private void initResetFilter() {
+        filterReset = initMenuItem("Reset filters", null, e -> {
+            filterLineage.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterHIV.getItems().forEach(i -> ((RadioMenuItem) i).setSelected(false));
+            filterCohort.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterStudyDistrict.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterSpecimenType.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterIsolation.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterPhenoDST.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterCapreomycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterEthambutol.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterEthionAmide.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterIsoniazid.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterKanamycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterPyrazinamide.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterOfloxacin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterRifampin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterStreptomycin.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterSpoligotype.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterGenoDST.getItems().forEach(i -> ((CheckMenuItem) i).setSelected(false));
+            filterTF.getItems().forEach(i -> ((RadioMenuItem) i).setSelected(false));
+            mainController.getFiltering().clearFilters();
+        });
     }
 }
