@@ -182,7 +182,7 @@ public class AnnotationTest {
         ann.setEnd(5);
 
         assertEquals(0, ann.getSpannedNodes().size());
-        ann.detNodesSpannedByAnnotation(0, nodeMap);
+        ann.detNodesSpannedByAnnotation(nodeMap);
         assertEquals(2, ann.getSpannedNodes().size());
     }
 }

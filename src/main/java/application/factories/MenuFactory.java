@@ -38,8 +38,8 @@ public class MenuFactory {
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
-    public static CheckMenuItem allowLevel;
-    public static CheckMenuItem showReferenceStrain;
+    private static CheckMenuItem allowLevel;
+    private static CheckMenuItem showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence;
@@ -64,6 +64,14 @@ public class MenuFactory {
      */
     public MenuFactory(MainController controller) {
         mainController = controller;
+    }
+
+    public void setShowReferenceStrain(boolean show) {
+        showReferenceStrain.setSelected(show);
+    }
+
+    public CheckMenuItem getAllowLevel() {
+        return allowLevel;
     }
 
     /**
@@ -419,7 +427,7 @@ public class MenuFactory {
             File file = new File(recentFile);
             File parentDir = file.getParentFile();
             switch (type) {
-                case GFF: mainController.initAnnotations(recentFile);
+                case GFF:
                     mainController.addRecentGFF(recentFile);
                     break;
                 case GFA: WindowFactory.createGFApopup(parentDir, file);

@@ -388,6 +388,14 @@ public class GraphController extends Controller<ScrollPane> {
     }
 
     /**
+     * Method to slide to a certain percent of the screen
+     * @param percent the percent to slide to
+     */
+    public void slideToPercent(double percent) {
+        getRoot().setHvalue((percent));
+    }
+
+    /**
      * Getter for the ZoomBox
      *
      * @return the zoomBox
