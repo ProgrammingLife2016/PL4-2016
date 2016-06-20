@@ -59,7 +59,7 @@ public class GraphController extends Controller<ScrollPane> {
         this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        this.getRoot().setPannable(true);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
