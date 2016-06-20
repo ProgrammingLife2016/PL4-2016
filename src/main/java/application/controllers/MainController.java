@@ -17,7 +17,6 @@ import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -31,9 +30,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.input.KeyEvent;
-
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -137,6 +133,10 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setCenter(imageView);
     }
 
+    /**
+     * Method to get the Screen
+     * @return the Screen
+     */
     public ScrollPane getScreen() {
         return screen;
     }
@@ -608,9 +608,13 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setTop(vBox);
     }
 
+    /**
+     * Method to add a Key Handler to the annotation TextField
+     * @param textField the annotation TextField
+     */
     public void addAnnotationKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
-            if(event.getCode().equals(KeyCode.ENTER)) {
+            if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
                     initListenerProperties();
                 }
@@ -618,6 +622,10 @@ public class MainController extends Controller<BorderPane> {
         });
     }
 
+    /**
+     * Method to add a Key Handler to the genome TextField
+     * @param textField the genome TextField
+     */
     public void addGenomeKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {

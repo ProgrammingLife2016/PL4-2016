@@ -221,7 +221,8 @@ public class GraphController extends Controller<ScrollPane> {
             prevClick.focus();
         }
         sideFocus(true);
-        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4)) / (graph.getMaxWidth() - 450));
+        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4))
+                / (graph.getMaxWidth() - 450));
         update(getGraph().getCurrentRef(), getGraph().getCurrentInt());
     }
 

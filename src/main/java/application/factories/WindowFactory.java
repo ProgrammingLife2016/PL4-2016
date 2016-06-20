@@ -255,6 +255,7 @@ public final class WindowFactory {
 
     /**
      * Method to create a PopUp when no Annotation Data is loaded
+     * @param files the currently chosen files
      */
     public static void createAnnotationPopup(File[] files) {
         ArrayList<Text> candidates = new ArrayList<>();
@@ -266,14 +267,14 @@ public final class WindowFactory {
                 for (File f : fileList) {
                     String ext = FilenameUtils.getExtension(f.getName());
                     if (ext.equals("gff")) {
-                        Text t = new Text (f.getAbsolutePath());
+                        Text t = new Text(f.getAbsolutePath());
                         candidates.add(t);
                     }
                 }
             }
         }
 
-       if (!candidates.isEmpty()){
+       if (!candidates.isEmpty()) {
            showMetaAnnoPopup(candidates, files, "gff");
        } else {
            chooseCorrectFile(files);
@@ -396,6 +397,12 @@ public final class WindowFactory {
         });
     }
 
+    /**
+     * Method to add an Event Handler to the GFF (Annotation) Pop Up
+     * @param listView the listView showing
+     * @param files    the list of chosen Files
+     * @param tempStage the Stage of the shown window
+     */
     public static void addGFFEventHandler(ListView listView, File[] files, Stage tempStage) {
         listView.setOnMouseClicked(event -> {
             Text file = (Text) listView.getSelectionModel().getSelectedItem();
@@ -413,6 +420,10 @@ public final class WindowFactory {
     }
 
 
+    /**
+     * Method to make sure we load the file with the right method
+     * @param files the files to load
+     */
     public static void chooseCorrectFile(File[] files) {
         File gfaFile = files[0];
         File nwkFile = files[1];

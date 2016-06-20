@@ -66,10 +66,18 @@ public class MenuFactory {
         mainController = controller;
     }
 
+    /**
+     * Method to set whether we show the reference strain
+     * @param show boolean
+     */
     public void setShowReferenceStrain(boolean show) {
         showReferenceStrain.setSelected(show);
     }
 
+    /**
+     * Method to get the MenuItem to allow the nucleotide level
+     * @return the MenuItem
+     */
     public CheckMenuItem getAllowLevel() {
         return allowLevel;
     }
@@ -314,7 +322,8 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
-        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        mainController.getGraphController().update(new ArrayList<>(),
+                mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();
