@@ -111,29 +111,11 @@ public class Graph {
                 currentInt = levelMaps.size() - 1;
                 current = generateModel(ref, depth);
 
-                //LoadOneUp is only needed when we do not start on the top level.
-                loadBoth(depth);
-            } else { //Second time. All models are loaded
-                if (depth < currentInt) {
-                    zoomOut = current;
-                    current = zoomIn;
-                    loadOneDown(depth);
-                    currentInt = depth;
-                } else if (depth > currentInt) {
-                    zoomIn = current;
-                    current = zoomOut;
-                    loadOneUp(depth);
-                    currentInt = depth;
-                } else if (ref != currentRef) {
-                    currentRef = ref;
-                    current.setLevelMaps(levelMaps);
-
-                    //LoadOneUp is only needed when we do not start on the top level.
-                    loadBoth(depth);
-                }
+            } else if (depth != currentInt) {
+                currentInt = depth;
+                current = generateModel(ref, depth);
             }
         }
-        currentInt = depth;
         return true;
     }
 
@@ -163,48 +145,6 @@ public class Graph {
     public void initAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
         annotationProcessor = new AnnotationProcessor(startMap, annotations);
-    }
-
-    /**
-     * Load both.
-     *
-     * @param depth depth
-     */
-    private void loadBoth(int depth) {
-        loadOneUp(depth);
-        loadOneDown(depth);
-    }
-
-    /**
-     * Method to Zoom out
-     *
-     * @param depth Depth to be loaded
-     */
-    private void loadOneUp(int depth) {
-        int finalDepth = depth;
-        new Thread("Load one up") {
-            public void start() {
-                if (finalDepth + 1 <= levelMaps.size() - 1) {
-                    zoomOut = generateModel(currentRef, finalDepth + 1);
-                }
-            }
-        }.start();
-    }
-
-    /**
-     * Method to Zoom in
-     *
-     * @param depth Depth to be loaded
-     */
-    private void loadOneDown(int depth) {
-        int finalDepth = depth;
-        new Thread("Load one down") {
-            public void start() {
-                if (finalDepth - 1 >= 0) {
-                    zoomIn = generateModel(currentRef, finalDepth - 1);
-                }
-            }
-        }.start();
     }
 
     /**

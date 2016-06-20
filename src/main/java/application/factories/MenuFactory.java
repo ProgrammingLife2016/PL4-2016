@@ -66,10 +66,18 @@ public class MenuFactory {
         mainController = controller;
     }
 
+    /**
+     * Method to set whether we show the reference strain
+     * @param show boolean
+     */
     public void setShowReferenceStrain(boolean show) {
         showReferenceStrain.setSelected(show);
     }
 
+    /**
+     * Method to get the MenuItem to allow the nucleotide level
+     * @return the MenuItem
+     */
     public CheckMenuItem getAllowLevel() {
         return allowLevel;
     }
@@ -284,20 +292,26 @@ public class MenuFactory {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
             if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
                 WindowFactory.createAlert();
+
+//            } else if (!mainController.isAnnotationsLoaded()) {
+//                mainController.createAnnotationPopup();
+//                mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
+//                        mainController.getTreeController().getSelectedGenomes());
+
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
                         mainController.getTreeController().getSelectedGenomes());
             }
         });
+
         showPhylogeneticTree = initMenuItem("Show Phylogenetic Tree", null, event -> mainController.fillTree());
 
         resetView = initMenuItem("Reset", null, event -> handleReset());
-        allowLevel = new CheckMenuItem("Allow nucliotide level");
+        allowLevel = new CheckMenuItem("Allow nucleotide level");
         allowLevel.setOnAction(event -> mainController.toggleAllowNucleotideLevel());
         showReferenceStrain = new CheckMenuItem("Show reference strain");
         showReferenceStrain.setOnAction(event -> mainController.toggleShowReferenceStrain());
-        return initMenu("View", showGenomeSequence, showPhylogeneticTree, new SeparatorMenuItem(),
-                new SeparatorMenuItem(), resetView, allowLevel, showReferenceStrain);
+        return initMenu("View", showGenomeSequence, showPhylogeneticTree, resetView, allowLevel, showReferenceStrain);
     }
 
     /**
@@ -308,7 +322,8 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
-        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        mainController.getGraphController().update(new ArrayList<>(),
+                mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();
@@ -386,7 +401,8 @@ public class MenuFactory {
             int finalIdx = idx;
             MenuItem recentMenuItem = initMenuItem(recents.get(idx), null, event -> {
                 String recentFile = recents.get(finalIdx);
-                setActionOnSelection(type, recentFile); });
+                setActionOnSelection(type, recentFile);
+            });
             if (recents.get(finalIdx).equals("Empty")) {
                 recentMenuItem.setDisable(true);
             }
@@ -404,11 +420,14 @@ public class MenuFactory {
     private Menu getMenuFromRecentMenuType(RecentMenuTypes type) {
         String fileTypeStr = "";
         switch (type) {
-            case GFF: fileTypeStr = "GFF";
+            case GFF:
+                fileTypeStr = "GFF";
                 break;
-            case GFA: fileTypeStr = "GFA";
+            case GFA:
+                fileTypeStr = "GFA";
                 break;
-            case NWK: fileTypeStr = "NWK";
+            case NWK:
+                fileTypeStr = "NWK";
                 break;
             default:
                 break;
@@ -430,9 +449,11 @@ public class MenuFactory {
                 case GFF:
                     mainController.addRecentGFF(recentFile);
                     break;
-                case GFA: WindowFactory.createGFApopup(parentDir, file);
+                case GFA:
+                    WindowFactory.createGFApopup(parentDir, file);
                     break;
-                case NWK: WindowFactory.createNWKpopup(parentDir, file);
+                case NWK:
+                    WindowFactory.createNWKpopup(parentDir, file);
                     break;
                 default:
                     break;

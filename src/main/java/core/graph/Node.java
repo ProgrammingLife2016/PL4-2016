@@ -516,7 +516,9 @@ public class Node {
      * @param previousLevelNodeId the nodeId to be added to the list.
      */
     public void addPreviousLevelNodesId(int previousLevelNodeId) {
-        this.previousLevelNodesIds.add(previousLevelNodeId);
+        if (!this.previousLevelNodesIds.contains(previousLevelNodeId)) {
+            this.previousLevelNodesIds.add(previousLevelNodeId);
+        }
     }
 
     /**

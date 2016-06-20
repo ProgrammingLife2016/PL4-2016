@@ -44,6 +44,12 @@ public class ZoomBox extends ScrollPane {
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
+        zoomRectBorder.setOnMouseClicked(event -> {
+            double value = ((event.getSceneX() - zoomRectBorder.getLayoutX()) / zoomRectBorder.getWidth()) / 2;
+            graphController.getRoot().setHvalue(value);
+
+        });
+
     }
 
     /**
@@ -94,6 +100,7 @@ public class ZoomBox extends ScrollPane {
         if (snap) {
             image = snapshot;
         }
+
 
         ImagePattern pattern = new ImagePattern(image, rectX, 20, zoomBoxWidth, zoomBoxHeight, false);
 
