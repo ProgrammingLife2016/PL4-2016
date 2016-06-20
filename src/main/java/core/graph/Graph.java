@@ -1,6 +1,5 @@
 package core.graph;
 
-import application.controllers.MainController;
 import application.fxobjects.Cell;
 import application.fxobjects.Edge;
 import core.annotation.Annotation;
