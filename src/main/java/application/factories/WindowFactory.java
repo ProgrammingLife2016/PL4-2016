@@ -96,12 +96,14 @@ public final class WindowFactory {
         }
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.addRecentGFA(selectedFile.getAbsolutePath());
 
-        File parentDir = selectedFile.getParentFile();
-        mainController.addRecentDir(parentDir.getAbsolutePath());
+        if (selectedFile != null) {
+            mainController.addRecentGFA(selectedFile.getAbsolutePath());
+            File parentDir = selectedFile.getParentFile();
+            mainController.addRecentDir(parentDir.getAbsolutePath());
 
-        createGFApopup(parentDir, selectedFile);
+            createGFApopup(parentDir, selectedFile);
+        }
 
         return directoryChooser;
     }
@@ -153,12 +155,14 @@ public final class WindowFactory {
         }
 
         File selectedFile = directoryChooser.showOpenDialog(window);
-        File parentDir = selectedFile.getParentFile();
 
-        mainController.addRecentDir(parentDir.getAbsolutePath());
+        if (selectedFile != null) {
+            File parentDir = selectedFile.getParentFile();
 
-        createNWKpopup(parentDir, selectedFile);
+            mainController.addRecentDir(parentDir.getAbsolutePath());
 
+            createNWKpopup(parentDir, selectedFile);
+        }
         return directoryChooser;
     }
 
@@ -279,6 +283,7 @@ public final class WindowFactory {
 
     /**
      * Method to create a PopUp when no Annotation Data is loaded
+     *
      * @param files the currently chosen files
      */
     public static void createAnnotationPopup(File[] files) {
@@ -298,13 +303,14 @@ public final class WindowFactory {
             }
         }
 
-       if (!candidates.isEmpty()) {
-           showMetaAnnoPopup(candidates, files, "gff");
-       } else {
-           chooseCorrectFile(files);
-       }
+        if (!candidates.isEmpty()) {
+            showMetaAnnoPopup(candidates, files, "gff");
+        } else {
+            chooseCorrectFile(files);
+        }
 
     }
+
     /**
      * Method to create and show the MetaData Pop-up
      *
@@ -423,8 +429,9 @@ public final class WindowFactory {
 
     /**
      * Method to add an Event Handler to the GFF (Annotation) Pop Up
-     * @param listView the listView showing
-     * @param files    the list of chosen Files
+     *
+     * @param listView  the listView showing
+     * @param files     the list of chosen Files
      * @param tempStage the Stage of the shown window
      */
     public static void addGFFEventHandler(ListView listView, File[] files, Stage tempStage) {
@@ -446,6 +453,7 @@ public final class WindowFactory {
 
     /**
      * Method to make sure we load the file with the right method
+     *
      * @param files the files to load
      */
     public static void chooseCorrectFile(File[] files) {
@@ -481,7 +489,6 @@ public final class WindowFactory {
             mainController.addRecentNWK(nwkFile.getAbsolutePath());
 
 
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
@@ -509,11 +516,11 @@ public final class WindowFactory {
             }
         }
 
-
         File selectedFile = directoryChooser.showOpenDialog(window);
-        mainController.initAnnotations(selectedFile.getAbsolutePath());
-        mainController.addRecentGFF(selectedFile.getAbsolutePath());
-
+        if (selectedFile != null) {
+            mainController.initAnnotations(selectedFile.getAbsolutePath());
+            mainController.addRecentGFF(selectedFile.getAbsolutePath());
+        }
         return directoryChooser;
     }
 
