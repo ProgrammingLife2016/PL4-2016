@@ -181,6 +181,7 @@ public final class WindowFactory {
         fillList(listView, candidates);
         handleTempStage(tempStage, type, listView);
 
+        System.out.println();
         if (type.toUpperCase().equals("NWK")) {
             addGFAEventHandler(listView, selectedFile, tempStage);
         } else if (type.toUpperCase().equals("GFA")) {
@@ -202,6 +203,7 @@ public final class WindowFactory {
 
             tempStage.hide();
 
+            System.out.println(FilenameUtils.getExtension(selectedGFAFile.getName()));
             if (!mainController.isMetaDataLoaded()) {
                 createMetaDatapopup(selectedGFAFile, nwk);
             } else {

@@ -95,6 +95,7 @@ public class ZoomBox extends ScrollPane {
             image = snapshot;
         }
 
+
         ImagePattern pattern = new ImagePattern(image, rectX, 20, zoomBoxWidth, zoomBoxHeight, false);
 
         zoomRectBorder.setFill(pattern);

@@ -17,21 +17,30 @@ import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 /**
  * MainController for GUI.
@@ -559,6 +568,7 @@ public class MainController extends Controller<BorderPane> {
         VBox vBox = new VBox();
         hBox = new HBox();
         genomeTextField = new TextField();
+        addGenomeKeyHandler(genomeTextField);
         hBox.getStylesheets().add("/css/main.css");
 
         searchButton = new Button("Search Genome (In Tree)");
@@ -569,9 +579,10 @@ public class MainController extends Controller<BorderPane> {
         setGenomeButtonActionListener(buttons);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
-        // Dont add the annotation search box in the tree view
+        // Don't add the annotation search box in the tree view
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
+            addAnnotationKeyHandler(annotationTextField);
             Button highlightButton = new Button("Highlight annotation");
             Button deselectAnnotationButton = new Button("Deselect annotation");
             setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
@@ -589,6 +600,41 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    public void addAnnotationKeyHandler(TextField textField) {
+        textField.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER)) {
+                if (!annotationTextField.getText().isEmpty()) {
+                    initListenerProperties();
+                }
+            }
+        });
+    }
+
+    public void addGenomeKeyHandler(TextField textField) {
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (!genomeTextField.getText().isEmpty()
+                        && treeController.getCellByName(
+                        genomeTextField.textProperty().get().trim().toUpperCase()) != null) {
+                    LeafCell cell = treeController.getCellByName(
+                            genomeTextField.textProperty().get().toUpperCase().trim());
+                    treeController.applyCellHighlight(cell);
+                    treeController.selectStrain(cell);
+                    genomeTextField.setText("");
+
+                    if (inGraph) {
+                        fillTree();
+                    }
+
+                    if (cell != null) {
+                        treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
+                    }
+                }
+
+            }
+        });
     }
 
     /**
