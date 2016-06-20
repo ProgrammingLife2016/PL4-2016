@@ -287,7 +287,6 @@ public class GraphController extends Controller<ScrollPane> {
             initMouseHandler();
         } else {
             addToPane(min);
-            System.out.println("Update" + drawFrom);
         }
 
         graph.endUpdate();

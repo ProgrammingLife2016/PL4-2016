@@ -46,17 +46,10 @@ public class ZoomBox extends ScrollPane {
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
-        zoomRectBorder.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        zoomRectBorder.setOnMouseClicked(event -> {
+            double value = ((event.getSceneX()-zoomRectBorder.getLayoutX())/zoomRectBorder.getWidth())/2;
+            graphController.getRoot().setHvalue(value);
 
-            @Override
-            public void handle(MouseEvent event) {
-                double value = ((event.getSceneX()-zoomRectBorder.getLayoutX())/zoomRectBorder.getWidth())/2;
-                graphController.getRoot().setHvalue(value);
-                System.out.println("Event scene X: " + (event.getSceneX()-zoomRectBorder.getLayoutY()));
-                System.out.println("ZoomRect width: " + zoomRectBorder.getWidth());
-                System.out.println(value);
-
-            }
         });
 
     }

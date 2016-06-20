@@ -248,10 +248,7 @@ public final class GraphReducer {
             if (removeNode == null) {
                 continue;
             }
-            System.out.println("removeNode id: " + removeNode.getId());
-            System.out.println("i = " + i);
             Node upperNode = upperMap.get(removeNode.getNextLevelNodeId());
-            System.out.println("upperNode id: " + removeNode.getNextLevelNodeId());
             for (int lowerNodeId : removeNode.getPreviousLevelNodesIds()) {
                 Node lowerNode = lowerMap.get(lowerNodeId);
                 if (lowerNode == null) {
