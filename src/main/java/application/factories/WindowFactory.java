@@ -22,6 +22,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -85,10 +86,21 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Graph File");
 
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
+
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.addRecentGFA(selectedFile.getAbsolutePath());
 
         File parentDir = selectedFile.getParentFile();
+        mainController.addRecentDir(parentDir.getAbsolutePath());
+
         createGFApopup(parentDir, selectedFile);
 
         return directoryChooser;
@@ -131,8 +143,20 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle("Select Tree File");
 
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
+
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
         File selectedFile = directoryChooser.showOpenDialog(window);
         File parentDir = selectedFile.getParentFile();
+
+        mainController.addRecentDir(parentDir.getAbsolutePath());
+
         createNWKpopup(parentDir, selectedFile);
 
         return directoryChooser;
@@ -476,6 +500,16 @@ public final class WindowFactory {
         FileChooser directoryChooser = new FileChooser();
         directoryChooser.setTitle(s);
 
+        Stack<String> mostRecentDir = mainController.getMostRecentDir();
+
+        if (!mostRecentDir.isEmpty()) {
+            File initialFile = new File(mostRecentDir.get(0));
+            if (initialFile != null && initialFile.isDirectory()) {
+                directoryChooser.setInitialDirectory(initialFile);
+            }
+        }
+
+
         File selectedFile = directoryChooser.showOpenDialog(window);
         mainController.initAnnotations(selectedFile.getAbsolutePath());
         mainController.addRecentGFF(selectedFile.getAbsolutePath());
@@ -558,4 +592,5 @@ public final class WindowFactory {
     public static void createMenuWithSearchWithoutAnnotation() {
         mainController.createMenu(true, false);
     }
+
 }

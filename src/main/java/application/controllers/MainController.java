@@ -76,6 +76,7 @@ public class MainController extends Controller<BorderPane> {
     private Stack<String> mostRecentGFF;
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
+    private Stack<String> mostRecentDir;
 
     private MenuFactory menuFactory;
 
@@ -90,6 +91,7 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFF = new Stack<>();
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
+        this.mostRecentDir = new Stack<>();
         this.filtering = new Filtering();
         this.metaDataLoaded = false;
         this.annotationsLoaded = false;
@@ -99,6 +101,7 @@ public class MainController extends Controller<BorderPane> {
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        checkMostRecent("/mostRecentDir.txt", mostRecentDir);
 
         createMenu(false, false);
 
@@ -280,7 +283,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentGFF() {
+    public Stack<String> getMostRecentGFF() {
         return mostRecentGFF;
     }
 
@@ -289,7 +292,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentGFA() {
+    public Stack<String> getMostRecentGFA() {
         return mostRecentGFA;
     }
 
@@ -298,8 +301,16 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentNWK() {
+    public Stack<String> getMostRecentNWK() {
         return mostRecentNWK;
+    }
+
+    /**
+     * Get the list containing the most recenlty visited directory
+     * @return the list
+     */
+    public Stack<String> getMostRecentDir() {
+        return mostRecentDir;
     }
 
     /**
@@ -339,6 +350,18 @@ public class MainController extends Controller<BorderPane> {
         }
 
     }
+
+    /**
+     * Add a file to the recently opened directory
+     * @param s the file to be added
+     */
+    public void addRecentDir(String s) {
+        if (!mostRecentDir.contains(s)) {
+            mostRecentDir.push(s);
+            writeMostRecent("/mostRecentDir.txt", mostRecentDir);
+        }
+    }
+
 
     /**
      * Method to add items to the GUI
