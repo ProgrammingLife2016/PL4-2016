@@ -510,8 +510,7 @@ public class MainController extends Controller<BorderPane> {
         new AnnotationProcessor(model.getLevelMaps().get(0), annotations).matchNodesAndAnnotations();
 
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
-                    annotationTextField.getText());
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
             Map<Integer, Cell> cellMap = model.getCellMap();
             if (newAnn == null || newAnn.getSpannedNodes() == null) {
                 annotationWarning.setText("Warning: No matches found");

@@ -96,13 +96,25 @@ public class AnnotationProcessor {
         Annotation matchingAnnotation = null;
 
         for (Annotation a : annotations) {
-            String strChar1LowerCase = str.substring(0, 1).toLowerCase() + str.substring(1);
-            String strChar1UpperCase = str.substring(0, 1).toUpperCase() + str.substring(1);
+            String[] displayNameArr = a.getDisplayNameAttr().split(" ");
 
-            if (a.getDisplayNameAttr().contains(strChar1LowerCase)
-                    || a.getDisplayNameAttr().contains(strChar1UpperCase)) {
+            // Example input: DNA polymerase III DnaN
+            if (str.contains(" ") && a.getDisplayNameAttr().toLowerCase().contains(str.toLowerCase())) {
+                System.out.println("Contains space");
                 counter++;
                 matchingAnnotation = a;
+            } else {
+                // Example input: 0002
+                if (displayNameArr[0].contains(str)) {
+                    counter++;
+                    matchingAnnotation = a;
+                }
+
+                // Example input: DnaN or dnaN
+                if (displayNameArr[displayNameArr.length - 1].toLowerCase().equals(str.toLowerCase())) {
+                    counter++;
+                    matchingAnnotation = a;
+                }
             }
         }
 
