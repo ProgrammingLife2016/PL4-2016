@@ -522,7 +522,7 @@ public class Node {
     }
 
     public void removePreviousLevelNodesId(int previousLevelNodeId) {
-        if (this.previousLevelNodesIds.contains(previousLevelNodeId)) {
+        if (this.previousLevelNodesIds.contains(Integer.valueOf(previousLevelNodeId))) {
             this.previousLevelNodesIds.remove(Integer.valueOf(previousLevelNodeId));
         }
     }

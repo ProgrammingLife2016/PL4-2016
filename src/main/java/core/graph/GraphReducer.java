@@ -85,8 +85,8 @@ public final class GraphReducer {
                 levelMaps.add(levelMap);
 
                 if (levelMaps.size() == 10) {
-//                    reduceZoomingLevels(reduceAmount);
-//                    i -= reduceAmount;
+                    reduceZoomingLevels(reduceAmount);
+                    i -= reduceAmount;
                 }
             }
         }
@@ -225,8 +225,8 @@ public final class GraphReducer {
                 int previousMapSize = levelMaps.get(level - 1).size();
                 int difference = Math.abs(currentMapSize - previousMapSize);
                 if (difference < smallestDifference) {
-//                    index = level;
-//                    smallestDifference = difference;
+                    index = level;
+                    smallestDifference = difference;
                 }
             }
             removeZoomLevel(index);
@@ -248,7 +248,10 @@ public final class GraphReducer {
             if (removeNode == null) {
                 continue;
             }
+            System.out.println("removeNode id: " + removeNode.getId());
+            System.out.println("i = " + i);
             Node upperNode = upperMap.get(removeNode.getNextLevelNodeId());
+            System.out.println("upperNode id: " + removeNode.getNextLevelNodeId());
             for (int lowerNodeId : removeNode.getPreviousLevelNodesIds()) {
                 Node lowerNode = lowerMap.get(lowerNodeId);
                 if (lowerNode == null) {
@@ -257,7 +260,6 @@ public final class GraphReducer {
                 lowerNode.setNextLevelNodeId(removeNode.getNextLevelNodeId());
                 upperNode.addPreviousLevelNodesId(lowerNodeId);
             }
-            upperNode.removePreviousLevelNodesId(i);
         }
         levelMaps.remove(index);
     }
@@ -626,9 +628,7 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-        if (levelMaps.size() > 0) {
-            levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
-        }
+        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
     }
 
     /**
