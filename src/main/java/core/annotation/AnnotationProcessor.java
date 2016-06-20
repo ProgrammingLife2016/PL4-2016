@@ -100,7 +100,6 @@ public class AnnotationProcessor {
 
             // Example input: DNA polymerase III DnaN
             if (str.contains(" ") && a.getDisplayNameAttr().toLowerCase().contains(str.toLowerCase())) {
-                System.out.println("Contains space");
                 counter++;
                 matchingAnnotation = a;
             } else {

@@ -111,24 +111,10 @@ public class Graph {
 
                 //LoadOneUp is only needed when we do not start on the top level.
                 loadBoth(depth);
-            } else { //Second time. All models are loaded
-                if (depth < currentInt) {
-                    zoomOut = current;
-                    current = zoomIn;
-                    loadOneDown(depth);
-                    currentInt = depth;
-                } else if (depth > currentInt) {
-                    zoomIn = current;
-                    current = zoomOut;
-                    loadOneUp(depth);
-                    currentInt = depth;
-                } else if (ref != currentRef) {
-                    currentRef = ref;
-                    current.setLevelMaps(levelMaps);
-
-                    //LoadOneUp is only needed when we do not start on the top level.
-                    loadBoth(depth);
-                }
+            } else if (depth != currentInt) {
+                current = generateModel(ref, depth);
+                currentRef = ref;
+                current.setLevelMaps(levelMaps);
             }
         }
         currentInt = depth;

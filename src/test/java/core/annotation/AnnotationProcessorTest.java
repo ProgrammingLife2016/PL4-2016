@@ -88,13 +88,13 @@ public class AnnotationProcessorTest {
         Annotation a1 = new Annotation();
         Annotation a2 = new Annotation();
 
-        a1.setDisplayNameAttr("test1");
-        a2.setDisplayNameAttr("test2");
+        a1.setDisplayNameAttr("test 1");
+        a2.setDisplayNameAttr("test 2");
 
         annotationList.add(a1);
         annotationList.add(a2);
 
-        assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test2"));
+        assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test 2"));
     }
 
     /**

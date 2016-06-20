@@ -487,9 +487,15 @@ public class MainController extends Controller<BorderPane> {
                 new AnnotationProcessor(model.getLevelMaps().get(0), model.getAnnotations())
                         .matchNodesAndAnnotations();
             }
+            String input = annotationTextField.getText();
 
-            if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
-                highlightAnnotation();
+            if (!input.isEmpty()) {
+                if (currentView > 0) {
+                    allowNucleotideLevel = true;
+                    switchScene(Integer.MIN_VALUE);
+                }
+
+                highlightAnnotation(input);
             }
 
             annotationTextField.setText("");
@@ -500,20 +506,21 @@ public class MainController extends Controller<BorderPane> {
             deselectAllAnnotations();
             annotationTextField.setText("");
             annotationWarning.setText("");
-
         });
 
     }
 
     /**
      * Highlights an annotation based on the string input in the annotationTextField.
+     *
+     * @param input The user's search query.
      */
-    public void highlightAnnotation() {
+    public void highlightAnnotation(String input) {
         Model model = graphController.getGraph().getModel();
         List<Annotation> annotations = model.getAnnotations();
 
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
             Map<Integer, Cell> cellMap = model.getCellMap();
             if (newAnn == null || newAnn.getSpannedNodes() == null) {
                 annotationWarning.setText("Warning: No matches found");
