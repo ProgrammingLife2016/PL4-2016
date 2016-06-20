@@ -121,6 +121,7 @@ public class Filtering {
     /**
      * Check the filters.
      */
+    @SuppressWarnings("checkstyle:methodlength")
     private void checkFilter1() {
         List<Predicate<Genome>> predicates = new ArrayList<>();
         filters.forEach(f -> {
@@ -216,6 +217,7 @@ public class Filtering {
     /**
      * Check the filters.
      */
+    @SuppressWarnings("checkstyle:methodlength")
     private void checkFilter4() {
         List<Predicate<Genome>> predicates = new ArrayList<>();
         filters.forEach(f -> {
@@ -573,6 +575,7 @@ public class Filtering {
     /**
      * Check the filters.
      */
+    @SuppressWarnings("checkstyle:methodlength")
     private void checkFilter17() {
         List<Predicate<Genome>> predicates = new ArrayList<>();
         filters.forEach(f -> {
