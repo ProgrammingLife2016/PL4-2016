@@ -412,27 +412,45 @@ public final class WindowFactory {
 
         VBox content = new VBox();
 
-        addAlertComponents(content, dialog);
+        addAlertComponents(content, dialog, "Please select two or more strains first.");
 
         Scene dialogScene = new Scene(content, 200, 100);
         dialog.setScene(dialogScene);
         dialog.show();
+    }
 
+    /**
+     * Method to create to alert
+     * Shown when searched no annotation cannot be found
+     */
+    public static void createAnnNotFoundAlert() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
+        dialog.setTitle("Annotation not found.");
+
+        VBox content = new VBox();
+
+        addAlertComponents(content, dialog, "Your search does not match any of the present annotations.");
+
+        Scene dialogScene = new Scene(content, 200, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     /**
      * Method to add the components to the alert pop up
      * @param content the content to be set
      * @param dialog the dialog to add the content to
+     * @param textToAdd The text to be displayed in the popup
      */
-    public static void addAlertComponents(VBox content, Stage dialog) {
+    public static void addAlertComponents(VBox content, Stage dialog, String textToAdd) {
         content.getStylesheets().add("/css/popup.css");
         content.getStyleClass().add("vBox");
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(10, 10, 10, 10));
         content.setSpacing(10);
-
-        Text text = new Text("Please select two or more strains first");
+        Text text = new Text(textToAdd);
         text.getStyleClass().add("text");
 
         Button ok = new Button();
@@ -441,7 +459,6 @@ public final class WindowFactory {
         ok.setOnMouseClicked(event -> dialog.hide());
 
         content.getChildren().addAll(text, ok);
-
     }
 
 

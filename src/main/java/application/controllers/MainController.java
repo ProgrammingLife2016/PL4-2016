@@ -70,7 +70,6 @@ public class MainController extends Controller<BorderPane> {
     private boolean annotationsLoaded;
     private boolean allowNucleotideLevel = false;
     private boolean showReferenceStrain = false;
-
     private Button searchButton;
     private Button selectAllButton;
     private Button deselectSearchButton;
@@ -127,6 +126,10 @@ public class MainController extends Controller<BorderPane> {
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
         imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
         this.getRoot().setCenter(imageView);
+    }
+
+    public ScrollPane getScreen() {
+        return screen;
     }
 
     /**
@@ -528,10 +531,21 @@ public class MainController extends Controller<BorderPane> {
             }
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
+            boolean foundAnnotation = false;
             if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
-                int i = newAnn.getSpannedNodes().get(0).getId();
-                graphController.getRoot().setHvalue((cellMap.get(i)).getLayoutX()
-                        / getGraphController().getGraph().getModel().getMaxWidth() - 450);
+                for (Node node : newAnn.getSpannedNodes()) {
+                    int id = node.getId();
+                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
+                    if (nodeInMap != null) {
+                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
+                        foundAnnotation = true;
+                        break;
+                    }
+                }
+            }
+            if (!foundAnnotation) {
+                WindowFactory.createAnnNotFoundAlert();
             }
 
             for (Node n : newAnn.getSpannedNodes()) {

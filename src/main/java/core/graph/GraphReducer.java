@@ -85,8 +85,8 @@ public final class GraphReducer {
                 levelMaps.add(levelMap);
 
                 if (levelMaps.size() == 10) {
-                    reduceZoomingLevels(reduceAmount);
-                    i -= reduceAmount;
+//                    reduceZoomingLevels(reduceAmount);
+//                    i -= reduceAmount;
                 }
             }
         }
@@ -191,22 +191,14 @@ public final class GraphReducer {
         for (int j = zoomLevel; maxDepth < 500; j++) {
             zoomLevel = j - 1;
             if (levelMaps.size() == 10) {
-                reduceZoomingLevels(reduceAmount);
-                j -= reduceAmount;
+//                reduceZoomingLevels(reduceAmount);
+//                j -= reduceAmount;
             }
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(zoomLevel), maxDepth);
-            int previousMapSize2 = levelMaps.get(zoomLevel).size();
-            int currentMapSize2 = levelMap2.size();
+            levelMaps.add(levelMap2);
 
-            if (levelMap2.size() < 20) {
+            if (levelMap2.size() < 30) {
                 return;
-            }
-            if (previousMapSize2 - currentMapSize2 == 0) {
-                levelMaps.set(zoomLevel, levelMap2);
-                maxDepth += 10;
-                j--;
-            } else {
-                levelMaps.add(levelMap2);
             }
         }
     }
@@ -223,14 +215,42 @@ public final class GraphReducer {
             for (int level = 3; level < levelMaps.size() - 2; level++) {
                 int currentMapSize = levelMaps.get(level).size();
                 int previousMapSize = levelMaps.get(level - 1).size();
-                int difference = currentMapSize - previousMapSize;
+                int difference = Math.abs(currentMapSize - previousMapSize);
                 if (difference < smallestDifference) {
                     index = level;
                     smallestDifference = difference;
                 }
             }
-            levelMaps.remove(index);
+            removeZoomLevel(index);
         }
+    }
+
+    /**
+     * Method to remove a zoomLevel from the LevelMaps.
+     *
+     * @param index index of the levelMap to remove
+     */
+    public static void removeZoomLevel(int index) {
+        HashMap<Integer, Node> mapToRemove = levelMaps.get(index);
+        HashMap<Integer, Node> lowerMap = levelMaps.get(index - 1);
+        HashMap<Integer, Node> upperMap = levelMaps.get(index + 1);
+
+        for (int i = 0; i < startMapSize; i++) {
+            Node removeNode = mapToRemove.get(i);
+            if (removeNode == null) {
+                continue;
+            }
+            Node upperNode = upperMap.get(removeNode.getNextLevelNodeId());
+            for (int lowerNodeId : removeNode.getPreviousLevelNodesIds()) {
+                Node lowerNode = lowerMap.get(lowerNodeId);
+                if (lowerNode == null) {
+                    continue;
+                }
+                lowerNode.setNextLevelNodeId(removeNode.getNextLevelNodeId());
+                upperNode.addPreviousLevelNodesId(lowerNodeId);
+            }
+        }
+        levelMaps.remove(index);
     }
 
     /**
@@ -258,8 +278,6 @@ public final class GraphReducer {
                 collapseIndel(nodeMap, parent);
             }
         }
-
-
         return nodeMap;
     }
 
@@ -599,9 +617,7 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-        if (levelMaps.size() > 0) {
-            levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
-        }
+        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
     }
 
     /**
