@@ -300,7 +300,8 @@ public class MenuFactory {
         mainController.setCurrentView(mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.strainSelection(new ArrayList<>(),
                 mainController.getGraphController().getGraph().getCurrentGenomes());
-        mainController.getGraphController().update(new ArrayList<>(), mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
+        mainController.getGraphController().update(new ArrayList<>(),
+                mainController.getGraphController().getGraph().getLevelMaps().size() - 1);
         mainController.getGraphController().getZoomBox().reset();
         mainController.getGraphController().getGraphMouseHandling().setPrevClick(null);
         mainController.createList();

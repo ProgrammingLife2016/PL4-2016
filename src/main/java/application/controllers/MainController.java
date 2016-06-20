@@ -63,7 +63,6 @@ public class MainController extends Controller<BorderPane> {
     private TextField annotationTextField;
     private Text annotationWarning;
     private StackPane box;
-    private int count;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
@@ -88,7 +87,6 @@ public class MainController extends Controller<BorderPane> {
         super(new BorderPane());
         loadFXMLfile("/fxml/main.fxml");
 
-        this.count = -1;
         this.secondCount = -1;
         this.mostRecentGFF = new Stack<>();
         this.mostRecentGFA = new Stack<>();
@@ -383,12 +381,14 @@ public class MainController extends Controller<BorderPane> {
 
         graphController.update(ref, currentView);
 
-        count++;
-        if(update) {
+        if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
     }
 
+    /**
+     * Sets whether the reference strain should be shown or not.
+     */
     public void toggleShowReferenceStrain() {
         this.showReferenceStrain = !this.showReferenceStrain;
     }
@@ -482,7 +482,7 @@ public class MainController extends Controller<BorderPane> {
         highlightButton.setOnAction(e -> {
             if (!isAnnotationsLoaded()) {
                 createAnnotationPopup();
-            } 
+            }
 
             if (currentView == 0 && !annotationTextField.getText().isEmpty()) {
                 highlightAnnotation();
@@ -674,6 +674,9 @@ public class MainController extends Controller<BorderPane> {
                 graphController.getGraph().getCurrentGenomes());
     }
 
+    /**
+     * Sets whether the nucleotide level map should be available to the opposite value.
+     */
     public void toggleAllowNucleotideLevel() {
         this.allowNucleotideLevel = !this.allowNucleotideLevel;
     }

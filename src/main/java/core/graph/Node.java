@@ -425,8 +425,7 @@ public class Node {
         StringBuilder sb = new StringBuilder();
 
         for (Annotation a : getAnnotations()) {
-            sb.append(format("- %s, spanning nodes: ", a.getDisplayNameAttr(),
-                    a.getIdAttr()));
+            sb.append(format("- %s, spanning nodes: ", a.getDisplayNameAttr()));
 
             if (a.getSpannedNodes().size() >= 1) {
                 String prefix = "";
