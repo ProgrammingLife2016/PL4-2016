@@ -490,9 +490,7 @@ public class MainController extends Controller<BorderPane> {
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (!isAnnotationsLoaded()) {
-                createAnnotationPopup();
-            } else {
+            if (isAnnotationsLoaded()) {
                 if (currentView != 0) {
                     return;
                 }
@@ -545,13 +543,6 @@ public class MainController extends Controller<BorderPane> {
 
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
         }
-    }
-
-    /**
-     * Method to create a PopUp when no Annotation Data is loaded
-     */
-    public void createAnnotationPopup() {
-        WindowFactory.createAnnotationChooser("Please load Annotation Data first");
     }
 
     /**

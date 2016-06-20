@@ -181,7 +181,6 @@ public final class WindowFactory {
         fillList(listView, candidates);
         handleTempStage(tempStage, type, listView);
 
-        System.out.println();
         if (type.toUpperCase().equals("NWK")) {
             addGFAEventHandler(listView, selectedFile, tempStage);
         } else if (type.toUpperCase().equals("GFA")) {
@@ -203,7 +202,6 @@ public final class WindowFactory {
 
             tempStage.hide();
 
-            System.out.println(FilenameUtils.getExtension(selectedGFAFile.getName()));
             if (!mainController.isMetaDataLoaded()) {
                 createMetaDatapopup(selectedGFAFile, nwk);
             } else {
@@ -221,8 +219,8 @@ public final class WindowFactory {
     /**
      * Method to create the MetaData Pop-up
      *
-     * @param gfaFile   the earlier chosen GFA-File
-     * @param nwkFile   the earlier chosen NWK-File
+     * @param gfaFile the earlier chosen GFA-File
+     * @param nwkFile the earlier chosen NWK-File
      */
     public static void createMetaDatapopup(File gfaFile, File nwkFile) {
         ArrayList<Text> candidates = new ArrayList<>();
@@ -240,13 +238,13 @@ public final class WindowFactory {
             }
         }
 
-        File[] files = new File[2];
+        File[] files = new File[4];
         files[0] = gfaFile;
         files[1] = nwkFile;
 
         mainController.setBackground("/background_images/loading.png");
         if (!candidates.isEmpty()) {
-            showMetaDataPopup(candidates, files, "metaData");
+            showMetaAnnoPopup(candidates, files, "metaData");
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.toString());
             mainController.initGraph();
@@ -256,13 +254,40 @@ public final class WindowFactory {
     }
 
     /**
+     * Method to create a PopUp when no Annotation Data is loaded
+     */
+    public static void createAnnotationPopup(File[] files) {
+        ArrayList<Text> candidates = new ArrayList<>();
+        File gfaFile = files[0];
+        File parentDir = gfaFile.getParentFile();
+        if (parentDir.isDirectory()) {
+            File[] fileList = parentDir.listFiles();
+            if (fileList != null) {
+                for (File f : fileList) {
+                    String ext = FilenameUtils.getExtension(f.getName());
+                    if (ext.equals("gff")) {
+                        Text t = new Text (f.getAbsolutePath());
+                        candidates.add(t);
+                    }
+                }
+            }
+        }
+
+       if (!candidates.isEmpty()){
+           showMetaAnnoPopup(candidates, files, "gff");
+       } else {
+           chooseCorrectFile(files);
+       }
+
+    }
+    /**
      * Method to create and show the MetaData Pop-up
      *
-     * @param candidates  all candidates that can be opened
-     * @param files the list of selected Files
-     * @param type        the type
+     * @param candidates all candidates that can be opened
+     * @param files      the list of selected Files
+     * @param type       the type
      */
-    public static void showMetaDataPopup(ArrayList<Text> candidates, File[] files, String type) {
+    public static void showMetaAnnoPopup(ArrayList<Text> candidates, File[] files, String type) {
         Stage tempStage = new Stage();
         ListView listView = new ListView();
 
@@ -271,6 +296,10 @@ public final class WindowFactory {
 
         if (type.equals("metaData")) {
             addMetaDataEventHandler(listView, files, tempStage);
+        }
+
+        if (type.equals("gff")) {
+            addGFFEventHandler(listView, files, tempStage);
         }
     }
 
@@ -361,33 +390,74 @@ public final class WindowFactory {
 
             tempStage.hide();
 
-            mainController.initMetadata(meta.getAbsolutePath());
-            createMenuWithSearchWithoutAnnotation();
+            files[2] = meta;
 
-            if (files[0] != null && files[1] != null) {
-                File gfaFile = files[0];
-                File nwkFile = files[1];
+            createAnnotationPopup(files);
+        });
+    }
 
-                if (FilenameUtils.getExtension(gfaFile.getName()).equals("nwk")) {
-                    mainController.getGraphController().getGraph().getNodeMapFromFile(nwkFile.getAbsolutePath());
-                    mainController.initGraph();
-                    mainController.addRecentGFA(nwkFile.getAbsolutePath());
+    public static void addGFFEventHandler(ListView listView, File[] files, Stage tempStage) {
+        listView.setOnMouseClicked(event -> {
+            Text file = (Text) listView.getSelectionModel().getSelectedItem();
+            File annotation = new File(file.getText());
+            files[3] = annotation;
 
-                    mainController.initTree(gfaFile.getAbsolutePath());
-                    mainController.addRecentNWK(gfaFile.getAbsolutePath());
-                } else {
-                    mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
-                    mainController.initGraph();
-                    mainController.addRecentGFA(gfaFile.getAbsolutePath());
-                    mainController.initTree(nwkFile.getAbsolutePath());
-                    mainController.addRecentNWK(nwkFile.getAbsolutePath());
-                }
+            tempStage.hide();
+
+            if (files[0] != null && files[1] != null && files[2] != null) {
+                chooseCorrectFile(files);
             }
         });
+
+        tempStage.setOnCloseRequest(event -> chooseCorrectFile(files));
+    }
+
+
+    public static void chooseCorrectFile(File[] files) {
+        File gfaFile = files[0];
+        File nwkFile = files[1];
+        File metaFile = files[2];
+        File annoFile = files[3];
+
+        if (FilenameUtils.getExtension(gfaFile.getName()).equals("nwk")) {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(nwkFile.getAbsolutePath());
+            mainController.initGraph();
+            mainController.addRecentGFA(nwkFile.getAbsolutePath());
+
+            mainController.initMetadata(metaFile.getAbsolutePath());
+
+            mainController.initTree(gfaFile.getAbsolutePath());
+            mainController.addRecentNWK(gfaFile.getAbsolutePath());
+
+
+            if (annoFile != null) {
+                mainController.initAnnotations(annoFile.getAbsolutePath());
+            }
+
+            createMenuWithSearch();
+        } else {
+            mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
+            mainController.initGraph();
+            mainController.addRecentGFA(gfaFile.getAbsolutePath());
+
+            mainController.initMetadata(metaFile.getAbsolutePath());
+
+            mainController.initTree(nwkFile.getAbsolutePath());
+            mainController.addRecentNWK(nwkFile.getAbsolutePath());
+
+
+
+            if (annoFile != null) {
+                mainController.initAnnotations(annoFile.getAbsolutePath());
+            }
+
+            createMenuWithSearch();
+        }
     }
 
     /**
      * Method that creates a directoryChooser.
+     *
      * @param s the title of the directoryChooser
      * @return the directoryChooser
      */
@@ -442,8 +512,9 @@ public final class WindowFactory {
 
     /**
      * Method to add the components to the alert pop up
-     * @param content the content to be set
-     * @param dialog the dialog to add the content to
+     *
+     * @param content   the content to be set
+     * @param dialog    the dialog to add the content to
      * @param textToAdd The text to be displayed in the popup
      */
     public static void addAlertComponents(VBox content, Stage dialog, String textToAdd) {
@@ -462,7 +533,6 @@ public final class WindowFactory {
 
         content.getChildren().addAll(text, ok);
     }
-
 
     /**
      * Creates the menu including a search bar with the annotations search box.
