@@ -39,11 +39,16 @@ public class GraphController extends Controller<ScrollPane> {
     private ZoomBox zoomBox;
     private DoubleProperty visibleAmount;
     private Stack<Integer> zoomPath;
+
+    public void setDrawFrom(int drawFrom) {
+        this.drawFrom = drawFrom;
+    }
+
     private int drawFrom = 0;
 
     /**
      * Constructor method for this class.
-     *
+     *s
      * @param m the mainController.
      */
     @SuppressFBWarnings("URF_UNREAD_FIELD")
@@ -59,15 +64,27 @@ public class GraphController extends Controller<ScrollPane> {
         this.zoomBox = new ZoomBox(this);
         this.getRoot().setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         this.getRoot().setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
+        this.getRoot().setPannable(true);
         ChangeListener<Object> changeListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
             update(graph.getCurrentRef(), graph.getCurrentInt());
         };
 
+        ChangeListener<Object> changeHListener = (observable, oldValue, newValue) -> {
+            Bounds bounds = getRoot().getViewportBounds();
+            drawFrom = -1 * (int) bounds.getMinX();
+            System.out.println("----");
+            System.out.println("!changelistener!");
+            System.out.println("observable: " + observable.toString());
+            System.out.println("old value: " + oldValue);
+            System.out.println("new value: " + newValue);
+            System.out.println("----");
+            update(graph.getCurrentRef(), graph.getCurrentInt());
+        };
+
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
-        this.getRoot().hvalueProperty().addListener(changeListener);
+        this.getRoot().hvalueProperty().addListener(changeHListener);
 
         setScrolling(this);
 
@@ -79,6 +96,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param gc the current GraphController
      */
     private void setScrolling(GraphController gc) {
+
         gc.getRoot().addEventFilter(ScrollEvent.SCROLL, event -> {
             if (graphMouseHandling.getPrevClick() != null) {
                 graphMouseHandling.getPrevClick().resetFocus();
@@ -94,7 +112,6 @@ public class GraphController extends Controller<ScrollPane> {
                         zoomOutFocus(graphMouseHandling.getPrevClick());
                     }
                     zoomBox.replaceZoomBox(updateZoomBox());
-                    event.consume();
 
                 } else if (event.getDeltaY() > 0) {
                     mainController.switchScene(-1);
@@ -102,11 +119,12 @@ public class GraphController extends Controller<ScrollPane> {
                         zoomInFocus(graphMouseHandling.getPrevClick());
                     }
                     zoomBox.replaceZoomBox(updateZoomBox());
-                    event.consume();
                 }
+                event.consume();
                 drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
                 update(graph.getCurrentRef(), graph.getCurrentInt());
             }
+            System.out.println("end of gc update");
         });
     }
 
@@ -214,15 +232,16 @@ public class GraphController extends Controller<ScrollPane> {
         GraphCell prevClick = (GraphCell) graph.getModel().getCellMap().get(nextLevelNodeId);
         graphMouseHandling.setPrevClick(prevClick);
         graphMouseHandling.setFocusedNode(graph.getLevelMaps().get(mainController.
-                    getCurrentView()).get(prevClick.getCellId()));
+                getCurrentView()).get(prevClick.getCellId()));
         if (mainController.getCurrentView() == graphMouseHandling.getOriginalZoomLevel()) {
             prevClick.originalFocus();
         } else {
             prevClick.focus();
         }
         sideFocus(true);
-        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4))
-                / (graph.getMaxWidth() - 450));
+//        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4))
+//                / (graph.getMaxWidth() - 450));
+
         update(getGraph().getCurrentRef(), getGraph().getCurrentInt());
     }
 
@@ -292,7 +311,14 @@ public class GraphController extends Controller<ScrollPane> {
 
         graph.endUpdate();
 
+
         this.getRoot().setContent(root);
+
+        if (graphMouseHandling.getPrevClick() != null) {
+            slideToPercent((graphMouseHandling.getPrevClick().getLayoutX() / (graph.getMaxWidth() - 450)));
+        }
+
+
     }
 
     /**
@@ -391,7 +417,9 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-        getRoot().setHvalue(percent);
+        if (getRoot().getHvalue() != percent) {
+            getRoot().setHvalue((percent));
+        }
     }
 
     /**

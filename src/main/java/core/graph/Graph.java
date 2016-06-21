@@ -354,6 +354,9 @@ public class Graph {
 
         // merge added & removed cells with all cells
         current.merge();
+
+
+//        System.out.println("end update");
     }
 
     /**

@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import org.apache.poi.ss.formula.functions.Even;
 
 import static java.lang.String.format;
 
@@ -79,6 +80,7 @@ public class GraphMouseHandling {
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = event -> {
         GraphCell node = (GraphCell) event.getSource();
+        mainController.getGraphController().getRoot().setPannable(false);
 
         double offsetX = event.getX() + node.getLayoutX()
                 - node.getCellShape().getLayoutBounds().getWidth() / 2;
@@ -87,8 +89,10 @@ public class GraphMouseHandling {
 
         event.getSceneX();
         node.relocate(offsetX, offsetY);
-    };
+        event.consume();
 
+        mainController.getGraphController().getRoot().setPannable(true);
+    };
 
     private EventHandler<MouseEvent> onMouseEnteredEventHandler = event -> {
         Cell cell = (Cell) event.getSource();
@@ -116,7 +120,6 @@ public class GraphMouseHandling {
         node.setOnMousePressed(onMousePressedEventHandler);
         node.setOnMouseEntered(onMouseEnteredEventHandler);
         node.setOnMouseDragged(onMouseDraggedEventHandler);
-        node.setOnDragDetected(onMouseDraggedEventHandler);
     }
 
     /**

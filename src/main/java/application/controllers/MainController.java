@@ -12,7 +12,6 @@ import core.annotation.AnnotationProcessor;
 import core.filtering.Filter;
 import core.filtering.Filtering;
 import core.graph.Node;
-import core.model.Model;
 import core.parsers.AnnotationParser;
 import core.parsers.MetaDataParser;
 import core.typeEnums.CellType;
@@ -80,6 +79,8 @@ public class MainController extends Controller<BorderPane> {
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
     private Stack<String> mostRecentDir;
+
+    private MenuFactory menuFactory;
 
     /**
      * Constructor to create MainController based on abstract Controller.
@@ -366,19 +367,19 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
-
     /**
      * Method to add items to the GUI
      */
     private void initGUI() {
         createZoomBoxAndLegend();
 
-        WindowFactory.createMenuWithSearch();
-        MenuFactory.toggleGraphViewMenu(true);
-        toggleSelectDeselect(true);
-
+        MenuFactory.toggleViewMenu(false);
+        MenuFactory.toggleFileMenu(true);
+        MenuFactory.toggleMostRecent(true);
+        MenuFactory.toggleFilters(false);
+        menuFactory.getAllowLevel().setDisable(false);
         this.getRoot().setCenter(graphController.getRoot());
-
+        toggleSelectDeselect(true);
 
         if (secondCount == -1) {
             createList();
@@ -411,7 +412,6 @@ public class MainController extends Controller<BorderPane> {
         }
 
         graphController.update(ref, currentView);
-
         if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
@@ -767,13 +767,11 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         inGraph = false;
+        createMenu(true, false);
         screen = treeController.getRoot();
-
-        if (isAnnotationsLoaded()) {
-            MenuFactory.loadAnnotations.setDisable(true);
-        }
-
-        MenuFactory.toggleTreeViewMenu(true);
+        toggleSelectDeselect(false);
+        menuFactory.getAllowLevel().setDisable(true);
+        setListItems();
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
@@ -790,7 +788,7 @@ public class MainController extends Controller<BorderPane> {
             genomes = graphController.getGraph().reduceGenomes(
                     treeController.getSelectedGenomes());
         } else {
-            genomes = graphController.getGraph().getCurrentGenomes();
+            genomes = graphController.getGraph().getAllGenomes();
         }
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
@@ -856,7 +854,7 @@ public class MainController extends Controller<BorderPane> {
             if (filtering.isFiltering()) {
                 strainSelection(new ArrayList<>(), getLoadedGenomeNames());
             } else {
-                strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
+                fillTree();
             }
         } else {
             setListItems();
@@ -900,5 +898,13 @@ public class MainController extends Controller<BorderPane> {
             );
             builder.append("\n");
         }
+    }
+
+    /**
+     * Getter for Filtering.
+     * @return Filtering.
+     */
+    public Filtering getFiltering() {
+        return filtering;
     }
 }

@@ -58,6 +58,7 @@ public class GraphLayout extends CellLayout {
      */
     public void execute() {
         tileWidth = Screen.getPrimary().getVisualBounds().getWidth();
+
         List<Cell> cells = model.getAddedCells();
         for (Cell c : cells) {
             GraphCell cell = (GraphCell) c;
@@ -83,10 +84,6 @@ public class GraphLayout extends CellLayout {
 
             if (cell.getLayoutY() > maxHeight) {
                 maxHeight = cell.getLayoutY();
-            }
-
-            if (cell.getLayoutX() > maxWidth) {
-                maxWidth = cell.getLayoutX();
             }
 
             for (Edge e : cell.getEdges()) {

@@ -85,8 +85,8 @@ public final class GraphReducer {
                 levelMaps.add(levelMap);
 
                 if (levelMaps.size() == 10) {
-//                    reduceZoomingLevels(reduceAmount);
-//                    i -= reduceAmount;
+                    reduceZoomingLevels(reduceAmount);
+                    i -= reduceAmount;
                 }
             }
         }
@@ -188,18 +188,20 @@ public final class GraphReducer {
      */
     private static void traverseMaps(int reduceAmount) {
         int maxDepth = 10;
-        for (int j = zoomLevel; maxDepth < 500; j++) {
+        for (int j = zoomLevel + 1; maxDepth < 500; j++) {
             zoomLevel = j - 1;
-            if (levelMaps.size() == 10) {
-//                reduceZoomingLevels(reduceAmount);
-//                j -= reduceAmount;
-            }
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(zoomLevel), maxDepth);
             levelMaps.add(levelMap2);
-
-            if (levelMap2.size() < 30) {
+            if (levelMap2.size() < 20) {
                 return;
             }
+
+            if (levelMaps.size() == 10) {
+                reduceZoomingLevels(reduceAmount);
+                j -= reduceAmount;
+            }
+
+            maxDepth += 20;
         }
     }
 

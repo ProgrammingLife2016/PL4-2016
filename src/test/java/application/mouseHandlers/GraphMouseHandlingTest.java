@@ -37,7 +37,6 @@ public class GraphMouseHandlingTest {
         assertNotNull(n.getOnMousePressed());
         assertNotNull(n.getOnMouseEntered());
         assertNotNull(n.getOnMouseDragged());
-        assertNotNull(n.getOnDragDetected());
     }
 
     /**
