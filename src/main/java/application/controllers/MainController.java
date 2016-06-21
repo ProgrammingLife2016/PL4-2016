@@ -73,6 +73,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean annotationsLoaded;
     private boolean allowNucleotideLevel;
     private boolean showReferenceStrain;
+    private boolean firstInitialization = true;
+
 
     private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
 
@@ -450,14 +452,22 @@ public class MainController extends Controller<BorderPane> {
      */
     private void createZoomBoxAndLegend() {
         HBox hbox = new HBox();
-
         // Place the legend
         createLegend();
         legend.setAlignment(Pos.CENTER_RIGHT);
 
         // Place the zoom box
         box = graphController.getZoomBox().getZoomBox();
-        zoomIndicator = new Label("Zoomlevel: 0%");
+
+        if (firstInitialization) {
+            zoomIndicator = new Label("Zoomlevel: 0%");
+            firstInitialization = false;
+        } else {
+            zoomIndicator = new Label("Zoomlevel: "
+                    + (int) ((graphController.getGraph().getLevelMaps().size() - 1 - (double) currentView)
+                    / (double) (graphController.getGraph().getLevelMaps().size() - 1) * 100) + "%");
+        }
+
         DropShadow ds = new DropShadow();
         ds.setOffsetY(3.0f);
         ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
