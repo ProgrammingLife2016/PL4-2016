@@ -64,12 +64,6 @@ public class GraphController extends Controller<ScrollPane> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
             update(graph.getCurrentRef(), graph.getCurrentInt());
-            System.out.println("----");
-            System.out.println("!changelistener!");
-            System.out.println("old value: " + oldValue);
-            System.out.println("new value: " + newValue);
-            System.out.println("----");
-
         };
 
         this.getRoot().viewportBoundsProperty().addListener(changeListener);

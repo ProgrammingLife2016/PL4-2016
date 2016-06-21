@@ -7,29 +7,22 @@ import java.util.List;
 
 /**
  * Class responsible for processing the annotation data.
- *
+ * @author Niels Warnars
  */
 public class AnnotationProcessor {
 
-    private List<Annotation> annotations;
-    private HashMap<Integer, Node> filteredNodeMap;
-
     /**
-     * Initializes a new annotation parser.
-     *
-     * @param nodeMap A given hash map of nodes.
-     * @param annotations List of annotations.
+     * Internal constructor
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
-        this.annotations = annotations;
-        this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
+    private AnnotationProcessor() {
     }
 
     /**
      * Matches reference nodes and annotations to each other.
      * @param lowestMap the map we want to apply the annotations to
      */
-    public void matchNodesAndAnnotations(HashMap<Integer, Node> lowestMap) {
+    public static void matchNodesAndAnnotations(List<Annotation> annotations, HashMap<Integer, Node> lowestMap) {
+        HashMap<Integer, Node> filteredNodeMap = filterAnnotationsInNodeMap(annotations, lowestMap);
         for (Annotation a : annotations) {
             for (Node n : a.getSpannedNodes()) {
                 Node node = lowestMap.get(n.getId());
@@ -41,31 +34,13 @@ public class AnnotationProcessor {
     }
 
     /**
-     * Determines the index of the last key in a given node map.
-     *
-     * @param nodeMap A given node map.
-     * @return The index of the last key in the node map.
-     */
-    public int determineNodeMapSize(HashMap<Integer, Node> nodeMap) {
-        int lastKey = -1;
-        for (int key : nodeMap.keySet()) {
-            if (key > lastKey) {
-                lastKey = key;
-            }
-        }
-
-        return lastKey;
-    }
-
-
-
-    /**
      * Filters out all nodes in a node map that do not belong to the reference.
      *
      * @param baseNodeMap a base node map.
      * @return A hash map of nodes present in the reference.
      */
-    public HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
+    public static HashMap<Integer, Node> filterAnnotationsInNodeMap(List<Annotation> annotations,
+                                                                    HashMap<Integer, Node> baseNodeMap) {
         String reference = "";
         HashMap<Integer, Node> nodeMap = new HashMap<>();
 
@@ -123,15 +98,6 @@ public class AnnotationProcessor {
             throw new TooManyAnnotationsFoundException();
         }
         return null;
-    }
-
-    /**
-     * Gets the list of annotations.
-     *
-     * @return The list of annotations.
-     */
-    public List<Annotation> getAnnotations() {
-        return annotations;
     }
 
     /**

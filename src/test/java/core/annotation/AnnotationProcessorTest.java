@@ -45,15 +45,6 @@ public class AnnotationProcessorTest {
 
         annotations = new ArrayList<>();
         annotations.add(a);
-        ap = new AnnotationProcessor(nodeMap, annotations);
-    }
-
-    /**
-     * tests the determineNodeMapSize method.
-     */
-    @Test
-    public void testDetermineNodeMapSize() {
-        assertEquals(3, ap.determineNodeMapSize(nodeMap));
     }
 
     /**
@@ -71,7 +62,7 @@ public class AnnotationProcessorTest {
         map.put(1, n1);
         map.put(2, n2);
 
-        HashMap<Integer, Node> res = ap.filterAnnotationsInNodeMap(map);
+        HashMap<Integer, Node> res = AnnotationProcessor.filterAnnotationsInNodeMap(annotations, map);
         assertEquals(1, res.size());
         assertEquals(n1, res.get(1));
     }
@@ -139,14 +130,6 @@ public class AnnotationProcessorTest {
         annotationList.add(a2);
 
         assertNull(AnnotationProcessor.findAnnotation(annotationList, "abc"));
-    }
-
-    /**
-     * Tests the getAnnotations method.
-     */
-    @Test
-    public void testGetAnnotations() {
-        assertEquals(annotations, ap.getAnnotations());
     }
 
 }

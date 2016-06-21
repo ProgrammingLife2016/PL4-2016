@@ -62,7 +62,6 @@ public class MainController extends Controller<BorderPane> {
     private ListFactory listFactory;
     private TextField genomeTextField;
     private TextField annotationTextField;
-    private Text annotationWarning;
 
     private StackPane box;
     private int secondCount;
@@ -528,7 +527,6 @@ public class MainController extends Controller<BorderPane> {
         deselectAnnotationButton.setOnAction(e -> {
             deselectAllAnnotations();
             annotationTextField.setText("");
-            annotationWarning.setText("");
         });
 
     }
@@ -538,17 +536,19 @@ public class MainController extends Controller<BorderPane> {
      */
     public void initListenerProperties() {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+        Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
-                    annotationTextField.getText());
-            Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
 
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
             boolean foundAnnotation = false;
-            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
+
+            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
                 for (Node node : newAnn.getSpannedNodes()) {
                     int id = node.getId();
+
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
@@ -566,8 +566,8 @@ public class MainController extends Controller<BorderPane> {
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
 
-            annotationWarning.setText("");
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+            WindowFactory.createTooManyAnnMatchesAlert();
         }
     }
 
