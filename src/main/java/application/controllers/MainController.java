@@ -20,12 +20,17 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,6 +65,7 @@ public class MainController extends Controller<BorderPane> {
     private TextField genomeTextField;
     private TextField annotationTextField;
     private StackPane box;
+    private Label zoomIndicator;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
@@ -448,9 +454,15 @@ public class MainController extends Controller<BorderPane> {
 
         // Place the zoom box
         box = graphController.getZoomBox().getZoomBox();
-
+        zoomIndicator = new Label("Zoomlevel: " + currentView);
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+        zoomIndicator.setEffect(ds);
+        zoomIndicator.setFont(Font.font(null, FontWeight.BOLD, 32));
+        zoomIndicator.setAlignment(Pos.TOP_CENTER);
         hbox.setAlignment(Pos.CENTER);
-        hbox.getChildren().addAll(box, legend);
+        hbox.getChildren().addAll(zoomIndicator, box, legend);
         this.getRoot().setBottom(hbox);
     }
 
@@ -748,6 +760,8 @@ public class MainController extends Controller<BorderPane> {
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
         toggleSelectDeselect(true);
+
+        zoomIndicator.setText("Zoomlevel: " + currentView);
     }
 
     /**
