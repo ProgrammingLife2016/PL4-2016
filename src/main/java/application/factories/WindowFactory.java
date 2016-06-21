@@ -550,11 +550,11 @@ public final class WindowFactory {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setResizable(false);
-        dialog.setTitle("Annotation not found.");
+        dialog.setTitle("Annotation not found");
 
         VBox content = new VBox();
 
-        addAlertComponents(content, dialog, "Your search does not match\n any of the present annotations.");
+        addAlertComponents(content, dialog, "Your search does not match any of\n the present annotations.");
 
         Scene dialogScene = new Scene(content, 250, 100);
         dialog.setScene(dialogScene);
@@ -568,7 +568,7 @@ public final class WindowFactory {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setResizable(false);
-        dialog.setTitle("Too many matches found.");
+        dialog.setTitle("Too many matches found");
 
         VBox content = new VBox();
 

@@ -544,7 +544,7 @@ public class MainController extends Controller<BorderPane> {
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
-            boolean foundAnnotation = false;
+
             if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
                 for (Node node : newAnn.getSpannedNodes()) {
                     int id = node.getId();
@@ -552,22 +552,21 @@ public class MainController extends Controller<BorderPane> {
                     if (nodeInMap != null) {
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450));
-                        foundAnnotation = true;
                         break;
                     }
                 }
             }
-            if (!foundAnnotation) {
-                WindowFactory.createAnnNotFoundAlert();
-            }
+
             for (Node n : newAnn.getSpannedNodes()) {
                 RectangleCell cell = ((RectangleCell) cellMap.get(n.getId()));
                 if (cell != null) {
                     cell.setHighLight();
                 }
             }
-
         } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+            WindowFactory.createTooManyAnnAlert();
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            WindowFactory.createAnnNotFoundAlert();
         }
     }
 

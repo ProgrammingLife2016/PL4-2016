@@ -94,7 +94,11 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test2"));
+        try {
+            assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test2"));
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -116,7 +120,11 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        AnnotationProcessor.findAnnotation(annotationList, "test");
+        try {
+            AnnotationProcessor.findAnnotation(annotationList, "test");
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -124,10 +132,11 @@ public class AnnotationProcessorTest {
      *
      * @throws AnnotationProcessor.TooManyAnnotationsFoundException throw exception on too many
      * matching annotations.
+     * @throws AnnotationProcessor.NoAnnotationsFoundException throw exception on no matchig annotations found.
      */
-    @Test
+    @Test(expected = AnnotationProcessor.NoAnnotationsFoundException.class)
     public void testFindAnnotationNoMatch()
-            throws AnnotationProcessor.TooManyAnnotationsFoundException {
+            throws AnnotationProcessor.TooManyAnnotationsFoundException, AnnotationProcessor.NoAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
         Annotation a1 = new Annotation();
         Annotation a2 = new Annotation();
@@ -138,7 +147,7 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        assertNull(AnnotationProcessor.findAnnotation(annotationList, "abc"));
+        AnnotationProcessor.findAnnotation(annotationList, "abc");
     }
 
     /**

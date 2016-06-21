@@ -92,9 +92,10 @@ public class AnnotationProcessor {
      * @param str A specified part of the display name to search on.
      * @return The found annotation.
      * @throws TooManyAnnotationsFoundException Throws exception on too many matching annotations.
+     * @throws NoAnnotationsFoundException Throws exception on no annotations found.
      */
     public static Annotation findAnnotation(List<Annotation> annotations, String str)
-            throws TooManyAnnotationsFoundException {
+            throws TooManyAnnotationsFoundException, NoAnnotationsFoundException {
         int counter = 0;
         Annotation matchingAnnotation = null;
 
@@ -120,7 +121,9 @@ public class AnnotationProcessor {
             }
         }
 
-        if (counter == 1) {
+        if (counter == 0) {
+            throw new NoAnnotationsFoundException();
+        } else if (counter == 1) {
             return matchingAnnotation;
         } else if (counter > 1) {
             throw new TooManyAnnotationsFoundException();
@@ -135,6 +138,18 @@ public class AnnotationProcessor {
      */
     public List<Annotation> getAnnotations() {
         return annotations;
+    }
+
+    /**
+     * Exception for no annotations found.
+     */
+    public static class NoAnnotationsFoundException extends Exception {
+
+        /**
+         * Exception class constructor.
+         */
+        public NoAnnotationsFoundException() {
+        }
     }
 
     /**
