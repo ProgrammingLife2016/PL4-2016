@@ -413,6 +413,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
+//<<<<<<< HEAD
 //        System.out.println("should be value: " + percent);
 //        System.out.println("value to be removed: " + getRoot().getHvalue());
         if (getRoot().getHvalue() != percent) {
@@ -420,7 +421,10 @@ public class GraphController extends Controller<ScrollPane> {
 //            System.out.println("set new h value!");
 
         }
-
+//
+//=======
+//        getRoot().setHvalue(percent);
+//>>>>>>> master
     }
 
     /**

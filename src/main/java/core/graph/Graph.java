@@ -314,10 +314,9 @@ public class Graph {
             Node from = nodeMap.get(parentId);
             int maxEdgeWidth = 10;
             int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), currentGenomes),
-                    intersectingStrings(to.getGenomes(), currentGenomes))
-                    / (double) Math.max(currentGenomes.size(), 10))) + 1;
-
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), reduceGenomes(currentGenomes)),
+                    intersectingStrings(to.getGenomes(), reduceGenomes(currentGenomes)))
+                    / (double) Math.max(reduceGenomes(currentGenomes).size(), 10))) + 1;
             ifStatement:
             if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
                 boolean edgePlaced = false;
@@ -580,7 +579,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes   selected genomes.
+     * @param genomes   selected genomes in Genome list.
      * @return the reduced list of genomes.
      */
     public List<String> reduceGenomeList(List<Genome> genomes) {
@@ -593,7 +592,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes selected genomes.
+     * @param genomes selected genomes in String list.
      * @return the reduced list of genomes.
      */
     public List<String> reduceGenomes(List<String> genomes) {

@@ -108,6 +108,7 @@ public final class WindowFactory {
         return directoryChooser;
     }
 
+
     /**
      * Method to create a pop-up when selecting a NWK File
      *
@@ -239,7 +240,7 @@ public final class WindowFactory {
                 mainController.addRecentNWK(nwk.getAbsolutePath());
                 mainController.initTree(nwk.getAbsolutePath());
 
-                createMenuWithSearch();
+                createMenuWithSearchWithoutAnnotation();
             }
         });
     }
@@ -467,33 +468,29 @@ public final class WindowFactory {
             mainController.initGraph();
             mainController.addRecentGFA(nwkFile.getAbsolutePath());
 
-            mainController.initMetadata(metaFile.getAbsolutePath());
-
-            mainController.initTree(gfaFile.getAbsolutePath());
-            mainController.addRecentNWK(gfaFile.getAbsolutePath());
-
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
 
-            createMenuWithSearch();
+            mainController.initMetadata(metaFile.getAbsolutePath());
+            mainController.initTree(gfaFile.getAbsolutePath());
+            mainController.addRecentNWK(gfaFile.getAbsolutePath());
+
+            createMenuWithSearchWithoutAnnotation();
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
             mainController.initGraph();
             mainController.addRecentGFA(gfaFile.getAbsolutePath());
 
-            mainController.initMetadata(metaFile.getAbsolutePath());
-
-            mainController.initTree(nwkFile.getAbsolutePath());
-            mainController.addRecentNWK(nwkFile.getAbsolutePath());
-
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
 
-            createMenuWithSearch();
+            mainController.initMetadata(metaFile.getAbsolutePath());
+            mainController.initTree(nwkFile.getAbsolutePath());
+            mainController.addRecentNWK(nwkFile.getAbsolutePath());
+
+            createMenuWithSearchWithoutAnnotation();
         }
     }
 
