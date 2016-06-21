@@ -535,7 +535,7 @@ public final class WindowFactory {
 
         addAlertComponents(content, dialog, "Please select two or more strains first.");
 
-        Scene dialogScene = new Scene(content, 200, 100);
+        Scene dialogScene = new Scene(content, 250, 100);
         dialog.setScene(dialogScene);
         dialog.show();
     }
