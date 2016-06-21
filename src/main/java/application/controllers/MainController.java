@@ -840,7 +840,7 @@ public class MainController extends Controller<BorderPane> {
             if (filtering.isFiltering()) {
                 strainSelection(new ArrayList<>(), getLoadedGenomeNames());
             } else {
-                strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
+                fillTree();
             }
         } else {
             setListItems();
