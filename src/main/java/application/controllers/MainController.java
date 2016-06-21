@@ -255,7 +255,7 @@ public class MainController extends Controller<BorderPane> {
                 sc.close();
             }
         } catch (IOException | URISyntaxException e1) {
-            e1.printStackTrace();
+
         }
     }
 
@@ -282,7 +282,7 @@ public class MainController extends Controller<BorderPane> {
 
             writer.close();
         } catch (IOException | URISyntaxException e1) {
-            e1.printStackTrace();
+
         }
     }
 
@@ -408,7 +408,6 @@ public class MainController extends Controller<BorderPane> {
             if (!selectedGenomes.contains("MT_H37RV_BRD_V5.ref")) {
                 selectedGenomes.add("MT_H37RV_BRD_V5.ref");
             }
-
         } else {
             selectedGenomes.remove("MT_H37RV_BRD_V5.ref");
         }
@@ -458,7 +457,7 @@ public class MainController extends Controller<BorderPane> {
 
         // Place the zoom box
         box = graphController.getZoomBox().getZoomBox();
-        zoomIndicator = new Label("Zoomlevel: " + currentView);
+        zoomIndicator = new Label("Zoomlevel: 0%");
         DropShadow ds = new DropShadow();
         ds.setOffsetY(3.0f);
         ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
@@ -751,7 +750,9 @@ public class MainController extends Controller<BorderPane> {
                 graphController.getGraph().getCurrentGenomes());
         toggleSelectDeselect(true);
 
-        zoomIndicator.setText("Zoomlevel: " + currentView);
+        zoomIndicator.setText("Zoomlevel: "
+                + (int) ((graphController.getGraph().getLevelMaps().size() - 1 - (double) currentView)
+                / (double) (graphController.getGraph().getLevelMaps().size() - 1) * 100) + "%");
     }
 
     /**

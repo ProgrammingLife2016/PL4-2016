@@ -41,7 +41,7 @@ public class GraphParser {
 
             bReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
         return nodeMap;

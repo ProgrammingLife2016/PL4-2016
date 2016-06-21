@@ -89,7 +89,7 @@ public class Graph {
         try {
             startMap = new GraphParser().readGFAFromFile(path);
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
         return startMap;
