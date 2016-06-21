@@ -758,6 +758,7 @@ public class MainController extends Controller<BorderPane> {
         screen = treeController.getRoot();
         toggleSelectDeselect(false);
         menuFactory.getAllowLevel().setDisable(true);
+        setListItems();
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
@@ -774,7 +775,7 @@ public class MainController extends Controller<BorderPane> {
             genomes = graphController.getGraph().reduceGenomes(
                     treeController.getSelectedGenomes());
         } else {
-            genomes = graphController.getGraph().getCurrentGenomes();
+            genomes = graphController.getGraph().getAllGenomes();
         }
         genomes.sort(Comparator.naturalOrder());
         list.setItems(FXCollections.observableArrayList(genomes));
