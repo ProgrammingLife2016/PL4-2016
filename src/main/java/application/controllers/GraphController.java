@@ -390,7 +390,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-        getRoot().setHvalue((percent));
+        getRoot().setHvalue(percent);
     }
 
     /**
