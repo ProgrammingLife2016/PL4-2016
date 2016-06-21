@@ -685,7 +685,10 @@ public class MainController extends Controller<BorderPane> {
                     }
                 }
 
+                genomeTextField.setText("");
             }
+
+
         });
     }
 
