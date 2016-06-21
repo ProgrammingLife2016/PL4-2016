@@ -497,6 +497,7 @@ public class MainController extends Controller<BorderPane> {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
             }
+                setListItems();
         });
 
         buttons.get(1).setOnAction(e -> {
