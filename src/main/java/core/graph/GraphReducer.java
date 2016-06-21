@@ -65,7 +65,6 @@ public final class GraphReducer {
 
         for (int i = 2;; i++) {
             zoomLevel = i - 1;
-            System.out.println(zoomLevel);
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(zoomLevel));
             int previousMapSize = levelMaps.get(zoomLevel).size();
             int currentMapSize = levelMap.size();
@@ -233,9 +232,6 @@ public final class GraphReducer {
         HashMap<Integer, Node> mapToRemove = levelMaps.get(index);
         HashMap<Integer, Node> lowerMap = levelMaps.get(index - 1);
         HashMap<Integer, Node> upperMap = levelMaps.get(index + 1);
-
-        System.out.println("removing");
-        System.out.println("index: " + index);
 
         for (int i = 0; i < startMapSize; i++) {
             Node removeNode = mapToRemove.get(i);

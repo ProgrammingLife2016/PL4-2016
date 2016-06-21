@@ -383,8 +383,11 @@ public class GraphController extends Controller<ScrollPane> {
             image = new WritableImage(pref, height);
         }
 
-        WritableImage snapshot = this.getRoot().getContent().snapshot(
-                new SnapshotParameters(), image);
+        if (pref > 8000) {
+            image = new WritableImage(8000, height);
+        }
+
+        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
         return snapshot;
     }
