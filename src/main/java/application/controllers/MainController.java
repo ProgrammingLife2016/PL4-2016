@@ -540,6 +540,7 @@ public class MainController extends Controller<BorderPane> {
                 if (!input.isEmpty()) {
                     if (currentView > 0) {
                         allowNucleotideLevel = true;
+                        menuFactory.getAllowLevel().setSelected(true);
                         switchScene(Integer.MIN_VALUE);
                     }
 
