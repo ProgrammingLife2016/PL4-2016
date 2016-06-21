@@ -37,8 +37,7 @@ public class MenuFactory {
             filterRifampin, filterStreptomycin, filterSpoligotype, filterGenoDST, filterTF,
             mostRecentGFA, mostRecentNWK, mostRecentGFF;
 
-    private static CheckMenuItem allowLevel;
-    private static CheckMenuItem showReferenceStrain;
+    private static CheckMenuItem allowLevel, showReferenceStrain;
 
     public static MenuItem loadPhylogeneticTree, loadGenome, loadAnnotations, resetView,
             shortcuts, about, showPhylogeneticTree, showGenomeSequence, filterReset;
@@ -123,19 +122,55 @@ public class MenuFactory {
         filterSpoligotype.setDisable(x);
         filterGenoDST.setDisable(x);
         filterTF.setDisable(x);
+        filterReset.setDisable(x);
     }
 
     /**
-     * Method to disable and enable buttons in View-Menu
+     * Method to disable and enable buttons in Tree View-menu
      *
      * @param x boolean
      */
-    public static void toggleViewMenu(boolean x) {
-        showGenomeSequence.setDisable(x);
+    public static void toggleTreeViewMenu(boolean x) {
         showPhylogeneticTree.setDisable(x);
+        showGenomeSequence.setDisable(!x);
         resetView.setDisable(x);
+        allowLevel.setDisable(x);
+        showReferenceStrain.setDisable(x);
+
+        toggleMostRecent(x);
+        toggleFileMenu(x);
 
     }
+
+    /**
+     * Method to disable and enable buttons in the Graph View-menu
+     * @param x boolean
+     */
+    public static void toggleGraphViewMenu(boolean x) {
+        showGenomeSequence.setDisable(x);
+        showPhylogeneticTree.setDisable(!x);
+        resetView.setDisable(!x);
+        allowLevel.setDisable(!x);
+        showReferenceStrain.setDisable(!x);
+
+        toggleFileMenu(x);
+        toggleMostRecent(x);
+        toggleFilters(!x);
+
+    }
+
+    /**
+     * Enable and disable the correct View Menu
+     * @param x boolean
+     */
+    public static void toggleViewMenu(boolean x) {
+        showPhylogeneticTree.setDisable(x);
+        showGenomeSequence.setDisable(x);
+        resetView.setDisable(x);
+        allowLevel.setDisable(x);
+        showReferenceStrain.setDisable(x);
+    }
+
 
     /**
      * Method to disable and enable buttons in File-Menu

@@ -9,10 +9,9 @@ import application.mouseHandlers.TreeMouseHandling;
 import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -125,13 +124,16 @@ public class TreeController extends Controller<ScrollPane> {
         collectedStrains.clear();
         collectedStrains.add(cell);
 
+
         if (name.contains("TKK") && MetaDataParser.getMetadata().get(name) != null) {
             applyColorUpwards(parentList,
                     determineEdgeLinColor(MetaDataParser.getMetadata().get(name).getLineage()), 4.0);
             applyColorOnCell(cell, determineSelectedLeafLinColor(MetaDataParser.getMetadata().get(name).getLineage()));
+          
         } else if (name.contains("G")) {
             applyColorUpwards(parentList, determineEdgeLinColor(4), 4.0);
             applyColorOnCell(cell, determineSelectedLeafLinColor(4));
+
         } else {
             applyColorUpwards(parentList, Color.YELLOW, 4.0);
         }

@@ -296,20 +296,7 @@ public class GraphTest {
         List<Integer> sortedNodeIds = g.topologicalSort(nodeMap);
         assertEquals(new ArrayList<>(Arrays.asList(1, 3, 2, 4, 5)), sortedNodeIds);
     }
-    /**
-     * Tests the getCurrentRef method.
-     */
-    @Test
-    public void testGetCurrentRef() {
-        ArrayList<String> ref = new ArrayList<>();
-        ref.add("a");
-        ref.add("b");
 
-        g.setDebugScreenShouldBeInitialized(false);
-        g.addGraphComponents(ref, 1);
-
-        assertEquals(ref, g.getCurrentRef());
-    }
     /**
      * Tests the set/getAnnotations methods.
      */
