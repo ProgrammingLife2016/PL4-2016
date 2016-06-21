@@ -63,7 +63,7 @@ public final class GraphReducer {
         initializeLevelMaps(startMap, genomesInFilter);
         int reduceAmount = 1;
 
-        for (int i = 2;; i++) {
+        for (int i = 1;; i++) {
             zoomLevel = i - 1;
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(zoomLevel));
             int previousMapSize = levelMaps.get(zoomLevel).size();
@@ -106,9 +106,9 @@ public final class GraphReducer {
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
-        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
-        determineParents(collapsedFilteredMap);
-        levelMaps.add(collapsedFilteredMap);
+//        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
+//        determineParents(collapsedFilteredMap);
+//        levelMaps.add(collapsedFilteredMap);
     }
 
     /**
@@ -197,9 +197,11 @@ public final class GraphReducer {
             HashMap<Integer, Node> levelMap2 = secondStageCollapse(levelMaps.get(zoomLevel), maxDepth);
             levelMaps.add(levelMap2);
 
-            if (levelMap2.size() < 30) {
+            if (levelMap2.size() < 20) {
                 return;
             }
+
+            maxDepth += 20;
         }
     }
 
@@ -617,7 +619,7 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-//        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
+        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
     }
 
     /**
