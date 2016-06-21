@@ -70,16 +70,16 @@ public class GraphController extends Controller<ScrollPane> {
         ChangeListener<Object> changeHListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
-            System.out.println("----");
-            System.out.println("!changelistener!");
-            System.out.println("observable: " + observable.toString());
-            System.out.println("old value: " + oldValue);
-            System.out.println("new value: " + newValue);
-            System.out.println("----");
+//            System.out.println("----");
+//            System.out.println("!changelistener!");
+//            System.out.println("observable: " + observable.toString());
+//            System.out.println("old value: " + oldValue);
+//            System.out.println("new value: " + newValue);
+//            System.out.println("----");
             //update(graph.getCurrentRef(), graph.getCurrentInt());
-            if (!hValueByCode) {
-               // slideToPercent((double) oldValue);
-            }
+//            if (!hValueByCode) {
+//               // slideToPercent((double) oldValue);
+//            }
         };
 
         this.getRoot().viewportBoundsProperty().addListener(changeListener);
@@ -416,11 +416,11 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-        System.out.println("should be value: " + percent);
-        System.out.println("value to be removed: " + getRoot().getHvalue());
+//        System.out.println("should be value: " + percent);
+//        System.out.println("value to be removed: " + getRoot().getHvalue());
         if (getRoot().getHvalue() != percent) {
             getRoot().setHvalue((percent));
-            System.out.println("set new h value!");
+//            System.out.println("set new h value!");
 
         }
 
