@@ -80,11 +80,6 @@ public final class GraphReducer {
             } else {
                 levelMaps.add(levelMap);
             }
-
-            if (levelMaps.size() == 10) {
-                //reduceZoomingLevels(reduceAmount);
-                //i -= reduceAmount;
-            }
         }
     }
 
@@ -192,64 +187,8 @@ public final class GraphReducer {
                 return;
             }
 
-            if (levelMaps.size() == 10) {
-//                reduceZoomingLevels(reduceAmount);
-//                j -= reduceAmount;
-            }
-
             maxDepth += 20;
         }
-    }
-
-    /**
-     * Reduced the number of zoomlevels.
-     *
-     * @param amountToRemove amount to remove
-     */
-    public static void reduceZoomingLevels(int amountToRemove) {
-        for (int k = 0; k < amountToRemove; k++) {
-            int smallestDifference = Integer.MAX_VALUE;
-            int index = -1;
-            for (int level = 3; level < levelMaps.size() - 1; level++) {
-                int currentMapSize = levelMaps.get(level).size();
-                int previousMapSize = levelMaps.get(level - 1).size();
-                int difference = Math.abs(currentMapSize - previousMapSize);
-                if (difference < smallestDifference) {
-                    index = level;
-                    smallestDifference = difference;
-                }
-            }
-            removeZoomLevel(index);
-        }
-    }
-
-    /**
-     * Method to remove a zoomLevel from the LevelMaps.
-     *
-     * @param index index of the levelMap to remove
-     */
-    public static void removeZoomLevel(int index) {
-        HashMap<Integer, Node> mapToRemove = levelMaps.get(index);
-        HashMap<Integer, Node> lowerMap = levelMaps.get(index - 1);
-        HashMap<Integer, Node> upperMap = levelMaps.get(index + 1);
-
-        for (int i = 0; i < startMapSize; i++) {
-            Node removeNode = mapToRemove.get(i);
-            if (removeNode == null) {
-                continue;
-            }
-            Node upperNode = upperMap.get(removeNode.getNextLevelNodeId());
-            for (int lowerNodeId : removeNode.getPreviousLevelNodesIds()) {
-                Node lowerNode = lowerMap.get(lowerNodeId);
-                if (lowerNode == null) {
-                    continue;
-                }
-                lowerNode.setNextLevelNodeId(removeNode.getNextLevelNodeId());
-                upperNode.addPreviousLevelNodesIds(removeNode.getPreviousLevelNodesIds());
-                upperNode.addPreviousLevelNodesId(lowerNodeId);
-            }
-        }
-        levelMaps.remove(index);
     }
 
     /**
