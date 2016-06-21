@@ -533,6 +533,7 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = false;
             menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
+            MenuFactory.filterReset.fire();
             fillTree();
         });
 
