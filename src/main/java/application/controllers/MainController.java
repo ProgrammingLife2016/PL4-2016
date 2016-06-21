@@ -531,7 +531,9 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to specify what the Listener needs to do
+     * Method to specify what the Listener needs to do.
+     *
+     * @param input The annotation search term.
      */
     public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
@@ -562,7 +564,9 @@ public class MainController extends Controller<BorderPane> {
 //            }
 
             for (Node n : newAnn.getSpannedNodes()) {
-                ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                if (n != null) {
+                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
+                }
             }
         } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
             WindowFactory.createAnnNotFoundAlert();

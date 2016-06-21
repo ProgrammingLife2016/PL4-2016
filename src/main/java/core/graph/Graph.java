@@ -65,6 +65,12 @@ public class Graph {
     private List<Annotation> annotations;
 
     /**
+     * The annotation processor.
+     */
+    private AnnotationProcessor annotationProcessor;
+
+
+    /**
      * Class constructor.
      */
     public Graph() {
@@ -127,8 +133,10 @@ public class Graph {
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             currentGenomes = new ArrayList<>(selectedGenomes);
-            AnnotationProcessor.matchNodesAndAnnotations(annotations, levelMaps.get(0));
 
+            if (annotationProcessor != null) {
+                annotationProcessor.matchNodesAndAnnotations();
+            }
             return true;
         }
         return false;
@@ -140,6 +148,7 @@ public class Graph {
      */
     public void initAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
+        annotationProcessor = new AnnotationProcessor(startMap, annotations);
     }
 
     /**
@@ -190,6 +199,7 @@ public class Graph {
      *
      * @return the list of genomes.
      */
+    @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     public ArrayList<String> findAllGenomes() {
         ArrayList<String> allGenomes = new ArrayList<>();
         for (int nodeId : startMap.keySet()) {

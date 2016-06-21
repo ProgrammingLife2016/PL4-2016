@@ -11,23 +11,31 @@ import java.util.List;
  */
 public class AnnotationProcessor {
 
+    private List<Annotation> annotations;
+    private HashMap<Integer, Node> filteredNodeMap;
+
     /**
-     * Internal constructor
+     * Initializes a new annotation parser.
+     *
+     * @param nodeMap A given hash map of nodes.
+     * @param annotations List of annotations.
      */
-    private AnnotationProcessor() {
+    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
+        this.annotations = annotations;
+        this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
+
+        for (Annotation annotation : this.annotations) {
+            annotation.detNodesSpannedByAnnotation(filteredNodeMap);
+        }
     }
 
     /**
      * Matches reference nodes and annotations to each other.
-     * @param lowestMap the map we want to apply the annotations to
      */
-    public static void matchNodesAndAnnotations(List<Annotation> annotations, HashMap<Integer, Node> lowestMap) {
-        System.out.println("[In matchNodesAndAnnotations]");
-
-        HashMap<Integer, Node> filteredNodeMap = filterAnnotationsInNodeMap(annotations, lowestMap);
+    public void matchNodesAndAnnotations() {
         for (Annotation a : annotations) {
             for (Node n : a.getSpannedNodes()) {
-                Node node = lowestMap.get(n.getId());
+                Node node = filteredNodeMap.get(n.getId());
                 if (node != null) {
                     node.addAnnotation(a);
                 }
@@ -41,8 +49,7 @@ public class AnnotationProcessor {
      * @param baseNodeMap a base node map.
      * @return A hash map of nodes present in the reference.
      */
-    public static HashMap<Integer, Node> filterAnnotationsInNodeMap(List<Annotation> annotations,
-                                                                    HashMap<Integer, Node> baseNodeMap) {
+    public HashMap<Integer, Node> filterAnnotationsInNodeMap(HashMap<Integer, Node> baseNodeMap) {
         String reference = "";
         HashMap<Integer, Node> nodeMap = new HashMap<>();
 
@@ -79,20 +86,17 @@ public class AnnotationProcessor {
             if (str.contains(" ") && a.getDisplayNameAttr().toLowerCase().contains(str.toLowerCase())) {
                 counter++;
                 matchingAnnotation = a;
-                System.out.format("1 - Found match on: %s\n", a.getDisplayNameAttr());
             } else {
                 // Example input: 0002
                 if (displayNameArr[0].contains(str)) {
                     counter++;
                     matchingAnnotation = a;
-                    System.out.format("2 - Found match on: %s\n", a.getDisplayNameAttr());
                 }
 
                 // Example input: DnaN or dnaN
-                if (displayNameArr[displayNameArr.length - 1].toLowerCase().equals(str.toLowerCase())) {
+                else if (displayNameArr[displayNameArr.length - 1].toLowerCase().equals(str.toLowerCase())) {
                     counter++;
                     matchingAnnotation = a;
-                    System.out.format("2 - Found match on: %s\n", a.getDisplayNameAttr());
                 }
             }
         }
@@ -105,6 +109,15 @@ public class AnnotationProcessor {
             throw new TooManyAnnotationsFoundException();
         }
         return null;
+    }
+
+    /**
+     * Gets the list of annotations.
+     *
+     * @return The list of annotations.
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
     }
 
     /**

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Test suite for the Annotation Parser class.
@@ -45,6 +44,7 @@ public class AnnotationProcessorTest {
 
         annotations = new ArrayList<>();
         annotations.add(a);
+        ap = new AnnotationProcessor(nodeMap, annotations);
     }
 
     /**
@@ -62,7 +62,7 @@ public class AnnotationProcessorTest {
         map.put(1, n1);
         map.put(2, n2);
 
-        HashMap<Integer, Node> res = AnnotationProcessor.filterAnnotationsInNodeMap(annotations, map);
+        HashMap<Integer, Node> res = ap.filterAnnotationsInNodeMap(map);
         assertEquals(1, res.size());
         assertEquals(n1, res.get(1));
     }
@@ -72,24 +72,26 @@ public class AnnotationProcessorTest {
      *
      * @throws AnnotationProcessor.TooManyAnnotationsFoundException throw exception on too many
      * matching annotations.
+     * @throws AnnotationProcessor.NoAnnotationsFoundException throw exception on no annotations found.
      */
     @Test
-    public void testFindAnnotation() throws AnnotationProcessor.TooManyAnnotationsFoundException {
+    public void testFindAnnotation() throws AnnotationProcessor.TooManyAnnotationsFoundException,
+            AnnotationProcessor.NoAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
         Annotation a1 = new Annotation();
         Annotation a2 = new Annotation();
 
-        a1.setDisplayNameAttr("test 1");
-        a2.setDisplayNameAttr("test 2");
+        a1.setDisplayNameAttr("test1");
+        a2.setDisplayNameAttr("test2");
 
         annotationList.add(a1);
         annotationList.add(a2);
 
-        try {
-            assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test 2"));
-        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
-            e.printStackTrace();
+        for (Annotation ann : annotationList) {
+            System.out.println(ann.getDisplayNameAttr());
         }
+
+        assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test2"));
     }
 
     /**
@@ -124,9 +126,9 @@ public class AnnotationProcessorTest {
      * @throws AnnotationProcessor.TooManyAnnotationsFoundException throw exception on too many
      * matching annotations.
      */
-    @Test
-    public void testFindAnnotationNoMatch()
-            throws AnnotationProcessor.TooManyAnnotationsFoundException {
+    @Test(expected=AnnotationProcessor.NoAnnotationsFoundException.class)
+    public void testFindAnnotationNoMatch() throws AnnotationProcessor.TooManyAnnotationsFoundException,
+            AnnotationProcessor.NoAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
         Annotation a1 = new Annotation();
         Annotation a2 = new Annotation();
@@ -137,11 +139,15 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        try {
-            assertNull(AnnotationProcessor.findAnnotation(annotationList, "abc"));
-        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
-            e.printStackTrace();
-        }
+        AnnotationProcessor.findAnnotation(annotationList, "abc");
+    }
+
+    /**
+     * Tests the getAnnotations method.
+     */
+    @Test
+    public void testGetAnnotations() {
+        assertEquals(annotations, ap.getAnnotations());
     }
 
 }
