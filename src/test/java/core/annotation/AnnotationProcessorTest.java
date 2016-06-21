@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Test suite for the Annotation Parser class.
@@ -136,7 +135,8 @@ public class AnnotationProcessorTest {
      */
     @Test(expected = AnnotationProcessor.NoAnnotationsFoundException.class)
     public void testFindAnnotationNoMatch()
-            throws AnnotationProcessor.TooManyAnnotationsFoundException, AnnotationProcessor.NoAnnotationsFoundException {
+            throws AnnotationProcessor.TooManyAnnotationsFoundException,
+            AnnotationProcessor.NoAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
         Annotation a1 = new Annotation();
         Annotation a2 = new Annotation();

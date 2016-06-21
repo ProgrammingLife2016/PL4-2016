@@ -40,10 +40,6 @@ public class GraphController extends Controller<ScrollPane> {
     private DoubleProperty visibleAmount;
     private Stack<Integer> zoomPath;
 
-    public void setDrawFrom(int drawFrom) {
-        this.drawFrom = drawFrom;
-    }
-
     private int drawFrom = 0;
 
     /**
@@ -273,6 +269,7 @@ public class GraphController extends Controller<ScrollPane> {
      * @param ref   the reference string.
      * @param depth the depth to draw.
      */
+    @SuppressWarnings("PMD.UselessParentheses")
     public void update(ArrayList<String> ref, int depth) {
         int min = drawFrom;
         //We received a different reference of depth, so we need to redraw.
@@ -386,8 +383,11 @@ public class GraphController extends Controller<ScrollPane> {
             image = new WritableImage(pref, height);
         }
 
-        WritableImage snapshot = this.getRoot().getContent().snapshot(
-                new SnapshotParameters(), image);
+        if (pref > 8000) {
+            image = new WritableImage(8000, height);
+        }
+
+        WritableImage snapshot = this.getRoot().getContent().snapshot(new SnapshotParameters(), image);
 
         return snapshot;
     }
@@ -407,7 +407,7 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public void slideToPercent(double percent) {
         if (getRoot().getHvalue() != percent) {
-            getRoot().setHvalue((percent));
+            getRoot().setHvalue(percent);
         }
     }
 
@@ -418,5 +418,14 @@ public class GraphController extends Controller<ScrollPane> {
      */
     public ZoomBox getZoomBox() {
         return zoomBox;
+    }
+
+    /**
+     * Sets the draw form.
+     *
+     * @param drawFrom The draw form.
+     */
+    public void setDrawFrom(int drawFrom) {
+        this.drawFrom = drawFrom;
     }
 }

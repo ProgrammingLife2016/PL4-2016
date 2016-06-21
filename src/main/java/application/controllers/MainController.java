@@ -72,7 +72,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean annotationsLoaded;
     private boolean allowNucleotideLevel;
     private boolean showReferenceStrain;
-    private boolean firstInitialization = true;
+    private boolean firstInitialization;
+    private List<String> oldGenomes;
 
 
     private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
@@ -103,6 +104,8 @@ public class MainController extends Controller<BorderPane> {
         this.annotationsLoaded = false;
         this.allowNucleotideLevel = false;
         this.showReferenceStrain = false;
+        this.firstInitialization = true;
+        this.oldGenomes = new ArrayList<>();
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -442,7 +445,21 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
+
         List<String> ss = graphController.getGraph().reduceGenomes(s);
+
+        if (ss.contains("MT_H37RV_BRD_V5.ref)") && !oldGenomes.contains("MT_H37RV_BRD_V5.ref")) {
+            oldGenomes.add("MT_H37RV_BRD_V5.ref");
+        }
+
+        if (!ss.contains("MT_H37RV_BRD_V5.ref") && oldGenomes.contains("MT_H37RV_BRD_V5.ref")) {
+            ss.add("MT_H37RV_BRD_V5.ref");
+        }
+
+        if (!ss.equals(oldGenomes)) {
+            graphController.getZoomBox().reset();
+            oldGenomes = ss;
+        }
 
         fillGraph(ref, ss);
         initGUI();
@@ -518,6 +535,7 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = false;
             menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
+            MenuFactory.filterReset.fire();
             fillTree();
         });
 
@@ -540,7 +558,7 @@ public class MainController extends Controller<BorderPane> {
                 if (!input.isEmpty()) {
                     if (currentView > 0) {
                         allowNucleotideLevel = true;
-
+                        menuFactory.getAllowLevel().setSelected(true);
                         switchScene(Integer.MIN_VALUE);
                     }
 
@@ -654,6 +672,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param textField the annotation TextField
      */
+    @SuppressWarnings("PMD.CollapsibleIfStatements")
     public void addAnnotationKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
@@ -678,6 +697,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @param textField the genome TextField
      */
+    @SuppressWarnings("PMD.CollapsibleIfStatements")
     public void addGenomeKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
@@ -895,9 +915,10 @@ public class MainController extends Controller<BorderPane> {
         );
 
         if (inGraph) {
-            if (filtering.isFiltering()) {
-                strainSelection(new ArrayList<>(), getLoadedGenomeNames());
+            if (filtering.isFiltering() && !getLoadedGenomeNames().isEmpty()) {
+                strainSelection(graphController.getGraph().getCurrentRef(), getLoadedGenomeNames());
             } else {
+                WindowFactory.createTooManyFilters();
                 fillTree();
             }
         } else {
@@ -953,6 +974,11 @@ public class MainController extends Controller<BorderPane> {
         return filtering;
     }
 
+    /**
+     * Getter for ListView.
+     *
+     * @return ListView.
+     */
     public ListView getList() {
         return list;
     }

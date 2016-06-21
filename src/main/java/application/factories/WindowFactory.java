@@ -535,7 +535,7 @@ public final class WindowFactory {
 
         addAlertComponents(content, dialog, "Please select two or more strains first.");
 
-        Scene dialogScene = new Scene(content, 200, 100);
+        Scene dialogScene = new Scene(content, 250, 100);
         dialog.setScene(dialogScene);
         dialog.show();
     }
@@ -570,6 +570,21 @@ public final class WindowFactory {
         VBox content = new VBox();
 
         addAlertComponents(content, dialog, "Annotation search resulted in\n too many matches.");
+
+        Scene dialogScene = new Scene(content, 250, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
+    public static void createTooManyFilters() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
+        dialog.setTitle("Too many filters applied");
+
+        VBox content = new VBox();
+
+        addAlertComponents(content, dialog, "Too many filters applied,\n no results found.");
 
         Scene dialogScene = new Scene(content, 250, 100);
         dialog.setScene(dialogScene);

@@ -3,7 +3,6 @@ package application.factories;
 import application.controllers.MainController;
 import application.fxobjects.graphCells.CollectionCell;
 import application.fxobjects.graphCells.RectangleCell;
-import core.genome.Genome;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -66,19 +65,21 @@ public class MenuFactory {
     }
 
     /**
-     * Method to get the allowLevel button
-     */
-    public CheckMenuItem getAllowLevel() {
-        return allowLevel;
-    }
-
-    /**
      * Method to set whether we show the reference strain
      *
      * @param show boolean
      */
     public void setShowReferenceStrain(boolean show) {
         showReferenceStrain.setSelected(show);
+    }
+
+    /**
+     * Method to get the MenuItem to allow the nucleotide level
+     *
+     * @return the MenuItem
+     */
+    public CheckMenuItem getAllowLevel() {
+        return allowLevel;
     }
 
     /**

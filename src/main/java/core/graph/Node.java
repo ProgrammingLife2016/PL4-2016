@@ -115,7 +115,9 @@ public class Node {
      * @param link - The other node to which this one is linked.
      */
     public void addLink(int link) {
-        this.links.add(link);
+        if (!this.links.contains(link)) {
+            this.links.add(link);
+        }
     }
 
     /***
