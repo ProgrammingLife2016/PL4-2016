@@ -99,9 +99,24 @@ public class AnnotationProcessor {
         Annotation matchingAnnotation = null;
 
         for (Annotation a : annotations) {
-            if (a.getDisplayNameAttr().contains(str)) {
+            String[] displayNameArr = a.getDisplayNameAttr().split(" ");
+
+            // Example input: DNA polymerase III DnaN
+            if (str.contains(" ") && a.getDisplayNameAttr().toLowerCase().contains(str.toLowerCase())) {
                 counter++;
                 matchingAnnotation = a;
+            } else {
+                // Example input: 0002
+                if (displayNameArr[0].contains(str)) {
+                    counter++;
+                    matchingAnnotation = a;
+                }
+
+                // Example input: DnaN or dnaN
+                else if (displayNameArr[displayNameArr.length - 1].toLowerCase().equals(str.toLowerCase())) {
+                    counter++;
+                    matchingAnnotation = a;
+                }
             }
         }
 

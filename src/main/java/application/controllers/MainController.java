@@ -512,11 +512,15 @@ public class MainController extends Controller<BorderPane> {
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
             if (isAnnotationsLoaded()) {
-                if (currentView != 0) {
-                    return;
-                }
-                if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                String input = annotationTextField.getText();
+
+                if (!input.isEmpty()) {
+                    if (currentView > 0) {
+                        allowNucleotideLevel = true;
+                        switchScene(Integer.MIN_VALUE);
+                    }
+
+                    initListenerProperties(input);
                 }
             }
         });
@@ -530,12 +534,13 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to specify what the Listener needs to do
+     *
+     * @param input The annotation search term.
      */
-    public void initListenerProperties() {
+    public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
-                    annotationTextField.getText());
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
@@ -633,7 +638,7 @@ public class MainController extends Controller<BorderPane> {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                    initListenerProperties(annotationTextField.getText());
                 }
             }
         });
