@@ -91,6 +91,7 @@ public class TreeController extends Controller<ScrollPane> {
                 selectedStrains.add(e);
             }
         });
+        mainController.setListItems();
     }
 
     /**

@@ -766,13 +766,13 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to add items to the Info-List
      */
-    private void setListItems() {
+    protected void setListItems() {
         List<String> genomes;
         if (filtering.isFiltering()) {
             genomes = graphController.getGraph().reduceGenomeList(filtering.getSelectedGenomes());
-        } else if (treeController != null && !treeController.getSelectedGenomes().isEmpty()) {
-            genomes = graphController.getGraph().reduceGenomes(
-                    treeController.getSelectedGenomes());
+        } else if (treeController != null
+                && !graphController.getGraph().reduceGenomes(treeController.getSelectedGenomes()).isEmpty()) {
+            genomes = graphController.getGraph().reduceGenomes(treeController.getSelectedGenomes());
         } else {
             genomes = graphController.getGraph().getAllGenomes();
         }
