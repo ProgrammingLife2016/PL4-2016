@@ -617,7 +617,7 @@ public final class GraphReducer {
         parent.setNucleotides(parent.getNucleotides() + child.getNucleotides());
         parent.addPreviousLevelNodesIds(new ArrayList<>(child.getPreviousLevelNodesIds()));
         parent.addPreviousLevelNodesId(child.getId());
-        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
+//        levelMaps.get(zoomLevel).get(child.getId()).setNextLevelNodeId(parent.getId());
     }
 
     /**

@@ -7,7 +7,6 @@ import application.fxobjects.layout.GraphLayout;
 import application.fxobjects.treeCells.LeafCell;
 import application.fxobjects.treeCells.MiddleCell;
 import core.annotation.Annotation;
-import core.annotation.AnnotationProcessor;
 import core.graph.Node;
 import core.typeEnums.CellType;
 import core.typeEnums.EdgeType;
@@ -48,7 +47,6 @@ public class Model {
     private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 
-    private AnnotationProcessor annotationProcessor;
 
     /**
      * Class constructor.

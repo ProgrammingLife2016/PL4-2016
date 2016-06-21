@@ -2,12 +2,10 @@ package application.fxobjects;
 
 import application.controllers.GraphController;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -46,17 +44,10 @@ public class ZoomBox extends ScrollPane {
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
-        zoomRectBorder.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                double value = ((event.getSceneX()-zoomRectBorder.getLayoutX())/zoomRectBorder.getWidth())/2;
-                graphController.getRoot().setHvalue(value);
-                System.out.println("Event scene X: " + (event.getSceneX()-zoomRectBorder.getLayoutY()));
-                System.out.println("ZoomRect width: " + zoomRectBorder.getWidth());
-                System.out.println(value);
-
-            }
+        //On click, set the scroll to that position in the graph.
+        zoomRectBorder.setOnMouseClicked(event -> {
+            double value = ((event.getX() - zoomRectBorder.getX()) / zoomBoxWidth);
+            graphController.getRoot().setHvalue(value);
         });
 
     }
@@ -109,6 +100,7 @@ public class ZoomBox extends ScrollPane {
         if (snap) {
             image = snapshot;
         }
+
 
         ImagePattern pattern = new ImagePattern(image, rectX, 20, zoomBoxWidth, zoomBoxHeight, false);
 

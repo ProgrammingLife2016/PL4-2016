@@ -21,11 +21,11 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,6 +76,7 @@ public class MainController extends Controller<BorderPane> {
     private Stack<String> mostRecentGFF;
     private Stack<String> mostRecentGFA;
     private Stack<String> mostRecentNWK;
+    private Stack<String> mostRecentDir;
 
     private MenuFactory menuFactory;
 
@@ -90,6 +91,7 @@ public class MainController extends Controller<BorderPane> {
         this.mostRecentGFF = new Stack<>();
         this.mostRecentGFA = new Stack<>();
         this.mostRecentNWK = new Stack<>();
+        this.mostRecentDir = new Stack<>();
         this.filtering = new Filtering();
         this.metaDataLoaded = false;
         this.annotationsLoaded = false;
@@ -99,6 +101,7 @@ public class MainController extends Controller<BorderPane> {
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
         checkMostRecent("/mostRecentNWK.txt", mostRecentNWK);
+        checkMostRecent("/mostRecentDir.txt", mostRecentDir);
 
         createMenu(false, false);
 
@@ -128,6 +131,10 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setCenter(imageView);
     }
 
+    /**
+     * Method to get the Screen
+     * @return the Screen
+     */
     public ScrollPane getScreen() {
         return screen;
     }
@@ -276,7 +283,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentGFF() {
+    public Stack<String> getMostRecentGFF() {
         return mostRecentGFF;
     }
 
@@ -285,7 +292,7 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentGFA() {
+    public Stack<String> getMostRecentGFA() {
         return mostRecentGFA;
     }
 
@@ -294,8 +301,16 @@ public class MainController extends Controller<BorderPane> {
      *
      * @return the list
      */
-    public Stack getMostRecentNWK() {
+    public Stack<String> getMostRecentNWK() {
         return mostRecentNWK;
+    }
+
+    /**
+     * Get the list containing the most recenlty visited directory
+     * @return the list
+     */
+    public Stack<String> getMostRecentDir() {
+        return mostRecentDir;
     }
 
     /**
@@ -335,6 +350,18 @@ public class MainController extends Controller<BorderPane> {
         }
 
     }
+
+    /**
+     * Add a file to the recently opened directory
+     * @param s the file to be added
+     */
+    public void addRecentDir(String s) {
+        if (!mostRecentDir.contains(s)) {
+            mostRecentDir.push(s);
+            writeMostRecent("/mostRecentDir.txt", mostRecentDir);
+        }
+    }
+
 
     /**
      * Method to add items to the GUI
@@ -484,9 +511,7 @@ public class MainController extends Controller<BorderPane> {
      */
     private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
         highlightButton.setOnAction(e -> {
-            if (!isAnnotationsLoaded()) {
-                createAnnotationPopup();
-            } else {
+            if (isAnnotationsLoaded()) {
                 if (currentView != 0) {
                     return;
                 }
@@ -542,13 +567,6 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to create a PopUp when no Annotation Data is loaded
-     */
-    public void createAnnotationPopup() {
-        WindowFactory.createAnnotationChooser("Please load Annotation Data first");
-    }
-
-    /**
      * Deselects all annotations
      */
     private void deselectAllAnnotations() {
@@ -573,6 +591,7 @@ public class MainController extends Controller<BorderPane> {
         VBox vBox = new VBox();
         hBox = new HBox();
         genomeTextField = new TextField();
+        addGenomeKeyHandler(genomeTextField);
         hBox.getStylesheets().add("/css/main.css");
 
         searchButton = new Button("Search Genome (In Tree)");
@@ -583,9 +602,10 @@ public class MainController extends Controller<BorderPane> {
         setGenomeButtonActionListener(buttons);
         hBox.getChildren().addAll(genomeTextField, searchButton, selectAllButton, deselectSearchButton);
 
-        // Dont add the annotation search box in the tree view
+        // Don't add the annotation search box in the tree view
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
+            addAnnotationKeyHandler(annotationTextField);
             Button highlightButton = new Button("Highlight annotation");
             Button deselectAnnotationButton = new Button("Deselect annotation");
             setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
@@ -603,6 +623,49 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setTop(vBox);
+    }
+
+    /**
+     * Method to add a Key Handler to the annotation TextField
+     * @param textField the annotation TextField
+     */
+    public void addAnnotationKeyHandler(TextField textField) {
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (!annotationTextField.getText().isEmpty()) {
+                    initListenerProperties();
+                }
+            }
+        });
+    }
+
+    /**
+     * Method to add a Key Handler to the genome TextField
+     * @param textField the genome TextField
+     */
+    public void addGenomeKeyHandler(TextField textField) {
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (!genomeTextField.getText().isEmpty()
+                        && treeController.getCellByName(
+                        genomeTextField.textProperty().get().trim().toUpperCase()) != null) {
+                    LeafCell cell = treeController.getCellByName(
+                            genomeTextField.textProperty().get().toUpperCase().trim());
+                    treeController.applyCellHighlight(cell);
+                    treeController.selectStrain(cell);
+                    genomeTextField.setText("");
+
+                    if (inGraph) {
+                        fillTree();
+                    }
+
+                    if (cell != null) {
+                        treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
+                    }
+                }
+
+            }
+        });
     }
 
     /**
@@ -778,12 +841,13 @@ public class MainController extends Controller<BorderPane> {
             } else {
                 strainSelection(new ArrayList<>(), graphController.getGraph().getAllGenomes());
             }
-            StringBuilder builder = new StringBuilder();
-            appendFilterNames(builder);
-            listFactory.modifyNodeInfo(builder.toString());
         } else {
             setListItems();
         }
+
+        StringBuilder builder = new StringBuilder();
+        appendFilterNames(builder);
+        listFactory.modifyNodeInfo(builder.toString());
 
         treeController.colorSelectedStrains();
     }
@@ -819,5 +883,13 @@ public class MainController extends Controller<BorderPane> {
             );
             builder.append("\n");
         }
+    }
+
+    /**
+     * Getter for Filtering.
+     * @return Filtering.
+     */
+    public Filtering getFiltering() {
+        return filtering;
     }
 }
