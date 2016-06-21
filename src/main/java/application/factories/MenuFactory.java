@@ -145,6 +145,7 @@ public class MenuFactory {
 
     /**
      * Method to disable and enable buttons in the Graph View-menu
+     *
      * @param x boolean
      */
     public static void toggleGraphViewMenu(boolean x) {
@@ -162,6 +163,7 @@ public class MenuFactory {
 
     /**
      * Enable and disable the correct View Menu
+     *
      * @param x boolean
      */
     public static void toggleViewMenu(boolean x) {
