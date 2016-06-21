@@ -538,6 +538,7 @@ public class MainController extends Controller<BorderPane> {
                 String input = annotationTextField.getText();
 
                 if (!input.isEmpty()) {
+                    annotationTextField.setText("");
                     if (currentView > 0) {
                         allowNucleotideLevel = true;
                         switchScene(Integer.MIN_VALUE);
@@ -603,6 +604,8 @@ public class MainController extends Controller<BorderPane> {
         nodeMap.values().stream().filter(n -> n.getType().equals(CellType.RECTANGLE)).forEachOrdered(n -> {
             ((RectangleCell) cellMap.get(n.getId())).deselectHighLight();
         });
+
+        annotationTextField.setText("");
     }
 
     /**
