@@ -546,22 +546,18 @@ public class MainController extends Controller<BorderPane> {
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
 
+            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
+                for (Node node : newAnn.getSpannedNodes()) {
+                    int id = node.getId();
 
-//            boolean foundAnnotation = false;
-//
-//            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
-//                for (Node node : newAnn.getSpannedNodes()) {
-//                    int id = node.getId();
-//
-//                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
-//                    if (nodeInMap != null) {
-//                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
-//                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
-//                        foundAnnotation = true;
-//                        break;
-//                    }
-//                }
-//            }
+                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
+                    if (nodeInMap != null) {
+                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
+                        break;
+                    }
+                }
+            }
 
             for (Node n : newAnn.getSpannedNodes()) {
                 if (n != null) {
