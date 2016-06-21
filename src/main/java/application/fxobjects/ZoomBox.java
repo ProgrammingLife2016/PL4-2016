@@ -44,10 +44,10 @@ public class ZoomBox extends ScrollPane {
         right.setPrefSize(zoomBoxWidth, zoomBoxHeight);
         right.getChildren().addAll(initZoomBox());
 
+        //On click, set the scroll to that position in the graph.
         zoomRectBorder.setOnMouseClicked(event -> {
-            double value = ((event.getSceneX() - zoomRectBorder.getLayoutX()) / zoomRectBorder.getWidth()) / 2;
+            double value = ((event.getX() - zoomRectBorder.getX()) / zoomBoxWidth);
             graphController.getRoot().setHvalue(value);
-
         });
 
     }
