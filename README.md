@@ -36,7 +36,7 @@ Run through IDE, such as [IntelliJ IDEA](https://www.jetbrains.com/idea/).
 We will explain the usage of the program step by step. The same information can be found in the application itself under "_help -> about_". Any area with a scrollbar can be scrolled through using the mouse wheel or the trackpad.
 
 ### Starting off
-After the application has loaded, load required files (.gfa, .nwk, .gff, .xlsx) via the "_file_" menu. The application will now automatically visualize the Phylogenetic tree.
+After the application has loaded, load required files (.gfa, .nwk, .gff, .xlsx) via the "_file_" menu. The application will now automatically visualize the Phylogenetic tree. **NOTE:** all resource files must be located in the same directory.
 
 ### The Phylogenetic tree
 Once in the Phylogenetic tree, you can explore the tree by scrolling up and down. When hovering over one of the tree leaves, you'll see all available meta data for that specific genome (a leaf represents a genome) in the info box on the right of the screen. In the upper part of the screen are _"select all"_ and "_deselect all_" buttons to select and deselect all genomes respectively.
@@ -49,7 +49,9 @@ If you would want to select genomes based on their meta data, for example their 
 Say you want to select a specific genome such as "TKK_02_0001", but you cannot find it in the tree. You can type the name of the desired genome in the text box in the upper part of the screen. After entering its name, you can press the search button and the genome will be automatically selected. After making a selection, you can view the selected genomes in the graph by selecting "_view -> show selected strains in graph_".
 
 ### The Graph
-Once in the graph, you will see all in the three selected strains visualized as a graph. In the bottom part of the screen, you will see the legend for nodes and edges in the graph and a zoom box. This zoom box indicates how far zoomed in you are and where you are in the graph in terms of x-coordinate. At the right part of the screen, you will see a list with loaded genomes and an information box. This box of information will show which filters are active and contain information on selected nodes. You can select nodes by clicking on them. From here, you can also select filters, would you so desire. 
+Once in the graph, you will see all in the three selected strains visualized as a graph. In the bottom part of the screen, you will see the legend for nodes and edges in the graph and a zoom box. This zoom box indicates how far zoomed in you are and where you are in the graph in terms of x-coordinate. At the right part of the screen, you will see a list with loaded genomes and an information box. This box of information will show which filters are active and contain information on selected nodes. You can select nodes by clicking on them. From here, you can also select filters, would you so desire.
+####Selecting nodes
+You can select nodes by clicking on the desired node. Once selected, this node will remain in focus. To remove focus on a node, you can simply click it again to deselect it. While a node is selected, horizontal zooming is disabled.
 ####Highlighting a strain
 Strain highlighting can be applied on one or multiple strains. You can do this by selecting the strain(s) you wish to highlight in the list of genomes on the right part of the screen. If you desire to select multiple strains you can use the Shift Click/control Click as you normally would in 
 ####Nucleotide level
