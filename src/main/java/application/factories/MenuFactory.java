@@ -332,14 +332,10 @@ public class MenuFactory {
      */
     private Menu initViewMenu() {
         showGenomeSequence = initMenuItem("Show selected strains in graph", null, event -> {
-            if (mainController.getTreeController().getSelectedGenomes().size() <= 1) {
+            if (mainController.getGraphController().getGraph().reduceGenomes(
+                    mainController.getTreeController().getSelectedGenomes()).size() <= 1
+                    || mainController.getList().getItems().size() <= 1) {
                 WindowFactory.createAlert();
-
-//            } else if (!mainController.isAnnotationsLoaded()) {
-//                mainController.createAnnotationPopup();
-//                mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
-//                        mainController.getTreeController().getSelectedGenomes());
-
             } else {
                 mainController.strainSelection(mainController.getGraphController().getGraph().getCurrentRef(),
                         mainController.getTreeController().getSelectedGenomes());

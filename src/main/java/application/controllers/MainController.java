@@ -921,4 +921,8 @@ public class MainController extends Controller<BorderPane> {
     public Filtering getFiltering() {
         return filtering;
     }
+
+    public ListView getList() {
+        return list;
+    }
 }
