@@ -544,8 +544,7 @@ public final class WindowFactory {
     }
 
     /**
-     * Method to create to alert
-     * Shown when searched no annotation cannot be found
+     * Shows a pop-up when no annotations have been found.
      */
     public static void createAnnNotFoundAlert() {
         final Stage dialog = new Stage();
@@ -555,9 +554,27 @@ public final class WindowFactory {
 
         VBox content = new VBox();
 
-        addAlertComponents(content, dialog, "Your search does not match any of the present annotations.");
+        addAlertComponents(content, dialog, "Your search does not match\n any of the present annotations.");
 
-        Scene dialogScene = new Scene(content, 200, 100);
+        Scene dialogScene = new Scene(content, 250, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
+    /**
+     * Shows a pop-up when no annotations have been found.
+     */
+    public static void createTooManyAnnAlert() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setResizable(false);
+        dialog.setTitle("Too many matches found.");
+
+        VBox content = new VBox();
+
+        addAlertComponents(content, dialog, "Annotation search resulted in\n too many matches.");
+
+        Scene dialogScene = new Scene(content, 250, 100);
         dialog.setScene(dialogScene);
         dialog.show();
     }
