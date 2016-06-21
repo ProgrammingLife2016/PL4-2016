@@ -768,6 +768,7 @@ public class MainController extends Controller<BorderPane> {
             MenuFactory.loadAnnotations.setDisable(true);
         }
 
+        toggleSearchBar(true);
         toggleSelectDeselect(false);
         MenuFactory.toggleTreeViewMenu(true);
         list.setDisable(true);
@@ -776,7 +777,15 @@ public class MainController extends Controller<BorderPane> {
         this.getRoot().setBottom(null);
     }
 
-    
+    /**
+     * Method to enable and disable the search bar
+     * @param x boolean
+     */
+    private void toggleSearchBar(boolean x) {
+        highlightButton.setDisable(x);
+        deselectAnnotationButton.setDisable(x);
+        annotationTextField.setDisable(x);
+    }
 
     /**
      * Method to add items to the Info-List
