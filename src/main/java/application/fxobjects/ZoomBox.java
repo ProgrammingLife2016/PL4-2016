@@ -32,6 +32,7 @@ public class ZoomBox extends ScrollPane {
     private GraphController graphController;
     private static Image image;
 
+
     /**
      * Class constructor.
      *
@@ -47,7 +48,7 @@ public class ZoomBox extends ScrollPane {
         //On click, set the scroll to that position in the graph.
         zoomRectBorder.setOnMouseClicked(event -> {
             double value = ((event.getX() - zoomRectBorder.getX()) / zoomBoxWidth);
-            graphController.getRoot().setHvalue(value);
+            graphController.slideToPercent(value);
         });
 
     }
