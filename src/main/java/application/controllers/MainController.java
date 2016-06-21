@@ -62,8 +62,7 @@ public class MainController extends Controller<BorderPane> {
     private ListView list;
     private int currentView;
     private ListFactory listFactory;
-    private TextField genomeTextField;
-    private TextField annotationTextField;
+    private TextField genomeTextField, annotationTextField;
     private StackPane box;
     private Label zoomIndicator;
     private int secondCount;
@@ -542,6 +541,7 @@ public class MainController extends Controller<BorderPane> {
                         switchScene(Integer.MIN_VALUE);
                     }
 
+                    System.out.println(input);
                     initListenerProperties(input);
                 }
             }
@@ -569,6 +569,8 @@ public class MainController extends Controller<BorderPane> {
                     int id = node.getId();
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
+                        System.out.println("id: " + id);
+                        System.out.println(cellMap.get(id).getLayoutX());
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450));
                         break;
@@ -655,7 +657,15 @@ public class MainController extends Controller<BorderPane> {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties(annotationTextField.getText());
+                        if (currentView > 0) {
+                            allowNucleotideLevel = true;
+                            switchScene(Integer.MIN_VALUE);
+                        }
+
+                    String s = annotationTextField.getText();
+                    System.out.println(s);
+                    initListenerProperties(s);
+
                 }
             }
         });
