@@ -12,27 +12,29 @@ import java.util.List;
 public class AnnotationProcessor {
 
     private List<Annotation> annotations;
-    private HashMap<Integer, Node> filteredNodeMap;
 
     /**
      * Initializes a new annotation parser.
      *
-     * @param nodeMap A given hash map of nodes.
      * @param annotations List of annotations.
      */
-    public AnnotationProcessor(HashMap<Integer, Node> nodeMap, List<Annotation> annotations) {
+    public AnnotationProcessor(List<Annotation> annotations) {
         this.annotations = annotations;
-        this.filteredNodeMap = filterAnnotationsInNodeMap(nodeMap);
-
-        for (Annotation annotation : this.annotations) {
-            annotation.detNodesSpannedByAnnotation(filteredNodeMap);
-        }
     }
 
     /**
      * Matches reference nodes and annotations to each other.
+     *
+     * @param lowestMap The node map.
      */
-    public void matchNodesAndAnnotations() {
+    public void matchNodesAndAnnotations(HashMap<Integer, Node> lowestMap) {
+        System.out.println("[in matchNodesAndAnnotations]");
+        HashMap<Integer, Node> filteredNodeMap = filterAnnotationsInNodeMap(lowestMap);
+
+        for (Annotation annotation : annotations) {
+            annotation.detNodesSpannedByAnnotation(filteredNodeMap);
+        }
+
         for (Annotation a : annotations) {
             for (Node n : a.getSpannedNodes()) {
                 Node node = filteredNodeMap.get(n.getId());

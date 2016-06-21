@@ -135,7 +135,7 @@ public class Graph {
             currentGenomes = new ArrayList<>(selectedGenomes);
 
             if (annotationProcessor != null) {
-                annotationProcessor.matchNodesAndAnnotations();
+                annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
             }
             return true;
         }
@@ -148,7 +148,7 @@ public class Graph {
      */
     public void initAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
-        annotationProcessor = new AnnotationProcessor(startMap, annotations);
+        annotationProcessor = new AnnotationProcessor(annotations);
     }
 
     /**

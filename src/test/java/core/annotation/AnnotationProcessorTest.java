@@ -44,7 +44,7 @@ public class AnnotationProcessorTest {
 
         annotations = new ArrayList<>();
         annotations.add(a);
-        ap = new AnnotationProcessor(nodeMap, annotations);
+        ap = new AnnotationProcessor(annotations);
     }
 
     /**
