@@ -122,6 +122,7 @@ public class MenuFactory {
         filterSpoligotype.setDisable(x);
         filterGenoDST.setDisable(x);
         filterTF.setDisable(x);
+        filterReset.setDisable(x);
     }
 
     /**

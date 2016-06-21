@@ -74,12 +74,6 @@ public class GraphController extends Controller<ScrollPane> {
         ChangeListener<Object> changeHListener = (observable, oldValue, newValue) -> {
             Bounds bounds = getRoot().getViewportBounds();
             drawFrom = -1 * (int) bounds.getMinX();
-            System.out.println("----");
-            System.out.println("!changelistener!");
-            System.out.println("observable: " + observable.toString());
-            System.out.println("old value: " + oldValue);
-            System.out.println("new value: " + newValue);
-            System.out.println("----");
             update(graph.getCurrentRef(), graph.getCurrentInt());
         };
 
@@ -124,7 +118,6 @@ public class GraphController extends Controller<ScrollPane> {
                 drawFrom = -1 * (int) getRoot().getViewportBounds().getMinX();
                 update(graph.getCurrentRef(), graph.getCurrentInt());
             }
-            System.out.println("end of gc update");
         });
     }
 
@@ -413,18 +406,9 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-//<<<<<<< HEAD
-//        System.out.println("should be value: " + percent);
-//        System.out.println("value to be removed: " + getRoot().getHvalue());
         if (getRoot().getHvalue() != percent) {
             getRoot().setHvalue((percent));
-//            System.out.println("set new h value!");
-
         }
-//
-//=======
-//        getRoot().setHvalue(percent);
-//>>>>>>> master
     }
 
     /**

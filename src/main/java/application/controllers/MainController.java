@@ -391,6 +391,7 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setRight(listVBox);
+        list.setDisable(false);
     }
 
     /**
@@ -487,7 +488,6 @@ public class MainController extends Controller<BorderPane> {
                         genomeTextField.textProperty().get().toUpperCase().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
-                genomeTextField.setText("");
 
                 if (inGraph) {
                     fillTree();
@@ -503,7 +503,6 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = false;
             menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
-            genomeTextField.setText("");
             fillTree();
         });
 
@@ -511,7 +510,6 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = true;
             menuFactory.setShowReferenceStrain(true);
             treeController.selectAll();
-            genomeTextField.setText("");
             fillTree();
         });
     }
@@ -534,7 +532,6 @@ public class MainController extends Controller<BorderPane> {
 
         deselectAnnotationButton.setOnAction(e -> {
             deselectAllAnnotations();
-            annotationTextField.setText("");
         });
 
     }
@@ -663,7 +660,6 @@ public class MainController extends Controller<BorderPane> {
                             genomeTextField.textProperty().get().toUpperCase().trim());
                     treeController.applyCellHighlight(cell);
                     treeController.selectStrain(cell);
-                    genomeTextField.setText("");
 
                     if (inGraph) {
                         fillTree();
@@ -687,17 +683,6 @@ public class MainController extends Controller<BorderPane> {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
     }
-
-    /**
-     * Method to enable the annotation searchBar
-     * @param x boolean indicating enabling or disabling
-     */
-    public void toggleSearchBar(boolean x) {
-        highlightButton.setDisable(x);
-        deselectAnnotationButton.setDisable(x);
-        annotationTextField.setDisable(x);
-    }
-
 
     /**
      * Method to create the Info-list
@@ -733,7 +718,6 @@ public class MainController extends Controller<BorderPane> {
                 highlights.add((String) o);
             }
 
-            //fillGraph(highlights, graphController.getGenomes());
             strainSelection(highlights, getTreeController().getSelectedGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
@@ -777,22 +761,22 @@ public class MainController extends Controller<BorderPane> {
     public void fillTree() {
         inGraph = false;
         screen = treeController.getRoot();
-//<<<<<<< HEAD
-        toggleSelectDeselect(false);
-        menuFactory.getAllowLevel().setDisable(true);
-        setListItems();
-//=======
 
-//        if (isAnnotationsLoaded()) {
-//            MenuFactory.loadAnnotations.setDisable(true);
-//        }
-//
-//        MenuFactory.toggleTreeViewMenu(true);
-//>>>>>>> master
+        setListItems();
+
+        if (isAnnotationsLoaded()) {
+            MenuFactory.loadAnnotations.setDisable(true);
+        }
+
+        toggleSelectDeselect(false);
+        MenuFactory.toggleTreeViewMenu(true);
+        list.setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
     }
+
+    
 
     /**
      * Method to add items to the Info-List
