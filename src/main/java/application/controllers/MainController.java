@@ -540,10 +540,10 @@ public class MainController extends Controller<BorderPane> {
                 if (!input.isEmpty()) {
                     if (currentView > 0) {
                         allowNucleotideLevel = true;
+
                         switchScene(Integer.MIN_VALUE);
                     }
 
-                    System.out.println(input);
                     initListenerProperties(input);
                 }
             }
@@ -561,7 +561,6 @@ public class MainController extends Controller<BorderPane> {
     public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
         try {
-            System.out.println("input: " + input);
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
@@ -572,7 +571,6 @@ public class MainController extends Controller<BorderPane> {
                     int id = node.getId();
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
-                        System.out.println(cellMap.get(id).getLayoutX());
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450));
                         break;
@@ -664,6 +662,7 @@ public class MainController extends Controller<BorderPane> {
 
                     if (currentView > 0) {
                         allowNucleotideLevel = true;
+                        menuFactory.getAllowLevel().setSelected(true);
                         switchScene(Integer.MIN_VALUE);
                     }
 

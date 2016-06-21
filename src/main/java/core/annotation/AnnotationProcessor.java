@@ -98,8 +98,7 @@ public class AnnotationProcessor {
             throws TooManyAnnotationsFoundException, NoAnnotationsFoundException {
         int counter = 0;
         Annotation matchingAnnotation = null;
-
-        System.out.println("str: " + str);
+        
         for (Annotation a : annotations) {
             String[] displayNameArr = a.getDisplayNameAttr().split(" ");
 
