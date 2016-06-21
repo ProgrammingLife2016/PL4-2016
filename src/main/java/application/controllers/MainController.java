@@ -127,6 +127,9 @@ public class MainController extends Controller<BorderPane> {
         ImageView imageView = new ImageView(s);
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
         imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        MenuFactory.toggleViewMenu(true);
+        MenuFactory.toggleFileMenu(false);
+        MenuFactory.toggleFilters(true);
         this.getRoot().setCenter(imageView);
     }
 
@@ -154,8 +157,8 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the annotation data file.
      */
     public void initAnnotations(String path) {
-        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         setAnnotationsLoaded(true);
+        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         graphController.getGraph().initAnnotations(annotations);
     }
 
@@ -368,11 +371,8 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
-        MenuFactory.toggleGraphViewMenu(false);
-        MenuFactory.toggleFileMenu(true);
-        MenuFactory.toggleMostRecent(true);
-        MenuFactory.toggleFilters(false);
-        menuFactory.getAllowLevel().setDisable(false);
+        MenuFactory.toggleGraphViewMenu(true);
+
         this.getRoot().setCenter(graphController.getRoot());
         toggleSelectDeselect(true);
 
@@ -617,8 +617,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
-            MenuFactory.toggleTreeViewMenu(true);
-            MenuFactory.toggleFilters(true);
+
             vBox.getChildren().addAll(menuBar);
         }
 
@@ -763,16 +762,15 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         inGraph = false;
-        createMenu(false, false);
         screen = treeController.getRoot();
-        toggleSelectDeselect(false);
 
-        MenuFactory.treeView(true);
+        if (isAnnotationsLoaded()) {
+            MenuFactory.loadAnnotations.setDisable(true);
+        }
+        MenuFactory.toggleTreeViewMenu(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
-
-
     }
 
     /**

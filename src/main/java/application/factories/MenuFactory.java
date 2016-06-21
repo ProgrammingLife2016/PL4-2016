@@ -130,10 +130,13 @@ public class MenuFactory {
      */
     public static void toggleTreeViewMenu(boolean x) {
         showPhylogeneticTree.setDisable(x);
+        showGenomeSequence.setDisable(!x);
         resetView.setDisable(x);
         allowLevel.setDisable(x);
         showReferenceStrain.setDisable(x);
 
+        toggleMostRecent(x);
+        toggleFileMenu(x);
 
     }
 
@@ -142,7 +145,20 @@ public class MenuFactory {
      * @param x boolean
      */
     public static void toggleGraphViewMenu(boolean x) {
+        showGenomeSequence.setDisable(x);
+        resetView.setDisable(!x);
+        allowLevel.setDisable(!x);
+        showReferenceStrain.setDisable(!x);
+
+        toggleFileMenu(x);
+        toggleMostRecent(x);
+        toggleFilters(!x);
+
+    }
+
+    public static void toggleViewMenu(boolean x) {
         showPhylogeneticTree.setDisable(x);
+        showGenomeSequence.setDisable(x);
         resetView.setDisable(x);
         allowLevel.setDisable(x);
         showReferenceStrain.setDisable(x);
@@ -175,15 +191,15 @@ public class MenuFactory {
      *
      * @param x boolean
      */
-    public static void treeView(boolean x) {
-        showReferenceStrain.setDisable(x);
-        showPhylogeneticTree.setDisable(x);
-
-        toggleTreeViewMenu(x);
-        toggleMostRecent(x);
-        toggleFileMenu(x);
-
-    }
+//    public static void treeView(boolean x) {
+//        showReferenceStrain.setDisable(x);
+//        showPhylogeneticTree.setDisable(x);
+//
+//        toggleTreeViewMenu(x);
+//        toggleMostRecent(x);
+//        toggleFileMenu(x);
+//
+//    }
 
 
     /**

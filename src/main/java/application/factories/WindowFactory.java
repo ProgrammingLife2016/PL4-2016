@@ -468,15 +468,13 @@ public final class WindowFactory {
             mainController.initGraph();
             mainController.addRecentGFA(nwkFile.getAbsolutePath());
 
-            mainController.initMetadata(metaFile.getAbsolutePath());
-
-            mainController.initTree(gfaFile.getAbsolutePath());
-            mainController.addRecentNWK(gfaFile.getAbsolutePath());
-
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
+
+            mainController.initMetadata(metaFile.getAbsolutePath());
+            mainController.initTree(gfaFile.getAbsolutePath());
+            mainController.addRecentNWK(gfaFile.getAbsolutePath());
 
             createMenuWithSearch();
         } else {
@@ -484,15 +482,13 @@ public final class WindowFactory {
             mainController.initGraph();
             mainController.addRecentGFA(gfaFile.getAbsolutePath());
 
-            mainController.initMetadata(metaFile.getAbsolutePath());
-
-            mainController.initTree(nwkFile.getAbsolutePath());
-            mainController.addRecentNWK(nwkFile.getAbsolutePath());
-
-
             if (annoFile != null) {
                 mainController.initAnnotations(annoFile.getAbsolutePath());
             }
+
+            mainController.initMetadata(metaFile.getAbsolutePath());
+            mainController.initTree(nwkFile.getAbsolutePath());
+            mainController.addRecentNWK(nwkFile.getAbsolutePath());
 
             createMenuWithSearch();
         }
