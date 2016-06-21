@@ -281,6 +281,12 @@ public class MenuFactory {
                 + "The node that contains \n your originally focused node, will now be marked as the "
                 + "new focus. Zooming in will bring you back to your originally focused node."), 1, 3);
 
+        RectangleCell annotationHighlightedCell = new RectangleCell(0, 1);
+        annotationHighlightedCell.setHighLight();
+        grid.add(annotationHighlightedCell, 0, 4);
+        grid.add(new Text("        When an annotation is highlighted, when zoomed in at nucleotide level, "
+                + "the nodes in this annotation will get a yellow border.\n"), 1, 4);
+
         return grid;
     }
 
