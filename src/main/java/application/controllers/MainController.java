@@ -20,12 +20,17 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,17 +65,17 @@ public class MainController extends Controller<BorderPane> {
     private TextField genomeTextField;
     private TextField annotationTextField;
     private StackPane box;
+    private Label zoomIndicator;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
-    private boolean allowNucleotideLevel = false;
-    private boolean showReferenceStrain = false;
+    private boolean allowNucleotideLevel;
+    private boolean showReferenceStrain;
 
-    private Button searchButton;
-    private Button selectAllButton;
-    private Button deselectSearchButton;
+    private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
+
     private HBox hBox;
 
     private Stack<String> mostRecentGFF;
@@ -128,6 +133,9 @@ public class MainController extends Controller<BorderPane> {
         ImageView imageView = new ImageView(s);
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
         imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        MenuFactory.toggleViewMenu(true);
+        MenuFactory.toggleFileMenu(false);
+        MenuFactory.toggleFilters(true);
         this.getRoot().setCenter(imageView);
     }
 
@@ -155,8 +163,8 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the annotation data file.
      */
     public void initAnnotations(String path) {
-        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         setAnnotationsLoaded(true);
+        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         graphController.getGraph().initAnnotations(annotations);
     }
 
@@ -369,13 +377,12 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
-        MenuFactory.toggleViewMenu(false);
-        MenuFactory.toggleFileMenu(true);
-        MenuFactory.toggleMostRecent(true);
-        MenuFactory.toggleFilters(false);
-        menuFactory.getAllowLevel().setDisable(false);
-        this.getRoot().setCenter(graphController.getRoot());
+        WindowFactory.createMenuWithSearch();
+        MenuFactory.toggleGraphViewMenu(true);
         toggleSelectDeselect(true);
+
+        this.getRoot().setCenter(graphController.getRoot());
+
 
         if (secondCount == -1) {
             createList();
@@ -384,6 +391,7 @@ public class MainController extends Controller<BorderPane> {
         }
 
         this.getRoot().setRight(listVBox);
+        list.setDisable(false);
     }
 
     /**
@@ -446,9 +454,15 @@ public class MainController extends Controller<BorderPane> {
 
         // Place the zoom box
         box = graphController.getZoomBox().getZoomBox();
-
+        zoomIndicator = new Label("Zoomlevel: " + currentView);
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+        zoomIndicator.setEffect(ds);
+        zoomIndicator.setFont(Font.font(null, FontWeight.BOLD, 32));
+        zoomIndicator.setAlignment(Pos.TOP_CENTER);
         hbox.setAlignment(Pos.CENTER);
-        hbox.getChildren().addAll(box, legend);
+        hbox.getChildren().addAll(zoomIndicator, box, legend);
         this.getRoot().setBottom(hbox);
     }
 
@@ -474,7 +488,6 @@ public class MainController extends Controller<BorderPane> {
                         genomeTextField.textProperty().get().toUpperCase().trim());
                 treeController.applyCellHighlight(cell);
                 treeController.selectStrain(cell);
-                genomeTextField.setText("");
 
                 if (inGraph) {
                     fillTree();
@@ -490,7 +503,6 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = false;
             menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
-            genomeTextField.setText("");
             fillTree();
         });
 
@@ -498,7 +510,6 @@ public class MainController extends Controller<BorderPane> {
             showReferenceStrain = true;
             menuFactory.setShowReferenceStrain(true);
             treeController.selectAll();
-            genomeTextField.setText("");
             fillTree();
         });
     }
@@ -506,10 +517,8 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the annotation highlight button.
      *
-     * @param highlightButton          The annotation highlight button.
-     * @param deselectAnnotationButton The annotation deselect button.
      */
-    private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
+    private void setAnnotationButtonsActionListener() {
         highlightButton.setOnAction(e -> {
             if (isAnnotationsLoaded()) {
                 String input = annotationTextField.getText();
@@ -527,7 +536,6 @@ public class MainController extends Controller<BorderPane> {
 
         deselectAnnotationButton.setOnAction(e -> {
             deselectAllAnnotations();
-            annotationTextField.setText("");
         });
 
     }
@@ -610,9 +618,9 @@ public class MainController extends Controller<BorderPane> {
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
             addAnnotationKeyHandler(annotationTextField);
-            Button highlightButton = new Button("Highlight annotation");
-            Button deselectAnnotationButton = new Button("Deselect annotation");
-            setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+            highlightButton = new Button("Highlight annotation");
+            deselectAnnotationButton = new Button("Deselect annotation");
+            setAnnotationButtonsActionListener();
             hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
         }
 
@@ -621,8 +629,7 @@ public class MainController extends Controller<BorderPane> {
         } else {
             menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
-            MenuFactory.toggleViewMenu(true);
-            MenuFactory.toggleFilters(true);
+
             vBox.getChildren().addAll(menuBar);
         }
 
@@ -657,7 +664,6 @@ public class MainController extends Controller<BorderPane> {
                             genomeTextField.textProperty().get().toUpperCase().trim());
                     treeController.applyCellHighlight(cell);
                     treeController.selectStrain(cell);
-                    genomeTextField.setText("");
 
                     if (inGraph) {
                         fillTree();
@@ -681,7 +687,6 @@ public class MainController extends Controller<BorderPane> {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
     }
-
 
     /**
      * Method to create the Info-list
@@ -717,7 +722,6 @@ public class MainController extends Controller<BorderPane> {
                 highlights.add((String) o);
             }
 
-            //fillGraph(highlights, graphController.getGenomes());
             strainSelection(highlights, getTreeController().getSelectedGenomes());
             if (getGraphController().getGraphMouseHandling().getPrevClick() != null) {
                 graphController.focus(getGraphController()
@@ -742,6 +746,9 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
+        toggleSelectDeselect(true);
+
+        zoomIndicator.setText("Zoomlevel: " + currentView);
     }
 
     /**
@@ -757,14 +764,31 @@ public class MainController extends Controller<BorderPane> {
      */
     public void fillTree() {
         inGraph = false;
-        createMenu(true, false);
         screen = treeController.getRoot();
-        toggleSelectDeselect(false);
-        menuFactory.getAllowLevel().setDisable(true);
+
         setListItems();
+
+        if (isAnnotationsLoaded()) {
+            MenuFactory.loadAnnotations.setDisable(true);
+        }
+
+        toggleSearchBar(true);
+        toggleSelectDeselect(false);
+        MenuFactory.toggleTreeViewMenu(true);
+        list.setDisable(true);
 
         this.getRoot().setCenter(screen);
         this.getRoot().setBottom(null);
+    }
+
+    /**
+     * Method to enable and disable the search bar
+     * @param x boolean
+     */
+    private void toggleSearchBar(boolean x) {
+        highlightButton.setDisable(x);
+        deselectAnnotationButton.setDisable(x);
+        annotationTextField.setDisable(x);
     }
 
     /**
