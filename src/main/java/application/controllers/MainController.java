@@ -62,8 +62,7 @@ public class MainController extends Controller<BorderPane> {
     private ListView list;
     private int currentView;
     private ListFactory listFactory;
-    private TextField genomeTextField;
-    private TextField annotationTextField;
+    private TextField genomeTextField, annotationTextField;
     private StackPane box;
     private Label zoomIndicator;
     private int secondCount;
@@ -146,6 +145,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to get the Screen
+     *
      * @return the Screen
      */
     public ScrollPane getScreen() {
@@ -320,6 +320,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Get the list containing the most recenlty visited directory
+     *
      * @return the list
      */
     public Stack<String> getMostRecentDir() {
@@ -366,6 +367,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Add a file to the recently opened directory
+     *
      * @param s the file to be added
      */
     public void addRecentDir(String s) {
@@ -526,7 +528,7 @@ public class MainController extends Controller<BorderPane> {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
             }
-                setListItems();
+            setListItems();
         });
 
         buttons.get(1).setOnAction(e -> {
@@ -547,7 +549,6 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Adds an action listener to the annotation highlight button.
-     *
      */
     private void setAnnotationButtonsActionListener() {
         highlightButton.setOnAction(e -> {
@@ -668,6 +669,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to add a Key Handler to the annotation TextField
+     *
      * @param textField the annotation TextField
      */
     @SuppressWarnings("PMD.CollapsibleIfStatements")
@@ -675,7 +677,16 @@ public class MainController extends Controller<BorderPane> {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties(annotationTextField.getText());
+                    String s = annotationTextField.getText();
+
+                    if (currentView > 0) {
+                        allowNucleotideLevel = true;
+                        menuFactory.getAllowLevel().setSelected(true);
+                        switchScene(Integer.MIN_VALUE);
+                    }
+
+                    initListenerProperties(s);
+
                 }
             }
         });
@@ -683,6 +694,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to add a Key Handler to the genome TextField
+     *
      * @param textField the genome TextField
      */
     @SuppressWarnings("PMD.CollapsibleIfStatements")
@@ -820,6 +832,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to enable and disable the search bar
+     *
      * @param x boolean
      */
     private void toggleSearchBar(boolean x) {
@@ -953,6 +966,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter for Filtering.
+     *
      * @return Filtering.
      */
     public Filtering getFiltering() {
