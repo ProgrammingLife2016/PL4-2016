@@ -456,7 +456,7 @@ public class MainController extends Controller<BorderPane> {
             ss.add("MT_H37RV_BRD_V5.ref");
         }
 
-        if(!ss.equals(oldGenomes)) {
+        if (!ss.equals(oldGenomes)) {
             graphController.getZoomBox().reset();
             oldGenomes = ss;
         }
@@ -973,6 +973,11 @@ public class MainController extends Controller<BorderPane> {
         return filtering;
     }
 
+    /**
+     * Getter for ListView.
+     *
+     * @return ListView.
+     */
     public ListView getList() {
         return list;
     }
