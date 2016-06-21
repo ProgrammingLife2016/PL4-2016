@@ -71,7 +71,7 @@ public class PhylogeneticTree {
         try {
             fileInputStream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            
         }
 
         BufferedReader r = new BufferedReader(new InputStreamReader(fileInputStream));

@@ -34,7 +34,7 @@ public class GraphParserTest {
         try {
             map = p.readGFAFromFile("src/main/resources/TestFiles/TBTestFile.gfa");
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
         assertEquals(4, map.size());
