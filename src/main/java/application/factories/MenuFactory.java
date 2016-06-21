@@ -3,6 +3,7 @@ package application.factories;
 import application.controllers.MainController;
 import application.fxobjects.graphCells.CollectionCell;
 import application.fxobjects.graphCells.RectangleCell;
+import core.genome.Genome;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

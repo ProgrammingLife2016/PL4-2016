@@ -383,7 +383,6 @@ public class MainController extends Controller<BorderPane> {
 
         this.getRoot().setCenter(graphController.getRoot());
 
-
         if (secondCount == -1) {
             createList();
             setListItems();
@@ -406,7 +405,10 @@ public class MainController extends Controller<BorderPane> {
         boolean update = false;
         // Apply the selected genomes
         if (showReferenceStrain) {
-            selectedGenomes.add("MT_H37RV_BRD_V5.ref");
+            if (!selectedGenomes.contains("MT_H37RV_BRD_V5.ref")) {
+                selectedGenomes.add("MT_H37RV_BRD_V5.ref");
+            }
+
         } else {
             selectedGenomes.remove("MT_H37RV_BRD_V5.ref");
         }
@@ -437,8 +439,10 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
-        fillGraph(ref, s);
-        setListItems();
+        graphController.getZoomBox().reset();
+        List<String> ss = graphController.getGraph().reduceGenomes(s);
+
+        fillGraph(ref, ss);
         initGUI();
     }
 
@@ -535,9 +539,7 @@ public class MainController extends Controller<BorderPane> {
             }
         });
 
-        deselectAnnotationButton.setOnAction(e -> {
-            deselectAllAnnotations();
-        });
+        deselectAnnotationButton.setOnAction(e -> deselectAllAnnotations());
 
     }
 
