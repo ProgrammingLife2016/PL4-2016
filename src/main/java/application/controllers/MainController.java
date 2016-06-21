@@ -903,7 +903,7 @@ public class MainController extends Controller<BorderPane> {
 
         if (inGraph) {
             if (filtering.isFiltering() && !getLoadedGenomeNames().isEmpty()) {
-                strainSelection(new ArrayList<>(), getLoadedGenomeNames());
+                strainSelection(graphController.getGraph().getCurrentRef(), getLoadedGenomeNames());
             } else {
                 fillTree();
             }
