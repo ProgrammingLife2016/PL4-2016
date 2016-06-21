@@ -63,7 +63,7 @@ public final class GraphReducer {
         initializeLevelMaps(startMap, genomesInFilter);
         int reduceAmount = 1;
 
-        for (int i = 2;; i++) {
+        for (int i = 1;; i++) {
             zoomLevel = i - 1;
             HashMap<Integer, Node> levelMap = collapse(levelMaps.get(zoomLevel));
             int previousMapSize = levelMaps.get(zoomLevel).size();
@@ -106,9 +106,9 @@ public final class GraphReducer {
         HashMap<Integer, Node> filteredNodeMap = generateFilteredMap(startMap, genomesInFilter);
         determineParents(filteredNodeMap);
         levelMaps.add(filteredNodeMap);
-        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
-        determineParents(collapsedFilteredMap);
-        levelMaps.add(collapsedFilteredMap);
+//        HashMap<Integer, Node> collapsedFilteredMap = collapseFirstMap(filteredNodeMap);
+//        determineParents(collapsedFilteredMap);
+//        levelMaps.add(collapsedFilteredMap);
     }
 
     /**
@@ -188,7 +188,7 @@ public final class GraphReducer {
      */
     private static void traverseMaps(int reduceAmount) {
         int maxDepth = 10;
-        for (int j = zoomLevel; maxDepth < 500; j++) {
+        for (int j = zoomLevel + 1; maxDepth < 500; j++) {
             zoomLevel = j - 1;
             if (levelMaps.size() == 10) {
 //                reduceZoomingLevels(reduceAmount);

@@ -381,7 +381,6 @@ public class MainController extends Controller<BorderPane> {
         }
 
         graphController.update(ref, currentView);
-
         if (update) {
             graphController.getZoomBox().fillZoomBox(true);
         }
