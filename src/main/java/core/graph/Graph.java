@@ -195,6 +195,7 @@ public class Graph {
      *
      * @return the list of genomes.
      */
+    @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     public ArrayList<String> findAllGenomes() {
         ArrayList<String> allGenomes = new ArrayList<>();
         for (int nodeId : startMap.keySet()) {

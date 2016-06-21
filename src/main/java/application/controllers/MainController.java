@@ -641,6 +641,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to add a Key Handler to the annotation TextField
      * @param textField the annotation TextField
      */
+    @SuppressWarnings("PMD.CollapsibleIfStatements")
     public void addAnnotationKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
@@ -655,6 +656,7 @@ public class MainController extends Controller<BorderPane> {
      * Method to add a Key Handler to the genome TextField
      * @param textField the genome TextField
      */
+    @SuppressWarnings("PMD.CollapsibleIfStatements")
     public void addGenomeKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
