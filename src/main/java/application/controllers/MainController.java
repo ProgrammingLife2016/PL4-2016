@@ -73,7 +73,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean annotationsLoaded;
     private boolean allowNucleotideLevel;
     private boolean showReferenceStrain;
-    private boolean firstInitialization = true;
+    private boolean firstInitialization;
+    private List<String> oldGenomes;
 
 
     private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
@@ -104,6 +105,8 @@ public class MainController extends Controller<BorderPane> {
         this.annotationsLoaded = false;
         this.allowNucleotideLevel = false;
         this.showReferenceStrain = false;
+        this.firstInitialization = true;
+        this.oldGenomes = new ArrayList<>();
 
         checkMostRecent("/mostRecentGFA.txt", mostRecentGFA);
         checkMostRecent("/mostRecentGFF.txt", mostRecentGFF);
@@ -440,8 +443,21 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
-        graphController.getZoomBox().reset();
+
         List<String> ss = graphController.getGraph().reduceGenomes(s);
+
+        if (ss.contains("MT_H37RV_BRD_V5.ref)") && !oldGenomes.contains("MT_H37RV_BRD_V5.ref")) {
+            oldGenomes.add("MT_H37RV_BRD_V5.ref");
+        }
+
+        if (!ss.contains("MT_H37RV_BRD_V5.ref") && oldGenomes.contains("MT_H37RV_BRD_V5.ref")) {
+            ss.add("MT_H37RV_BRD_V5.ref");
+        }
+
+        if(!ss.equals(oldGenomes)) {
+            graphController.getZoomBox().reset();
+            oldGenomes = ss;
+        }
 
         fillGraph(ref, ss);
         initGUI();
