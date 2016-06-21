@@ -9,7 +9,6 @@ import application.mouseHandlers.TreeMouseHandling;
 import core.genome.Genome;
 import core.parsers.MetaDataParser;
 import core.phylogeneticTree.PhylogeneticTree;
-import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,6 +23,7 @@ import static application.fxobjects.LineageColor.*;
 /**
  * Class responsible for setting up the scroll pane containing the phylogenetic tree.
  */
+@SuppressWarnings("PMD.UselessParentheses")
 public class TreeController extends Controller<ScrollPane> {
     private PhylogeneticTree pt;
     private List<Edge> collectedEdges;
