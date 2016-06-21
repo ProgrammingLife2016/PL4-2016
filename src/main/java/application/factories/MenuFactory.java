@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.*;
 
@@ -71,14 +70,6 @@ public class MenuFactory {
      */
     public void setShowReferenceStrain(boolean show) {
         showReferenceStrain.setSelected(show);
-    }
-
-    /**
-     * Method to get the MenuItem to allow the nucleotide level
-     * @return the MenuItem
-     */
-    public CheckMenuItem getAllowLevel() {
-        return allowLevel;
     }
 
     /**
@@ -157,6 +148,10 @@ public class MenuFactory {
 
     }
 
+    /**
+     * Enable and disable the correct View Menu
+     * @param x boolean
+     */
     public static void toggleViewMenu(boolean x) {
         showPhylogeneticTree.setDisable(x);
         showGenomeSequence.setDisable(x);
@@ -186,22 +181,6 @@ public class MenuFactory {
         mostRecentGFA.setDisable(x);
         mostRecentGFF.setDisable(x);
     }
-
-    /**
-     * Method to set the right treeView
-     *
-     * @param x boolean
-     */
-//    public static void treeView(boolean x) {
-//        showReferenceStrain.setDisable(x);
-//        showPhylogeneticTree.setDisable(x);
-//
-//        toggleTreeViewMenu(x);
-//        toggleMostRecent(x);
-//        toggleFileMenu(x);
-//
-//    }
-
 
     /**
      * Create Help-Menu
