@@ -39,6 +39,7 @@ public class ZoomBox extends ScrollPane {
      *
      * @param g the GraphController currently active
      */
+    @SuppressWarnings("PMD.UselessParentheses")
     public ZoomBox(GraphController g) {
         this.graphController = g;
         initVariables();

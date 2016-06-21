@@ -39,11 +39,7 @@ public class Model {
     private GraphLayout graphLayout;
 
     private Rectangle2D screenSize;
-
-    public TreeMap<Integer, ArrayList<Cell>> getTileCellMap() {
-        return tileCellMap;
-    }
-
+    
     private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 

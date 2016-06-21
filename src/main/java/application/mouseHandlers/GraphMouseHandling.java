@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import org.apache.poi.ss.formula.functions.Even;
 
 import static java.lang.String.format;
 
