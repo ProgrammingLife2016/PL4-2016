@@ -918,6 +918,7 @@ public class MainController extends Controller<BorderPane> {
             if (filtering.isFiltering() && !getLoadedGenomeNames().isEmpty()) {
                 strainSelection(graphController.getGraph().getCurrentRef(), getLoadedGenomeNames());
             } else {
+                WindowFactory.createTooManyFilters();
                 fillTree();
             }
         } else {
