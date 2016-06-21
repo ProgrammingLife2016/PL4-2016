@@ -2,6 +2,7 @@ package application.fxobjects;
 
 import application.controllers.GraphController;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
@@ -48,6 +49,8 @@ public class ZoomBox extends ScrollPane {
         //On click, set the scroll to that position in the graph.
         zoomRectBorder.setOnMouseClicked(event -> {
             double value = ((event.getX() - zoomRectBorder.getX()) / zoomBoxWidth);
+            Bounds bounds = graphController.getRoot().getViewportBounds();
+            graphController.setDrawFrom(-1 * (int) bounds.getMinX());
             graphController.slideToPercent(value);
         });
 

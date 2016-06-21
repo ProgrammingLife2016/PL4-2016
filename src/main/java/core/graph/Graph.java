@@ -352,7 +352,7 @@ public class Graph {
         current.merge();
 
 
-        System.out.println("end update");
+//        System.out.println("end update");
     }
 
     /**

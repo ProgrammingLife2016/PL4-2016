@@ -39,6 +39,11 @@ public class GraphController extends Controller<ScrollPane> {
     private ZoomBox zoomBox;
     private DoubleProperty visibleAmount;
     private Stack<Integer> zoomPath;
+
+    public void setDrawFrom(int drawFrom) {
+        this.drawFrom = drawFrom;
+    }
+
     private int drawFrom = 0;
 
     /**
@@ -408,11 +413,11 @@ public class GraphController extends Controller<ScrollPane> {
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-        System.out.println("should be value: " + percent);
-        System.out.println("value to be removed: " + getRoot().getHvalue());
+//        System.out.println("should be value: " + percent);
+//        System.out.println("value to be removed: " + getRoot().getHvalue());
         if (getRoot().getHvalue() != percent) {
             getRoot().setHvalue((percent));
-            System.out.println("set new h value!");
+//            System.out.println("set new h value!");
 
         }
 
