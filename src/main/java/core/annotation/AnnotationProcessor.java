@@ -75,6 +75,7 @@ public class AnnotationProcessor {
      * @param str A specified part of the display name to search on.
      * @return The found annotation.
      * @throws TooManyAnnotationsFoundException Throws exception on too many matching annotations.
+     * @throws NoAnnotationsFoundException Throws exception on no annotations found.
      */
     public static Annotation findAnnotation(List<Annotation> annotations, String str)
             throws NoAnnotationsFoundException, TooManyAnnotationsFoundException {

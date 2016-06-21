@@ -125,8 +125,9 @@ public class AnnotationProcessorTest {
      *
      * @throws AnnotationProcessor.TooManyAnnotationsFoundException throw exception on too many
      * matching annotations.
+     * @throws AnnotationProcessor.NoAnnotationsFoundException throw exception on no matching annotations.
      */
-    @Test(expected=AnnotationProcessor.NoAnnotationsFoundException.class)
+    @Test(expected = AnnotationProcessor.NoAnnotationsFoundException.class)
     public void testFindAnnotationNoMatch() throws AnnotationProcessor.TooManyAnnotationsFoundException,
             AnnotationProcessor.NoAnnotationsFoundException {
         List<Annotation> annotationList = new ArrayList<>();
