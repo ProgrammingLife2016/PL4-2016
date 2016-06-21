@@ -239,6 +239,9 @@ public class GraphController extends Controller<ScrollPane> {
             prevClick.focus();
         }
         sideFocus(true);
+//        slideToPercent((prevClick.getLayoutX() - (mainController.getScreen().getWidth() / 4))
+//                / (graph.getMaxWidth() - 450));
+
         update(getGraph().getCurrentRef(), getGraph().getCurrentInt());
     }
 
@@ -410,17 +413,13 @@ public class GraphController extends Controller<ScrollPane> {
 
     /**
      * Method to slide to a certain percent of the screen
+     * 
      * @param percent the percent to slide to
      */
     public void slideToPercent(double percent) {
-//        System.out.println("should be value: " + percent);
-//        System.out.println("value to be removed: " + getRoot().getHvalue());
         if (getRoot().getHvalue() != percent) {
             getRoot().setHvalue((percent));
-//            System.out.println("set new h value!");
-
         }
-
     }
 
     /**

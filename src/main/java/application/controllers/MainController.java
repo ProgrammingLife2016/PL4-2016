@@ -26,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,18 +60,19 @@ public class MainController extends Controller<BorderPane> {
     private ListFactory listFactory;
     private TextField genomeTextField;
     private TextField annotationTextField;
+
     private StackPane box;
     private int secondCount;
     private Filtering filtering;
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
-    private boolean allowNucleotideLevel = false;
-    private boolean showReferenceStrain = false;
 
-    private Button searchButton;
-    private Button selectAllButton;
-    private Button deselectSearchButton;
+    private boolean allowNucleotideLevel;
+    private boolean showReferenceStrain;
+
+    private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
+
     private HBox hBox;
 
     private Stack<String> mostRecentGFF;
@@ -128,6 +130,9 @@ public class MainController extends Controller<BorderPane> {
         ImageView imageView = new ImageView(s);
         imageView.fitWidthProperty().bind(this.getRoot().widthProperty());
         imageView.fitHeightProperty().bind(this.getRoot().heightProperty());
+        MenuFactory.toggleViewMenu(true);
+        MenuFactory.toggleFileMenu(false);
+        MenuFactory.toggleFilters(true);
         this.getRoot().setCenter(imageView);
     }
 
@@ -155,8 +160,8 @@ public class MainController extends Controller<BorderPane> {
      * @param path Path to the annotation data file.
      */
     public void initAnnotations(String path) {
-        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         setAnnotationsLoaded(true);
+        List<Annotation> annotations = AnnotationParser.readGFFFromFile(path);
         graphController.getGraph().initAnnotations(annotations);
     }
 
@@ -362,7 +367,6 @@ public class MainController extends Controller<BorderPane> {
         }
     }
 
-
     /**
      * Method to add items to the GUI
      */
@@ -487,16 +491,12 @@ public class MainController extends Controller<BorderPane> {
         });
 
         buttons.get(1).setOnAction(e -> {
-            showReferenceStrain = false;
-            menuFactory.setShowReferenceStrain(false);
             treeController.clearSelection();
             genomeTextField.setText("");
             fillTree();
         });
 
         buttons.get(2).setOnAction(e -> {
-            showReferenceStrain = true;
-            menuFactory.setShowReferenceStrain(true);
             treeController.selectAll();
             genomeTextField.setText("");
             fillTree();
@@ -506,17 +506,19 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the annotation highlight button.
      *
-     * @param highlightButton          The annotation highlight button.
-     * @param deselectAnnotationButton The annotation deselect button.
      */
-    private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
+    private void setAnnotationButtonsActionListener() {
         highlightButton.setOnAction(e -> {
             if (isAnnotationsLoaded()) {
-                if (currentView != 0) {
-                    return;
-                }
-                if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                String input = annotationTextField.getText();
+
+                if (!input.isEmpty()) {
+                    if (currentView > 0) {
+                        allowNucleotideLevel = true;
+                        switchScene(Integer.MIN_VALUE);
+                    }
+
+                    initListenerProperties(input);
                 }
             }
         });
@@ -529,40 +531,43 @@ public class MainController extends Controller<BorderPane> {
     }
 
     /**
-     * Method to specify what the Listener needs to do
+     * Method to specify what the Listener needs to do.
+     *
+     * @param input The annotation search term.
      */
-    public void initListenerProperties() {
+    public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
+        Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations,
-                    annotationTextField.getText());
-            Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
+            System.out.println(input);
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
+
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
-            boolean foundAnnotation = false;
-            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() != 0) {
+
+            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
                 for (Node node : newAnn.getSpannedNodes()) {
                     int id = node.getId();
+
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450));
-                        foundAnnotation = true;
                         break;
                     }
                 }
             }
-            if (!foundAnnotation) {
-                WindowFactory.createAnnNotFoundAlert();
-            }
+
             for (Node n : newAnn.getSpannedNodes()) {
-                RectangleCell cell = ((RectangleCell) cellMap.get(n.getId()));
-                if (cell != null) {
-                    cell.setHighLight();
+                if (n != null) {
+                    ((RectangleCell) cellMap.get(n.getId())).setHighLight();
                 }
             }
-
-        } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            WindowFactory.createAnnNotFoundAlert();
+        } catch (AnnotationProcessor.TooManyAnnotationsFoundException e) {
+            WindowFactory.createTooManyAnnMatchesAlert();
         }
     }
 
@@ -606,19 +611,18 @@ public class MainController extends Controller<BorderPane> {
         if (withAnnotationSearch) {
             annotationTextField = new TextField();
             addAnnotationKeyHandler(annotationTextField);
-            Button highlightButton = new Button("Highlight annotation");
-            Button deselectAnnotationButton = new Button("Deselect annotation");
-            setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+            highlightButton = new Button("Highlight annotation");
+            deselectAnnotationButton = new Button("Deselect annotation");
+            setAnnotationButtonsActionListener();
             hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
         }
 
         if (withSearch) {
             vBox.getChildren().addAll(menuBar, hBox);
         } else {
-            menuFactory = new MenuFactory(this);
+            MenuFactory menuFactory = new MenuFactory(this);
             menuBar = menuFactory.createMenu(menuBar);
-            MenuFactory.toggleViewMenu(true);
-            MenuFactory.toggleFilters(true);
+
             vBox.getChildren().addAll(menuBar);
         }
 
@@ -633,7 +637,7 @@ public class MainController extends Controller<BorderPane> {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                    initListenerProperties(annotationTextField.getText());
                 }
             }
         });
@@ -676,6 +680,16 @@ public class MainController extends Controller<BorderPane> {
     public void toggleSelectDeselect(boolean x) {
         selectAllButton.setDisable(x);
         deselectSearchButton.setDisable(x);
+    }
+
+    /**
+     * Method to enable the annotation searchBar
+     * @param x boolean indicating enabling or disabling
+     */
+    public void toggleSearchBar(boolean x) {
+        highlightButton.setDisable(x);
+        deselectAnnotationButton.setDisable(x);
+        annotationTextField.setDisable(x);
     }
 
 
@@ -738,11 +752,11 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
+        toggleSelectDeselect(true);
     }
 
     /**
-     * Method to toggle whether or not the nucleotide level can be reached
-     * through scrolling.
+     * Method to toggle whether or not the nucleotide level can be reached through scrolling.
      */
     public void toggleAllowNucleotideLevel() {
         this.allowNucleotideLevel = !this.allowNucleotideLevel;

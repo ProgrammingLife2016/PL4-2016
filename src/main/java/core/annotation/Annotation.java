@@ -260,7 +260,6 @@ public class Annotation implements Comparable<Annotation> {
         spannedNodes.add(node);
     }
 
-
     @SuppressFBWarnings("EQ_COMPARETO_USE_OBJECT_EQUALS")
     @Override
     public int compareTo(Annotation o) {
@@ -285,6 +284,7 @@ public class Annotation implements Comparable<Annotation> {
         for (int key : nodeMap.keySet()) {
             if (key > nodeMapSize) { nodeMapSize = key; }
         }
+
         int zIndex = 0;
         for (int idx = 0; idx < nodeMapSize; idx++) {
             Node n = nodeMap.get(idx);
@@ -303,6 +303,7 @@ public class Annotation implements Comparable<Annotation> {
             }
             zIndex = nUpper;
         }
+
         return -1;
     }
 }

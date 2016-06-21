@@ -64,7 +64,11 @@ public class Graph {
      */
     private List<Annotation> annotations;
 
+    /**
+     * The annotation processor.
+     */
     private AnnotationProcessor annotationProcessor;
+
 
     /**
      * Class constructor.
@@ -110,7 +114,6 @@ public class Graph {
             if (currentInt == -1) { //First time we are here.
                 currentInt = levelMaps.size() - 1;
                 current = generateModel(ref, depth);
-
             } else if (depth != currentInt) {
                 currentInt = depth;
                 current = generateModel(ref, depth);
@@ -130,6 +133,7 @@ public class Graph {
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
             currentGenomes = new ArrayList<>(selectedGenomes);
+
             if (annotationProcessor != null) {
                 annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
             }
@@ -144,7 +148,7 @@ public class Graph {
      */
     public void initAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
-        annotationProcessor = new AnnotationProcessor(startMap, annotations);
+        annotationProcessor = new AnnotationProcessor(annotations);
     }
 
     /**
@@ -195,6 +199,7 @@ public class Graph {
      *
      * @return the list of genomes.
      */
+    @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     public ArrayList<String> findAllGenomes() {
         ArrayList<String> allGenomes = new ArrayList<>();
         for (int nodeId : startMap.keySet()) {
@@ -314,10 +319,9 @@ public class Graph {
             Node from = nodeMap.get(parentId);
             int maxEdgeWidth = 10;
             int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), currentGenomes),
-                    intersectingStrings(to.getGenomes(), currentGenomes))
-                    / (double) Math.max(currentGenomes.size(), 10))) + 1;
-
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), reduceGenomes(currentGenomes)),
+                    intersectingStrings(to.getGenomes(), reduceGenomes(currentGenomes)))
+                    / (double) Math.max(reduceGenomes(currentGenomes).size(), 10))) + 1;
             ifStatement:
             if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {
                 boolean edgePlaced = false;
@@ -580,7 +584,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes   selected genomes.
+     * @param genomes   selected genomes in Genome list.
      * @return the reduced list of genomes.
      */
     public List<String> reduceGenomeList(List<Genome> genomes) {
@@ -593,7 +597,7 @@ public class Graph {
     /**
      * Reduce the list of selected genomes to genomes available in the loaded graph.
      *
-     * @param genomes selected genomes.
+     * @param genomes selected genomes in String list.
      * @return the reduced list of genomes.
      */
     public List<String> reduceGenomes(List<String> genomes) {
