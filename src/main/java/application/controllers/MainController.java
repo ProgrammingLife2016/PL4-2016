@@ -142,6 +142,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to get the Screen
+     *
      * @return the Screen
      */
     public ScrollPane getScreen() {
@@ -316,6 +317,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Get the list containing the most recenlty visited directory
+     *
      * @return the list
      */
     public Stack<String> getMostRecentDir() {
@@ -362,6 +364,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Add a file to the recently opened directory
+     *
      * @param s the file to be added
      */
     public void addRecentDir(String s) {
@@ -508,7 +511,7 @@ public class MainController extends Controller<BorderPane> {
                     treeController.getRoot().setVvalue(cell.getLayoutY() / treeController.getMaxY());
                 }
             }
-                setListItems();
+            setListItems();
         });
 
         buttons.get(1).setOnAction(e -> {
@@ -528,7 +531,6 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Adds an action listener to the annotation highlight button.
-     *
      */
     private void setAnnotationButtonsActionListener() {
         highlightButton.setOnAction(e -> {
@@ -559,6 +561,7 @@ public class MainController extends Controller<BorderPane> {
     public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
         try {
+            System.out.println("input: " + input);
             Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
             Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
@@ -569,7 +572,6 @@ public class MainController extends Controller<BorderPane> {
                     int id = node.getId();
                     Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
                     if (nodeInMap != null) {
-                        System.out.println("id: " + id);
                         System.out.println(cellMap.get(id).getLayoutX());
                         graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
                                 / (graphController.getGraph().getModel().getMaxWidth() - 450));
@@ -651,19 +653,20 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to add a Key Handler to the annotation TextField
+     *
      * @param textField the annotation TextField
      */
     public void addAnnotationKeyHandler(TextField textField) {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                        if (currentView > 0) {
-                            allowNucleotideLevel = true;
-                            switchScene(Integer.MIN_VALUE);
-                        }
-
                     String s = annotationTextField.getText();
-                    System.out.println(s);
+
+                    if (currentView > 0) {
+                        allowNucleotideLevel = true;
+                        switchScene(Integer.MIN_VALUE);
+                    }
+
                     initListenerProperties(s);
 
                 }
@@ -673,6 +676,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to add a Key Handler to the genome TextField
+     *
      * @param textField the genome TextField
      */
     public void addGenomeKeyHandler(TextField textField) {
@@ -809,6 +813,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Method to enable and disable the search bar
+     *
      * @param x boolean
      */
     private void toggleSearchBar(boolean x) {
@@ -942,6 +947,7 @@ public class MainController extends Controller<BorderPane> {
 
     /**
      * Getter for Filtering.
+     *
      * @return Filtering.
      */
     public Filtering getFiltering() {

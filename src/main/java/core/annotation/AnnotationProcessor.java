@@ -99,6 +99,7 @@ public class AnnotationProcessor {
         int counter = 0;
         Annotation matchingAnnotation = null;
 
+        System.out.println("str: " + str);
         for (Annotation a : annotations) {
             String[] displayNameArr = a.getDisplayNameAttr().split(" ");
 
