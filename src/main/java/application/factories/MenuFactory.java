@@ -75,6 +75,15 @@ public class MenuFactory {
     }
 
     /**
+     * Method to get the MenuItem to allow the nucleotide level
+     *
+     * @return the MenuItem
+     */
+    public CheckMenuItem getAllowLevel() {
+        return allowLevel;
+    }
+
+    /**
      * Method that creates a Menu.
      *
      * @param bar a MenuBar.

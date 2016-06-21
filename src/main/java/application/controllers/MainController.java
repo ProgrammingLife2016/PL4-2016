@@ -440,6 +440,7 @@ public class MainController extends Controller<BorderPane> {
      */
     public void strainSelection(ArrayList<String> ref, List<String> s) {
         graphController.getGraph().reset();
+        graphController.getZoomBox().reset();
         List<String> ss = graphController.getGraph().reduceGenomes(s);
 
         fillGraph(ref, ss);
