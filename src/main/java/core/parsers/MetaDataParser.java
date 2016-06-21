@@ -38,7 +38,7 @@ public final class MetaDataParser {
                 metadata = parse(fileInputStream);
                 fileInputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
         }
     }
@@ -62,7 +62,7 @@ public final class MetaDataParser {
             });
             stream.close();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return metaMap;
     }

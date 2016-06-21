@@ -95,7 +95,7 @@ public final class AnnotationParser {
                 annotations = readGFF(fileInputStream).stream()
                         .filter(a -> a.getType().equals("CDS")).collect(Collectors.toList());
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
         }
 

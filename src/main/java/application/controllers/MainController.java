@@ -255,7 +255,7 @@ public class MainController extends Controller<BorderPane> {
                 sc.close();
             }
         } catch (IOException | URISyntaxException e1) {
-            e1.printStackTrace();
+
         }
     }
 
@@ -282,7 +282,7 @@ public class MainController extends Controller<BorderPane> {
 
             writer.close();
         } catch (IOException | URISyntaxException e1) {
-            e1.printStackTrace();
+
         }
     }
 

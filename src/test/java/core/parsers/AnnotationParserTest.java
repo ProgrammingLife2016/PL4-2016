@@ -33,7 +33,7 @@ public class AnnotationParserTest {
             annotations = AnnotationParser.readGFF(is);
             is.close();
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
         assertEquals(1, annotations.size());
