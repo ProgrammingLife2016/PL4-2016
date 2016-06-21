@@ -65,6 +65,10 @@ public class Graph {
     private List<Annotation> annotations;
 
     /**
+     * The annotation parser.
+     */
+    private AnnotationProcessor annotationProcessor;
+    /**
      * Class constructor.
      */
     public Graph() {
@@ -126,14 +130,22 @@ public class Graph {
         if (!(intersection(selectedGenomes, currentGenomes) == currentGenomes.size()
                 && currentGenomes.size() == selectedGenomes.size())) {
             levelMaps = GraphReducer.createLevelMaps(startMap, 1, selectedGenomes);
-            new AnnotationProcessor(levelMaps.get(0), current.getAnnotations()).matchNodesAndAnnotations();
             currentGenomes = new ArrayList<>(selectedGenomes);
+            if (annotationProcessor != null) {
+                annotationProcessor.matchNodesAndAnnotations(levelMaps.get(0));
+            }
             return true;
         }
-
-
-
         return false;
+    }
+
+    /**
+     * Method to add annotations to the startMap, the map that is originally parsed.
+     * @param annotations the list of annotations
+     */
+    public void initAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+        annotationProcessor = new AnnotationProcessor(startMap, annotations);
     }
 
     /**
@@ -184,7 +196,6 @@ public class Graph {
      *
      * @return the list of genomes.
      */
-    @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     public ArrayList<String> findAllGenomes() {
         ArrayList<String> allGenomes = new ArrayList<>();
         for (int nodeId : startMap.keySet()) {
@@ -300,14 +311,13 @@ public class Graph {
      */
     public void addEdgesToCell(Node to, HashMap<Integer, Node> nodeMap, Model toret,
                                ArrayList<String> ref) {
-
         for (int parentId : to.getParents()) {
             Node from = nodeMap.get(parentId);
             int maxEdgeWidth = 10;
             int width = (int) Math.round(maxEdgeWidth
-                    * ((double) intersection(intersectingStrings(from.getGenomes(), genomes),
-                    intersectingStrings(to.getGenomes(), genomes))
-                    / (double) Math.max(genomes.size(), 10))) + 1;
+                    * ((double) intersection(intersectingStrings(from.getGenomes(), currentGenomes),
+                    intersectingStrings(to.getGenomes(), currentGenomes))
+                    / (double) Math.max(currentGenomes.size(), 10))) + 1;
 
             ifStatement:
             if (intersection(from.getGenomes(), ref) > 0 && intersection(to.getGenomes(), ref) > 0) {

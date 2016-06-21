@@ -43,6 +43,7 @@ public class Model {
     private TreeMap<Integer, ArrayList<Cell>> tileCellMap;
     private ArrayList<Edge> longEdges = new ArrayList<>();
 
+
     /**
      * Class constructor.
      */

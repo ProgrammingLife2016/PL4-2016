@@ -425,7 +425,8 @@ public class Node {
         StringBuilder sb = new StringBuilder();
 
         for (Annotation a : getAnnotations()) {
-            sb.append(format("- %s, spanning nodes: ", a.getDisplayNameAttr()));
+            sb.append(format("- %s (ID: %d), spanning nodes: ", a.getDisplayNameAttr(),
+                    a.getIdAttr()));
 
             if (a.getSpannedNodes().size() >= 1) {
                 String prefix = "";
@@ -517,12 +518,6 @@ public class Node {
     public void addPreviousLevelNodesId(int previousLevelNodeId) {
         if (!this.previousLevelNodesIds.contains(previousLevelNodeId)) {
             this.previousLevelNodesIds.add(previousLevelNodeId);
-        }
-    }
-
-    public void removePreviousLevelNodesId(int previousLevelNodeId) {
-        if (this.previousLevelNodesIds.contains(Integer.valueOf(previousLevelNodeId))) {
-            this.previousLevelNodesIds.remove(Integer.valueOf(previousLevelNodeId));
         }
     }
 

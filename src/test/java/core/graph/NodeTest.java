@@ -239,7 +239,7 @@ public class NodeTest {
         a.addSpannedNode(new Node(1, "", 1));
 
         n.setAnnotations(new ArrayList<>(Arrays.asList(a)));
-        assertTrue(n.getAnnotationsAsString().contains("- A, spanning nodes: 1"));
+        assertTrue(n.getAnnotationsAsString().contains("- A (ID: 42), spanning nodes: 1"));
     }
 
     /**
