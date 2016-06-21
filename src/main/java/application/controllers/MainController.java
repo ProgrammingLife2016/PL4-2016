@@ -65,8 +65,8 @@ public class MainController extends Controller<BorderPane> {
     private boolean inGraph;
     private boolean metaDataLoaded;
     private boolean annotationsLoaded;
-    private boolean allowNucleotideLevel = false;
-    private boolean showReferenceStrain = false;
+    private boolean allowNucleotideLevel;
+    private boolean showReferenceStrain;
 
     private Button searchButton, selectAllButton, deselectSearchButton, highlightButton, deselectAnnotationButton;
 
@@ -371,10 +371,12 @@ public class MainController extends Controller<BorderPane> {
     private void initGUI() {
         createZoomBoxAndLegend();
 
+        WindowFactory.createMenuWithSearch();
         MenuFactory.toggleGraphViewMenu(true);
+        toggleSelectDeselect(true);
 
         this.getRoot().setCenter(graphController.getRoot());
-        toggleSelectDeselect(true);
+
 
         if (secondCount == -1) {
             createList();
@@ -506,10 +508,8 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Adds an action listener to the annotation highlight button.
      *
-     * @param highlightButton          The annotation highlight button.
-     * @param deselectAnnotationButton The annotation deselect button.
      */
-    private void setAnnotationButtonsActionListener(Button highlightButton, Button deselectAnnotationButton) {
+    private void setAnnotationButtonsActionListener() {
         highlightButton.setOnAction(e -> {
             if (isAnnotationsLoaded()) {
                 if (currentView != 0) {
@@ -608,7 +608,7 @@ public class MainController extends Controller<BorderPane> {
             addAnnotationKeyHandler(annotationTextField);
             highlightButton = new Button("Highlight annotation");
             deselectAnnotationButton = new Button("Deselect annotation");
-            setAnnotationButtonsActionListener(highlightButton, deselectAnnotationButton);
+            setAnnotationButtonsActionListener();
             hBox.getChildren().addAll(annotationTextField, highlightButton, deselectAnnotationButton);
         }
 
@@ -681,11 +681,11 @@ public class MainController extends Controller<BorderPane> {
      * Method to enable the annotation searchBar
      * @param x boolean indicating enabling or disabling
      */
-//    public void toggleSearchBar(boolean x) {
-//        highlightButton.setDisable(x);
-//        deselectAnnotationButton.setDisable(x);
-//        annotationTextField.setDisable(x);
-    //}
+    public void toggleSearchBar(boolean x) {
+        highlightButton.setDisable(x);
+        deselectAnnotationButton.setDisable(x);
+        annotationTextField.setDisable(x);
+    }
 
 
     /**
@@ -747,6 +747,7 @@ public class MainController extends Controller<BorderPane> {
         currentView = Math.min(graphController.getGraph().getLevelMaps().size() - 1, currentView);
         fillGraph(graphController.getGraph().getCurrentRef(),
                 graphController.getGraph().getCurrentGenomes());
+        toggleSelectDeselect(true);
     }
 
     /**
@@ -767,6 +768,7 @@ public class MainController extends Controller<BorderPane> {
         if (isAnnotationsLoaded()) {
             MenuFactory.loadAnnotations.setDisable(true);
         }
+
         MenuFactory.toggleTreeViewMenu(true);
 
         this.getRoot().setCenter(screen);

@@ -146,6 +146,7 @@ public class MenuFactory {
      */
     public static void toggleGraphViewMenu(boolean x) {
         showGenomeSequence.setDisable(x);
+        showPhylogeneticTree.setDisable(!x);
         resetView.setDisable(!x);
         allowLevel.setDisable(!x);
         showReferenceStrain.setDisable(!x);

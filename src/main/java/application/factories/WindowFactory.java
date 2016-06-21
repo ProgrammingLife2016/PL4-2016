@@ -240,7 +240,7 @@ public final class WindowFactory {
                 mainController.addRecentNWK(nwk.getAbsolutePath());
                 mainController.initTree(nwk.getAbsolutePath());
 
-                createMenuWithSearch();
+                createMenuWithSearchWithoutAnnotation();
             }
         });
     }
@@ -476,7 +476,7 @@ public final class WindowFactory {
             mainController.initTree(gfaFile.getAbsolutePath());
             mainController.addRecentNWK(gfaFile.getAbsolutePath());
 
-            createMenuWithSearch();
+            createMenuWithSearchWithoutAnnotation();
         } else {
             mainController.getGraphController().getGraph().getNodeMapFromFile(gfaFile.getAbsolutePath());
             mainController.initGraph();
@@ -490,7 +490,7 @@ public final class WindowFactory {
             mainController.initTree(nwkFile.getAbsolutePath());
             mainController.addRecentNWK(nwkFile.getAbsolutePath());
 
-            createMenuWithSearch();
+            createMenuWithSearchWithoutAnnotation();
         }
     }
 
