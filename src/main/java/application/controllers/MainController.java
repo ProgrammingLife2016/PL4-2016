@@ -27,7 +27,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -519,7 +518,7 @@ public class MainController extends Controller<BorderPane> {
                         switchScene(Integer.MIN_VALUE);
                     }
 
-                    initListenerProperties();
+                    initListenerProperties(input);
                 }
             }
         });
@@ -534,39 +533,40 @@ public class MainController extends Controller<BorderPane> {
     /**
      * Method to specify what the Listener needs to do
      */
-    public void initListenerProperties() {
+    public void initListenerProperties(String input) {
         List<Annotation> annotations = graphController.getGraph().getModel().getAnnotations();
         Map<Integer, Cell> cellMap = graphController.getGraph().getModel().getCellMap();
 
         try {
-            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, annotationTextField.getText());
+            System.out.println(input);
+            Annotation newAnn = AnnotationProcessor.findAnnotation(annotations, input);
 
             // Deselect the previously highlighted annotation as only one should be highlighted at a time.
             deselectAllAnnotations();
-            boolean foundAnnotation = false;
 
-            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
-                for (Node node : newAnn.getSpannedNodes()) {
-                    int id = node.getId();
 
-                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
-                    if (nodeInMap != null) {
-                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
-                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
-                        foundAnnotation = true;
-                        break;
-                    }
-                }
-            }
-            if (!foundAnnotation) {
-                WindowFactory.createAnnNotFoundAlert();
-            }
+//            boolean foundAnnotation = false;
+//
+//            if (newAnn.getSpannedNodes() != null && newAnn.getSpannedNodes().size() > 0) {
+//                for (Node node : newAnn.getSpannedNodes()) {
+//                    int id = node.getId();
+//
+//                    Node nodeInMap = graphController.getGraph().getLevelMaps().get(0).get(id);
+//                    if (nodeInMap != null) {
+//                        graphController.slideToPercent((cellMap.get(id).getLayoutX() - (screen.getWidth() / 4))
+//                                / (graphController.getGraph().getModel().getMaxWidth() - 450));
+//                        foundAnnotation = true;
+//                        break;
+//                    }
+//                }
+//            }
 
             for (Node n : newAnn.getSpannedNodes()) {
                 ((RectangleCell) cellMap.get(n.getId())).setHighLight();
             }
-
-        } catch (AnnotationProcessor.TooManyAnnotationsFoundException e1) {
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            WindowFactory.createAnnNotFoundAlert();
+        } catch (AnnotationProcessor.TooManyAnnotationsFoundException e) {
             WindowFactory.createTooManyAnnMatchesAlert();
         }
     }
@@ -637,7 +637,7 @@ public class MainController extends Controller<BorderPane> {
         textField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!annotationTextField.getText().isEmpty()) {
-                    initListenerProperties();
+                    initListenerProperties(annotationTextField.getText());
                 }
             }
         });

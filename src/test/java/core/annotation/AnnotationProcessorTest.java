@@ -85,7 +85,11 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test 2"));
+        try {
+            assertEquals(a2, AnnotationProcessor.findAnnotation(annotationList, "test 2"));
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -107,7 +111,11 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        AnnotationProcessor.findAnnotation(annotationList, "test");
+        try {
+            AnnotationProcessor.findAnnotation(annotationList, "test");
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -129,7 +137,11 @@ public class AnnotationProcessorTest {
         annotationList.add(a1);
         annotationList.add(a2);
 
-        assertNull(AnnotationProcessor.findAnnotation(annotationList, "abc"));
+        try {
+            assertNull(AnnotationProcessor.findAnnotation(annotationList, "abc"));
+        } catch (AnnotationProcessor.NoAnnotationsFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }

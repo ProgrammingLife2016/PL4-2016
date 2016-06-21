@@ -22,6 +22,8 @@ public class AnnotationProcessor {
      * @param lowestMap the map we want to apply the annotations to
      */
     public static void matchNodesAndAnnotations(List<Annotation> annotations, HashMap<Integer, Node> lowestMap) {
+        System.out.println("[In matchNodesAndAnnotations]");
+
         HashMap<Integer, Node> filteredNodeMap = filterAnnotationsInNodeMap(annotations, lowestMap);
         for (Annotation a : annotations) {
             for (Node n : a.getSpannedNodes()) {
@@ -66,7 +68,7 @@ public class AnnotationProcessor {
      * @throws TooManyAnnotationsFoundException Throws exception on too many matching annotations.
      */
     public static Annotation findAnnotation(List<Annotation> annotations, String str)
-            throws TooManyAnnotationsFoundException {
+            throws NoAnnotationsFoundException, TooManyAnnotationsFoundException {
         int counter = 0;
         Annotation matchingAnnotation = null;
 
@@ -77,22 +79,27 @@ public class AnnotationProcessor {
             if (str.contains(" ") && a.getDisplayNameAttr().toLowerCase().contains(str.toLowerCase())) {
                 counter++;
                 matchingAnnotation = a;
+                System.out.format("1 - Found match on: %s\n", a.getDisplayNameAttr());
             } else {
                 // Example input: 0002
                 if (displayNameArr[0].contains(str)) {
                     counter++;
                     matchingAnnotation = a;
+                    System.out.format("2 - Found match on: %s\n", a.getDisplayNameAttr());
                 }
 
                 // Example input: DnaN or dnaN
                 if (displayNameArr[displayNameArr.length - 1].toLowerCase().equals(str.toLowerCase())) {
                     counter++;
                     matchingAnnotation = a;
+                    System.out.format("2 - Found match on: %s\n", a.getDisplayNameAttr());
                 }
             }
         }
 
-        if (counter == 1) {
+        if (counter == 0) {
+            throw new NoAnnotationsFoundException();
+        } else if (counter == 1) {
             return matchingAnnotation;
         } else if (counter > 1) {
             throw new TooManyAnnotationsFoundException();
@@ -101,7 +108,19 @@ public class AnnotationProcessor {
     }
 
     /**
-     * Exception for too many elements in a data structure.
+     * Exception for no annotations found.
+     */
+    public static class NoAnnotationsFoundException extends Exception {
+
+        /**
+         * Exception class constructor.
+         */
+        public NoAnnotationsFoundException() {
+        }
+    }
+
+    /**
+     * Exception for too many annotations found.
      */
     public static class TooManyAnnotationsFoundException extends Exception {
 
